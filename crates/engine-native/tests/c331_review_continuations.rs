@@ -148,7 +148,7 @@ fn c9j_hwendao_hand_and_equipment_origin_visibility_survives_restore() {
 fn c9j_duishi_actual_hand_and_equipment_acquisitions_keep_visibility() {
     let pack=super::c331_source_predicates::source_pack("shahai-swd-upstream-noname");
     let mut seen=[false;2];
-    for seed in 19004..19020 {
+    for (idx, seed) in (19004..19020).enumerate() {
         let mut e=Engine::new_with_extensions(seed,3,&[&pack]).unwrap();
         for seat in 0..3 {e.debug_clear_hand(seat);}
         e.debug_set_turn(0,engine_native::Phase::Play,1);e.debug_grant(0,"duishi");
@@ -157,7 +157,15 @@ fn c9j_duishi_actual_hand_and_equipment_acquisitions_keep_visibility() {
         let skill=e.catalog().skill_by_name("duishi").unwrap();
         let out=e.submit(engine_native::GameCommand{actor:0,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action:engine_native::GameAction::ActivateSkill{skill}});
         assert!(!matches!(out,engine_native::CommandOutcome::Rejected(_)));
-        answer(&mut e,vec![O::Card(cost)]);answer(&mut e,vec![O::Player(1)]);finish(&mut e);
+        answer(&mut e,vec![O::Card(cost)]);answer(&mut e,vec![O::Player(1)]);
+        if e.open_choice().is_some_and(|c| c.spec.prompt == "duishi_discard_same_suit") {
+            answer(&mut e, vec![]);
+        }
+        if e.open_choice().is_some_and(|c| c.spec.prompt == "duishi_gain") {
+            let pick = if idx % 2 == 0 { hand } else { equip };
+            answer(&mut e, vec![O::Card(pick)]);
+        }
+        finish(&mut e);
         let (taken,public)=e.log().iter().find_map(|l|if let engine_native::LogEvent::CardsTaken{from:1,to:0,cards,public}=l {Some((cards[0],*public))} else {None}).expect("actual acquisition");
         assert_eq!(public,taken==equip);assert!(taken==hand||taken==equip);seen[public as usize]=true;
         assert_eq!(e.event_view_for(2).iter().any(|l|matches!(l,engine_native::view::EventView::Public(engine_native::LogEvent::CardsTaken{cards,..})if cards==&[taken])),public);

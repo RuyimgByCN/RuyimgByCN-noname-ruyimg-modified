@@ -80,9 +80,48 @@ fn swd_deferred_pozhou_seal_cycle() {
         "破舟：1 号技能被封印"
     );
 
-    // 推进到 1 号阶段开始 → 封印解除（技能恢复）。
+    // 推进到 1 号回合内（TurnBegin/Play）仍保持封印；1 号整回合结束（TurnPhaseAfter）才解封恢复。
     for _ in 0..20 {
-        if e.turn().current == 1 {
+        if e.turn().current == 1 && e.turn().phase == engine_native::event::Phase::Play {
+            break;
+        }
+        if let Some(c) = e.open_choice() {
+            let (cid, obs) = (c.id, c.observer);
+            let sel: Vec<ChoiceOption> = if c.spec.min == 0 || c.spec.allow_cancel {
+                vec![ChoiceOption::Pass]
+            } else {
+                c.spec
+                    .options
+                    .iter()
+                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
+                    .copied()
+                    .take(c.spec.min.max(1))
+                    .collect()
+            };
+            let _ = submit(
+                &mut e,
+                obs,
+                GameAction::Answer {
+                    choice_id: cid,
+                    selection: sel,
+                },
+            );
+            continue;
+        }
+        let actor = e.turn().current;
+        let _ = submit(&mut e, actor, GameAction::NextPhase);
+    }
+    assert!(
+        !e.state_core()
+            .skills
+            .get(&(1, lanzhi))
+            .map(|i| i.enabled)
+            .unwrap_or(false),
+        "破舟：1 号自己出牌阶段仍处于封印状态（phaseAfter 才解除）"
+    );
+    // 推进过 1 号回合结束（进入 2 号回合）→ 1 号已触发 TurnPhaseAfter 并解封
+    for _ in 0..20 {
+        if e.turn().current != 1 {
             break;
         }
         if let Some(c) = e.open_choice() {
@@ -117,6 +156,6 @@ fn swd_deferred_pozhou_seal_cycle() {
             .get(&(1, lanzhi))
             .map(|i| i.enabled)
             .unwrap_or(false),
-        "破舟：1 号阶段开始解封（技能恢复）"
+        "破舟：1 号回合结束 TurnPhaseAfter 解封（技能恢复）"
     );
 }

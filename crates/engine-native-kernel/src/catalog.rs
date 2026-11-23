@@ -952,6 +952,11 @@ pub trait SkillBehavior: Send + Sync {
         false
     }
 
+    /// 手牌出牌/响应封锁原语（如 `bingfeng2` `cardEnabled2 position==='h'`）：仅禁用手牌，装备区牌不受限。
+    fn blocks_hand_cards(&self) -> bool {
+        false
+    }
+
     /// 本技能的具名 filter / 查询需要本回合弃置与摸牌史。
     /// 标准宿主技为 false，标准局面不写 VmAux，v295 摘要保持不变。
     fn needs_vm_card_history(&self) -> bool {

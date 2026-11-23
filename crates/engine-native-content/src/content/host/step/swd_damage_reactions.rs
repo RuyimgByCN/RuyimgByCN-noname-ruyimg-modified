@@ -399,6 +399,15 @@ impl HostMachine {
             // → 若手牌 ≥8 自受 3 火伤
             HostBehavior::SwdHeihuo => match self.stage {
                 HostStage::Act => {
+                    if ctx.core.player(self.owner).hand.is_empty()
+                        || ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .contains_key(&(self.owner, "swd_heihuo2".to_string()))
+                    {
+                        return Flow::Done;
+                    }
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
@@ -432,29 +441,10 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
-                    let in_hand = ctx.core.player(self.owner).hand.contains(&picked);
-                    if in_hand {
-                        ctx.take_hand_card(self.owner, picked);
-                    } else {
-                        ctx.core
-                            .player_mut(self.owner)
-                            .equips
-                            .retain(|x| *x != picked);
-                        if ctx.catalog.card_kind(picked).is_equip() {
-                            crate::kernel::revoke_equip_skills(
-                                ctx.core,
-                                ctx.catalog,
-                                self.owner,
-                                picked,
-                            );
-                        }
+                    if !super::u05_7c_skills::discard_he_card(ctx, self.owner, picked) {
+                        return Flow::Done;
                     }
-                    ctx.to_discard(picked);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![picked],
-                    });
-                    // R05-C2：摸「弃后手牌数」走 R 帧；「手牌 ≥8 自伤 3 火」
+                    // R05-C2：摸「弃后手牌数」走 R 帧；「手牌 ≥8 自伤 3 火并置回合锁 swd_heihuo2」
                     // 读摸后手牌 → 续行段（同步序＝摸完再判）。
                     let draw_n = ctx.core.player(self.owner).hand.len();
                     if draw_n > 0 {
@@ -606,37 +596,31 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 麻醉触发面：伤害前置——off_court 黑牌返还（登记差异：上游
-            // 伤害后归还，原生伤前归还）并令本次伤害 -1
+            // 麻醉触发面：伤害前置——仅降 1 并授予 lmazui3（黑牌留至 DamageEnd/DamageZero 回收）
             HostBehavior::SwdLmazui2 => {
-                let black = ctx
-                    .core
-                    .player(self.owner)
-                    .off_court
-                    .iter()
-                    .copied()
-                    .find(|c| {
-                        matches!(
-                            ctx.catalog.cards[*c as usize].suit,
-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                        )
-                    });
-                if let Some(c) = black {
-                    ctx.core
-                        .player_mut(self.owner)
-                        .off_court
-                        .retain(|x| *x != c);
-                    ctx.core.player_mut(self.owner).hand.push(c);
-                }
-                let frame = ctx
-                    .res
-                    .frame_mut(ctx.current_event_frame_id())
-                    .expect("frame");
-                if let crate::event::EventData::Damage(d) = &mut frame.data {
-                    d.amount = d.amount.saturating_sub(1);
+                {
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
+                    if let crate::event::EventData::Damage(d) = &mut frame.data {
+                        d.amount = d.amount.saturating_sub(1);
+                    }
                 }
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY) {
                     ctx.core.skills.remove(&(self.owner, def));
+                }
+                if let Some(def) = ctx.catalog.skill_by_name("lmazui3") {
+                    ctx.insert_skill(
+                        (self.owner, def),
+                        crate::state::SkillInstance {
+                            owner: self.owner,
+                            enabled: true,
+                            once_used: false,
+                            expires_end_of_turn: false,
+                            rounds: 0,
+                        },
+                    );
                 }
                 Flow::Done
             }
@@ -725,48 +709,6 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 乖戾：Before 帧 +1（缚斧同款直写）；After 帧弃两张手牌
-            //（手牌不足弃全部）
-            HostBehavior::SwdGuaili => {
-                let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
-                match frame {
-                    Some(crate::event::EventData::Damage(d))
-                        if !d.prevented && d.source == Some(self.owner) =>
-                    {
-                        // Canonical payload stays on the root; persisted progress identifies this window.
-                        let after = !ctx
-                            .current_damage()
-                            .expect("damage root")
-                            .settlement
-                            .progress
-                            .is_pre_hp();
-                        if after {
-                            let hand: Vec<CardId> =
-                                ctx.core.player(self.owner).hand.iter().copied().collect();
-                            let n = hand.len().min(2);
-                            for c in hand.into_iter().take(n) {
-                                ctx.discard_from_hand(self.owner, c);
-                            }
-                            Flow::Done
-                        } else {
-                            let frame = ctx
-                                .res
-                                .frame_mut(ctx.current_event_frame_id())
-                                .expect("frame");
-                            if let crate::event::EventData::Damage(d) = &mut frame.data {
-                                if let Some(amount) = d.amount.checked_add(1) {
-                                    d.amount = amount;
-                                } else {
-                                    ctx.fail_damage_amount();
-                                    return Flow::Done;
-                                }
-                            }
-                            Flow::Done
-                        }
-                    }
-                    _ => Flow::Done,
-                }
-            }
             // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
             // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
             HostBehavior::SwdXuying => {
@@ -929,15 +871,15 @@ impl HostMachine {
                         skill: "神焰",
                         owner: self.owner, presentation: None });
                 } else {
-                    // 结算面：逐个蔓延（上游 shenyan2 global damageAfter 循环）
+                    // 结算面：逐个蔓延（上游 shenyan2 global damageAfter 座位序循环 + source = owner；LIFO 逆序压栈）
                     let pending: Vec<PlayerId> =
                         std::mem::take(&mut ctx.core.player_mut(self.owner).shenyan_pending);
-                    for t in pending {
+                    for t in pending.into_iter().rev() {
                         if !ctx.core.player(t).alive {
                             continue;
                         }
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            None,
+                            Some(self.owner),
                             t,
                             1,
                             crate::event::DamageNature::Fire,
@@ -952,9 +894,13 @@ impl HostMachine {
     }
 }
 
-/// 黑火自伤判定（R05-C2 抽出）：手牌 ≥8 → 对自己 3 点火伤。
+/// 黑火自伤判定（R05-C2 / R2）：手牌 ≥8 → 对自己 3 点火伤并置本回合锁 `swd_heihuo2`。
 fn heihuo_self_burn_check(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if ctx.core.player(owner).hand.len() >= 8 {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "swd_heihuo2".to_string()), 1);
         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
             Some(owner),
             owner,

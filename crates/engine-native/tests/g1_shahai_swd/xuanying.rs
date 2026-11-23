@@ -236,14 +236,20 @@ fn source_parent_engine(pack: &ExtensionPack) -> Engine {
     }
     let def = e.catalog().skill_by_name("xuanying").unwrap();
     assert!(e.state_core().skills.contains_key(&(0, def)));
-    // 父技 group 現在把傷害子技一併授予（C331 審查第 4 項的修法）。
+    // 父技 group 授予回合外失牌子技 xuanying_use（swd/skill.js:970-1112），不再授予 xuanying_damage（hasDamage: false）。
     let child = e
         .catalog()
-        .skill_by_name("xuanying_damage")
-        .expect("damage child registered by the parent group");
+        .skill_by_name("xuanying_use")
+        .expect("xuanying_use child registered by the parent group");
     assert!(
         e.state_core().skills.contains_key(&(0, child)),
-        "parent group grants the damage child"
+        "parent group grants xuanying_use child"
+    );
+    assert!(
+        e.catalog()
+            .skill_by_name("xuanying_damage")
+            .is_none_or(|d| !e.state_core().skills.contains_key(&(0, d))),
+        "parent group must NOT grant xuanying_damage"
     );
     e
 }
@@ -282,59 +288,98 @@ fn source_parent_group_grants_damage_child_counterattack_and_requires_the_grant(
     let mut e = source_parent_engine(&pack);
     e.debug_set_turn(1, Phase::Play, 1);
     e.state_core_mut().players[0].linked = true;
+    let p0_card = e.debug_place(0, "tao");
+    let chai = {
+        let c = (0..e.catalog().cards.len() as u32)
+            .find(|c| e.catalog().card_kind(*c) == engine_native::catalog::CardKind::Dismantle)
+            .expect("dismantle");
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != c);
+        core.discard.retain(|x| *x != c);
+        core.table.retain(|x| *x != c);
+        for pl in core.players.iter_mut() {
+            pl.hand.retain(|x| *x != c);
+        }
+        core.players[1].hand.push(c);
+        c
+    };
     let attacker_hp = e.debug_hp(1);
-    let owner_hp = e.debug_hp(0);
     let cursor = e.log().len();
-    e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    let _ = play(&mut e, chai, vec![0]);
+    for _ in 0..8 {
+        let Some(ch) = e.open_choice().cloned() else { break };
+        if ch.spec.prompt == "xuanying_use_target" {
+            break;
+        }
+        let sel = if ch.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            ch.spec.options.iter().take(ch.spec.min.max(1)).copied().collect()
+        };
+        source_answer(&mut e, sel);
+    }
+    let xy_ch = e.open_choice().expect("回合外失牌应触发 xuanying_use_target");
+    assert_eq!((xy_ch.observer, xy_ch.spec.prompt), (0, "xuanying_use_target"));
+    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
+    let mut r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
+    assert_eq!(e.open_choice(), r.open_choice());
+    source_answer(&mut e, vec![ChoiceOption::Player(1)]);
+    source_answer(&mut r, vec![ChoiceOption::Player(1)]);
     source_settle(&mut e);
-    assert_eq!(e.debug_hp(0), owner_hp - 1);
-    assert_eq!(
-        e.debug_hp(1),
-        attacker_hp - 1,
-        "granted damage child counterattacks the source"
-    );
-    assert!(
-        !e.state_core().player(0).linked,
-        "counterattack unlinks the owner"
-    );
+    source_settle(&mut r);
+    assert!(!e.debug_hand(0).contains(&p0_card));
+    assert_eq!(e.debug_hp(1), attacker_hp - 1, "granted xuanying_use unlinks and plays virtual Sha");
+    assert!(!e.state_core().player(0).linked, "xuanying_use unlinks the owner");
     assert!(
         e.log()[cursor..]
             .iter()
-            .any(|event| matches!(event, engine_native::LogEvent::CardPlayed { player: 0, .. })),
-        "counterattack plays a virtual Sha"
+            .any(|event| matches!(
+                event,
+                engine_native::LogEvent::VirtualCardPlayed {
+                    player: 0,
+                    kind: engine_native::catalog::CardKind::Sha,
+                    ..
+                }
+            )),
+        "xuanying_use plays a virtual Sha"
     );
-    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
-    let r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
     let expected = e.save();
     let mut actual = r.save();
     actual.auth_generation = expected.auth_generation;
     assert_eq!(actual, expected);
 
-    // 只有父技、沒有子技授予 → 傷害面不可達（不解除橫置、不反擊）。
+    // 受伤不再触发 xuanying_damage（hasDamage: false）。
+    e.state_core_mut().players[0].linked = true;
+    let p1_hp = e.debug_hp(1);
+    let p0_hp = e.debug_hp(0);
+    e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    assert!(e.open_choice().is_none(), "受伤不得弹出 xuanying_damage 窗口");
+    assert_eq!(e.debug_hp(0), p0_hp - 1);
+    assert_eq!(e.debug_hp(1), p1_hp, "受伤不得反击来源");
+    assert!(e.state_core().player(0).linked, "受伤不得解除横置");
+
+    // 只有父技、没有子技授予 → 回合外失牌面不可达。
     let mut no_child = source_parent_engine(&pack);
-    let child = no_child.catalog().skill_by_name("xuanying_damage").unwrap();
+    let child = no_child.catalog().skill_by_name("xuanying_use").unwrap();
     no_child.state_core_mut().skills.remove(&(0, child));
     no_child.debug_set_turn(1, Phase::Play, 1);
     no_child.state_core_mut().players[0].linked = true;
-    let attacker_hp = no_child.debug_hp(1);
-    let owner_hp = no_child.debug_hp(0);
-    let cursor = no_child.log().len();
+    let p0_card2 = no_child.debug_place(0, "tao");
+    no_child.state_core_mut().players[0].hand.retain(|x| *x == p0_card2);
+    let attacker_hp2 = no_child.debug_hp(1);
+    let cursor2 = no_child.log().len();
     no_child.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
     source_settle(&mut no_child);
-    assert_eq!(no_child.debug_hp(0), owner_hp - 1);
-    assert_eq!(
-        no_child.debug_hp(1),
-        attacker_hp,
-        "ungranted damage child must not counterattack"
-    );
+    assert_eq!(no_child.debug_hp(1), attacker_hp2);
+    assert!(no_child.state_core().player(0).linked);
     assert!(
-        no_child.state_core().player(0).linked,
-        "ungranted damage child cannot unlink the owner"
-    );
-    assert!(
-        !no_child.log()[cursor..]
+        !no_child.log()[cursor2..]
             .iter()
-            .any(|event| matches!(event, engine_native::LogEvent::CardPlayed { player: 0, .. })),
+            .any(|event| matches!(
+                event,
+                engine_native::LogEvent::CardPlayed { player: 0, .. }
+                    | engine_native::LogEvent::VirtualCardPlayed { player: 0, .. }
+            )),
         "ungranted child must not manufacture a Sha"
     );
 }

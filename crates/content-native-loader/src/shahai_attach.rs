@@ -11,7 +11,7 @@ use std::collections::BTreeSet;
 
 use engine_native::catalog::{CardDef, CardKind, EquipSlot, Faction, Suit};
 use engine_native::content::extension::{ExtensionGeneral, ExtensionPack};
-use engine_native::content::host::card_kind_equip_skills;
+use engine_native::content::host::{card_kind_equip_skills, HostBehavior, HostSkillDecl};
 use engine_native::content::names;
 use engine_native::content::standard::Gender;
 
@@ -708,4 +708,64 @@ pub fn try_attach_shahai_formal_package(
         );
     }
     attached
+}
+
+/// 桥接扩展包的宿主伴随技补全（蛊惑→rechanyuan、十常侍→danggu/mowang/伴随、swd 二段技）。
+pub(crate) fn attach_bridge_companion_skills(
+    host_skills: &mut Vec<HostSkillDecl>,
+    deferred: &[String],
+) {
+    if host_skills.iter().any(|d| d.name == "reguhuo") {
+        let interned = names::intern("rechanyuan".to_string());
+        if !host_skills.iter().any(|d| d.name == interned) {
+            host_skills.push(HostSkillDecl {
+                name: interned,
+                behavior: HostBehavior::Rechanyuan,
+                presentation_binding: None,
+            });
+        }
+    }
+    if deferred.iter().any(|name| name == "shichangshi") {
+        for &(sk_name, behavior) in &[
+            ("k_danggu", HostBehavior::KDanggu),
+            ("k_mowang", HostBehavior::KMowang),
+        ] {
+            let interned = names::intern(sk_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior,
+                    presentation_binding: None,
+                });
+            }
+        }
+        for &sk_name in &crate::decision34_closure::L10_SCS_COMPANION_SKILLS {
+            let interned = names::intern(sk_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior: HostBehavior::L10ScsCompanion,
+                    presentation_binding: None,
+                });
+            }
+        }
+    }
+    for &(trigger_name, companion_name, behavior) in &[
+        ("kbolan", "kbolan2", HostBehavior::SwdKbolan2),
+        ("lmazui", "lmazui3", HostBehavior::SwdLmazui3),
+        ("touxi", "touxi2", HostBehavior::SwdTouxi2),
+        ("pozhou", "pozhou_sealed", HostBehavior::SwdPozhouSealed),
+        ("pozhou2", "pozhou_sealed", HostBehavior::SwdPozhouSealed),
+    ] {
+        if host_skills.iter().any(|d| d.name == trigger_name) {
+            let interned = names::intern(companion_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior,
+                    presentation_binding: None,
+                });
+            }
+        }
+    }
 }

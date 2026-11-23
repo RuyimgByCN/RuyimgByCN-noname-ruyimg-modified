@@ -539,6 +539,19 @@ pub fn collect_shan_response_cards(
             }
         }
     }
+    let yaotong2 = !target_sealed
+        && !catalog.is_rechanyuan_sealed_name(core, target, "yaotong")
+        && catalog
+            .skill_by_name("yaotong")
+            .is_some_and(|d| core.has_skill(target, d))
+        && core.player(target).hand.len() % 2 == 1;
+    if yaotong2 && !target_hand_blocked {
+        for &c in &core.player(target).hand {
+            if !shans.contains(&c) {
+                shans.push(c);
+            }
+        }
+    }
     if !target_hand_blocked {
         for &c in &core.player(target).hand {
             if catalog

@@ -926,6 +926,11 @@ impl VmAux {
                 && !key.starts_with("zexing_visited:")
                 && !key.starts_with("mbcmjiushi_")
                 && key != "yxs_guimian_sha_limit_bonus"
+                && key != "swd_duishi2"
+                && key != "swd_duishi3"
+                && !key.starts_with("swd_linyun_sha:")
+                && key != "u05_swd_jianji_unequip"
+                && key != "swd_heihuo2"
         });
     }
 

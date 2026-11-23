@@ -1,6 +1,7 @@
 //! 轩辕剑（swd）宿主技：把牌置于目标武将牌旁或判定区（枕流、麻醉、玄咒、命符）。
 
 use super::super::*;
+use super::u08_batch_d::set_flag;
 
 impl HostMachine {
     pub(super) fn step_swd_card_attach(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -124,7 +125,7 @@ impl HostMachine {
                         .copied()
                         .filter(|c| {
                             matches!(
-                                ctx.catalog.cards[*c as usize].suit,
+                                ctx.catalog.effective_card_suit(ctx.core, self.owner, *c),
                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                             )
                         })
@@ -151,24 +152,28 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     if !ctx.core.player(self.owner).hand.contains(&c)
                         || !matches!(
-                            ctx.catalog.cards[c as usize].suit,
+                            ctx.catalog.effective_card_suit(ctx.core, self.owner, c),
                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                         )
                     {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.card = Some(c);
+                    let lm2_def = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
-                        .filter(|p| *p != self.owner && ctx.core.player(*p).off_court.is_empty())
+                        .filter(|p| !lm2_def.is_some_and(|d| ctx.core.has_skill(*p, d)))
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -189,19 +194,23 @@ impl HostMachine {
                         ChoiceOption::Player(p) => Some(*p),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     let Some(c) = self.card else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
+                    let lm2_def = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY);
                     if ctx.core.player(t).alive
-                        && ctx.core.player(t).off_court.is_empty()
+                        && !lm2_def.is_some_and(|d| ctx.core.has_skill(t, d))
                         && ctx.core.player(self.owner).hand.contains(&c)
                     {
                         ctx.take_hand_card(self.owner, c);
                         ctx.core.player_mut(t).off_court.push(c);
-                        // 授予触发面实例（其伤害前置返还+降 1 后自清）
-                        if let Some(def) = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY) {
+                        set_flag(ctx.core, t, "swd_lmazui2_card", u32::from(c) + 1);
+                        // 授予触发面实例（其伤害前置降 1 后挂 lmazui3 归还）
+                        if let Some(def) = lm2_def {
                             ctx.insert_skill(
                                 (t, def),
                                 crate::state::SkillInstance {
@@ -347,10 +356,8 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 命符·姜子牙面：SelectCard 梅花手牌 → TargetChoice 任一其他
-            // 存活 → 弃梅花牌+实体发现鬼幽结置其判定区（上游 prepare throw
-            // + addJudge 同口径；登记差异：实体发现替代 createCard；同名
-            // 判定区重复由命令期校验承担）
+            // 命符·姜子牙面（swd/skill.js:3844）：SelectCard 暂存梅花 he 牌 → TargetChoice 任一
+            // 判定区无鬼幽结的角色 → 不弃牌直接将该牌声明为鬼幽结置入其判定区；取消退回 once_used
             HostBehavior::SwdMingfu => match self.stage {
                 HostStage::Act => {
                     let options: Vec<ChoiceOption> = ctx
@@ -358,16 +365,30 @@ impl HostMachine {
                         .player(self.owner)
                         .hand
                         .iter()
+                        .chain(ctx.core.player(self.owner).equips.iter())
                         .copied()
                         .filter(|c| {
                             matches!(
-                                ctx.catalog.cards[*c as usize].suit,
+                                ctx.catalog.effective_card_suit(ctx.core, self.owner, *c),
                                 crate::catalog::Suit::Club
                             )
                         })
                         .map(ChoiceOption::Card)
                         .collect();
-                    if options.is_empty() {
+                    let has_target = ctx.core.alive_players().any(|p| {
+                        p != self.owner
+                            && !ctx.catalog.blocks_delayed_trick(ctx.core, p)
+                            && !ctx.core.player(p).judge.iter().any(|jc| {
+                                ctx.core
+                                    .declared_kinds
+                                    .get(jc)
+                                    .copied()
+                                    .unwrap_or_else(|| ctx.catalog.card_kind(*jc))
+                                    == CardKind::Guiyoujie
+                            })
+                    });
+                    if options.is_empty() || !has_target {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -388,24 +409,40 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if !ctx.core.player(self.owner).hand.contains(&c)
+                    let owned = ctx.core.player(self.owner).hand.contains(&c)
+                        || ctx.core.player(self.owner).equips.contains(&c);
+                    if !owned
                         || !matches!(
-                            ctx.catalog.cards[c as usize].suit,
+                            ctx.catalog.effective_card_suit(ctx.core, self.owner, c),
                             crate::catalog::Suit::Club
                         )
                     {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
-                    ctx.discard_from_hand(self.owner, c);
+                    self.card = Some(c);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
-                        .filter(|p| *p != self.owner)
+                        .filter(|p| {
+                            *p != self.owner
+                                && !ctx.catalog.blocks_delayed_trick(ctx.core, *p)
+                                && !ctx.core.player(*p).judge.iter().any(|jc| {
+                                    ctx.core
+                                        .declared_kinds
+                                        .get(jc)
+                                        .copied()
+                                        .unwrap_or_else(|| ctx.catalog.card_kind(*jc))
+                                        == CardKind::Guiyoujie
+                                })
+                        })
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -426,28 +463,43 @@ impl HostMachine {
                         ChoiceOption::Player(p) => Some(*p),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if !ctx.core.player(t).alive {
+                    let Some(c) = self.card.take() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive
+                        || t == self.owner
+                        || ctx.catalog.blocks_delayed_trick(ctx.core, t)
+                    {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
-                    // 实体发现鬼幽结（牌堆优先，弃堆兜底；均无则不做）
-                    let found = ctx
-                        .core
-                        .deck
-                        .iter()
-                        .position(|c| ctx.catalog.card_kind(*c) == CardKind::Guiyoujie)
-                        .map(|i| ctx.core.deck.remove(i))
-                        .or_else(|| {
-                            ctx.core
-                                .discard
-                                .iter()
-                                .position(|c| ctx.catalog.card_kind(*c) == CardKind::Guiyoujie)
-                                .map(|i| ctx.core.discard.remove(i))
+                    if ctx.core.player(self.owner).hand.contains(&c) {
+                        ctx.take_hand_card(self.owner, c);
+                    } else if ctx.core.player(self.owner).equips.contains(&c) {
+                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                        if ctx.catalog.card_kind(c).is_equip() {
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                        }
+                        ctx.emit(EventData::CardsLost {
+                            player: self.owner,
+                            cards: vec![c],
+                            origins: vec![crate::event::LostOrigin::Equip],
                         });
-                    if let Some(card) = found {
-                        ctx.core.player_mut(t).judge.push(card);
+                    } else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
                     }
+                    ctx.core.declared_kinds.insert(c, CardKind::Guiyoujie);
+                    ctx.core.player_mut(t).judge.push(c);
+                    ctx.emit(EventData::CardsMoved {
+                        cards: vec![c],
+                        from: self.owner,
+                        to: t,
+                    });
                     Flow::Done
                 }
                 _ => Flow::Done,

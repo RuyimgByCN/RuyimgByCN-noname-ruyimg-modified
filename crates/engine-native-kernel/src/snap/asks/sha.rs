@@ -231,7 +231,14 @@ pub(super) fn active_sha_ask(
             || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;
         let sealed = catalog.is_tieji_sealed(core, target);
         let hand_locked =
-            crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target);
+            crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target)
+                || catalog.blocks_hand_cards(core, target);
+        let yaotong2 = !sealed
+            && !catalog.is_rechanyuan_sealed_name(core, target, "yaotong")
+            && catalog
+                .skill_by_name("yaotong")
+                .is_some_and(|d| core.has_skill(target, d))
+            && core.player(target).hand.len() % 2 == 1;
         let longdan = !sealed
             && !catalog.is_rechanyuan_sealed_name(core, target, LONG_DAN)
             && catalog
@@ -270,6 +277,13 @@ pub(super) fn active_sha_ask(
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
                 if black && !already {
+                    options.push(ChoiceOption::Card(c));
+                }
+            }
+        }
+        if yaotong2 && target_can_play && !hand_locked {
+            for c in core.player(target).hand.iter().copied() {
+                if !options.contains(&ChoiceOption::Card(c)) {
                     options.push(ChoiceOption::Card(c));
                 }
             }

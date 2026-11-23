@@ -1,6 +1,7 @@
 //! 轩辕剑（swd）宿主技：以牌为代价视为使用杀（花间、剑击、林韵、愚钝）。
 
 use super::super::*;
+use super::u08_batch_d::set_flag;
 
 impl HostMachine {
     pub(super) fn step_swd_card_virtual_sha(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -97,8 +98,8 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 剑击·少微面：SelectCard 弃装备牌 → TargetChoice 杀合法目标 →
-            // 虚拟杀 + 摸 1（上游 useCard sha + draw 同口径）
+            // 剑击·少微面（swd/skill.js:3598）：SelectCard 暂存装备牌 → TargetChoice 选目标后
+            // 提交弃牌、置无视防具旗、摸 1 并使用无牌虚拟杀；结算后清旗
             HostBehavior::SwdJianji => match self.stage {
                 HostStage::Act => {
                     let options: Vec<ChoiceOption> = ctx
@@ -112,6 +113,7 @@ impl HostMachine {
                         .map(ChoiceOption::Card)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -132,24 +134,16 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if ctx.core.player(self.owner).hand.contains(&c) {
-                        ctx.discard_from_hand(self.owner, c);
-                    } else if ctx.core.player(self.owner).equips.contains(&c) {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        if ctx.catalog.card_kind(c).is_equip() {
-                            crate::kernel::revoke_equip_skills(
-                                ctx.core,
-                                ctx.catalog,
-                                self.owner,
-                                c,
-                            );
-                        }
-                        ctx.to_discard(c);
-                    } else {
+                    if !ctx.core.player(self.owner).hand.contains(&c)
+                        && !ctx.core.player(self.owner).equips.contains(&c)
+                    {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
+                    self.card = Some(c);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
@@ -161,6 +155,7 @@ impl HostMachine {
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -181,12 +176,47 @@ impl HostMachine {
                         ChoiceOption::Player(p) => Some(*p),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if ctx.core.player(t).alive && !ctx.core.deck.is_empty() {
-                        ctx.use_virtual_card(self.owner, CardKind::Sha, vec![t]);
-                        ctx.start_draw(self.owner, 1);
+                    let Some(c) = self.card.take() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
                     }
+                    let Some(orig) = super::u05_7c_viewas::take_he_card_to_table(ctx, self.owner, c)
+                    else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
+                    };
+                    set_flag(ctx.core, self.owner, "u05_swd_jianji_unequip", 1);
+                    set_flag(ctx.core, self.owner, "vm_va_sha_no_count", 1);
+                    // LIFO：先压杀（以原装备牌 c 作载体）、次压摸 1、最后压 CardsLost（先离区后摸再杀）
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: Some(c),
+                        player: self.owner,
+                        targets: vec![t],
+                        nature: crate::event::DamageNature::Normal,
+                        use_as: Some(CardKind::Sha),
+                        cancelled: false,
+                    }));
+                    ctx.start_draw(self.owner, 1);
+                    ctx.emit(EventData::CardsLost {
+                        player: self.owner,
+                        cards: vec![c],
+                        origins: vec![orig],
+                    });
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::ShuchuiTargetLoop => {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "u05_swd_jianji_unequip".to_string()));
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -292,6 +322,7 @@ impl HostMachine {
                             ctx.discard_from_hand(self.owner, c2);
                             if ctx.core.player(self.owner).hand.contains(&c1) {
                                 ctx.core.declared_kinds.insert(c1, CardKind::Sha);
+                                set_flag(ctx.core, self.owner, &format!("swd_yudun_sha:{c1}"), 1);
                                 ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
                                     c1,
                                     self.owner,
@@ -329,7 +360,7 @@ impl HostMachine {
                             options,
                             min: 2,
                             max: 2,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -368,7 +399,7 @@ impl HostMachine {
                             options: candidates,
                             min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -382,8 +413,15 @@ impl HostMachine {
                     if !ctx.core.player(target).alive {
                         return Flow::Done;
                     }
-                    // 两张牌为转化素材（手牌/装备皆可）：次张弃置，首张为
-                    // 载荷牌并声明为杀
+                    // 两张牌为转化素材（手牌/装备皆可）：混色（一红一黑）为无色 `"none"`，
+                    // 同色保留花色；次张弃置，首张作载荷声明为杀
+                    let is_red = |card: CardId| {
+                        matches!(
+                            ctx.catalog.effective_card_suit(ctx.core, self.owner, card),
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    };
+                    let mixed_color = is_red(*c1) != is_red(*c2);
                     for c in [*c2, *c1] {
                         if ctx.core.player(self.owner).hand.contains(&c) {
                             if c == *c1 {
@@ -418,6 +456,15 @@ impl HostMachine {
                     ctx.core
                         .declared_kinds
                         .insert(*c1, crate::catalog::CardKind::Sha);
+                    set_flag(ctx.core, self.owner, &format!("swd_linyun_sha:{}", *c1), 1);
+                    if mixed_color {
+                        set_flag(
+                            ctx.core,
+                            self.owner,
+                            &format!("swd_linyun_colorless:{}", *c1),
+                            1,
+                        );
+                    }
                     ctx.emit(crate::event::EventData::CardUsed(
                         crate::machine::card_use_as(
                             *c1,

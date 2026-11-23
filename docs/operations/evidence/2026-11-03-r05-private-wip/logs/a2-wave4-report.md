@@ -30,7 +30,7 @@
 | H40 | SwdHuanxing 幻形 | metadata/swd.rs:895 | filtering/swd.rs:695 | — | 无（g1_shahai_swd/huanxing 全绿） |
 | H41 | SwdHuajin2 化金触发面 | metadata/swd.rs:1001（extra_events PhaseBegin→TurnBegin；主事件 DamageBefore 保持） | filtering/swd.rs:814（自清臂→TurnBegin） | step/swd_damage_reactions.rs:187（Phase{Judge,begin} 臂→TurnBegin） | 无（g1_shahai_swd/huajin 全绿） |
 | H43 | SwdFengyinState 机关凤封印 | metadata/swd.rs:1117 | filtering/swd.rs:1062 | — | 无（g1_shahai_gwent 全绿） |
-| H44 | SwdGouhunluoSub 勾魂锣·倒计时 | metadata/swd.rs:1173 | filtering/swd.rs:1100（仅来源 player 的回合） | — | g1_wudian/swd.rs：倒计时导航跨约三轮，drain 改 robust 应答（强制 discard_to_limit 的 Pass 不被接受曾致挂死），A2 H44 注释 |
+| H44 | SwdGouhunluoSub 勾魂锣·倒计时 | metadata/swd_cards.rs:45（原 metadata/swd.rs 第 1173 行） | filtering/swd.rs:1100（仅来源 player 的回合） | — | g1_wudian/swd.rs：倒计时导航跨约三轮，drain 改 robust 应答（强制 discard_to_limit 的 Pass 不被接受曾致挂死），A2 H44 注释 |
 | H45 | WudianGeju 割据 | metadata/wudian.rs:60 | filtering/common.rs:716 | — | 无（g1_wudian/murongziying 全绿） |
 | H49 | XianjianQianfang 千方 | metadata/xianjian.rs:415 | filtering/xianjian.rs:241 | — | 无（t9_d5_surface 全绿） |
 | S14 | BOSS_SHEDU 蛇毒 | standard/boss_skills.rs:191（PhaseBegin→TurnBegin） | standard/skills/shed_u.rs:10（TurnBegin{player}+shedu>0） | — | 无（boss_xiangliu 全绿） |

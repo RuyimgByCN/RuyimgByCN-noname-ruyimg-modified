@@ -36,8 +36,13 @@ pub(in crate::content::host) fn anruo_usable_cards_for_ctx(
         .get(&(owner, "l10_scschihe_block_suits".to_string()))
         .copied()
         .unwrap_or(0);
-    core.player(owner)
-        .hand
+    let can_hand = !catalog.blocks_hand_cards(core, owner);
+    let hand_iter = if can_hand {
+        core.player(owner).hand.as_slice()
+    } else {
+        &[]
+    };
+    hand_iter
         .iter()
         .chain(core.player(owner).equips.iter())
         .copied()

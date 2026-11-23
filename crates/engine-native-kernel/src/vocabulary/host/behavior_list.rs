@@ -3,7 +3,7 @@
 use super::HostBehavior;
 
 impl HostBehavior {
-    pub const ALL: [HostBehavior; 676] = [
+    pub const ALL: [HostBehavior; 682] = [
         HostBehavior::ShaDamageForceDiscard,
         HostBehavior::PhaseEndRecoverOrDraw,
         HostBehavior::TargetDiscardEquipOrDamage,
@@ -680,5 +680,11 @@ impl HostBehavior {
         HostBehavior::U05SwdSadengjinhuan,
         HostBehavior::U05SwdGuiyanfadao,
         HostBehavior::U05SwdTianxianjiu,
+        HostBehavior::SwdTouxi,
+        HostBehavior::SwdTouxi2,
+        HostBehavior::SwdKbolan2,
+        HostBehavior::SwdLmazui3,
+        HostBehavior::SwdXuanyingUse,
+        HostBehavior::SwdPozhouSealed,
     ];
 }

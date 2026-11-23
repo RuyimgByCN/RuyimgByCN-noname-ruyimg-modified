@@ -345,35 +345,30 @@ impl HostMachine {
                     let Some(discarded) = picked else {
                         return Flow::Done;
                     };
-                    if ctx.core.player(self.owner).hand.contains(&discarded) {
-                        ctx.discard_from_hand(self.owner, discarded);
-                    } else {
-                        ctx.core
-                            .player_mut(self.owner)
-                            .equips
-                            .retain(|x| *x != discarded);
-                        crate::kernel::revoke_equip_skills(
-                            ctx.core,
-                            ctx.catalog,
-                            self.owner,
-                            discarded,
-                        );
-                        ctx.to_discard(discarded);
+                    if !super::u05_7c_skills::discard_he_card(ctx, self.owner, discarded) {
+                        return Flow::Done;
                     }
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![discarded],
-                    });
                     {
                         let (used, user) = {
                             let u = ctx.current_card_use_mut();
                             (u.card, u.player)
                         };
                         ctx.current_card_use_mut().cancelled = true;
-                        // 取消的使用：牌从桌面归还使用者手牌（上游
-                        // trigger.cancel 同口径；提交段按 cancelled 跳过）
-                        ctx.core.table.retain(|x| Some(*x) != used);
-                        ctx.core.player_mut(user).hand.extend(used);
+                        // 取消的使用：实体牌置入处理区（若尚在使用者手/装备区），不得退回手牌，
+                        // 交由 intrinsic::discard_remaining_carriers 统一弃入弃牌堆（swd/skill.js:3675）。
+                        if let Some(used_card) = used {
+                            if !ctx.core.table.contains(&used_card) {
+                                if let Some(orig) =
+                                    super::u05_7c_viewas::take_he_card_to_table(ctx, user, used_card)
+                                {
+                                    ctx.emit(EventData::CardsLost {
+                                        player: user,
+                                        cards: vec![used_card],
+                                        origins: vec![orig],
+                                    });
+                                }
+                            }
+                        }
                     }
                     Flow::Done
                 }

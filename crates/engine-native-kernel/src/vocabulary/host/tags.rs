@@ -685,6 +685,12 @@ impl HostBehavior {
             HostBehavior::U05SwdSadengjinhuan => 1337,
             HostBehavior::U05SwdGuiyanfadao => 1338,
             HostBehavior::U05SwdTianxianjiu => 1339,
+            HostBehavior::SwdTouxi => 1340,
+            HostBehavior::SwdTouxi2 => 1341,
+            HostBehavior::SwdKbolan2 => 1342,
+            HostBehavior::SwdLmazui3 => 1343,
+            HostBehavior::SwdXuanyingUse => 1344,
+            HostBehavior::SwdPozhouSealed => 1345,
         }
     }
 

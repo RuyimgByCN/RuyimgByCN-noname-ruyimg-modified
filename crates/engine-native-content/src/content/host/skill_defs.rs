@@ -326,7 +326,6 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::SwdLangeguaiyiEquipSkill
         | HostBehavior::MtgYixialanRecast
         | HostBehavior::SwdShuchuiUse
-        | HostBehavior::SwdDuishi
         | HostBehavior::SwdZhanlu
         // 解纷（第 1007 轮补）：上游 `enable:'phaseUse'` + `usable: 1`
         | HostBehavior::SwdJiefen
@@ -355,19 +354,17 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::SwdYijue
         | HostBehavior::SwdDangping
         | HostBehavior::SwdMingfu
-        | HostBehavior::SwdCyxianjiang
         | HostBehavior::SwdJianji
         | HostBehavior::SwdAojian
         | HostBehavior::SwdHuajin
         | HostBehavior::SwdXuanzhou
         | HostBehavior::SwdFuniao
-        | HostBehavior::SwdHeihuo
         | HostBehavior::SwdToudan
         | HostBehavior::SwdNlianji
         | HostBehavior::SwdShehun
         | HostBehavior::SwdJuxi
-        | HostBehavior::SwdPozhou2
-        | HostBehavior::SwdSxianjing
+        | HostBehavior::SwdYeying
+        | HostBehavior::SwdFengze
         | HostBehavior::SwdGuxing => crate::catalog::SkillLimits {
             once_per_turn: true,
             ..Default::default()

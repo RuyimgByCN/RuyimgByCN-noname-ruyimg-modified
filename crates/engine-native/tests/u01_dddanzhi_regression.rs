@@ -767,14 +767,10 @@ fn dddanzhi_black_fengze_taoyuan_restores_nullify_window_and_carrier() {
         give(&mut e, 2, black);
         give(&mut e, 0, counter);
         e.debug_set_turn(2, Phase::Play, 3);
-        submit(
-            &mut e,
-            2,
-            GameAction::PlayCard {
-                card: black,
-                targets: vec![],
-            },
-        );
+        let fz_def = e.catalog().skill_by_name("fengze").unwrap();
+        submit(&mut e, 2, GameAction::ActivateSkill { skill: fz_def });
+        assert_eq!(e.open_choice().unwrap().spec.prompt, "fengze_pick");
+        answer(&mut e, vec![ChoiceOption::Card(black)]);
         assert_eq!(e.open_choice().unwrap().spec.prompt, "nullify_window");
         let snapshot = decode_archive(&encode_archive(&e.save())).unwrap();
         let mut restored = Engine::restore_with_extensions(&snapshot, &packs).unwrap();

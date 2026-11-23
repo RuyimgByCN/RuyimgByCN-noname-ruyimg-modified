@@ -591,11 +591,17 @@ impl HostSkillBehavior {
             HostBehavior::FzLiegong => (None, None),
             HostBehavior::FzXinKuanggu => (None, None),
             HostBehavior::SwdNlianji => (None, None),
-            // 铁壁：杀的首个非持有者目标（活/距/护甲校验在 filter）
-            HostBehavior::SwdTiebi => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), None),
+            // 铁壁：目标与距离校验在机器步内遍历 `u.targets` 完成
+            HostBehavior::SwdTiebi => (None, None),
+            HostBehavior::SwdTouxi => match event {
+                EventData::TurnEndWindow { player, .. } => (Some(*player), None),
                 _ => (None, None),
             },
+            HostBehavior::SwdTouxi2
+            | HostBehavior::SwdKbolan2
+            | HostBehavior::SwdLmazui3
+            | HostBehavior::SwdXuanyingUse
+            | HostBehavior::SwdPozhouSealed => (None, None),
             // 大同：自己（摸 2）
             HostBehavior::SwdDatong => (Some(owner), None),
             // 承剑：伤害来源（摸 1 面在效果）

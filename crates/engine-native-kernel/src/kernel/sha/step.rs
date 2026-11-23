@@ -152,15 +152,27 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     return self.advance_target(ctx);
                 }
             }
-            if ctx
+            let has_cike = ctx
                 .catalog
                 .skill_by_name("cike")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            let has_fayin = ctx
+                .catalog
+                .skill_by_name("fayin")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            let has_linyun = ctx
+                .catalog
+                .skill_by_name("linyun")
                 .is_some_and(|d| ctx.core.has_skill(self.source, d))
                 || ctx
                     .catalog
-                    .skill_by_name("fayin")
-                    .is_some_and(|d| ctx.core.has_skill(self.source, d))
-            {
+                    .skill_by_name("linyun2")
+                    .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            let has_lingyue = ctx
+                .catalog
+                .skill_by_name("lingyue")
+                .is_some_and(|d| ctx.core.has_skill(self.source, d));
+            if has_cike || has_fayin || has_linyun || has_lingyue {
                 if self.renwang_blocks(ctx, qinggang_pierce) {
                     return self.advance_target(ctx);
                 }
@@ -215,10 +227,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 不可被闪避（上游 yxs_fanji2 shaBegin → trigger.directHit 同口径）
         let yxs_fanji2_direct_hit = {
             let red = self.card.is_some_and(|c| {
-                matches!(
-                    ctx.catalog.resolved_card_suit(ctx.core, c),
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                )
+                !crate::kernel::is_linyun_colorless(ctx.core, self.source, c)
+                    && matches!(
+                        ctx.catalog.resolved_card_suit(ctx.core, c),
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
             });
             red && ctx
                 .catalog
@@ -239,10 +252,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             };
         let poyue_direct_hit = {
             let red = self.card.is_some_and(|c| {
-                matches!(
-                    ctx.catalog.resolved_card_suit(ctx.core, c),
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                )
+                !crate::kernel::is_linyun_colorless(ctx.core, self.source, c)
+                    && matches!(
+                        ctx.catalog.resolved_card_suit(ctx.core, c),
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    )
             });
             red && (ctx
                     .catalog
@@ -259,8 +273,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         };
         if !self.armor_judged {
             self.armor_judged = true;
-            let guilong_direct_hit =
-                crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
+            let guilong_direct_hit = !self
+                .card
+                .is_some_and(|c| crate::kernel::is_linyun_colorless(ctx.core, self.source, c))
+                && crate::rvm_bridge::modifiers::d34_l28_mods::is_guilong_red_sha(
                     ctx.core,
                     ctx.catalog,
                     self.source,
@@ -672,41 +688,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             if let Some(flow) = self.resolve_yueren(ctx) {
                 return flow;
             }
-            // 玲月（司徒强，swd 武将面批㉗）：锁定——杀指定目标后目标弃
-            // 置一张牌（he 确定性首张，登记差异上游目标自选 chooseToDiscard
-            // forced；每杀每目标一次=!asked 门内）
-            {
-                let has_lingyue = ctx
-                    .catalog
-                    .skill_by_name("lingyue")
-                    .map(|d| ctx.core.has_skill(self.source, d))
-                    .unwrap_or(false);
-                if has_lingyue && ctx.core.player(self.target).alive {
-                    let hand_first = ctx.core.player(self.target).hand.first().copied();
-                    let eq_first = ctx.core.player(self.target).equips.first().copied();
-                    if let Some(c) = hand_first.or(eq_first) {
-                        let in_hand = ctx.core.player(self.target).hand.contains(&c);
-                        if in_hand {
-                            ctx.discard_from_hand(self.target, c);
-                        } else {
-                            ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
-                            if ctx.catalog.resolved_card_kind(ctx.core, c).is_equip() {
-                                crate::kernel::revoke_equip_skills(
-                                    ctx.core,
-                                    ctx.catalog,
-                                    self.target,
-                                    c,
-                                );
-                            }
-                            ctx.to_discard(c);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: self.target,
-                                cards: vec![c],
-                            });
-                        }
-                    }
-                }
-            }
+            // 玲月（司徒强）与林韵（linyun2）均已收敛至 shaBegin 宿主钩子 `u05_7c_sha.rs`。
             let jianwu_hit = ctx
                 .catalog
                 .skill_by_name("jianwu")

@@ -432,19 +432,31 @@ fn swd_generals_b63_lianwu_yuchen_duishi_xielei() {
             selection: vec![ChoiceOption::Player(1)],
         },
     );
-    // p1 同花色窗：若 p1 恰有 heart 则空应答拒打；无 heart 则直接获得面
+    // p1 同花色窗：若 p1 恰有同花色则空应答拒打；随后走 duishi_gain 自选获得窗
     if let Some(c) = e.open_choice() {
-        assert_eq!(c.spec.prompt, "duishi_discard_same_suit");
-        let (cid, obs) = (c.id, c.observer);
-        submit(
-            &mut e,
-            obs,
-            GameAction::Answer {
-                choice_id: cid,
-                selection: vec![],
-            },
-        );
+        if c.spec.prompt == "duishi_discard_same_suit" {
+            let (cid, obs) = (c.id, c.observer);
+            submit(
+                &mut e,
+                obs,
+                GameAction::Answer {
+                    choice_id: cid,
+                    selection: vec![],
+                },
+            );
+        }
     }
+    let gain_ch = e.open_choice().expect("对诗拒绝/无同花色后开 duishi_gain 窗");
+    assert_eq!(gain_ch.spec.prompt, "duishi_gain");
+    let (cid, obs, pick_opt) = (gain_ch.id, gain_ch.observer, gain_ch.spec.options[0]);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![pick_opt],
+        },
+    );
     settle_optional_confirm(&mut e);
     assert!(e.debug_hand(0).len() >= 1, "对诗拒绝面：p0 获得一张");
     assert!(!e.debug_hand(1).contains(&p1_any) || e.debug_hand(0).contains(&p1_any) || true);

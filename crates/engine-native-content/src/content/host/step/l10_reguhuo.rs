@@ -205,7 +205,7 @@ pub(crate) fn reguhuo_response_skill(
 ) -> Option<SkillDefId> {
     if !core.player(responder).alive
         || core.player(responder).hand.is_empty()
-        || catalog.blocks_all_cards(core, responder)
+        || catalog.blocks_hand_cards(core, responder)
     {
         return None;
     }

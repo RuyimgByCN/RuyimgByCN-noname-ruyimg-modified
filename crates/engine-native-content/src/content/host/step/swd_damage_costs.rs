@@ -222,8 +222,7 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 冰箭：SelectCard 弃黑色杀 → TargetChoice 有手牌目标 → 闪全
-            // 弃或 1 雷伤
+            // 冰箭：SelectCard 暂存黑色杀 → TargetChoice 选目标后再弃牌 → 闪全弃或 1 雷伤；取消退回 once_used
             HostBehavior::SwdBingjian => match self.stage {
                 HostStage::Act => {
                     let options: Vec<ChoiceOption> = ctx
@@ -235,13 +234,14 @@ impl HostMachine {
                         .filter(|c| {
                             ctx.catalog.card_kind(*c).is_sha_like()
                                 && matches!(
-                                    ctx.catalog.cards[*c as usize].suit,
+                                    ctx.catalog.effective_card_suit(ctx.core, self.owner, *c),
                                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                                 )
                         })
                         .map(ChoiceOption::Card)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -262,13 +262,14 @@ impl HostMachine {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if ctx.core.player(self.owner).hand.contains(&picked) {
-                        ctx.discard_from_hand(self.owner, picked);
-                    } else {
+                    if !ctx.core.player(self.owner).hand.contains(&picked) {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
+                    self.card = Some(picked);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
@@ -276,6 +277,7 @@ impl HostMachine {
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::TargetChoice;
@@ -296,12 +298,24 @@ impl HostMachine {
                         ChoiceOption::Player(p) => Some(*p),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    if !ctx.core.player(t).alive {
+                    let Some(picked) = self.card.take() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive
+                        || !ctx.core.player(self.owner).hand.contains(&picked)
+                    {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
-                    // 亮手牌（登记展示）：闪全弃，否则 1 雷伤
+                    ctx.discard_from_hand(self.owner, picked);
+                    ctx.log(LogEvent::CardDiscarded {
+                        player: self.owner,
+                        cards: vec![picked],
+                    });
                     let shans: Vec<CardId> = ctx
                         .core
                         .player(t)
@@ -319,9 +333,13 @@ impl HostMachine {
                             None,
                         )));
                     } else {
-                        for c in shans {
-                            ctx.discard_from_hand(t, c);
+                        for c in &shans {
+                            ctx.discard_from_hand(t, *c);
                         }
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: t,
+                            cards: shans,
+                        });
                     }
                     Flow::Done
                 }
@@ -357,35 +375,18 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
-                    let in_hand = ctx.core.player(self.owner).hand.contains(&picked);
-                    if in_hand {
-                        ctx.take_hand_card(self.owner, picked);
-                    } else {
-                        ctx.core
-                            .player_mut(self.owner)
-                            .equips
-                            .retain(|x| *x != picked);
-                        if ctx.catalog.card_kind(picked).is_equip() {
-                            crate::kernel::revoke_equip_skills(
-                                ctx.core,
-                                ctx.catalog,
-                                self.owner,
-                                picked,
-                            );
-                        }
+                    if !ctx.core.player(self.owner).hand.contains(&picked)
+                        && !ctx.core.player(self.owner).equips.contains(&picked)
+                    {
+                        return Flow::Done;
                     }
-                    ctx.to_discard(picked);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![picked],
-                    });
+                    self.card = Some(picked);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
                         .filter(|p| {
                             *p != self.owner
-                                && ctx.core.computed_distance(ctx.catalog, self.owner, *p)
-                                    <= ctx.core.attack_range(ctx.catalog, self.owner)
+                                && ctx.core.computed_distance(ctx.catalog, self.owner, *p) <= 1
                                 && ctx.core.player(self.owner).hp <= ctx.core.player(*p).hp
                         })
                         .map(ChoiceOption::Player)
@@ -413,15 +414,21 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
-                    if ctx.core.player(t).alive {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
+                    let Some(picked) = self.card.take() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive
+                        || !super::u05_7c_skills::discard_he_card(ctx, self.owner, picked)
+                    {
+                        return Flow::Done;
                     }
+                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                        Some(self.owner),
+                        t,
+                        1,
+                        crate::event::DamageNature::Normal,
+                        None,
+                    )));
                     Flow::Done
                 }
                 _ => Flow::Done,

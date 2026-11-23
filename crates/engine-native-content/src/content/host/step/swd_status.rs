@@ -9,26 +9,6 @@ impl HostMachine {
             HostBehavior::SwdHuanxia => Flow::Done,
             // 破月：无效果步
             HostBehavior::SwdPoyue => Flow::Done,
-            // 森罗：activate 门已验手牌最少——对其他有手牌角色各：弃 2
-            //（确定性首两张，登记差异上游自选）+摸 1
-            HostBehavior::SwdSenluo => {
-                let targets: Vec<PlayerId> = ctx
-                    .core
-                    .alive_players()
-                    .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
-                    .collect();
-                for t in targets {
-                    let hand: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
-                    let n = hand.len().min(2);
-                    for c in hand.into_iter().take(n) {
-                        ctx.discard_from_hand(t, c);
-                    }
-                    if ctx.core.player(t).alive {
-                        ctx.start_draw(t, 1);
-                    }
-                }
-                Flow::Done
-            }
             // 诱引：frequent 锁定式——直摸 1（无确认窗）
             HostBehavior::SwdYouyin => {
                 if ctx.core.player(self.owner).alive {
@@ -229,38 +209,9 @@ impl HostMachine {
             // 幻形·移除面：移除幻形授予的技能实例（在位旗标=内部状态技能
             // 实例；按其他玩家将技能全表尝试移除——登记差异：不追踪具体
             // 授予集）
+            // 幻形·移除面：自己受伤结算后清除本次授予技能、swd_huanxing_prev_gid 与在位标记
             HostBehavior::SwdHuanxing2 => {
-                // 移除幻形授予的技能实例：按 all 玩家（除自己）将技能名
-                // 全表扫描，跳过自己本将技能（登记差异：不追踪具体授予
-                // 集，同名他将技能亦会被移除的边界已收窄为本将排除）
-                let own: Vec<&'static str> = {
-                    let meta = ctx.catalog.general_meta(
-                        ctx.core.player(self.owner).general_slots[0].unwrap_or(u16::MAX),
-                    );
-                    meta.map(|(_, _, skills, _, _)| skills).unwrap_or_default()
-                };
-                let mut candidates: Vec<&'static str> = Vec::new();
-                for i in 0..ctx.core.players.len() {
-                    let pid = i as PlayerId;
-                    if pid == self.owner {
-                        continue;
-                    }
-                    let meta = ctx
-                        .catalog
-                        .general_meta(ctx.core.player(pid).general_slots[0].unwrap_or(u16::MAX));
-                    if let Some((_, _, skills, _, _)) = meta {
-                        for s in skills {
-                            if !own.contains(&s) && !candidates.contains(&s) {
-                                candidates.push(s);
-                            }
-                        }
-                    }
-                }
-                for n in candidates {
-                    if let Some(def) = ctx.catalog.skill_by_name(n) {
-                        ctx.core.skills.remove(&(self.owner, def));
-                    }
-                }
+                super::swd_card_targets::revoke_huanxing_granted(ctx, self.owner, true);
                 if let Some(sdef) = ctx.catalog.skill_by_name(SWD_HUANXING_STATE_KEY) {
                     ctx.core.skills.remove(&(self.owner, sdef));
                 }
@@ -347,27 +298,6 @@ impl HostMachine {
                     }
                 } else if ctx.core.player(r).alive {
                     ctx.start_draw(r, 1);
-                }
-                Flow::Done
-            }
-            // 铁壁：弃首张黑牌 → 目标 +1 护甲（登记差异：上游玩家选弃牌）
-            HostBehavior::SwdTiebi => {
-                let Some(t) = self.target else {
-                    return Flow::Done;
-                };
-                let black = ctx.core.player(self.owner).hand.iter().copied().find(|c| {
-                    matches!(
-                        ctx.catalog.cards[*c as usize].suit,
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    )
-                });
-                if let Some(c) = black {
-                    ctx.discard_from_hand(self.owner, c);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: self.owner,
-                        cards: vec![c],
-                    });
-                    ctx.change_hujia(t, 1);
                 }
                 Flow::Done
             }
@@ -497,20 +427,6 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 灵弦：与座位序首个攻击距离 >1 的其他存活者各摸 1
-            // （登记差异：自选目标→首个确定性近似；可放弃→恒发动近似）
-            HostBehavior::SwdLingxian => {
-                let n = ctx.core.players.len() as u8;
-                if let Some(t) = (0..n).find(|t| {
-                    *t != self.owner
-                        && ctx.core.player(*t).alive
-                        && ctx.core.computed_distance(ctx.catalog, self.owner, *t) > 1
-                }) {
-                    ctx.start_draw(self.owner, 1);
-                    ctx.start_draw(t, 1);
-                }
-                Flow::Done
-            }
             // 魂身（deferred 消解批 胡月）：使用/打出闪后计数 +1
             HostBehavior::SwdHyunshen => {
                 ctx.core.player_mut(self.owner).hyunshen_count =
@@ -582,14 +498,20 @@ impl HostMachine {
                         cards: vec![trap],
                     });
                 }
-                // 随机获得使用者一张 he 牌（确定性：首个 he）
-                let stolen = ctx
-                    .core
-                    .player(attacker)
-                    .hand
-                    .first()
-                    .copied()
-                    .or_else(|| ctx.core.player(attacker).equips.first().copied());
+                // 随机获得使用者一张 he 牌（hand + equips 联合均匀随机）
+                let h_len = ctx.core.player(attacker).hand.len();
+                let e_len = ctx.core.player(attacker).equips.len();
+                let total = h_len + e_len;
+                let stolen = if total == 0 {
+                    None
+                } else {
+                    let j = ctx.core.rng.gen_range(total as u32) as usize;
+                    if j < h_len {
+                        Some(ctx.core.player(attacker).hand[j])
+                    } else {
+                        Some(ctx.core.player(attacker).equips[j - h_len])
+                    }
+                };
                 if let Some(c) = stolen {
                     ctx.take_owned_card(attacker, c);
                     ctx.core.player_mut(self.owner).hand.push(c);
@@ -601,9 +523,12 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 陷阱·取回：受伤后随机取回一张陷阱（确定性：首个）
+            // 陷阱·取回：受伤后随机取回一张陷阱（rng.gen_range）
             HostBehavior::SwdSxianjingDamage => {
-                if let Some(trap) = ctx.core.player(self.owner).sxianjing_traps.first().copied() {
+                let n = ctx.core.player(self.owner).sxianjing_traps.len();
+                if n > 0 {
+                    let j = ctx.core.rng.gen_range(n as u32) as usize;
+                    let trap = ctx.core.player(self.owner).sxianjing_traps[j];
                     ctx.core
                         .player_mut(self.owner)
                         .sxianjing_traps
@@ -717,6 +642,18 @@ impl HostMachine {
                     }
                 }
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_FENGYIN_STATE_KEY) {
+                    ctx.core.skills.remove(&(self.owner, def));
+                }
+                Flow::Done
+            }
+            // 破舟·封印到期（swd/skill.js:3463）：拥有者下一回合结束（TurnPhaseAfter）恢复技能并移除自身
+            HostBehavior::SwdPozhouSealed => {
+                for ((p, _), inst) in ctx.core.skills.iter_mut() {
+                    if *p == self.owner {
+                        inst.enabled = true;
+                    }
+                }
+                if let Some(def) = ctx.catalog.skill_by_name(SWD_POZHOU_SEALED_KEY) {
                     ctx.core.skills.remove(&(self.owner, def));
                 }
                 Flow::Done

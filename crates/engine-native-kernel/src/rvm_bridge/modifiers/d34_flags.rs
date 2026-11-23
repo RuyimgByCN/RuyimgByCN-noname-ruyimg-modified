@@ -1001,6 +1001,7 @@ pub fn apply_ignore_armor_with_card(
             && (has_ext_skill(state, catalog, source, "shouyue")
                 || flag_val(state, source, "shouyue_active") > 0))
         || flag_val(state, source, "l27_twxiafeng_spent") > 0
+        || flag_val(state, source, "u05_swd_jianji_unequip") > 0
     {
         ignore = true;
     }

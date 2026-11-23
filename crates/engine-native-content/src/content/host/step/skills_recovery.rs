@@ -226,7 +226,7 @@ impl HostMachine {
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
-                        .filter(|p| *p != self.owner && ctx.core.player(*p).max_hp as u16 >= need)
+                        .filter(|p| ctx.core.player(*p).max_hp as u16 >= need)
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {

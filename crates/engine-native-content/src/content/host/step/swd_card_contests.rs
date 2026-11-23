@@ -1,4 +1,5 @@
 use super::super::*;
+use super::u08_batch_d::{flag, set_flag};
 
 impl HostMachine {
     pub(super) fn step_swd_card_contests(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -42,13 +43,16 @@ impl HostMachine {
                     if !ctx.core.player(self.owner).hand.contains(&picked) {
                         return Flow::Done;
                     }
-                    // 花色由所选实体查目录——同花色弃牌窗按此过滤
+                    self.card = Some(picked);
                     self.cards = vec![picked];
-                    ctx.discard_from_hand(self.owner, picked);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
-                        .filter(|p| *p != self.owner && !ctx.core.player(*p).hand.is_empty())
+                        .filter(|p| {
+                            *p != self.owner
+                                && !ctx.core.player(*p).hand.is_empty()
+                                && flag(ctx.core, *p, "swd_duishi3") == 0
+                        })
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
@@ -74,30 +78,30 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
-                    if !ctx.core.player(t).alive || ctx.core.player(t).hand.is_empty() {
+                    let Some(picked) = self.card else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive
+                        || ctx.core.player(t).hand.is_empty()
+                        || !ctx.core.player(self.owner).hand.contains(&picked)
+                    {
                         return Flow::Done;
                     }
-                    let suit = self
-                        .cards
-                        .first()
-                        .map(|c| ctx.catalog.cards[*c as usize].suit);
+                    ctx.discard_from_hand(self.owner, picked);
+                    let suit = ctx.catalog.effective_card_suit(ctx.core, self.owner, picked);
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(t)
                         .hand
                         .iter()
-                        .filter(|c| {
-                            suit.map(|s| ctx.catalog.cards[**c as usize].suit == s)
-                                .unwrap_or(false)
-                        })
+                        .filter(|c| ctx.catalog.effective_card_suit(ctx.core, t, **c) == suit)
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
-                    if options.is_empty() {
-                        // 无同花色手牌：直接走获得面
-                        return self.duishi_gain_random(ctx, t);
-                    }
                     self.target = Some(t);
+                    if options.is_empty() {
+                        return self.duishi_prompt_gain(ctx, t);
+                    }
                     self.stage = HostStage::CardsAsk;
                     Flow::WaitChoice {
                         observer: t,
@@ -105,9 +109,9 @@ impl HostMachine {
                             kind: ChoiceKind::SelectCards,
                             prompt: "duishi_discard_same_suit",
                             options,
-                            min: 0,
+                            min: 1,
                             max: 1,
-                            allow_cancel: false,
+                            allow_cancel: true,
                         },
                     }
                 }
@@ -119,13 +123,63 @@ impl HostMachine {
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    if let Some(c) = pick.filter(|c| ctx.core.player(t).hand.contains(c)) {
-                        ctx.discard_from_hand(t, c);
-                        Flow::Done
-                    } else {
-                        // 空应答=拒绝 → 随机获得
-                        self.duishi_gain_random(ctx, t)
+                    if let Some(c) = pick {
+                        if ctx.core.player(t).hand.contains(&c) {
+                            ctx.discard_from_hand(t, c);
+                            set_flag(ctx.core, t, "swd_duishi3", 1);
+                            return Flow::Done;
+                        }
                     }
+                    self.duishi_prompt_gain(ctx, t)
+                }
+                HostStage::CompareTargetPick => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    let in_hand = ctx.core.player(t).hand.contains(&c);
+                    let in_equip = ctx.core.player(t).equips.contains(&c);
+                    if !in_hand && !in_equip {
+                        return Flow::Done;
+                    }
+                    let orig = if in_hand {
+                        ctx.take_hand_card(t, c);
+                        crate::event::LostOrigin::Hand
+                    } else {
+                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
+                        ctx.core.declared_slots.remove(&c);
+                        ctx.core.player_mut(t).card_mods.remove(&c);
+                        if ctx.catalog.card_kind(c).is_equip() {
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+                        }
+                        crate::event::LostOrigin::Equip
+                    };
+                    ctx.note_cards_lost(t, &[c]);
+                    if ctx.core.player(self.owner).alive {
+                        ctx.core.player_mut(self.owner).hand.push(c);
+                        ctx.log(LogEvent::CardsTaken {
+                            from: t,
+                            to: self.owner,
+                            cards: vec![c],
+                            public: !in_hand,
+                        });
+                        set_flag(ctx.core, self.owner, "swd_duishi2", 1);
+                        ctx.emit(EventData::CardsMoved {
+                            cards: vec![c],
+                            from: t,
+                            to: self.owner,
+                        });
+                    } else {
+                        ctx.to_discard(c);
+                    }
+                    ctx.emit(EventData::CardsLost {
+                        player: t,
+                        cards: vec![c],
+                        origins: vec![orig],
+                    });
+                    Flow::Done
                 }
                 _ => Flow::Done,
             },

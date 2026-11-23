@@ -33,19 +33,20 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 麻醉·临月面（武将面批 83）：有黑色手牌且有其他未挂附存活角色
+            // 麻醉·临月面：有黑色手牌且有未持 lmazui2 的存活角色（含自己，swd/skill.js:1279）
             HostBehavior::SwdLmazui => {
                 let black = ctx.state.player(owner).hand.iter().any(|c| {
                     matches!(
-                        ctx.catalog.cards[*c as usize].suit,
+                        ctx.catalog.effective_card_suit(&ctx.state, owner, *c),
                         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                     )
                 });
-                let others = ctx
+                let lm2_def = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY);
+                let has_target = ctx
                     .state
                     .alive_players()
-                    .any(|p| p != owner && ctx.state.player(p).off_court.is_empty());
-                if !black || !others {
+                    .any(|p| !lm2_def.is_some_and(|d| ctx.state.has_skill(p, d)));
+                if !black || !has_target {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -87,10 +88,13 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 奥剑（deferred 消解批）：已损失体力≥1 且有手牌
+            // 奥剑（swd/skill.js:4074）：已损失体力≥1、有手牌且攻击距离<=1内有其他角色
             HostBehavior::SwdAojian => {
                 let x = (ctx.state.player(owner).max_hp as i32 - ctx.state.player(owner).hp).max(0);
-                if x == 0 || ctx.state.player(owner).hand.is_empty() {
+                let in_range = ctx.state.alive_players().any(|p| {
+                    p != owner && ctx.state.computed_distance(ctx.catalog, owner, p) <= 1
+                });
+                if x == 0 || ctx.state.player(owner).hand.is_empty() || !in_range {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -121,9 +125,14 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 拼点（deferred 消解批）：手牌有牌
+            // 拼点（swd/skill.js:3971）：自己有手牌且至少两名其他角色有手牌
             HostBehavior::SwdNlianji => {
-                if ctx.state.player(owner).hand.is_empty() {
+                let others = ctx
+                    .state
+                    .alive_players()
+                    .filter(|p| *p != owner && !ctx.state.player(*p).hand.is_empty())
+                    .count();
+                if ctx.state.player(owner).hand.is_empty() || others < 2 {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -178,7 +187,7 @@ impl HostSkillBehavior {
                     }
                     let sealed = ctx
                         .catalog
-                        .skill_by_name(SWD_FENGYIN_STATE_KEY)
+                        .skill_by_name(SWD_POZHOU_SEALED_KEY)
                         .map(|d| ctx.state.has_skill(p, d))
                         .unwrap_or(false);
                     !sealed
@@ -273,14 +282,14 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 林韵（swd 批 127）：出牌阶段主动——两张牌（手/装备）当杀
+            // 林韵（swd 批 127）：出牌阶段主动——未受杀次数/封锁限制且两张牌（手/装备）当杀
             HostBehavior::SwdLinyun => {
-                if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
-                    || ctx.state.turn.current != owner
+                if !super::super::step::skills_virtual_use::can_activate_sha_viewas(
+                    &ctx.state,
+                    ctx.catalog,
+                    owner,
+                ) || ctx.state.player(owner).hand.len() + ctx.state.player(owner).equips.len() < 2
                 {
-                    return None;
-                }
-                if ctx.state.player(owner).hand.len() + ctx.state.player(owner).equips.len() < 2 {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -349,15 +358,21 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 黑火（deferred 消解批）：he 有装备牌
+            // 黑火（swd/skill.js:1987）：有手牌、he 有装备且无回合锁 swd_heihuo2
             HostBehavior::SwdHeihuo => {
-                let has = ctx
-                    .state
-                    .player(owner)
-                    .hand
-                    .iter()
-                    .chain(ctx.state.player(owner).equips.iter())
-                    .any(|c| ctx.catalog.card_kind(*c).is_equip());
+                let has = !ctx.state.player(owner).hand.is_empty()
+                    && !ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .contains_key(&(owner, "swd_heihuo2".to_string()))
+                    && ctx
+                        .state
+                        .player(owner)
+                        .hand
+                        .iter()
+                        .chain(ctx.state.player(owner).equips.iter())
+                        .any(|c| ctx.catalog.card_kind(*c).is_equip());
                 if !has {
                     return None;
                 }
@@ -419,15 +434,33 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 命符·姜子牙面（武将面批 88）：有梅花手牌
+            // 命符·姜子牙面：he 有梅花且存在判定区未有鬼幽结的目标
             HostBehavior::SwdMingfu => {
-                let club = ctx.state.player(owner).hand.iter().any(|c| {
-                    matches!(
-                        ctx.catalog.cards[*c as usize].suit,
-                        crate::catalog::Suit::Club
-                    )
+                let club = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| {
+                        matches!(
+                            ctx.catalog.effective_card_suit(&ctx.state, owner, *c),
+                            crate::catalog::Suit::Club
+                        )
+                    });
+                let has_target = ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && !ctx.catalog.blocks_delayed_trick(&ctx.state, p)
+                        && !ctx.state.player(p).judge.iter().any(|jc| {
+                            ctx.state
+                                .declared_kinds
+                                .get(jc)
+                                .copied()
+                                .unwrap_or_else(|| ctx.catalog.card_kind(*jc))
+                                == CardKind::Guiyoujie
+                        })
                 });
-                if !club {
+                if !club || !has_target {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -461,14 +494,20 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 活弹·舒莞儿面（武将面批 85）：有红色手牌且存活其他角色≥1
+            // 活弹·舒莞儿面：he 有红色牌（有效花色）且存活其他角色 ≥1
             HostBehavior::SwdHuodan => {
-                let red = ctx.state.player(owner).hand.iter().any(|c| {
-                    matches!(
-                        ctx.catalog.cards[*c as usize].suit,
-                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                    )
-                });
+                let red = ctx
+                    .state
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .chain(ctx.state.player(owner).equips.iter())
+                    .any(|c| {
+                        matches!(
+                            ctx.catalog.effective_card_suit(&ctx.state, owner, *c),
+                            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                        )
+                    });
                 let others = ctx.state.alive_players().any(|p| p != owner);
                 if !red || !others {
                     return None;
@@ -484,7 +523,7 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 愚钝·福面（武将面批 82）：两张锦囊手牌且在攻击范围内有目标
+            // 愚钝·福面（武将面批 82）：出牌阶段未达杀次数上限、手牌未被封锁、两张锦囊手牌且存在合法杀目标
             HostBehavior::SwdYudun => {
                 let tricks = ctx
                     .state
@@ -498,12 +537,14 @@ impl HostSkillBehavior {
                             && k.is_basic_trick_or_equip()
                     })
                     .count();
-                let in_range = ctx.state.alive_players().any(|p| {
-                    p != owner
-                        && ctx.state.computed_distance(ctx.catalog, owner, p)
-                            <= ctx.state.attack_range(ctx.catalog, owner)
-                });
-                if tricks < 2 || !in_range {
+                if tricks < 2
+                    || ctx.catalog.blocks_hand_cards(&ctx.state, owner)
+                    || !super::super::step::skills_virtual_use::can_activate_sha_viewas(
+                        &ctx.state,
+                        ctx.catalog,
+                        owner,
+                    )
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -517,9 +558,10 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 占星·肯迪面（武将面批 82）：有手牌
+            // 占星·肯迪面（swd/skill.js）：he 有牌即可发动
             HostBehavior::SwdZhanxing => {
-                if ctx.state.player(owner).hand.is_empty() {
+                let p = ctx.state.player(owner);
+                if p.hand.is_empty() && p.equips.is_empty() {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -592,7 +634,7 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 焰羽·少微面（武将面批㊱）：红色牌 ≥2
+            // 焰羽·少微面（武将面批㊱）：有效红色牌 ≥2 且存在其他存活角色
             HostBehavior::SwdHuangyu => {
                 let reds = ctx
                     .state
@@ -602,12 +644,13 @@ impl HostSkillBehavior {
                     .chain(ctx.state.player(owner).equips.iter())
                     .filter(|c| {
                         matches!(
-                            ctx.catalog.cards[**c as usize].suit,
+                            ctx.catalog.effective_card_suit(&ctx.state, owner, **c),
                             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                         )
                     })
                     .count();
-                if reds < 2 {
+                let has_other = ctx.state.alive_players().any(|p| p != owner);
+                if reds < 2 || !has_other {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -659,16 +702,20 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 冰箭（武将面批㉞ 海大胖）：手牌有黑色杀
+            // 冰箭（swd）：手牌有黑色杀且存在有手牌的其他存活角色
             HostBehavior::SwdBingjian => {
                 let has = ctx.state.player(owner).hand.iter().any(|c| {
                     ctx.catalog.card_kind(*c).is_sha_like()
                         && matches!(
-                            ctx.catalog.cards[*c as usize].suit,
+                            ctx.catalog.effective_card_suit(&ctx.state, owner, *c),
                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                         )
                 });
-                if !has {
+                let has_target = ctx
+                    .state
+                    .alive_players()
+                    .any(|p| p != owner && !ctx.state.player(p).hand.is_empty());
+                if !has || !has_target {
                     return None;
                 }
                 Some(Box::new(HostMachine {
@@ -844,10 +891,21 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 对诗（武将面批㉒ 王思月）：手牌非空即发动（usable:1 走
-            // limits；上游 duishi2/3 临时技面由限一次收敛）
+            // 对诗（swd/skill.js:3786）：未置 duishi2、有手牌且存在手牌非空且未置 duishi3 之其他角色
             HostBehavior::SwdDuishi => {
-                if ctx.state.player(owner).hand.is_empty() {
+                let has_target = ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && !ctx.state.player(p).hand.is_empty()
+                        && !ctx.state.vm_aux.flags.contains_key(&(p, "swd_duishi3".to_string()))
+                });
+                if ctx.state.player(owner).hand.is_empty()
+                    || ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .contains_key(&(owner, "swd_duishi2".to_string()))
+                    || !has_target
+                {
                     return None;
                 }
                 Some(Box::new(HostMachine {

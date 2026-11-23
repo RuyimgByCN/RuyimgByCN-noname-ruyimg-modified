@@ -66,7 +66,18 @@ impl HostMachine {
                     if targets.is_empty() || targets.iter().any(|t| !ctx.core.player(*t).alive) {
                         return Flow::Done;
                     }
-                    ctx.use_virtual_card(self.owner, CardKind::Sha, targets);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.owner, "vm_va_sha_no_count".to_string()), 1);
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: None,
+                        player: self.owner,
+                        targets,
+                        nature: crate::event::DamageNature::Normal,
+                        use_as: Some(CardKind::Sha),
+                        cancelled: false,
+                    }));
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -83,13 +94,14 @@ impl HostMachine {
                         .copied()
                         .filter(|c| {
                             matches!(
-                                ctx.catalog.cards[*c as usize].suit,
+                                ctx.catalog.effective_card_suit(ctx.core, self.owner, *c),
                                 crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                             )
                         })
                         .map(ChoiceOption::Card)
                         .collect();
                     if reds.len() < 2 {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -110,35 +122,25 @@ impl HostMachine {
                         .answer()
                         .iter()
                         .filter_map(|o| match o {
-                            ChoiceOption::Card(c) => Some(*c),
+                            ChoiceOption::Card(c)
+                                if matches!(
+                                    ctx.catalog.effective_card_suit(ctx.core, self.owner, *c),
+                                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                                ) =>
+                            {
+                                Some(*c)
+                            }
                             _ => None,
                         })
                         .collect();
                     if picks.len() < 2 {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     for c in picks {
-                        let in_hand = ctx.core.player(self.owner).hand.contains(&c);
-                        if in_hand {
-                            ctx.take_hand_card(self.owner, c);
-                        } else {
-                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                            if ctx.catalog.card_kind(c).is_equip() {
-                                crate::kernel::revoke_equip_skills(
-                                    ctx.core,
-                                    ctx.catalog,
-                                    self.owner,
-                                    c,
-                                );
-                            }
-                        }
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![c],
-                        });
+                        let _ = super::u05_7c_skills::discard_he_card(ctx, self.owner, c);
                     }
-                    // 虚拟炽羽袭：全体其他存活（座位序，同 AOE push 口径）
+                    // 虚拟炽羽袭（card: None 空牌堆安全）：全体其他存活（座位序，同 AOE push 口径）
                     let targets: Vec<PlayerId> = ctx
                         .core
                         .seat_order_from(ctx.core.next_alive(self.owner))
@@ -148,7 +150,14 @@ impl HostMachine {
                     if targets.is_empty() {
                         return Flow::Done;
                     }
-                    ctx.use_virtual_card(self.owner, CardKind::Chiyuxi, targets);
+                    ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                        card: None,
+                        player: self.owner,
+                        targets,
+                        nature: crate::event::DamageNature::Normal,
+                        use_as: Some(CardKind::Chiyuxi),
+                        cancelled: false,
+                    }));
                     Flow::Done
                 }
                 _ => Flow::Done,

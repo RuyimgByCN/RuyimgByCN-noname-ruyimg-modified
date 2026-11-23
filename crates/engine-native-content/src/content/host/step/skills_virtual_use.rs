@@ -245,25 +245,19 @@ impl HostMachine {
                 HostStage::ReguhuoFinalPick => super::l10_reguhuo::step_final_pick(self, ctx),
                 _ => Flow::Done,
             },
-            // 极略：看牌堆顶 3 张 → 选一张基本/锦囊牌 → 选目标 → 使用
+            // 极略（swd/skill.js:3308）：看牌堆顶 3 张（不足 3 张且弃牌堆非空时先洗入弃牌堆并保留既有堆顶）→ 选一张可使用的基本/锦囊牌 → 选目标（含借刀两段）→ 置桌面使用
             HostBehavior::Jilve => match self.stage {
                 HostStage::Act => {
-                    let top: Vec<CardId> = ctx.core.deck.iter().rev().take(3).copied().collect();
-                    let options: Vec<ChoiceOption> = top
-                        .into_iter()
-                        .filter(|c| {
-                            let kind = ctx.catalog.card_kind(*c);
-                            if kind.is_basic_kind() || kind.equip_slot().is_none() {
-                                // 基本牌或锦囊（非装备）且目标规则可满足
-                                let (min, _, targets) =
-                                    ctx.core.legal_targets(ctx.catalog, kind, self.owner);
-                                min == 0 || !targets.is_empty()
-                            } else {
-                                false
-                            }
-                        })
-                        .map(ChoiceOption::Card)
-                        .collect();
+                    if ctx.core.deck.len() < 3 && !ctx.core.discard.is_empty() {
+                        let existing_top = std::mem::take(&mut ctx.core.deck);
+                        let mut washed = std::mem::take(&mut ctx.core.discard);
+                        ctx.core.rng.shuffle(&mut washed);
+                        crate::kernel::elo_on_wash_deck(ctx.core, &washed);
+                        washed.extend(existing_top);
+                        ctx.core.deck = washed;
+                        ctx.log(LogEvent::DeckReshuffled);
+                    }
+                    let options = jilve_card_options(ctx.core, ctx.catalog, self.owner);
                     if options.is_empty() {
                         return Flow::Done;
                     }
@@ -284,21 +278,29 @@ impl HostMachine {
                     let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
                         return Flow::Done;
                     };
-                    if !ctx.core.deck.contains(&card) {
+                    if !ctx.core.deck.contains(&card)
+                        || !jilve_card_playable(ctx.core, ctx.catalog, self.owner, card)
+                    {
                         return Flow::Done;
                     }
                     let kind = ctx.catalog.card_kind(card);
-                    let (min, max, targets) = ctx.core.legal_targets(ctx.catalog, kind, self.owner);
+                    let (min, max, targets) =
+                        jilve_legal_targets(ctx.core, ctx.catalog, kind, self.owner);
                     self.card = Some(card);
                     if min == 0 && max == 0 {
-                        // 无目标牌：直接使用（牌堆 → 手牌 → CardUsed）
+                        // 无须手选目标（无中生有 targets=[], AOE targets=合法目标列表）：牌堆 → 处理区 table → CardUsed
                         ctx.core.deck.retain(|c| *c != card);
-                        ctx.core.player_mut(self.owner).hand.push(card);
+                        ctx.core.table.push(card);
                         ctx.core.player_mut(self.owner).jilve_used += 1;
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "极略",
+                            owner: self.owner,
+                            presentation: None,
+                        });
                         ctx.emit(EventData::CardUsed(crate::machine::card_use(
                             card,
                             self.owner,
-                            Vec::new(),
+                            targets,
                         )));
                         self.stage = HostStage::ShuchuiTargetLoop;
                         return Flow::Yield;
@@ -334,14 +336,65 @@ impl HostMachine {
                     if targets.is_empty() || !ctx.core.deck.contains(&card) {
                         return Flow::Done;
                     }
+                    if ctx.catalog.card_kind(card) == CardKind::Jiedao {
+                        let holder = targets[0];
+                        let victims = ctx.core.legal_jiedao_victims(ctx.catalog, holder);
+                        if victims.is_empty() {
+                            return Flow::Done;
+                        }
+                        self.target = Some(holder);
+                        self.stage = HostStage::JiefenTarget;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectPlayers,
+                                prompt: "jilve_jiedao_victim",
+                                options: victims.into_iter().map(ChoiceOption::Player).collect(),
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
                     ctx.core.deck.retain(|c| *c != card);
-                    ctx.core.player_mut(self.owner).hand.push(card);
+                    ctx.core.table.push(card);
                     ctx.core.player_mut(self.owner).jilve_used += 1;
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "极略",
-                        owner: self.owner, presentation: None });
+                        owner: self.owner,
+                        presentation: None,
+                    });
                     ctx.emit(EventData::CardUsed(crate::machine::card_use(
                         card, self.owner, targets,
+                    )));
+                    self.stage = HostStage::ShuchuiTargetLoop;
+                    Flow::Yield
+                }
+                HostStage::JiefenTarget => {
+                    let Some(card) = self.card else {
+                        return Flow::Done;
+                    };
+                    let Some(holder) = self.target else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Player(victim)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.deck.contains(&card) {
+                        return Flow::Done;
+                    }
+                    ctx.core.deck.retain(|c| *c != card);
+                    ctx.core.table.push(card);
+                    ctx.core.player_mut(self.owner).jilve_used += 1;
+                    ctx.log(LogEvent::SkillTriggered {
+                        skill: "极略",
+                        owner: self.owner,
+                        presentation: None,
+                    });
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use(
+                        card,
+                        self.owner,
+                        vec![holder, victim],
                     )));
                     self.stage = HostStage::ShuchuiTargetLoop;
                     Flow::Yield
@@ -354,9 +407,13 @@ impl HostMachine {
                 HostStage::Act => {
                     let lost_equips =
                         match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
-                            Some(EventData::CardsLost { origins, .. }) => origins
+                            Some(EventData::CardsLost { cards, origins, .. }) => cards
                                 .iter()
-                                .filter(|o| **o == crate::event::LostOrigin::Equip)
+                                .enumerate()
+                                .filter(|(i, c)| {
+                                    origins.get(*i) == Some(&crate::event::LostOrigin::Equip)
+                                        || ctx.catalog.card_kind(**c).is_equip()
+                                })
                                 .count(),
                             _ => 0,
                         };
@@ -454,4 +511,149 @@ impl HostMachine {
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+}
+
+pub(in crate::content::host) fn can_activate_sha_viewas(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> bool {
+    matches!(core.turn.phase, crate::event::Phase::Play)
+        && core.turn.current == owner
+        && !catalog.blocks_all_cards(core, owner)
+        && !sha_blocked_for(core, catalog, owner)
+        && !core.legal_targets(catalog, CardKind::Sha, owner).2.is_empty()
+}
+
+pub(in crate::content::host) fn sha_blocked_for(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> bool {
+    let birin = catalog
+        .skill_by_name(GW_BIRIN_STATE_KEY)
+        .is_some_and(|def| core.skills.get(&(owner, def)).is_some_and(|i| i.enabled));
+    let shouhu = catalog
+        .skill_by_name(WUDIAN_SHOUHU_KEY)
+        .is_some_and(|def| core.skills.get(&(owner, def)).is_some_and(|i| i.enabled));
+    let qz = catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_QINGZHU)
+        .is_some_and(|def| core.skills.get(&(owner, def)).is_some_and(|i| i.enabled))
+        && !catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_JIDING)
+            .is_some_and(|def| core.has_skill(owner, def));
+    if birin || shouhu || qz {
+        return true;
+    }
+    if !core.turn.sha_used_play_phase {
+        return false;
+    }
+    if core.current_land == Some(CardKind::Longlushanfeng) && !core.turn.land_sha_used {
+        return false;
+    }
+    !super::l10_reguhuo::has_unlimited_sha(core, catalog, owner)
+}
+
+pub(in crate::content::host) fn jilve_legal_targets(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    kind: CardKind,
+    owner: PlayerId,
+) -> (u8, u8, Vec<PlayerId>) {
+    let (min, max, mut targets) = core.legal_targets(catalog, kind, owner);
+    if matches!(kind, CardKind::Le | CardKind::Bing | CardKind::Guiyoujie) {
+        targets.retain(|&p| !catalog.blocks_delayed_trick(core, p));
+    }
+    (min, max, targets)
+}
+
+pub(in crate::content::host) fn jilve_card_playable(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+    card: CardId,
+) -> bool {
+    let kind = catalog.card_kind(card);
+    if kind.is_equip() || !kind.is_basic_trick_or_equip() {
+        return false;
+    }
+    if matches!(
+        kind,
+        CardKind::Shan
+            | CardKind::Nullify
+            | CardKind::Hufu
+            | CardKind::Youdishenru
+            | CardKind::Jinlianzhu
+            | CardKind::Shenmiguo
+            | CardKind::Jiguan
+            | CardKind::Hslingjian
+    ) {
+        return false;
+    }
+    if core.player(owner).wangshi_ban && kind.is_basic_kind() {
+        return false;
+    }
+    if kind.is_sha_like() && sha_blocked_for(core, catalog, owner) {
+        return false;
+    }
+    if matches!(kind, CardKind::Jiu | CardKind::Tianxianjiu) && core.turn.jiu_used {
+        return false;
+    }
+    if kind == CardKind::Tao && crate::kernel::tao_futai2_banned(core, catalog, owner) {
+        return false;
+    }
+    if kind == CardKind::Changshezhen
+        && !core.inline(catalog, owner)
+        && !core
+            .alive_players()
+            .any(|p| p != owner && core.is_friend_of(catalog, owner, p))
+    {
+        return false;
+    }
+    if kind == CardKind::Dizaizhen
+        && !core
+            .alive_players()
+            .any(|p| !core.is_major_faction(catalog, p))
+    {
+        return false;
+    }
+    if matches!(
+        kind,
+        CardKind::Tianfuzhen | CardKind::Qixingzhen | CardKind::Niaoxiangzhen
+    ) && core.players.len() < 4
+    {
+        return false;
+    }
+    let (min, max, targets) = jilve_legal_targets(core, catalog, kind, owner);
+    if min == 0 && max == 0 {
+        if matches!(
+            kind,
+            CardKind::Wugu
+                | CardKind::Taoyuan
+                | CardKind::SavageAttack
+                | CardKind::ArcheryAttack
+                | CardKind::Jingleishan
+                | CardKind::Chiyuxi
+                | CardKind::Xianluhui
+        ) {
+            return !targets.is_empty();
+        }
+        return true;
+    }
+    targets.len() >= min as usize
+}
+
+pub(in crate::content::host) fn jilve_card_options(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> Vec<ChoiceOption> {
+    core.deck
+        .iter()
+        .rev()
+        .take(3)
+        .copied()
+        .filter(|c| jilve_card_playable(core, catalog, owner, *c))
+        .map(ChoiceOption::Card)
+        .collect()
 }

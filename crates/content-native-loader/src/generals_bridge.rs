@@ -70,7 +70,15 @@ pub(crate) fn bridge_generals_inner(
                 0..=u64::from(u32::MAX),
             )?
             .map(|n| n as u32);
-            match mapping_of(sk, "generals[].skills[].mapping")? {
+            let mapped_gen_skill = match mapping_of(sk, "generals[].skills[].mapping")? {
+                MappedSkill::Builtin(b)
+                    if b == "突袭" && key == "touxi" && name == "swd_duguningke" =>
+                {
+                    MappedSkill::Host(engine_native::content::host::HostBehavior::SwdTouxi)
+                }
+                other => other,
+            };
+            match mapped_gen_skill {
                 MappedSkill::Host(behavior) => {
                     let interned = names::intern(key.to_string());
                     match host_skills.iter().find(|d| d.name == interned) {

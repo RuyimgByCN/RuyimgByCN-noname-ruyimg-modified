@@ -122,7 +122,7 @@ impl ShaResolveMachine {
         }
         let eff_suit = self
             .card
-            .map(|c| ctx.catalog.effective_card_suit(ctx.core, self.source, c));
+            .and_then(|c| crate::kernel::effective_sha_suit(ctx.core, ctx.catalog, self.source, c));
         let black = matches!(
             eff_suit,
             Some(crate::catalog::Suit::Spade | crate::catalog::Suit::Club)

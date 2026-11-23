@@ -99,6 +99,15 @@ pub(super) fn host_sha_begin_step_impl(
     ) {
         return true;
     }
+    if crate::content::host::step::u05_7c_sha::sha_begin_step_u05_7c(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+    ) {
+        return true;
+    }
     if crate::content::host::step::u05_b5b_gwent::u05_b5b_sha_begin_step(
         ctx,
         sha_frame_id,
@@ -218,6 +227,20 @@ pub(super) fn host_card_use_after_impl(
     fid: crate::ids::EventId,
     u: &CardUseData,
 ) {
+    if let Some(cid) = u.card {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(u.player, format!("swd_linyun_sha:{cid}")));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(u.player, format!("swd_linyun_colorless:{cid}")));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(u.player, format!("swd_yudun_sha:{cid}")));
+    }
     crate::content::host::step::u05_ow::host_card_use_after_ow(ctx, u);
     crate::content::host::step::l27_fixes::host_card_use_after_clandianzhan(ctx, u);
     crate::content::host::step::u01_fixes_1::u01_card_use_after_hook(ctx, u);

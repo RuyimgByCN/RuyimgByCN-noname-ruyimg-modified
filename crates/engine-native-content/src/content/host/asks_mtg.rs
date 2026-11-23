@@ -800,6 +800,8 @@ pub(super) fn active_ask_batches(
             }
             _ => None,
         },
-        _ => None,
+        _ => super::step::u05_7c_asks::ask_u05_7c(
+            behavior, stage, owner, target, targets, card, cards, core, catalog,
+        ),
     }
 }

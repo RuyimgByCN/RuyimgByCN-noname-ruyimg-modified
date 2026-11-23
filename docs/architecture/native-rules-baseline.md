@@ -1,5 +1,15 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-7c（U05 SWD 角色技能 Part 1 113 项语义对齐、`combat_rules_sha.rs` 拆分、`xuanying_use` / `PlayCard` 防劫持回落与 2 项边界保留）
+
+- **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `1340..=1345`（`SwdTouxi..=SwdPozhouSealed`，[behavior.rs](../../crates/engine-native-kernel/src/vocabulary/host/behavior.rs#L1890-L1902)，`HostBehavior::ALL=682`，`trigger_bearing=309`），[known_prompts_u05_7c.rs](../../crates/engine-native-kernel/src/archive/known_prompts_u05_7c.rs#L3-L30) 尾追加 `26` 条提示词（`"touxi_discard"..="fengze_pick"`），接入 [metadata/swd_cards.rs](../../crates/engine-native-kernel/src/vocabulary/host/metadata/swd_cards.rs)、`u05_7c_{asks,sha,skills,viewas}.rs`（4 模块）、[extension_choices_swd.rs](../../crates/engine-native/src/ai/extension_choices_swd.rs) 与 `u05_b7c_swd_skills1/*`（`24` 项测试），并将 `swd_duguningke` `"突袭"` 桥接至 `HostBehavior::SwdTouxi`（[generals_bridge.rs](../../crates/content-native-loader/src/generals_bridge.rs)）。
+  - **主线协同与 R1–R3 修复**：从 [combat_rules.rs](../../crates/engine-native-kernel/src/kernel/combat_rules.rs) 拆出 [combat_rules_sha.rs](../../crates/engine-native-kernel/src/kernel/combat_rules_sha.rs) 承接 `sha_card_use_as` / `sha_blocked_for` / `sha_user_or_target_blocked` / `usable_sha_options`（保 Rust 非测试 `<= 1,000` 有效行）；[keys.rs](../../crates/engine-native-kernel/src/vocabulary/host/keys.rs#L13-L16) 自 `SwdXuanying::group_children` 移除 `xuanying_damage`，仅授予 `xuanying_use`；`yeying`/`guiying`/`fengze` 改由 `ActivateSkill` 显式转化，`huanxia`/`yaotong` 经 [huanxia_yaotong_play_fallback](../../crates/engine-native/src/engine/play_rules.rs#L878-L912) 仅在目标非天然合法时回落当杀，[play_rules.rs](../../crates/engine-native/src/engine/play_rules.rs#L28-L32) 与 `:129` 分别维持 `is_u01_hand_locked` (`CardLimit`) 与 `blocks_hand_cards` (`IllegalTargets` / `mianzhen2`) 分工；[filtering/swd.rs](../../crates/engine-native-content/src/content/host/filtering/swd.rs) 与 `u05_7c_sha.rs` 等闭环 `aojian`/`shangxi`（`computed_distance <= 1` + `owner.hp <= p.hp`）、`linyun`（混色 `"none"` 无视黑杀限制）、`yudun` 作用域计数、`kbolan` `frequent` 可选确认、`jilve` 牌堆重洗、`cyxianjiang` 同回合多目标与 `swd_linyun_*`/`swd_yudun_sha` 清旗。
+- **明确保留为 `简化近似` 的 `2` 项 SWD 角色技能边界**：
+  1. `U05:skills:pojian`（`character/swd/skill.js:2123`）：[filtering/swd.rs](../../crates/engine-native-content/src/content/host/filtering/swd.rs#L614-L624) 仅于 `CardsDiscarded` 触发，未覆全完整 `loseEnd` 手牌失去窗口。
+  2. `U05:skills:xuanyuan_ai`（`character/swd/skill.js:3289`）：仅属 AI 评分加成标签，未接入 `engine-native/src/ai/`。
+
 ## 2026-11-23 Batch U05-7b（U05 SWD 卡牌 Part 2 40 张与 64 技能 104 项语义对齐、`is_tao_like_core` / `yuchan_swap` `Stage::Done` 延迟与 4 技能边界保留）
 
 - **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

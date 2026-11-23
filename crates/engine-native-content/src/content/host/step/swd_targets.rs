@@ -3,17 +3,17 @@ use super::super::*;
 impl HostMachine {
     pub(super) fn step_swd_targets(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
-            // 浴尘：Act 选目标（he 非空其他角色）→ TargetChoice 随机弃其
-            // 一张（登记差异：上游弃牌者自选，原生 RNG 代选——冰河要塞
-            // 同款登记；装备随 revoke）
+            // 浴尘：Act 选目标（he 非空其他角色）→ 目标自选弃其一张 he 牌
             HostBehavior::SwdYuchen => match self.stage {
                 HostStage::Act => {
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
                         .filter(|p| {
-                            let pl = ctx.core.player(*p);
-                            !pl.hand.is_empty() || !pl.equips.is_empty()
+                            *p != self.owner && {
+                                let pl = ctx.core.player(*p);
+                                !pl.hand.is_empty() || !pl.equips.is_empty()
+                            }
                         })
                         .map(ChoiceOption::Player)
                         .collect();
@@ -43,27 +43,30 @@ impl HostMachine {
                     if !ctx.core.player(t).alive {
                         return Flow::Done;
                     }
-                    let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
-                    pool.extend(ctx.core.player(t).equips.iter().copied());
-                    if pool.is_empty() {
+                    let options = super::u05_7c_skills::he_card_options(ctx.core, t);
+                    if options.is_empty() {
                         return Flow::Done;
                     }
-                    let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-                    let c = pool[j];
-                    let is_equip = ctx.catalog.card_kind(c).is_equip();
-                    if ctx.core.player(t).hand.contains(&c) {
-                        ctx.take_hand_card(t, c);
-                    } else {
-                        ctx.core.player_mut(t).equips.retain(|x| *x != c);
-                        if is_equip {
-                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
-                        }
+                    self.target = Some(t);
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "yuchen_discard",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
                     }
-                    ctx.to_discard(c);
-                    ctx.log(LogEvent::CardDiscarded {
-                        player: t,
-                        cards: vec![c],
-                    });
+                }
+                HostStage::SelectCard => {
+                    if let (Some(t), Some(ChoiceOption::Card(c))) =
+                        (self.target, ctx.answer().first().copied())
+                    {
+                        let _ = super::u05_7c_skills::discard_he_card(ctx, t, c);
+                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -380,10 +383,13 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 破舟·封印：消耗 1 计数，封印一名其他角色（全部技能禁用至其
-            // 下一阶段开始；登记差异：上游至其下一回合结束）
+            // 破舟·封印（swd/skill.js:3415）：多选 1..pozhou_count 名未封印其他角色，按人数扣计数并仅禁用非锁定技
             HostBehavior::SwdPozhou2 => match self.stage {
                 HostStage::Act => {
+                    let cap = ctx.core.player(self.owner).pozhou_count as usize;
+                    if cap == 0 {
+                        return Flow::Done;
+                    }
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .alive_players()
@@ -393,7 +399,7 @@ impl HostMachine {
                             }
                             let sealed = ctx
                                 .catalog
-                                .skill_by_name(SWD_FENGYIN_STATE_KEY)
+                                .skill_by_name(SWD_POZHOU_SEALED_KEY)
                                 .map(|d| ctx.core.has_skill(*p, d))
                                 .unwrap_or(false);
                             !sealed
@@ -403,6 +409,7 @@ impl HostMachine {
                     if options.is_empty() {
                         return Flow::Done;
                     }
+                    let max = cap.min(options.len());
                     self.stage = HostStage::TargetChoice;
                     Flow::WaitChoice {
                         observer: self.owner,
@@ -411,40 +418,63 @@ impl HostMachine {
                             prompt: "pozhou_target",
                             options,
                             min: 1,
-                            max: 1,
+                            max,
                             allow_cancel: true,
                         },
                     }
                 }
                 HostStage::TargetChoice => {
-                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
+                    let targets: Vec<PlayerId> = ctx
+                        .answer()
+                        .iter()
+                        .filter_map(|o| match o {
+                            ChoiceOption::Player(p) => Some(*p),
+                            _ => None,
+                        })
+                        .collect();
+                    if targets.is_empty() {
                         return Flow::Done;
-                    };
-                    let cur = ctx.core.player(self.owner).pozhou_count;
-                    ctx.core.player_mut(self.owner).pozhou_count = cur.saturating_sub(1);
-                    if let Some(fdef) = ctx.catalog.skill_by_name(SWD_FENGYIN_STATE_KEY) {
-                        let keys: Vec<(PlayerId, crate::ids::SkillDefId)> = ctx
-                            .core
-                            .skills
-                            .iter()
-                            .map(|((p, d), _)| (*p, *d))
-                            .filter(|(p, d)| *p == t && *d != fdef)
-                            .collect();
-                        for k in keys {
-                            if let Some(inst) = ctx.core.skills.get_mut(&k) {
-                                inst.enabled = false;
+                    }
+                    let cap = ctx.core.player(self.owner).pozhou_count as usize;
+                    let take = targets.len().min(cap);
+                    ctx.core.player_mut(self.owner).pozhou_count =
+                        (cap - take) as u8;
+                    if let Some(sdef) = ctx.catalog.skill_by_name(SWD_POZHOU_SEALED_KEY) {
+                        for t in targets.into_iter().take(take) {
+                            if !ctx.core.player(t).alive || ctx.core.has_skill(t, sdef) {
+                                continue;
                             }
+                            let keys: Vec<(PlayerId, crate::ids::SkillDefId)> = ctx
+                                .core
+                                .skills
+                                .iter()
+                                .map(|((p, d), _)| (*p, *d))
+                                .filter(|(p, d)| {
+                                    *p == t
+                                        && *d != sdef
+                                        && !ctx.catalog.is_charlotte_skill(*d)
+                                        && !crate::catalog::Catalog::is_locked_skill_name(
+                                            ctx.catalog.skills[*d as usize].name,
+                                            ctx.catalog.skills[*d as usize].trigger.as_ref(),
+                                        )
+                                })
+                                .collect();
+                            for k in keys {
+                                if let Some(inst) = ctx.core.skills.get_mut(&k) {
+                                    inst.enabled = false;
+                                }
+                            }
+                            ctx.insert_skill(
+                                (t, sdef),
+                                crate::state::SkillInstance {
+                                    owner: t,
+                                    enabled: true,
+                                    once_used: false,
+                                    expires_end_of_turn: false,
+                                    rounds: 0,
+                                },
+                            );
                         }
-                        ctx.insert_skill(
-                            (t, fdef),
-                            crate::state::SkillInstance {
-                                owner: t,
-                                enabled: true,
-                                once_used: false,
-                                expires_end_of_turn: false,
-                                rounds: 0,
-                            },
-                        );
                     }
                     Flow::Done
                 }

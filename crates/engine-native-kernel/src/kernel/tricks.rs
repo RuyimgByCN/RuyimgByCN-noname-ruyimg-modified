@@ -27,12 +27,32 @@ impl crate::catalog::SkillMachine for WuzhongMachine {
         crate::snap::MachineSnapshot::Wuzhong { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        if !self.draw_done {
+        let fid = ctx.current_frame_id();
+        let draw_started_key = format!("wuzhong_draw_started:{fid}");
+        if !self.draw_done
+            && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.owner, draw_started_key.clone()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+        {
             // R05：真实 R 帧（先摸 2）——Yield 等 R 子树完成后续行弃本体。
+            // 同步落旗标以兼容中途 Draw 挂起（如 kbolan2_top）读档续行不重摸。
             self.draw_done = true;
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((self.owner, draw_started_key), 1);
             ctx.start_draw(self.owner, 2);
             return Flow::Yield;
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.owner, draw_started_key));
         // 弃置锦囊本体（按牌种扫表：恢复期安全，不依赖快照携带 card）。
         if let Some(pos) = ctx
             .core

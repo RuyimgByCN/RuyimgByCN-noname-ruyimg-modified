@@ -331,6 +331,7 @@ impl HostMachine {
                 }
                 HostStage::SelectCard => {
                     let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     self.cards = vec![c];
@@ -345,6 +346,7 @@ impl HostMachine {
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::CardsAsk;
@@ -362,6 +364,7 @@ impl HostMachine {
                 }
                 HostStage::CardsAsk => {
                     let Some(ChoiceOption::Player(t0)) = ctx.answer().first().copied() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     self.target = Some(t0);
@@ -374,6 +377,7 @@ impl HostMachine {
                         .map(ChoiceOption::Player)
                         .collect();
                     if options.is_empty() {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::CompareTargetPick;
@@ -391,12 +395,13 @@ impl HostMachine {
                 }
                 HostStage::CompareTargetPick => {
                     let Some(ChoiceOption::Player(t1)) = ctx.answer().first().copied() else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
-                    self.targets = vec![t1];
                     let Some(t0) = self.target else {
                         return Flow::Done;
                     };
+                    self.targets = vec![t0, t1];
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(t0)
@@ -425,39 +430,110 @@ impl HostMachine {
                     let Some(ChoiceOption::Card(t0_card)) = ctx.answer().first().copied() else {
                         return Flow::Done;
                     };
-                    let Some(t0) = self.target else {
+                    if self.targets.len() < 2 || self.cards.is_empty() {
                         return Flow::Done;
-                    };
-                    let Some(t1) = self.targets.first().copied() else {
-                        return Flow::Done;
-                    };
-                    // t1 拼点牌：座位序首个手牌（登记差异：自选→首个）
-                    let Some(t1_card) = ctx.core.player(t1).hand.first().copied() else {
-                        return Flow::Done;
-                    };
-                    let Some(throw_card) = self.cards.first().copied() else {
-                        return Flow::Done;
-                    };
-                    if ctx.core.player(t0).hand.contains(&t0_card) {
-                        ctx.discard_from_hand(t0, t0_card);
                     }
-                    if ctx.core.player(t1).hand.contains(&t1_card) {
-                        ctx.discard_from_hand(t1, t1_card);
+                    let t1 = self.targets[1];
+                    self.cards = vec![self.cards[0], t0_card];
+                    self.target = Some(t1);
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(t1)
+                        .hand
+                        .iter()
+                        .copied()
+                        .map(ChoiceOption::Card)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
                     }
+                    self.stage = HostStage::JiefenTarget;
+                    Flow::WaitChoice {
+                        observer: t1,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "nlianji_t1_pick",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::JiefenTarget => {
+                    let Some(ChoiceOption::Card(t1_card)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if self.targets.len() < 2 || self.cards.len() < 2 {
+                        return Flow::Done;
+                    }
+                    let (t0, t1) = (self.targets[0], self.targets[1]);
+                    let (throw_card, t0_card) = (self.cards[0], self.cards[1]);
+                    if !ctx.core.player(self.owner).hand.contains(&throw_card)
+                        || !ctx.core.player(t0).hand.contains(&t0_card)
+                        || !ctx.core.player(t1).hand.contains(&t1_card)
+                    {
+                        return Flow::Done;
+                    }
+                    // 上游 nlianji：先将所亮手牌置入处理区（离手+CardsLost），平局时入弃堆，胜负则交予胜者
+                    ctx.take_hand_card(self.owner, throw_card);
+                    ctx.core.table.push(throw_card);
+                    ctx.note_cards_lost(self.owner, &[throw_card]);
+                    ctx.discard_from_hand(t0, t0_card);
+                    ctx.discard_from_hand(t1, t1_card);
                     let r0 = ctx.catalog.cards[t0_card as usize].rank;
                     let r1 = ctx.catalog.cards[t1_card as usize].rank;
                     if r0 == r1 {
+                        ctx.core.table.retain(|x| *x != throw_card);
+                        ctx.to_discard(throw_card);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: self.owner,
+                            cards: vec![throw_card],
+                        });
+                        ctx.emit(EventData::CardsLost {
+                            player: self.owner,
+                            cards: vec![throw_card],
+                            origins: vec![crate::event::LostOrigin::Hand],
+                        });
                         return Flow::Done;
                     }
                     let (winner, loser) = if r0 > r1 { (t0, t1) } else { (t1, t0) };
-                    ctx.give_hand_card(self.owner, winner, throw_card);
-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                        Some(winner),
-                        loser,
-                        1,
-                        crate::event::DamageNature::Normal,
-                        None,
-                    )));
+                    ctx.core.table.retain(|x| *x != throw_card);
+                    let mut moved_to_winner = false;
+                    if ctx.core.player(winner).alive {
+                        ctx.core.player_mut(winner).hand.push(throw_card);
+                        ctx.log(LogEvent::CardsTaken {
+                            from: self.owner,
+                            to: winner,
+                            cards: vec![throw_card],
+                            public: true,
+                        });
+                        moved_to_winner = true;
+                    } else {
+                        ctx.to_discard(throw_card);
+                    }
+                    // LIFO：先压伤害，后压 CardsMoved 与 CardsLost（先离手→得牌→再造成伤害）
+                    if ctx.core.player(loser).alive {
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(winner),
+                            loser,
+                            1,
+                            crate::event::DamageNature::Normal,
+                            None,
+                        )));
+                    }
+                    if moved_to_winner {
+                        ctx.emit(EventData::CardsMoved {
+                            cards: vec![throw_card],
+                            from: self.owner,
+                            to: winner,
+                        });
+                    }
+                    ctx.emit(EventData::CardsLost {
+                        player: self.owner,
+                        cards: vec![throw_card],
+                        origins: vec![crate::event::LostOrigin::Hand],
+                    });
                     Flow::Done
                 }
                 _ => Flow::Done,

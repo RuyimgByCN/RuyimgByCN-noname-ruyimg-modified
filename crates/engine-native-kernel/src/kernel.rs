@@ -250,6 +250,7 @@ pub use equipment::{
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
+mod combat_rules_sha;
 pub use combat_rules::{
     discard_response_card, has_ow_mujing, is_black_trick_card, is_gw_dudayuanshuai2_locked,
     is_ssr_luoyi_trick_to_duel, is_tao_like_core, jinyan_blocks_black_trick, mbcmfangzhu_baiban,
@@ -285,3 +286,44 @@ pub mod elo;
 pub use elo::*;
 mod l25_haoyunlai;
 pub use l25_haoyunlai::l25_haoyunlai_on_draw_begin;
+
+/// 林韵混色素材（一红一黑）产生的无色（`"none"`）虚拟杀标记。
+pub fn is_linyun_colorless(
+    core: &crate::state::GameStateCore,
+    player: crate::ids::PlayerId,
+    card: crate::ids::CardId,
+) -> bool {
+    core.vm_aux
+        .flags
+        .get(&(player, format!("swd_linyun_colorless:{card}")))
+        .copied()
+        .unwrap_or(0)
+        != 0
+}
+
+/// 杀结算中的有效花色：混色林韵为 `None`（无色），否则回落至 `Catalog::effective_card_suit`。
+pub fn effective_sha_suit(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: crate::ids::PlayerId,
+    card: crate::ids::CardId,
+) -> Option<crate::catalog::Suit> {
+    if is_linyun_colorless(core, player, card) {
+        None
+    } else {
+        Some(catalog.effective_card_suit(core, player, card))
+    }
+}
+
+/// 用牌事件中的有效花色：混色林韵无色为 `None`，否则返回经载体解析后的牌面花色。
+pub fn card_use_suit(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    u: &crate::event::CardUseData,
+) -> Option<crate::catalog::Suit> {
+    if u.card.is_some_and(|c| is_linyun_colorless(core, u.player, c)) {
+        None
+    } else {
+        u.suit_in(core, catalog)
+    }
+}

@@ -58,6 +58,7 @@ fn swd_deferred_nlianji_compare_reward_and_damage() {
             "nlianji_target0" => vec![ChoiceOption::Player(1)],
             "nlianji_target1" => vec![ChoiceOption::Player(2)],
             "nlianji_t0_pick" => vec![ChoiceOption::Card(high)],
+            "nlianji_t1_pick" => vec![ChoiceOption::Card(low)],
             other => panic!("未预期询问 {other}"),
         };
         let _ = submit(

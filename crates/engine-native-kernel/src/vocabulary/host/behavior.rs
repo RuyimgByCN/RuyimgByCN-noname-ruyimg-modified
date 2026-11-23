@@ -1887,4 +1887,16 @@ pub enum HostBehavior {
     U05SwdGuiyanfadao,
     /// U05 swd Batch 7b 天仙酒杀伤后摸二（tag 1339：`tianxianjiu`）。
     U05SwdTianxianjiu,
+    /// U05 杀海拾遗 swd 偷袭（tag 1340，`swd/skill.js:3924`）：他人整回合结束可判定，黑→1 雷伤并获 touxi2，红→其可弃你 1 牌。
+    SwdTouxi,
+    /// U05 杀海拾遗 swd 偷袭冷却标记（tag 1341，`swd/skill.js:3963`）：自己回合开始移除自身。
+    SwdTouxi2,
+    /// U05 杀海拾遗 swd 拷贝栏置顶子机（tag 1342，`swd/skill.js:693`）：摸牌结束将 1 张手牌置于牌堆顶并移除自身。
+    SwdKbolan2,
+    /// U05 杀海拾遗 swd 麻醉回收面（tag 1343，`swd/skill.js:1316`）：伤害结算后/归零时返还存储的黑牌并移除自身。
+    SwdLmazui3,
+    /// U05 杀海拾遗 swd 玄影回合外失牌反击面（tag 1344，`swd/skill.js:1078`）：回合外失去牌且已横置时，可选目标解除横置并无次数限制使用虚拟【杀】。
+    SwdXuanyingUse,
+    /// U05 杀海拾遗 swd 破舟封印状态面（tag 1345，`swd/skill.js:3463`）：破舟2付与，目标下一回合结束（`TurnPhaseAfter`）解封并移除自身。
+    SwdPozhouSealed,
 }

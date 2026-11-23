@@ -78,14 +78,50 @@ fn swd_deferred_b92_heihuo_fzhenwei_dunxing() {
         "黑火：手牌加倍（2→4）"
     );
     assert_eq!(e.debug_hp(0), 4, "黑火：<8 无火伤");
-    // 反例：每回合限一次
-    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_hh });
+    // <8 无 heihuo2：可同回合继续发动；手牌 >=8 自伤并挂 swd_heihuo2 后本回合锁
+    let eq2 = {
+        let id = (0..e.catalog().cards.len() as u32)
+            .find(|c| {
+                *c != eq1
+                    && e.catalog().card_kind(*c).equip_slot()
+                        == Some(engine_native::catalog::EquipSlot::HorseMinus)
+            })
+            .expect("减一坐骑在目录");
+        let core = e.state_core_mut();
+        core.deck.retain(|x| *x != id);
+        core.discard.retain(|x| *x != id);
+        core.table.retain(|x| *x != id);
+        for pl in core.players.iter_mut() {
+            pl.hand.retain(|x| *x != id);
+        }
+        core.players[0].hand.push(id);
+        id
+    };
+    let out_again = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_hh });
     assert!(
-        !matches!(
-            out,
+        matches!(
+            out_again,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "黑火反例：再发动拒 {out:?}"
+        "黑火：<8 可同回合再次发动 {out_again:?}"
+    );
+    let c2 = e.open_choice().expect("黑火第二次弃牌窗");
+    let (cid, obs) = (c2.id, c2.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(eq2)],
+        },
+    );
+    settle_optional_confirm(&mut e);
+    assert!(e.debug_hand(0).len() >= 8, "黑火第二次摸翻倍后手牌 >= 8（4→8）");
+    assert_eq!(e.debug_hp(0), 1, "黑火 >=8 自伤 3 火（4→1）");
+    let out_blocked = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_hh });
+    assert!(
+        matches!(out_blocked, CommandOutcome::Rejected(_)),
+        "黑火反例：触发自伤挂 swd_heihuo2 后本回合不得再发动 {out_blocked:?}"
     );
 
     // ② 真威（凤钰）：自己回合内他人响应牌 → 交给另一角色

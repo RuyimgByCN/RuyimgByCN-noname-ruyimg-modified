@@ -44,7 +44,9 @@ fn swd_deferred_lingxian_draws_with_far_target() {
             .options
             .iter()
             .any(|o| matches!(o, ChoiceOption::Card(x) if *x == shan));
-        let sel: Vec<ChoiceOption> = if has_shan {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "lingxian_target" {
+            vec![ChoiceOption::Player(3)]
+        } else if has_shan {
             vec![ChoiceOption::Card(shan)]
         } else if c.spec.min == 0 || c.spec.allow_cancel {
             vec![ChoiceOption::Pass]

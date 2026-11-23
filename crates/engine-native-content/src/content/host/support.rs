@@ -697,33 +697,34 @@ impl HostMachine {
         Flow::Done
     }
 
-    /// 对诗获得面：随机获得目标一张牌（he；登记差异：上游弃牌者自选，
-    /// 原生 RNG 代选——浴尘同款）。
-    pub(super) fn duishi_gain_random(&mut self, ctx: &mut Ctx<'_>, t: PlayerId) -> Flow {
-        let mut pool: Vec<CardId> = ctx.core.player(t).hand.iter().copied().collect();
-        pool.extend(ctx.core.player(t).equips.iter().copied());
-        if pool.is_empty() || !ctx.core.player(self.owner).alive {
+    /// 对诗获得面：目标拒绝/无同花色时，发动者自选获得目标一张 he 牌（CompareTargetPick）。
+    pub(super) fn duishi_prompt_gain(&mut self, ctx: &mut Ctx<'_>, t: PlayerId) -> Flow {
+        let mut options: Vec<ChoiceOption> = ctx
+            .core
+            .player(t)
+            .hand
+            .iter()
+            .chain(ctx.core.player(t).equips.iter())
+            .copied()
+            .map(ChoiceOption::Card)
+            .collect();
+        if options.is_empty() || !ctx.core.player(self.owner).alive {
             return Flow::Done;
         }
-        let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
-        let c = pool[j];
-        let in_hand = ctx.core.player(t).hand.contains(&c);
-        if in_hand {
-            ctx.take_hand_card(t, c);
-        } else {
-            ctx.core.player_mut(t).equips.retain(|x| *x != c);
-            if ctx.catalog.card_kind(c).is_equip() {
-                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
-            }
+        options.dedup();
+        self.target = Some(t);
+        self.stage = HostStage::CompareTargetPick;
+        Flow::WaitChoice {
+            observer: self.owner,
+            spec: ChoiceSpec {
+                kind: ChoiceKind::SelectCards,
+                prompt: "duishi_gain",
+                options,
+                min: 1,
+                max: 1,
+                allow_cancel: false,
+            },
         }
-        ctx.core.player_mut(self.owner).hand.push(c);
-        ctx.log(LogEvent::CardsTaken {
-            from: t,
-            to: self.owner,
-            cards: vec![c],
-            public: !in_hand,
-        });
-        Flow::Done
     }
 
     /// 鼠槌逐杀循环头（ShuchuiTargetLoop 臂与链头共用）：目标存活且

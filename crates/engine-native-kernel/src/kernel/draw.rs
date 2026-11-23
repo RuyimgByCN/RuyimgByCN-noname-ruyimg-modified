@@ -383,6 +383,27 @@ impl crate::catalog::SkillMachine for DrawMachine {
             return Flow::Done;
         };
         if terminal == T::Running {
+            let mut requested = requested;
+            if held_cards.is_empty() && requested > 0 {
+                let prev = requested;
+                if (ctx.catalog.hooks.draw_event_step)(
+                    ctx,
+                    player,
+                    self.root,
+                    true,
+                    &mut requested,
+                ) {
+                    return Flow::Yield;
+                }
+                if requested != prev {
+                    ctx.res.frame_mut(self.root).unwrap().data = EventData::Draw {
+                        player,
+                        requested,
+                        held_cards: held_cards.clone(),
+                        terminal,
+                    };
+                }
+            }
             if held_cards.len() < requested as usize {
                 if ctx.core.deck.is_empty() {
                     if ctx.core.discard.is_empty() {
@@ -397,6 +418,15 @@ impl crate::catalog::SkillMachine for DrawMachine {
                             held_cards,
                             terminal,
                         };
+                        if (ctx.catalog.hooks.draw_event_step)(
+                            ctx,
+                            player,
+                            self.root,
+                            false,
+                            &mut requested,
+                        ) {
+                            return Flow::Yield;
+                        }
                         return Flow::Done;
                     }
                     let mut cards = std::mem::take(&mut ctx.core.discard);
@@ -458,6 +488,10 @@ impl crate::catalog::SkillMachine for DrawMachine {
             matches!(f.data, EventData::DrawGain { draw, .. } if draw == self.root)
         });
         if !gain_running {
+            let mut req = requested;
+            if (ctx.catalog.hooks.draw_event_step)(ctx, player, self.root, false, &mut req) {
+                return Flow::Yield;
+            }
             return Flow::Done;
         }
         Flow::Yield

@@ -219,6 +219,17 @@ fn swd_generals_b66_wanjun_senluo_huopu() {
         ),
         "森罗发动 {out:?}"
     );
+    let c = e.open_choice().expect("森罗弃牌窗");
+    assert_eq!(c.spec.prompt, "senluo_discard");
+    let (cid, obs) = (c.id, c.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(a1), ChoiceOption::Card(a2)],
+        },
+    );
     settle_optional_confirm(&mut e);
     assert_eq!(e.debug_hand(1).len(), 3, "森罗：p1 弃 2 摸 1（4→3）");
     assert!(

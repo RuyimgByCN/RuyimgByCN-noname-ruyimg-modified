@@ -333,10 +333,11 @@ pub fn is_guilong_red_sha(
 ) -> bool {
     has_ext_skill(state, catalog, source, "guilongzhanyuedao")
         && card.is_some_and(|c| {
-            matches!(
-                catalog.effective_card_suit(state, source, c),
-                Suit::Heart | Suit::Diamond
-            )
+            !crate::kernel::is_linyun_colorless(state, source, c)
+                && matches!(
+                    catalog.effective_card_suit(state, source, c),
+                    Suit::Heart | Suit::Diamond
+                )
         })
 }
 

@@ -125,6 +125,14 @@ pub struct ContentHooks {
     pub draw_begin_step: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, &mut i32),
     /// 单次摸牌事件开始（含阶段摸牌与无中生有等技能摸牌，未翻面摸底牌时）的牌堆调整钩子。
     pub on_draw_machine_begin: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
+    /// 通用 `Draw` 事件 `drawBegin`（`is_begin = true`）与 `drawEnd`/`drawAfter`（`is_begin = false`）宿主钩子（如 `kbolan`/`kbolan2`）。
+    pub draw_event_step: fn(
+        &mut crate::machine::Ctx<'_>,
+        crate::ids::PlayerId,
+        crate::ids::EventId,
+        bool,
+        &mut u32,
+    ) -> bool,
     /// 用牌结算完成弹出时（`useCardAfter`）宿主触发钩子（如 `jieyong`）。
     pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::EventId, &crate::event::CardUseData),
     /// 建局开局发牌后（`gameDrawEnd`）宿主初始化钩子（如 `xiefang`）。
@@ -296,6 +304,7 @@ impl ContentHooks {
         sha_end_step: |_, _, _, _, _, _| false,
         draw_begin_step: |_, _, _| {},
         on_draw_machine_begin: |_, _| {},
+        draw_event_step: |_, _, _, _, _| false,
         on_card_use_after: |_, _, _| {},
         on_game_start: |_, _| {},
         on_death_before: |_, _| false,

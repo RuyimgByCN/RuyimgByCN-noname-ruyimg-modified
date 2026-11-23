@@ -73,6 +73,18 @@ impl HostSkillBehavior {
             HostBehavior::SwdFuniao => self.activate_swd_skills(ctx, owner),
             // 黑火（deferred 消解批）：he 有装备牌
             HostBehavior::SwdHeihuo => self.activate_swd_skills(ctx, owner),
+            HostBehavior::SwdYeying
+            | HostBehavior::SwdGuiying
+            | HostBehavior::SwdFengze
+            | HostBehavior::SwdHuanxia
+            | HostBehavior::SwdYaotong => {
+                super::step::u05_7c_viewas::activate_u05_viewas(
+                    self.behavior,
+                    &self.name,
+                    ctx,
+                    owner,
+                )
+            }
             // 头弹·麦星面（武将面批 91）：有黑桃 he 且有其他存活
             HostBehavior::SwdToudan => self.activate_swd_skills(ctx, owner),
             // 玄影·端蒙面（武将面批 90）：未横置且有存活其他角色（sha 面）
@@ -432,6 +444,11 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::SwdXuanzhou
         | HostBehavior::SwdFuniao
         | HostBehavior::SwdHeihuo
+        | HostBehavior::SwdYeying
+        | HostBehavior::SwdGuiying
+        | HostBehavior::SwdFengze
+        | HostBehavior::SwdHuanxia
+        | HostBehavior::SwdYaotong
         | HostBehavior::SwdToudan
         | HostBehavior::SwdXuanying
         | HostBehavior::SwdMingfu

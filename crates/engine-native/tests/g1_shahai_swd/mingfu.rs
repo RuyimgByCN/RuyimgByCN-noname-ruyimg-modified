@@ -90,9 +90,14 @@ fn swd_generals_b88_mingfu() {
         "命符：p1 判定区获得鬼幽结（前 {judge_before}）"
     );
     assert_eq!(
-        e.catalog().card_kind(e.state_core().players[1].judge[0]),
-        CardKind::Guiyoujie,
-        "命符：置入牌为鬼幽结"
+        e.state_core().players[1].judge[0],
+        club,
+        "命符：梅花实体牌直接置入目标判定区"
+    );
+    assert_eq!(
+        e.state_core().declared_kinds.get(&club).copied(),
+        Some(CardKind::Guiyoujie),
+        "命符：置入牌声明为鬼幽结"
     );
     // 反例：无梅花手牌发动被拒
     e.debug_clear_hand(0);

@@ -51,3 +51,6 @@ mod u05_b7a_swd_cards;
 
 #[path = "../u05_b7b_swd_cards.rs"]
 mod u05_b7b_swd_cards;
+
+#[path = "../u05_b7c_swd_skills1.rs"]
+mod u05_b7c_swd_skills1;

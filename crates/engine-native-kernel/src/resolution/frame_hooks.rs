@@ -223,6 +223,9 @@ fn on_card_use_popped(
     core.vm_aux
         .flags
         .remove(&(u.player, format!("dying_save_frame:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("wuzhong_draw_started:{popped_id}")));
     let _ = crate::kernel::take_tao_extra_carriers(core, u.player, popped_id);
     core.vm_aux
         .flags

@@ -39,23 +39,24 @@ pub(crate) use step::{
     hearth_dying_save_skills, hearth_response_skill_jingxiang, hearth_try_named_ext_card,
     host_before_facedown_turn_skip, host_before_gain_hand, host_before_recover,
     host_card_use_after, host_card_use_after_xianjian, host_draw_begin_step,
-    host_draw_begin_xianjian, host_judge_settled, host_on_choose_respond_begin_xianjian,
-    host_on_damage_end_xianjian, host_on_death_before, host_on_draw_machine_begin_hearth,
-    host_on_equip_gained_hearth, host_on_equip_revoked_hearth, host_on_game_start,
-    host_on_hand_card_removed, host_on_hand_card_removed_xianjian, host_on_hp_changed_xianjian,
-    host_on_hujia_changed, host_on_judge_pre_hearth, host_on_judge_rewrite_pre_hearth,
-    host_on_outer_settled_hearth, host_on_phase_draw_before, host_on_phase_end_hearth,
-    host_on_phase_end_xianjian, host_on_phase_use_end, host_on_phase_use_end_xianjian,
-    host_on_player_died, host_on_recover_before, host_on_recover_before_xianjian,
-    host_on_round_start, host_on_round_start_xianjian, host_on_shanxian_turnover,
-    host_on_turn_begin, host_on_turn_phase_after, host_play_begin_xianjian,
-    host_preserves_skills_on_death, host_sha_begin_step, host_sha_end_step,
-    host_sha_end_xianjian, host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped,
+    host_draw_begin_xianjian, host_draw_event_step, host_judge_settled,
+    host_on_choose_respond_begin_xianjian, host_on_damage_end_xianjian, host_on_death_before,
+    host_on_draw_machine_begin_hearth, host_on_equip_gained_hearth,
+    host_on_equip_revoked_hearth, host_on_game_start, host_on_hand_card_removed,
+    host_on_hand_card_removed_xianjian, host_on_hp_changed_xianjian, host_on_hujia_changed,
+    host_on_judge_pre_hearth, host_on_judge_rewrite_pre_hearth, host_on_outer_settled_hearth,
+    host_on_phase_draw_before, host_on_phase_end_hearth, host_on_phase_end_xianjian,
+    host_on_phase_use_end, host_on_phase_use_end_xianjian, host_on_player_died,
+    host_on_recover_before, host_on_recover_before_xianjian, host_on_round_start,
+    host_on_round_start_xianjian, host_on_shanxian_turnover, host_on_turn_begin,
+    host_on_turn_phase_after, host_play_begin_xianjian, host_preserves_skills_on_death,
+    host_sha_begin_step, host_sha_end_step, host_sha_end_xianjian,
+    host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped,
     is_hearth_vanish_card_hook, on_cards_to_discard_chengye, on_l25_host_event,
     on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
     play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
-    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response, resolve_hearth_dying_save,
-    scsanruo_response_skill, u01_phase_skipped_hook,
+    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
+    resolve_hearth_dying_save, scsanruo_response_skill, u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
@@ -367,6 +368,20 @@ impl SkillBehavior for HostSkillBehavior {
                     self, ctx, frame, owner, event,
                 )
             }
+            HostBehavior::SwdLmazui3 => {
+                matches!(
+                    kind,
+                    crate::event::EventKind::DamageEnd | crate::event::EventKind::DamageZero
+                ) && matches!(event, EventData::Damage(d) if d.source == Some(owner))
+                    && ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "swd_lmazui2_card".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+            }
             _ => self.filter_with_frames(ctx, _frames, frame, owner, event),
         }
     }
@@ -387,6 +402,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::ShengkeCheck
                 | HostBehavior::GwentFengyinState
                 | HostBehavior::SwdFengyinState
+                | HostBehavior::SwdPozhouSealed
                 | HostBehavior::GujianFoodShihuifenBan
                 | HostBehavior::SwdQinglongzhiguiHeld
                 | HostBehavior::SwdZhuquezhizhangHeld
@@ -864,6 +880,9 @@ impl SkillBehavior for HostSkillBehavior {
         self.blocks_delayed_trick()
     }
     fn blocks_all_cards(&self) -> bool {
+        false
+    }
+    fn blocks_hand_cards(&self) -> bool {
         matches!(self.behavior, HostBehavior::Bingfeng2)
     }
     fn needs_vm_card_history(&self) -> bool {

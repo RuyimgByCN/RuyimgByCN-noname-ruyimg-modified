@@ -837,6 +837,13 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
                     None => MappedSkill::Deferred,
                 }
             }
+            MappedSkill::Builtin(b)
+                if b == "突袭"
+                    && key == "touxi"
+                    && meta.def.name == "shahai-swd-upstream-noname" =>
+            {
+                MappedSkill::Host(HostBehavior::SwdTouxi)
+            }
             other => other,
         };
         match mapped {
@@ -879,41 +886,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
     for d in opt_array(&parsed, "deferred", "deferred")? {
         deferred.push(req_str(d, "name", "deferred[].name")?.to_string());
     }
-    if host_skills.iter().any(|d| d.name == "reguhuo") {
-        let interned = names::intern("rechanyuan".to_string());
-        if !host_skills.iter().any(|d| d.name == interned) {
-            host_skills.push(HostSkillDecl {
-                name: interned,
-                behavior: HostBehavior::Rechanyuan,
-                presentation_binding: None,
-            });
-        }
-    }
-    if deferred.iter().any(|name| name == "shichangshi") {
-        for &(sk_name, behavior) in &[
-            ("k_danggu", HostBehavior::KDanggu),
-            ("k_mowang", HostBehavior::KMowang),
-        ] {
-            let interned = names::intern(sk_name.to_string());
-            if !host_skills.iter().any(|d| d.name == interned) {
-                host_skills.push(HostSkillDecl {
-                    name: interned,
-                    behavior,
-                    presentation_binding: None,
-                });
-            }
-        }
-        for &sk_name in &decision34_closure::L10_SCS_COMPANION_SKILLS {
-            let interned = names::intern(sk_name.to_string());
-            if !host_skills.iter().any(|d| d.name == interned) {
-                host_skills.push(HostSkillDecl {
-                    name: interned,
-                    behavior: HostBehavior::L10ScsCompanion,
-                    presentation_binding: None,
-                });
-            }
-        }
-    }
+    shahai_attach::attach_bridge_companion_skills(&mut host_skills, &deferred);
 
     // generals 缺省为空：卡牌包合法；同文件声明的武将经同一 pack 段装载。
     // 武将命中的宿主技能声明追加在伴随技能与 skills 数组之后（次序决定
@@ -926,6 +899,24 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             }
             Some(_) => {}
             None => host_skills.push(decl),
+        }
+    }
+    for &(trigger_name, companion_name, behavior) in &[
+        ("kbolan", "kbolan2", HostBehavior::SwdKbolan2),
+        ("lmazui", "lmazui3", HostBehavior::SwdLmazui3),
+        ("touxi", "touxi2", HostBehavior::SwdTouxi2),
+        ("pozhou", "pozhou_sealed", HostBehavior::SwdPozhouSealed),
+        ("pozhou2", "pozhou_sealed", HostBehavior::SwdPozhouSealed),
+    ] {
+        if host_skills.iter().any(|d| d.name == trigger_name) {
+            let interned = names::intern(companion_name.to_string());
+            if !host_skills.iter().any(|d| d.name == interned) {
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior,
+                    presentation_binding: None,
+                });
+            }
         }
     }
     definition_ids.merge(generals_out.definition_ids)?;

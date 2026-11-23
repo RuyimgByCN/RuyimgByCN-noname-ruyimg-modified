@@ -3,6 +3,7 @@ use super::*;
 mod common;
 mod wudian;
 mod swd;
+mod swd_cards;
 mod xianjian;
 mod l01;
 mod source_order;
@@ -843,6 +844,12 @@ impl HostBehavior {
             // 勾魂锣·倒计时：来源回合开始（global phaseBegin 由 filter 定向）
             HostBehavior::SwdGouhunluoSub => self.trigger_meta_swd(),
             HostBehavior::SwdJiguantongCard => self.trigger_meta_swd(),
+            HostBehavior::SwdTouxi
+            | HostBehavior::SwdTouxi2
+            | HostBehavior::SwdKbolan2
+            | HostBehavior::SwdLmazui3
+            | HostBehavior::SwdXuanyingUse
+            | HostBehavior::SwdPozhouSealed => self.trigger_meta_swd(),
             HostBehavior::WudianDuoqi
             | HostBehavior::WudianYouzhan
             | HostBehavior::WudianChoudu

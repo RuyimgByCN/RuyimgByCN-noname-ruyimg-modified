@@ -153,10 +153,18 @@ impl Catalog {
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
-        self.skill_by_name("mianzhen2").is_some_and(|d| {
-            self.skills[d as usize].behavior.as_host_behavior()
-                == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
-                && core.has_skill(p, d)
+        if self.blocks_all_cards(core, p)
+            || crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, p)
+            || self.skill_by_name("mianzhen2").is_some_and(|d| {
+                self.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)
+                    && core.has_skill(p, d)
+            })
+        {
+            return true;
+        }
+        core.skills.iter().any(|((o, def), inst)| {
+            *o == p && inst.enabled && self.skills[*def as usize].behavior.blocks_hand_cards()
         })
     }
 
@@ -392,6 +400,11 @@ impl Catalog {
                 | "tuoqiao"
                 | "huimeng"
                 | "yuexing"
+                | "lanzhi"
+                | "lingxian"
+                | "tiebi"
+                | "huanxing"
+                | "lingyue"
         ) {
             return false;
         }
@@ -717,6 +730,41 @@ impl Catalog {
                     .behavior
                     .blocks_all_cards_when(self, core, p)
         })
+    }
+
+    /// 枚举 `player` 装备区中可用于宿主 view-as 出牌的卡牌 ID（`huanxia`/`poxiao`；`yeying`/`guiying`/`fengze` 经 ActivateSkill 通道处理）。
+    pub fn host_view_as_extra_cards(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+    ) -> Vec<CardId> {
+        let sealed = self.is_tieji_sealed(core, player)
+            || (core.player(player).hp <= 1 && self.has_rechanyuan(core, player));
+        if sealed || self.blocks_all_cards(core, player) {
+            return Vec::new();
+        }
+        let has_ready = |name: &str, check_once: bool| {
+            self.skill_by_name(name).is_some_and(|d| {
+                core.skills
+                    .get(&(player, d))
+                    .is_some_and(|i| i.enabled && (!check_once || !i.once_used))
+            })
+        };
+        let huanxia = has_ready("huanxia", false);
+        let poxiao = has_ready("poxiao", false);
+        if !(huanxia || poxiao) {
+            return Vec::new();
+        }
+        core.player(player)
+            .equips
+            .iter()
+            .copied()
+            .filter(|&c| {
+                let suit = self.effective_card_suit(core, player, c);
+                let red = matches!(suit, Suit::Heart | Suit::Diamond);
+                (huanxia && red) || (poxiao && self.card_kind(c).is_equip())
+            })
+            .collect()
     }
 
     /// G1 目标过滤原语：`p` 是否持有「延时锦囊目标免疫」类技能（墨守：乐/兵不能指定其为目标）。

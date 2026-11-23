@@ -52,6 +52,37 @@ impl HostSkillBehavior {
         {
             return false;
         }
+        if self.behavior == HostBehavior::Cyqiaoxie {
+            let parent_is_use = frame
+                .parent
+                .and_then(|pid| frames.iter().find(|f| f.id == pid))
+                .is_some_and(|pf| matches!(pf.data, EventData::CardUsed(_)));
+            if parent_is_use {
+                return false;
+            }
+            return matches!(
+                event,
+                EventData::CardsLost { player, cards, origins }
+                if *player == owner
+                    && (origins.contains(&crate::event::LostOrigin::Equip)
+                        || cards.iter().any(|c| ctx.catalog.card_kind(*c).is_equip()))
+            );
+        }
+        if self.behavior == HostBehavior::SwdGuaili {
+            let EventData::Damage(d) = event else {
+                return false;
+            };
+            let root = match frame.data {
+                EventData::DamageWindow { root, .. } => frames.iter().find(|f| f.id == root),
+                EventData::Damage(_) => Some(frame),
+                _ => None,
+            };
+            let sha_like = root
+                .and_then(|r| crate::event::damage_card_kind(frames, r, ctx.catalog))
+                .or_else(|| d.card.map(|c| ctx.catalog.card_kind(c)))
+                .is_some_and(|k| k.is_sha_like());
+            return d.source == Some(owner) && !d.from_chain && !d.prevented && sha_like;
+        }
         if self.behavior == HostBehavior::ShengkeCheck {
             return wuxing::shengke_matches_in_frame(ctx, frame.id, owner, event);
         }
@@ -206,6 +237,24 @@ impl HostSkillBehavior {
             return super::step::swd_u05_7b::filter_with_frame(
                 self, ctx, frame, owner, event,
             );
+        }
+        if self.behavior == HostBehavior::SwdXuanyingUse {
+            let Some(cards) = swd::swd_xuanying_use_event_cards(ctx, owner, event) else {
+                return false;
+            };
+            if !matches!(event, EventData::CardsLost { .. })
+                && frames.iter().any(|f| {
+                    f.id != frame.id
+                        && matches!(
+                            &f.data,
+                            EventData::CardsLost { player, cards: lc, .. }
+                            if *player == owner && cards.iter().any(|c| lc.contains(c))
+                        )
+                })
+            {
+                return false;
+            }
+            return true;
         }
         self.filter_behavior(ctx, owner, event)
     }
@@ -1074,6 +1123,12 @@ impl HostSkillBehavior {
             | HostBehavior::U05SwdHufuViewAs
             | HostBehavior::U05SwdYuchanEquip
             | HostBehavior::U05SwdPassiveMarker => false,
+            HostBehavior::SwdTouxi
+            | HostBehavior::SwdTouxi2
+            | HostBehavior::SwdKbolan2
+            | HostBehavior::SwdLmazui3
+            | HostBehavior::SwdXuanyingUse
+            | HostBehavior::SwdPozhouSealed => self.filter_swd(ctx, owner, event),
             _ => false,
         }
     }

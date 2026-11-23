@@ -1,6 +1,7 @@
 //! 轩辕剑（swd）宿主技：付牌后指定目标并取牌、交牌或复制（鬼眼、孵鸟、分舵、魅惑、运筹、幻形）。
 
 use super::super::*;
+use super::u08_batch_d::{flag, set_flag};
 
 impl HostMachine {
     pub(super) fn step_swd_card_targets(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -198,21 +199,14 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 幻形（武将面批 87）：SelectCard 弃一张 he → TargetChoice
-            // 男性其他存活角色 → 复制其（非 unique/未持有）技能实例并
-            // 置 huanxing_granted（受伤后移除）
+            // 幻形（swd/skill.js:3039）：SelectCard 暂存牌 → TargetChoice 选非上轮武将之男性其他角色
+            // → 提交弃牌并复制其非 unique/charlotte 且未持有的武将技（记录至 swd_huanxing_granted:*）
             HostBehavior::SwdHuanxing => match self.stage {
                 HostStage::Act => {
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .player(self.owner)
-                        .hand
-                        .iter()
-                        .copied()
-                        .chain(ctx.core.player(self.owner).equips.iter().copied())
-                        .map(ChoiceOption::Card)
-                        .collect();
-                    if options.is_empty() {
+                    let options = super::u05_7c_skills::he_card_options(ctx.core, self.owner);
+                    let candidates =
+                        huanxing_candidate_targets(ctx.core, ctx.catalog, self.owner);
+                    if options.is_empty() || candidates.is_empty() {
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -235,33 +229,12 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
-                    if ctx.core.player(self.owner).hand.contains(&c) {
-                        ctx.discard_from_hand(self.owner, c);
-                    } else if ctx.core.player(self.owner).equips.contains(&c) {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        if ctx.catalog.card_kind(c).is_equip() {
-                            crate::kernel::revoke_equip_skills(
-                                ctx.core,
-                                ctx.catalog,
-                                self.owner,
-                                c,
-                            );
-                        }
-                        ctx.to_discard(c);
-                    }
-                    let options: Vec<ChoiceOption> = ctx
-                        .core
-                        .alive_players()
-                        .filter(|p| {
-                            *p != self.owner
-                                && ctx.core.matches_gender(
-                                    ctx.catalog,
-                                    *p,
-                                    crate::content::standard::Gender::Male,
-                                )
-                        })
-                        .map(ChoiceOption::Player)
-                        .collect();
+                    self.card = Some(c);
+                    let options: Vec<ChoiceOption> =
+                        huanxing_candidate_targets(ctx.core, ctx.catalog, self.owner)
+                            .into_iter()
+                            .map(ChoiceOption::Player)
+                            .collect();
                     if options.is_empty() {
                         return Flow::Done;
                     }
@@ -285,29 +258,29 @@ impl HostMachine {
                     }) else {
                         return Flow::Done;
                     };
+                    let Some(c) = self.card else {
+                        return Flow::Done;
+                    };
                     if !ctx.core.player(t).alive {
                         return Flow::Done;
                     }
-                    // 复制目标将的技能名（登记差异：unique/已持有过滤按
-                    // 目录名；复制面收敛为实例授予）
-                    let names: Vec<&'static str> = {
-                        let meta = ctx
-                            .catalog
-                            .general_meta(ctx.core.player(t).general_slots[0].unwrap_or(u16::MAX));
-                        meta.map(|(_, _, skills, _, _)| skills).unwrap_or_default()
+                    let Some(gid) = ctx.core.player(t).general_slots[0] else {
+                        return Flow::Done;
                     };
-                    let mut granted = Vec::new();
-                    for n in names {
-                        if let Some(def) = ctx.catalog.skill_by_name(n) {
-                            if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                                granted.push(def);
-                            }
-                        }
-                    }
-                    if granted.is_empty() {
+                    let granted = huanxing_copyable_skills(ctx.core, ctx.catalog, self.owner, gid);
+                    if granted.is_empty() || !super::u05_7c_skills::discard_he_card(ctx, self.owner, c)
+                    {
                         return Flow::Done;
                     }
+                    revoke_huanxing_granted(ctx, self.owner, false);
+                    set_flag(ctx.core, self.owner, "swd_huanxing_prev_gid", u32::from(gid) + 1);
                     for def in granted {
+                        set_flag(
+                            ctx.core,
+                            self.owner,
+                            &format!("swd_huanxing_granted:{def}"),
+                            1,
+                        );
                         ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
@@ -319,8 +292,6 @@ impl HostMachine {
                             },
                         );
                     }
-                    // 在位旗标=内部状态技能实例（免存档字段批——
-                    // 已启用技能随内容锁/快照自然往返）
                     if let Some(sdef) = ctx.catalog.skill_by_name(SWD_HUANXING_STATE_KEY) {
                         ctx.insert_skill(
                             (self.owner, sdef),
@@ -472,6 +443,7 @@ impl HostMachine {
                         ChoiceOption::Player(p) => Some(*p),
                         _ => None,
                     }) else {
+                        super::u05_7c_skills::refund_once_used(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     };
                     self.target = Some(t);
@@ -521,25 +493,89 @@ impl HostMachine {
                         to: self.owner,
                         cards: vec![c],
                     });
-                    // 自己交 1 张手牌给手牌最少的其他存活角色（确定性）
-                    let dest = (0..ctx.core.players.len() as u8)
-                        .filter(|&i| i != self.owner && ctx.core.player(i).alive)
-                        .min_by_key(|&i| ctx.core.player(i).hand.len());
-                    if let Some(d) = dest {
-                        if let Some(c2) = ctx.core.player(self.owner).hand.first().copied() {
-                            ctx.core.player_mut(self.owner).hand.retain(|x| *x != c2);
-                            ctx.core.player_mut(d).hand.push(c2);
-                            ctx.emit(EventData::CardsMoved {
-                                cards: vec![c2],
-                                from: self.owner,
-                                to: d,
-                            });
-                            ctx.log(LogEvent::CardsGiven {
-                                from: self.owner,
-                                to: d,
-                                cards: vec![c2],
-                            });
-                        }
+                    let my_hand = ctx.core.player(self.owner).hand.len();
+                    let has_dest = ctx
+                        .core
+                        .alive_players()
+                        .any(|p| p != self.owner && ctx.core.player(p).hand.len() < my_hand);
+                    if !ctx.core.player(self.owner).hand.is_empty() && has_dest {
+                        let options: Vec<ChoiceOption> = ctx
+                            .core
+                            .player(self.owner)
+                            .hand
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card)
+                            .collect();
+                        self.stage = HostStage::SelectCard;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "swd_jiefen_give_card",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                    Flow::Done
+                }
+                HostStage::SelectCard => {
+                    let Some(c2) = ctx.answer().iter().find_map(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    self.card = Some(c2);
+                    let my_hand = ctx.core.player(self.owner).hand.len();
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|p| *p != self.owner && ctx.core.player(*p).hand.len() < my_hand)
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() || !ctx.core.player(self.owner).hand.contains(&c2) {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::CompareTargetPick;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "swd_jiefen_give_target",
+                            options,
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::CompareTargetPick => {
+                    let Some(d) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    let Some(c2) = self.card else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(d).alive && ctx.core.player(self.owner).hand.contains(&c2) {
+                        ctx.core.player_mut(self.owner).hand.retain(|x| *x != c2);
+                        ctx.core.player_mut(d).hand.push(c2);
+                        ctx.emit(EventData::CardsMoved {
+                            cards: vec![c2],
+                            from: self.owner,
+                            to: d,
+                        });
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.owner,
+                            to: d,
+                            cards: vec![c2],
+                        });
                     }
                     Flow::Done
                 }
@@ -634,4 +670,120 @@ impl HostMachine {
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+}
+
+fn is_swd_unique_skill(name: &str) -> bool {
+    matches!(
+        name,
+        "hxunzhi"
+            | "jinlin"
+            | "bingfeng"
+            | "shouyin"
+            | "xuanyuan"
+            | "pozhou"
+            | "pozhou2"
+            | "kunlunjing"
+            | "swdtianshu"
+            | "xuehuang"
+            | "busi"
+            | "xuying"
+            | "yinguo"
+            | "guiyan"
+            | "mailun"
+            | "niepan"
+            | "jilve"
+            | "luanwu"
+            | "yeyan"
+            | "fuhun"
+            | "ruoyu"
+            | "zili"
+            | "baiyin"
+            | "hunzi"
+            | "hujia"
+            | "jijiang"
+            | "xueyi"
+            | "songwei"
+            | "baonve"
+            | "wuhun"
+            | "zaoxian"
+            | "shenfen"
+            | "qixing"
+    )
+}
+
+pub(super) fn revoke_huanxing_granted(ctx: &mut Ctx<'_>, owner: PlayerId, clear_prev: bool) {
+    let keys: Vec<(PlayerId, String, crate::ids::SkillDefId)> = ctx
+        .core
+        .vm_aux
+        .flags
+        .iter()
+        .filter_map(|((p, k), _)| {
+            if *p == owner {
+                k.strip_prefix("swd_huanxing_granted:")
+                    .and_then(|s| s.parse::<crate::ids::SkillDefId>().ok())
+                    .map(|def| (*p, k.clone(), def))
+            } else {
+                None
+            }
+        })
+        .collect();
+    for (p, key, def) in keys {
+        ctx.core.vm_aux.flags.remove(&(p, key));
+        ctx.core.skills.remove(&(owner, def));
+    }
+    if clear_prev {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(owner, "swd_huanxing_prev_gid".to_string()));
+    }
+}
+
+pub(super) fn huanxing_copyable_skills(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+    gid: u16,
+) -> Vec<crate::ids::SkillDefId> {
+    let Some((_, _, skills, _, _)) = catalog.general_meta(gid) else {
+        return Vec::new();
+    };
+    let mut granted = Vec::new();
+    for n in skills {
+        if is_swd_unique_skill(n) {
+            continue;
+        }
+        if let Some(def) = catalog.skill_by_name(n) {
+            let owned_non_hx = core.skills.contains_key(&(owner, def))
+                && flag(core, owner, &format!("swd_huanxing_granted:{def}")) == 0;
+            if !catalog.is_charlotte_skill(def) && !owned_non_hx {
+                granted.push(def);
+            }
+        }
+    }
+    granted
+}
+
+pub(super) fn huanxing_candidate_targets(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+) -> Vec<PlayerId> {
+    let prev_gid = flag(core, owner, "swd_huanxing_prev_gid");
+    core.alive_players()
+        .filter(|p| {
+            if *p == owner
+                || !core.matches_gender(catalog, *p, crate::content::standard::Gender::Male)
+            {
+                return false;
+            }
+            let Some(gid) = core.player(*p).general_slots[0] else {
+                return false;
+            };
+            if prev_gid > 0 && u32::from(gid) + 1 == prev_gid {
+                return false;
+            }
+            !huanxing_copyable_skills(core, catalog, owner, gid).is_empty()
+        })
+        .collect()
 }

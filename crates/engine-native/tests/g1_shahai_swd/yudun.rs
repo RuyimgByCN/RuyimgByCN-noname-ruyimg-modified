@@ -48,29 +48,11 @@ fn swd_generals_b82_yudun_zhanxing() {
         ),
         "愚钝：锦囊禁用（无中生有拒）{out:?}"
     );
-    // ② 愚钝：两张锦囊当杀（不计出杀次数——先普通出杀，再转化杀仍可用）
+    // ② 愚钝：两张锦囊当杀（先 yudun 转化杀不计出杀次数，之后仍可正常出杀；反之先普通出杀占次数则 yudun 被拒）
     e.debug_clear_hand(0);
     let t1 = e.debug_place(0, "wuzhong");
     let t2 = e.debug_place(0, "snatch");
-    // 先出一张普通杀（占掉限一次）
     let s0 = e.debug_place(0, "sha");
-    let out = submit(
-        &mut e,
-        0,
-        GameAction::PlayCard {
-            card: s0,
-            targets: vec![1],
-        },
-    );
-    assert!(
-        matches!(
-            out,
-            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
-        ),
-        "普通杀 {out:?}"
-    );
-    settle_optional_confirm(&mut e);
-    pass_nullify(&mut e);
     let def_yd = e.catalog().skill_by_name("yudun").expect("愚钝在目录");
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_yd });
     assert!(
@@ -104,8 +86,34 @@ fn swd_generals_b82_yudun_zhanxing() {
     );
     settle_optional_confirm(&mut e);
     pass_nullify(&mut e);
-    assert_eq!(e.debug_hp(1), 2, "愚钝：双锦囊当杀命中");
-    let _ = (s0, t1, t2);
+    assert_eq!(e.debug_hp(1), 3, "愚钝：双锦囊当杀命中");
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: s0,
+            targets: vec![1],
+        },
+    );
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "先愚钝后再普通出杀仍可用 {out:?}"
+    );
+    settle_optional_confirm(&mut e);
+    pass_nullify(&mut e);
+    assert_eq!(e.debug_hp(1), 2, "愚钝：之后普通杀命中（3→2）");
+    // 反例：已消耗本阶段杀次数后，不得再发动 yudun
+    let t3 = e.debug_place(0, "wuzhong");
+    let t4 = e.debug_place(0, "snatch");
+    let out_blocked = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_yd });
+    assert!(
+        matches!(out_blocked, CommandOutcome::Rejected(_)),
+        "愚钝反例：已出普通杀后不可再发动愚钝 {out_blocked:?}"
+    );
+    let _ = (s0, t1, t2, t3, t4);
 
     // ③ 占星：弃 1 张手牌亮 1 张牌堆顶（黑桃→选目标受 1 雷伤）
     // 布牌：手牌 1 张，牌堆顶黑桃

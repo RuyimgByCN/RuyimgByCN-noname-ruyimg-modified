@@ -533,10 +533,10 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .filter(|s| s.behavior.package_skill_id().is_some())
         .map(|s| s.name.to_string())
         .collect();
-    // U05-6a/6b + U05-5a/5b + U05-4 + U05-7a/7b promoted hearth, gwent, xianjian & swd-cards skills from VM into native `HostBehavior`s.
+    // U05-6a/6b + U05-5a/5b + U05-4 + U05-7a/7b/7c promoted hearth, gwent, xianjian, swd_cards & swd_duguningke(touxi) skills from VM into native `HostBehavior`s.
     assert!(
-        vm_skill_names.len() >= 80,
-        "expected >= 80 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars + xianjian + swd_cards native host migration), got {}",
+        vm_skill_names.len() >= 75,
+        "expected >= 75 remaining verified U05 VM skills in Catalog (after ow + hearth + gwent_cards + gwent_chars + xianjian + swd_cards + U05-7c touxi native host migration), got {}",
         vm_skill_names.len()
     );
     for ow_sk in ["woliu", "zhongdun", "mujing", "shanxian"] {

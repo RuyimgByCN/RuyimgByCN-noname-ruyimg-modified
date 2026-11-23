@@ -47,17 +47,32 @@ fn swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying() {
         b
     };
 
-    // ① 夜影（小黄龙）：黑色牌当乾坤镖（恰 1 目标——目标+距离 1 邻座
-    // 各弃一张；he 空者跳过）
+    // ① 夜影（小黄龙）：主动发动选黑牌当乾坤镖（恰 1 目标——目标+距离 1 邻座各弃一张）
     e.debug_grant(0, "yeying");
     let bc = black_card(&mut e);
     let d1 = e.debug_place(1, "tao"); // p1 唯一手牌（必被弃）
+    let dy = e.catalog().skill_by_name("yeying").expect("夜影在目录");
+    submit(&mut e, 0, GameAction::ActivateSkill { skill: dy });
+    let ch = e.open_choice().expect("夜影选黑牌窗");
+    assert_eq!(ch.spec.prompt, "yeying_pick");
+    let (cid, obs) = (ch.id, ch.observer);
     submit(
         &mut e,
-        0,
-        GameAction::PlayCard {
-            card: bc,
-            targets: vec![1],
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(bc)],
+        },
+    );
+    let tgt = e.open_choice().expect("夜影选目标窗");
+    assert_eq!(tgt.spec.prompt, "yeying_target");
+    let (cid, obs) = (tgt.id, tgt.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Player(1)],
         },
     );
     settle_optional_confirm(&mut e);
@@ -66,10 +81,8 @@ fn swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying() {
         "夜影：乾坤镖路由（p1 被弃牌）"
     );
 
-    // ② 归影（虎魄）：黑色牌当偷梁换柱（单目标换牌：双方须有手牌）
-    // 撤①的夜影（viewAs 链序 yeying 先于 guiying——双持会命中乾坤镖）
+    // ② 归影（虎魄）：主动发动选黑牌当偷梁换柱（单目标换牌：双方须有手牌）
     {
-        let dy = e.catalog().skill_by_name("yeying").expect("夜影在目录");
         e.state_core_mut().skills.remove(&(0, dy));
     }
     e.debug_grant(0, "guiying");
@@ -80,12 +93,28 @@ fn swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying() {
     let own2 = e.debug_place(0, "tao"); // 己方换出牌
     let v2 = e.debug_place(1, "tao");
     let v2b = e.debug_place(1, "shan");
+    let dg = e.catalog().skill_by_name("guiying").expect("归影在目录");
+    submit(&mut e, 0, GameAction::ActivateSkill { skill: dg });
+    let ch = e.open_choice().expect("归影选黑牌窗");
+    assert_eq!(ch.spec.prompt, "guiying_pick");
+    let (cid, obs) = (ch.id, ch.observer);
     submit(
         &mut e,
-        0,
-        GameAction::PlayCard {
-            card: bc2,
-            targets: vec![1],
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(bc2)],
+        },
+    );
+    let tgt = e.open_choice().expect("归影选目标窗");
+    assert_eq!(tgt.spec.prompt, "guiying_target");
+    let (cid, obs) = (tgt.id, tgt.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Player(1)],
         },
     );
     // 偷梁换柱机器：own 选牌窗→目标选牌窗（settle 应答首选项）
@@ -99,9 +128,8 @@ fn swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying() {
         "归影：换牌语义（own 入目标、v2b 保留）"
     );
 
-    // ③ 凤泽（司徒强）：黑色牌当桃园结义（全体其他回 1）
+    // ③ 凤泽（司徒强）：主动发动选黑牌当桃园结义（全体其他回 1）
     {
-        let dg = e.catalog().skill_by_name("guiying").expect("归影在目录");
         e.state_core_mut().skills.remove(&(0, dg));
     }
     e.debug_grant(0, "fengze");
@@ -111,12 +139,17 @@ fn swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying() {
     let bc3 = black_card(&mut e);
     e.debug_set_hp(1, 2);
     e.debug_set_hp(2, 3);
+    let dfz = e.catalog().skill_by_name("fengze").expect("凤泽在目录");
+    submit(&mut e, 0, GameAction::ActivateSkill { skill: dfz });
+    let ch = e.open_choice().expect("凤泽选黑牌窗");
+    assert_eq!(ch.spec.prompt, "fengze_pick");
+    let (cid, obs) = (ch.id, ch.observer);
     submit(
         &mut e,
-        0,
-        GameAction::PlayCard {
-            card: bc3,
-            targets: vec![],
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(bc3)],
         },
     );
     settle_optional_confirm(&mut e);

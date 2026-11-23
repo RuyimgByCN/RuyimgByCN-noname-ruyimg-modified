@@ -555,6 +555,16 @@ impl HostBehavior {
             Self::HuanleMonkeyCard => (Timing::Normal, -25, true),
             // extension/欢乐卡牌/card/skill.js:70 (xuelunyang)
             Self::HuanleXuelunyangCard => (Timing::Normal, -25, true),
+            // extension/杀海拾遗/character/swd/skill.js:1316 (lmazui3)
+            Self::SwdLmazui3 => (Timing::Normal, 0, true),
+            // extension/杀海拾遗/character/swd/skill.js:3924 (touxi)
+            Self::SwdTouxi => (Timing::Normal, 0, true),
+            // extension/杀海拾遗/character/swd/skill.js:3963 (touxi2)
+            Self::SwdTouxi2 => (Timing::Normal, 0, true),
+            // extension/杀海拾遗/character/swd/skill.js:1078 (xuanying_use)
+            Self::SwdXuanyingUse => (Timing::Normal, 0, true),
+            // extension/杀海拾遗/character/swd/skill.js:3463 (pozhou2 -> phaseAfter)
+            Self::SwdPozhouSealed => (Timing::Normal, 0, false),
             // noname-liuli/noname/card/gujian.js:1088; Liuli game.js:32348-32365 (silent).
             Self::GujianFoodZiyangdan => (Timing::Normal, 1, false),
             // noname-liuli/noname/extension/AI优化/extension.js:8, 870 (L01 AI优化, silent).

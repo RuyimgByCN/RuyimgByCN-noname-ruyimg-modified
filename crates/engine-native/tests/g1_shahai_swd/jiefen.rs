@@ -96,13 +96,35 @@ fn swd_generals_b20_jiefen_multistep() {
         },
     );
 
-    // 登记差异：上游 chooseCardTarget 玩家自选自己交出的牌与目标，原生
-    // 确定性直发（自己交手牌 first 给手牌最少的其他存活角色）——无 q3 窗。
-    // 断言：p1 3-1=2；p3 +1-1=1；p0 +1=1
+    // 问 3：p0 自选一张手牌交出；问 4：p0 自选手牌较少之目标 p3
+    let q3 = e.open_choice().expect("q3 自己选交牌");
+    assert_eq!(q3.spec.prompt, "swd_jiefen_give_card");
+    let (cid, obs) = (q3.id, q3.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(mine)],
+        },
+    );
+    let q4 = e.open_choice().expect("q4 选交牌目标");
+    assert_eq!(q4.spec.prompt, "swd_jiefen_give_target");
+    let (cid, obs) = (q4.id, q4.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Player(0)],
+        },
+    );
+
+    // 断言：p1 3-1=2；p3 1+1-1=1；p0 0+1=1
     assert_eq!(e.state_core().players[1].hand.len(), 2, "分舵：p1 交 1");
     assert_eq!(e.state_core().players[3].hand.len(), 1, "分舵：p3 持平");
     assert_eq!(e.state_core().players[0].hand.len(), 1, "分舵：p0 得 1");
-    let _ = (mine, give1);
+    let _ = give1;
 }
 
 /// 解纷是**每阶段一次**（上游 `character/swd/skill.js:341`：`enable:"phaseUse"` + `usable: 1`）。

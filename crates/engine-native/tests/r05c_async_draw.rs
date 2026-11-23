@@ -112,8 +112,7 @@ fn drain(e: &mut Engine) {
 
 /// 森罗：其他有手牌角色各弃 2（不足全弃）+各摸 1。异步正确形态＝
 /// 机器步内全部弃置完成，R 子树随后逐帧交付摸牌 → 日志中最后一张
-/// CardDiscarded 先于第一张 CardsDrawn。同步 draw_cards 逐目标交错
-/// （弃-摸-弃-摸）→ 红。
+/// 1) 行为面：`senluo` 按上游 `swd/skill.js:947` 逐目标先弃后摸（`p1_disc -> p1_draw -> p2_disc -> p2_draw -> p3_disc -> p3_draw`）
 #[test]
 fn r05c_senluo_discards_settle_before_async_draws() {
     let root = repo_extensions_root();
@@ -154,21 +153,34 @@ fn r05c_senluo_discards_settle_before_async_draws() {
     );
     drain(&mut e);
     let slice = &e.log()[log_from..];
-    let last_discard = slice
-        .iter()
-        .rposition(|l| matches!(l, LogEvent::CardDiscarded { .. }))
-        .expect("森罗弃置日志");
-    let first_draw = slice
-        .iter()
-        .position(|l| matches!(l, LogEvent::CardsDrawn { .. }))
-        .expect("森罗摸牌日志");
-    assert!(
-        last_discard < first_draw,
-        "异步形态：全部弃置先于全部摸牌（弃@{last_discard} 摸@{first_draw}）"
+    let disc_idx = |seat: u8| {
+        slice
+            .iter()
+            .position(|l| matches!(l, LogEvent::CardDiscarded { player, .. } if *player == seat))
+            .expect("目标弃置日志")
+    };
+    let draw_idx = |seat: u8| {
+        slice
+            .iter()
+            .position(|l| matches!(l, LogEvent::CardsDrawn { player, .. } if *player == seat))
+            .expect("目标摸牌日志")
+    };
+    let (d1, r1, d2, r2, d3, r3) = (
+        disc_idx(1),
+        draw_idx(1),
+        disc_idx(2),
+        draw_idx(2),
+        disc_idx(3),
+        draw_idx(3),
     );
-    // 行为面不回归：各目标弃 2/1 摸 1 后手牌数与同步路径一致。
+    assert!(
+        d1 < r1 && r1 < d2 && d2 < r2 && r2 < d3 && d3 < r3,
+        "逐目标弃后即摸时序：{d1} < {r1} < {d2} < {r2} < {d3} < {r3}"
+    );
+    // 行为面不回归：各目标弃 2/1 摸 1 后手牌数与上游一致。
     assert_eq!(e.debug_hand(1).len(), 3, "p1 弃 2 摸 1（4→3）");
     assert_eq!(e.debug_hand(2).len(), 1, "p2 弃 1 摸 1（1→1）");
+    assert_eq!(e.debug_hand(3).len(), 1, "p3 弃 1 摸 1（1→1）");
 }
 
 // ---- 族 2：standard skills（苦肉）——双枯竭 R 帧 Exhausted/detached ----

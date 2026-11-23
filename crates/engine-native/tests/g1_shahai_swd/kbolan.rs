@@ -43,11 +43,34 @@ fn swd_deferred_b98_kbolan_aojian() {
         }
         let _ = submit(&mut e, c, GameAction::NextPhase);
     }
-    // 完成摸牌阶段（NextPhase 进 Play）
+    // 完成摸牌阶段（NextPhase 进 Play）：先确认 kbolan_confirm，再应答 kbolan2_top 置顶选牌窗
     submit(&mut e, 0, GameAction::NextPhase);
+    let kb_conf = e.open_choice().expect("kbolan_confirm 确认窗");
+    assert_eq!(kb_conf.spec.prompt, "kbolan_confirm");
+    let (cid, obs) = (kb_conf.id, kb_conf.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    );
+    let top_pick = e.open_choice().expect("kbolan2_top 选牌窗");
+    assert_eq!(top_pick.spec.prompt, "kbolan2_top");
+    let (cid, obs) = (top_pick.id, top_pick.observer);
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![ChoiceOption::Card(keep)],
+        },
+    );
     let h_after = e.debug_hand(0).len();
     assert_eq!(h_after - h0, 2, "拷贝栏：净 +2（固定 2+额外 1-置回 1）");
-    let _ = (keep, deck_len);
+    assert_eq!(e.state_core().deck.last().copied(), Some(keep), "拷贝栏：选牌置于牌堆顶");
+    let _ = deck_len;
 
     // ② 奥剑（Miles）：弃 2 张手牌 → 攻击距离 1 内至多 2 名各 1 伤
     e.debug_grant(0, "aojian");

@@ -16,7 +16,7 @@ pub(crate) use l10_reguhuo::{
     reguhuo_spawn_response,
 };
 pub(crate) use l10_scs::{on_phase_end_l10_scs, scsanruo_response_skill};
-mod skills_virtual_use;
+pub(super) mod skills_virtual_use;
 mod skills_discard_costs;
 mod skills_damage;
 mod skills_damage_extra;
@@ -183,6 +183,11 @@ pub(super) mod u08_batch_b;
 pub(super) mod u08_batch_c;
 pub(super) mod u08_batch_d;
 pub(crate) use u08_batch_d::{host_card_use_after, host_sha_begin_step, host_sha_end_step};
+pub(super) mod u05_7c_asks;
+pub(super) mod u05_7c_sha;
+pub(super) mod u05_7c_skills;
+pub(crate) use u05_7c_skills::host_draw_event_step;
+pub(super) mod u05_7c_viewas;
 pub(super) mod l25_batch_a;
 pub(crate) use l25_batch_a::on_l25_host_event;
 pub(super) mod l25_batch_b;
@@ -294,8 +299,8 @@ impl HostMachine {
             HostBehavior::SwdMufengHeld => self.step_swd_equipment(ctx),
             // 望尘：确认门后 TargetChoice 选任意角色翻面
             HostBehavior::SwdWangchenHeld => self.step_swd_equipment(ctx),
-            // 还侠：无效果步（PlayCard 转化臂+kernel 跟踪钩承载）
-            HostBehavior::SwdHuanxia => self.step_swd_status(ctx),
+            // 还侠（屈娴，swd 武将面批 27）：PlayCard 兼 ActivateSkill 主动转化红牌当杀（含还侠回收跟踪）
+            HostBehavior::SwdHuanxia => u05_7c_viewas::step_u05_viewas(self, ctx),
             // 破月：无效果步
             HostBehavior::SwdPoyue => self.step_swd_status(ctx),
             // 收纳：SelectCard 弃 1 手牌 → TargetChoice 其他有手牌角色 →
@@ -370,9 +375,8 @@ impl HostMachine {
             HostBehavior::SwdXianghui => self.step_swd_recovery(ctx),
             // 挥琪：TargetChoice 选一名其他角色 → 摸 X（X=自己已损失体力）
             HostBehavior::SwdHuiqi => self.step_swd_targets(ctx),
-            // 森罗：activate 门已验手牌最少——对其他有手牌角色各：弃 2
-            //（确定性首两张，登记差异上游自选）+摸 1
-            HostBehavior::SwdSenluo => self.step_swd_status(ctx),
+            // 森罗（swd/skill.js:947）：其他有手牌角色逐个自选弃 2 张手牌 + 摸 1
+            HostBehavior::SwdSenluo => self.step_u05_7c_skills(ctx),
             // 连打：SelectCard 弃一张牌（he 可取消=放弃）→ 虚拟杀对原目
             // 标再结算（凤略直发口径；每回合旗置位=循环守卫）
             HostBehavior::SwdLianda => self.step_swd_virtual_cards(ctx),
@@ -392,14 +396,12 @@ impl HostMachine {
             HostBehavior::SwdWanjun => self.step_swd_status(ctx),
             // 火扑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
             HostBehavior::SwdHuopu => self.step_swd_status(ctx),
-            // 夜影：锁定 marker（engine PlayCard viewAs 链查询），无效果步
-            HostBehavior::SwdYeying => self.step_swd_status(ctx),
-            // 归影：锁定 marker（engine PlayCard viewAs 链查询），无效果步
-            HostBehavior::SwdGuiying => self.step_swd_status(ctx),
-            // 凤泽：锁定 marker（engine PlayCard viewAs 链查询），无效果步
-            HostBehavior::SwdFengze => self.step_swd_status(ctx),
-            // 玲月：锁定（sha 机器内联臂查询），无独立效果步
-            HostBehavior::SwdLingyue => self.step_swd_status(ctx),
+            // 夜影 / 归影 / 凤泽：出牌主动黑牌转化（选黑色 he → 选目标/直接置桌面使用）
+            HostBehavior::SwdYeying
+            | HostBehavior::SwdGuiying
+            | HostBehavior::SwdFengze => u05_7c_viewas::step_u05_viewas(self, ctx),
+            // 玲月（swd/skill.js:1560）：shaBegin 确认后目标自选弃 1 张 he 牌
+            HostBehavior::SwdLingyue => self.step_u05_7c_sha(ctx),
             // 暗莲映：frequent 锁定式——直摸 2
             HostBehavior::SwdAnlianying => self.step_swd_status(ctx),
             // 疾风：锁定 marker（engine max_targets 链+state computed_distance
@@ -487,8 +489,8 @@ impl HostMachine {
             // ComparePlayerPick 己方选牌 → 比点：赢=目标置封印（本回合
             // 基本/锦囊失效）+受 1 伤；输=目标已受伤回 1
             HostBehavior::SwdYijue => self.step_swd_damage_combos(ctx),
-            // 拷贝栏：锁定（Draw 内联钩），无独立效果步
-            HostBehavior::SwdKbolan => self.step_swd_status(ctx),
+            // 拷贝栏（swd/skill.js:672）：drawBegin 可选确认（frequent:true）
+            HostBehavior::SwdKbolan => self.step_u05_7c_skills(ctx),
             // 奥剑：SelectCard 弃 1..X 张手牌 → TargetChoice 攻击距离内
             // 至多 X 名 → 各 1 伤
             HostBehavior::SwdAojian => self.step_swd_damage_multi(ctx),
@@ -532,8 +534,8 @@ impl HostMachine {
             // 凝弦：确认 → SelectCards 弃任意张黑色 he 牌 → SelectPlayers
             // 等量目标 → 各受 1 伤
             HostBehavior::SwdNingxian => self.step_swd_damage_multi(ctx),
-            // 妖童：锁定 marker（engine viewAs 链查询），无效果步
-            HostBehavior::SwdYaotong => self.step_swd_status(ctx),
+            // 妖童（齐，swd 消解批 93）：PlayCard 兼 ActivateSkill（手牌为奇数时任意手牌当杀）
+            HostBehavior::SwdYaotong => u05_7c_viewas::step_u05_viewas(self, ctx),
             // 黑火：SelectCard 弃一张装备牌（he）→ 摸等同弃前手牌数的牌
             // → 若手牌 ≥8 自受 3 火伤
             HostBehavior::SwdHeihuo => self.step_swd_damage_reactions(ctx),
@@ -619,9 +621,8 @@ impl HostMachine {
             HostBehavior::SwdWuxie => self.step_swd_status(ctx),
             // 幻剑：锁定 marker（engine PlayCard viewAs 链查询），无效果步
             HostBehavior::SwdHuanjian => self.step_swd_status(ctx),
-            // 乖戾：Before 帧 +1（缚斧同款直写）；After 帧弃两张手牌
-            //（手牌不足弃全部）
-            HostBehavior::SwdGuaili => self.step_swd_damage_reactions(ctx),
+            // 乖戾（swd/skill.js:2600）：Before 面 +1 并标 armed；After 面自选弃 2 张手牌
+            HostBehavior::SwdGuaili => self.step_u05_7c_skills(ctx),
             // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
             // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
             HostBehavior::SwdXuying => self.step_swd_damage_reactions(ctx),
@@ -667,8 +668,8 @@ impl HostMachine {
             HostBehavior::WudianLiduan => self.step_wudian_status(ctx),
             // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）
             HostBehavior::WudianFuchou2 => self.step_wudian_status(ctx),
-            // 铁壁：弃首张黑牌 → 目标 +1 护甲（登记差异：上游玩家选弃牌）
-            HostBehavior::SwdTiebi => self.step_swd_status(ctx),
+            // 铁壁（swd/skill.js:847）：逐符合距离 ≤1 无护甲杀目标自选弃黑手牌 +1 护甲
+            HostBehavior::SwdTiebi => self.step_u05_7c_skills(ctx),
             // 流虹：使用杀后摸 1
             HostBehavior::SwdLiuhong => self.step_swd_status(ctx),
             // 墨剑：目标摸 1 + 自己回 1（未满血门）
@@ -728,9 +729,8 @@ impl HostMachine {
             HostBehavior::SwdRexue => self.step_swd_status(ctx),
             // 幻音：判定——黑桃取消该牌、红桃摸 1、其余无事
             HostBehavior::SwdHuanyin => self.step_swd_status(ctx),
-            // 灵弦：与座位序首个攻击距离 >1 的其他存活者各摸 1
-            // （登记差异：自选目标→首个确定性近似；可放弃→恒发动近似）
-            HostBehavior::SwdLingxian => self.step_swd_status(ctx),
+            // 灵弦（swd/skill.js:2671）：自选一名攻击距离 >1 的其他存活角色各摸 1（可取消）
+            HostBehavior::SwdLingxian => self.step_u05_7c_skills(ctx),
             // 拼点（deferred 消解批 独孤宁珂）：弃一张手牌，令两名角色拼点：
             // 赢者获得该牌、输者受赢者 1 伤（拼点牌两目标自选；登记差异：
             // 目标/拼点牌座位序与确定性近似）
@@ -859,8 +859,14 @@ impl HostMachine {
             HostBehavior::Songci => self.step_skills_cards(ctx),
             // 诛害：选一张手中的【杀】→ 对结束阶段角色使用（实体牌）
             HostBehavior::SwdZhuhai => self.step_swd_virtual_cards(ctx),
-            // 林韵：两张牌当杀（手牌或装备；首张为载荷牌，declared Sha）
-            HostBehavior::SwdLinyun => self.step_swd_card_virtual_sha(ctx),
+            // 林韵（swd/skill.js:2854）：出牌转化两张牌当杀 / shaBegin（linyun2）询问出闪否则直击
+            HostBehavior::SwdLinyun => {
+                if self.def_key == "linyun2" {
+                    self.step_u05_7c_sha(ctx)
+                } else {
+                    self.step_swd_card_virtual_sha(ctx)
+                }
+            }
             HostBehavior::SwdJikong => self.step_swd_targets(ctx),
             // 魅惑：选目标 → 取其一张牌（装备牌则装备之）
             HostBehavior::SwdMeihuo => self.step_swd_card_targets(ctx),
@@ -1354,6 +1360,12 @@ impl HostMachine {
             | HostBehavior::U05SwdSadengjinhuan
             | HostBehavior::U05SwdGuiyanfadao
             | HostBehavior::U05SwdTianxianjiu => swd_u05_7b::step(self, ctx),
+            HostBehavior::SwdTouxi
+            | HostBehavior::SwdTouxi2
+            | HostBehavior::SwdKbolan2
+            | HostBehavior::SwdLmazui3 => self.step_u05_7c_skills(ctx),
+            HostBehavior::SwdXuanyingUse => self.step_swd_damage_targets(ctx),
+            HostBehavior::SwdPozhouSealed => self.step_swd_status(ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

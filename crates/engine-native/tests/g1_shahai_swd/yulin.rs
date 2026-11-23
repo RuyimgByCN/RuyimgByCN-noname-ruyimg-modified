@@ -370,7 +370,11 @@ fn swd_generals_b22_yulin_ningshuang_gongshen() {
     settle_optional_confirm(&mut e);
     assert_eq!(e.debug_hp(2), 4, "工神：p2 免伤");
     assert_eq!(hand_len_w(&e, 3), 0, "工神：zhuge 已弃");
-    assert_eq!(hand_len_w(&e, 1), 1, "工神：取消的杀留在 p1 手牌");
+    assert_eq!(hand_len_w(&e, 1), 0, "工神：取消的杀进入弃牌堆");
+    assert!(
+        e.state_core().discard.contains(&sha5),
+        "工神：取消的杀进弃牌堆"
+    );
 
     // 反例 ③a：取消确认窗 → 杀照常结算
     reset_sha(&mut e);

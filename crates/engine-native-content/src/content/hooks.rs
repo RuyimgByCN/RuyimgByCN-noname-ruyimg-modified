@@ -27,6 +27,7 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     sha_hit_step: crate::content::host::host_sha_hit_step_all,
     sha_end_step: crate::content::host::host_sha_end_step_all,
     draw_begin_step: crate::content::host::host_draw_begin_step_all,
+    draw_event_step: crate::content::host::host_draw_event_step,
     on_draw_machine_begin: crate::content::host::host_on_draw_machine_begin_hearth,
     on_card_use_after: crate::content::host::host_card_use_after_all,
     on_game_start: crate::content::host::host_on_game_start,

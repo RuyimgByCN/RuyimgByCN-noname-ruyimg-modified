@@ -212,10 +212,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdHuanyin => matches!(event,
                 EventData::CardUsed(u)
                 if u.player != owner && u.targets.contains(&owner) && !u.cancelled),
-            // 灵弦：自己使用/打出牌，且非自己回合，且存在攻击距离 >1 的其他存活者
+            // 灵弦：自己使用/打出实体牌，且非自己回合，且存在攻击距离 >1 的其他存活者
             HostBehavior::SwdLingxian => {
                 let by_owner = match event {
-                    EventData::CardUsed(u) => u.player == owner,
+                    EventData::CardUsed(u) => u.player == owner && u.card.is_some(),
                     EventData::CardResponded { player, .. } => *player == owner,
                     _ => false,
                 };
@@ -227,23 +227,22 @@ impl HostSkillBehavior {
                             && ctx.state.computed_distance(ctx.catalog, owner, t) > 1
                     })
             }
-            // 铁壁：杀指定了与持有者距离 ≤1 的目标，持有者有黑牌
+            // 铁壁：杀指定了与持有者距离 ≤1 的无护甲目标，持有者手牌有黑牌
             HostBehavior::SwdTiebi => {
-                let hit = matches!(event,
+                matches!(event,
                 EventData::CardUsed(u)
-                if u.effective_kind(ctx.catalog).is_sha_like()
+                if u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)).is_sha_like()
                     && u.targets.iter().any(|&t| {
                         ctx.state.player(t).alive
                             && ctx.state.player(t).hujia == 0
-                            && ctx.state.seat_distance(t, owner) <= 1
+                            && ctx.state.computed_distance(ctx.catalog, owner, t) <= 1
                     })
                     && ctx.state.player(owner).hand.iter().any(|c| {
                         matches!(
-                            ctx.catalog.cards[*c as usize].suit,
+                            ctx.catalog.effective_card_suit(&ctx.state, owner, *c),
                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                         )
-                    }));
-                hit
+                    }))
             }
             // 大同（A2 H62）：任意玩家整回合结束（global phaseEnd）全场极差 ≤1
             HostBehavior::SwdDatong => matches!(event,
@@ -478,27 +477,25 @@ impl HostSkillBehavior {
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
             HostBehavior::SwdKongdongyinGuard => matches!(event,
                 EventData::Death { player, .. } if *player == owner),
-            // 神秘果窗口（上游 `g_shenmiguo`）：自己出牌阶段用出基本/普通锦囊结算后、
-            // 手持神秘果、每阶段限一次、目标全存活；view-as 转化用牌、五谷（Remained
-            // 面未实现）、机关异类与延时锦囊不进再结算白名单（complexTarget/exclusion
-            // 同口径收窄）。
-            // 神秘果窗口在 `Stage::Done`（`host_card_use_after_swd` = 上游 `useCardAfter`）
-            // 派发，避免在 `AfterTriggers`（`Intrinsic` 执行前）误判未生效的目标状态，
-            // 且在 `SwdYuchanSwap` 优先检查前不提前消费或换走玉蝉坎。
             HostBehavior::SwdShenmiguoWindow => false,
-            // 浴尘：回合外使用/打出黑色牌结算后（双事件；he 有牌的目标
-            // 在机器步求取，filter 只验事件形状）
+            // 浴尘：回合外使用/打出黑色牌结算后，且存在 he 有牌的其他存活角色
             HostBehavior::SwdYuchen => {
-                matches!(event,
-                    EventData::CardUsed(u)
-                    if u.player == owner
-                        && ctx.state.turn.current != owner
-                        && u.suit(ctx.catalog).is_some_and(|s|is_black_suit(&s))
-                ) || matches!(event,
-                EventData::CardResponded { card, player }
-                if *player == owner
-                    && ctx.state.turn.current != owner
-                    && is_black_suit(&ctx.catalog.cards[*card as usize].suit))
+                let has_other_he = ctx.state.alive_players().any(|p| {
+                    p != owner
+                        && (!ctx.state.player(p).hand.is_empty()
+                            || !ctx.state.player(p).equips.is_empty())
+                });
+                has_other_he
+                    && (matches!(event,
+                        EventData::CardUsed(u)
+                        if u.player == owner
+                            && ctx.state.turn.current != owner
+                            && u.suit(ctx.catalog).is_some_and(|s| is_black_suit(&s))
+                    ) || matches!(event,
+                        EventData::CardResponded { card, player }
+                        if *player == owner
+                            && ctx.state.turn.current != owner
+                            && is_black_suit(&ctx.catalog.effective_card_suit(&ctx.state, *player, *card))))
             }
             // 挟雷：使用/打出杀结算后（双事件；>2 人局；目标候选在机器
             // 步求取——use 排除原目标、respond 排除来源）
@@ -667,8 +664,10 @@ impl HostSkillBehavior {
             // trigger: {source: "damageBegin"} 同口径）且 off_court 有牌
             HostBehavior::SwdLmazui2 => matches!(event,
                 EventData::Damage(d)
-                if d.source == Some(owner) && !d.prevented
-                    && !ctx.state.player(owner).off_court.is_empty()),
+                if d.source == Some(owner)
+                    && !d.prevented
+                    && d.amount > 0
+                    && ctx.state.vm_aux.flags.get(&(owner, "swd_lmazui2_card".to_string())).copied().unwrap_or(0) > 0),
             // 圣手·淳于恒面：锁定 marker（engine viewAs 链查询），无触发
             HostBehavior::SwdShengshou => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
@@ -693,9 +692,17 @@ impl HostSkillBehavior {
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
-            // 玄影父技只有主动面（未横置出杀）；伤害面是 group 子技。
+            // 玄影父技只有主动 sha 面；回合外失牌反击面由 group 子技 `xuanying_use` 承担。
             HostBehavior::SwdXuanying => false,
-            // 玄影伤害子技：自己受伤（真实）、已横置、来源存活（父技授予才可达）
+            // 玄影回合外失牌反击子技：非己方回合失去牌且已横置且存在其他存活角色
+            HostBehavior::SwdXuanyingUse => swd_xuanying_use_event_cards(ctx, owner, event).is_some(),
+            // 破舟封印状态面：拥有者整回合结束后解除禁用并移除自身（TurnPhaseAfter）
+            HostBehavior::SwdPozhouSealed => matches!(
+                event,
+                EventData::TurnEndWindow { player, after: true }
+                if *player == owner
+            ),
+            // 保留兼容历史单测/元数据直挂定义（不再挂入 xuanying group_children）
             HostBehavior::SwdXuanyingDamage => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner
@@ -936,12 +943,17 @@ impl HostSkillBehavior {
                 EventData::TurnEndWindow { player, after: false }
                 if *player == owner),
             // 冰箭/神鼎/鬼眼：出牌主动技（ActivateSkill 通道），无触发面
-            // 袭西·凤钰面：自己出牌阶段开始且 he 有牌（候选面机器步求取）
+            // 袭西·凤钰面：自己出牌阶段开始、he 有牌且攻击距离<=1内存在体力>=己方的其他角色
             HostBehavior::SwdShangxi => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin }
                 if *player == owner && *begin
                     && (!ctx.state.player(owner).hand.is_empty()
-                        || !ctx.state.player(owner).equips.is_empty())),
+                        || !ctx.state.player(owner).equips.is_empty())
+                    && ctx.state.alive_players().any(|p| {
+                        p != owner
+                            && ctx.state.computed_distance(ctx.catalog, owner, p) <= 1
+                            && ctx.state.player(owner).hp <= ctx.state.player(p).hp
+                    })),
             // 花间·剑仙面：自己出牌阶段结束且 he 有牌
             HostBehavior::SwdHuajian => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin }
@@ -1095,7 +1107,47 @@ impl HostSkillBehavior {
             HostBehavior::SwdGouhunluoSub => matches!(event,
                 EventData::TurnBegin { player }
                 if ctx.state.player(owner).gouhunluo_source == Some(*player)),
+            HostBehavior::SwdTouxi => matches!(event,
+                EventData::TurnEndWindow { player, after: false }
+                if *player != owner
+                    && ctx.state.player(*player).alive
+                    && !ctx
+                        .catalog
+                        .skill_by_name("touxi2")
+                        .is_some_and(|d| ctx.state.has_skill(owner, d))),
+            HostBehavior::SwdTouxi2 => matches!(event,
+                EventData::TurnBegin { player } if *player == owner),
+            HostBehavior::SwdKbolan2 | HostBehavior::SwdLmazui3 => false,
             _ => unreachable!("behavior routed to the wrong filter module"),
         }
+    }
+}
+
+pub(super) fn swd_xuanying_use_event_cards(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    event: &EventData,
+) -> Option<Vec<CardId>> {
+    if ctx.state.turn.current == owner
+        || !ctx.state.player(owner).linked
+        || !ctx.state.alive_players().any(|p| p != owner)
+    {
+        return None;
+    }
+    match event {
+        EventData::CardsLost { player, cards, .. }
+        | EventData::CardsDiscarded { player, cards }
+            if *player == owner && !cards.is_empty() =>
+        {
+            Some(cards.clone())
+        }
+        EventData::CardsMoved { from, to, cards }
+            if *from == owner && from != to && !cards.is_empty() =>
+        {
+            Some(cards.clone())
+        }
+        EventData::CardUsed(u) if u.player == owner && !u.cancelled => u.card.map(|c| vec![c]),
+        EventData::CardResponded { player, card } if *player == owner => Some(vec![*card]),
+        _ => None,
     }
 }

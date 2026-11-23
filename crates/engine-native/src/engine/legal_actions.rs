@@ -152,6 +152,8 @@ impl Engine {
             for eq in self
                 .catalog()
                 .player_vm_view_as_extra_cards(self.state_core(), seat, true, None)
+                .into_iter()
+                .chain(self.catalog().host_view_as_extra_cards(self.state_core(), seat))
             {
                 if !hand.contains(&eq) {
                     hand.push(eq);

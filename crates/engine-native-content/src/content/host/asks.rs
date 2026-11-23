@@ -10,15 +10,23 @@ use super::asks_mtg::{active_ask_batches, active_ask_mtg};
 use super::asks_swd::active_ask_swd;
 use super::asks_wudian::active_ask_wudian;
 
-pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
+pub(super) fn xuanying_target_spec_with_prompt(
+    core: &GameStateCore,
+    owner: PlayerId,
+    prompt: &'static str,
+) -> ChoiceSpec {
     ChoiceSpec {
         kind: ChoiceKind::SelectPlayers,
-        prompt: "xuanying_target",
+        prompt,
         options: core.alive_players().filter(|p| *p != owner).map(ChoiceOption::Player).collect(),
         min: 1,
         max: 1,
         allow_cancel: true,
     }
+}
+
+pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
+    xuanying_target_spec_with_prompt(core, owner, "xuanying_target")
 }
 
 /// 宿主机器的询问派生：按行为 + 阶段还原 host.rs 各 step 中
@@ -49,9 +57,14 @@ pub(crate) fn active_ask_host(
             owner, "yihua_discard", ChoiceKind::SelectCards,
             hand_card_options(&core.player(owner).hand), 2, 2, true,
         )),
-        HostBehavior::SwdXuanying => {
+        HostBehavior::SwdXuanying | HostBehavior::SwdXuanyingUse => {
             if stage != HostStage::TargetChoice { return None; }
-            let spec = xuanying_target_spec(core, owner);
+            let prompt = if behavior == HostBehavior::SwdXuanyingUse {
+                "xuanying_use_target"
+            } else {
+                "xuanying_target"
+            };
+            let spec = xuanying_target_spec_with_prompt(core, owner, prompt);
             if spec.options.is_empty() { return None; }
             Some(ask(owner, spec.prompt, spec.kind, spec.options, spec.min, spec.max, spec.allow_cancel))
         }

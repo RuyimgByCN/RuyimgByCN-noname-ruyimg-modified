@@ -106,42 +106,113 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 旋影父技的已授予主动 sha 面；伤害面由子技承担。
-            HostBehavior::SwdXuanying => {
-                match self.stage {
-                    HostStage::Act => {
-                        let spec = asks::xuanying_target_spec(ctx.core, self.owner);
-                        if spec.options.is_empty() {
-                            return Flow::Done;
-                        }
-                        self.stage = HostStage::TargetChoice;
-                        Flow::WaitChoice {
-                            observer: self.owner,
-                            spec,
-                        }
+            // 旋影父技的已授予主动 sha 面（先横置，Yield 后再发虚拟杀；card: None 不偷牌堆）。
+            HostBehavior::SwdXuanying => match self.stage {
+                HostStage::Act => {
+                    let spec = asks::xuanying_target_spec(ctx.core, self.owner);
+                    if spec.options.is_empty() {
+                        return Flow::Done;
                     }
-                    HostStage::TargetChoice => {
-                        let Some(t) = ctx.answer().first().and_then(|o| match o {
-                            ChoiceOption::Player(p) => Some(*p),
-                            _ => None,
-                        }) else {
-                            return Flow::Done;
-                        };
-                        if ctx.core.player(t).alive {
-                            // commit_linked 翻转旗标（不含预置）
-                            ctx.emit(EventData::Linked {
-                                player: self.owner,
-                                linked: true,
-                            });
-                            if !ctx.core.deck.is_empty() {
-                                ctx.use_virtual_card(self.owner, CardKind::Sha, vec![t]);
-                            }
-                        }
-                        Flow::Done
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec,
                     }
-                    _ => Flow::Done,
                 }
-            }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    self.target = Some(t);
+                    self.stage = HostStage::DrawSettle;
+                    ctx.emit(EventData::Linked {
+                        player: self.owner,
+                        linked: true,
+                    });
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    if let Some(t) = self.target {
+                        if ctx.core.player(t).alive {
+                            ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                card: None,
+                                player: self.owner,
+                                targets: vec![t],
+                                nature: crate::event::DamageNature::Normal,
+                                use_as: Some(CardKind::Sha),
+                                cancelled: false,
+                            }));
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
+            // 玄影回合外失牌反击子技（swd/skill.js:1078）：选目标 → 解除横置 → Yield → 不计次虚拟杀
+            HostBehavior::SwdXuanyingUse => match self.stage {
+                HostStage::Act => {
+                    if !ctx.core.player(self.owner).linked || ctx.core.turn.current == self.owner {
+                        return Flow::Done;
+                    }
+                    let spec = asks::xuanying_target_spec_with_prompt(
+                        ctx.core,
+                        self.owner,
+                        "xuanying_use_target",
+                    );
+                    if spec.options.is_empty() {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec,
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(t) = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Player(p) => Some(*p),
+                        _ => None,
+                    }) else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(t).alive {
+                        return Flow::Done;
+                    }
+                    self.target = Some(t);
+                    self.stage = HostStage::DrawSettle;
+                    ctx.emit(EventData::Linked {
+                        player: self.owner,
+                        linked: false,
+                    });
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    if let Some(t) = self.target {
+                        if ctx.core.player(t).alive {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((self.owner, "vm_va_sha_no_count".to_string()), 1);
+                            ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                                card: None,
+                                player: self.owner,
+                                targets: vec![t],
+                                nature: crate::event::DamageNature::Normal,
+                                use_as: Some(CardKind::Sha),
+                                cancelled: false,
+                            }));
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 聚悉：扣存活数并选一名角色——已受伤则自选受伤/回复，否则受伤
             HostBehavior::SwdJuxi => match self.stage {
                 HostStage::Act => {

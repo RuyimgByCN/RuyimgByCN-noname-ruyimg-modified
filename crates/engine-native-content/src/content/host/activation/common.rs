@@ -54,6 +54,7 @@ impl HostSkillBehavior {
                     || ctx.state.turn.current != owner
                     || ctx.state.player(owner).hand.is_empty()
                     || ctx.catalog.blocks_card_use_and_save(ctx.state, owner)
+                    || ctx.catalog.blocks_hand_cards(ctx.state, owner)
                 {
                     return None;
                 }
@@ -134,12 +135,12 @@ impl HostSkillBehavior {
                     stage: HostStage::Act,
                 }))
             }
-            // 极略（swd 批 136）：出牌阶段主动（每阶段 3 次）
+            // 极略（swd 批 136）：出牌阶段主动（每阶段 3 次；牌堆与弃牌堆不得同空）
             HostBehavior::Jilve => {
                 if !matches!(ctx.state.turn.phase, crate::event::Phase::Play)
                     || ctx.state.turn.current != owner
                     || ctx.state.player(owner).jilve_used >= 3
-                    || ctx.state.deck.is_empty()
+                    || (ctx.state.deck.is_empty() && ctx.state.discard.is_empty())
                 {
                     return None;
                 }

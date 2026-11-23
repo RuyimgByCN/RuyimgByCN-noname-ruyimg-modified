@@ -1405,7 +1405,7 @@ fn l10_round3_blocks_all_cards_new_zhixi_bingfeng2_blocks_play_activation() {
     eb.debug_clear_hand(0);
     let _ht_b = eb.debug_place_suit(0, Suit::Heart);
     let _dia_b = eb.debug_place_suit(0, Suit::Diamond);
-    assert!(eb.catalog().blocks_all_cards(eb.state_core(), 0));
+    assert!(eb.catalog().blocks_hand_cards(eb.state_core(), 0));
     let gh_b = eb.catalog().skill_by_name("reguhuo").unwrap();
     let tl_b = eb.catalog().skill_by_name("scstaoluan").unwrap();
     let ar_b = eb.catalog().skill_by_name("scsanruo").unwrap();

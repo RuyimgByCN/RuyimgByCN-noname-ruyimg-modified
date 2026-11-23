@@ -12,7 +12,7 @@ impl HostBehavior {
     /// 授予，内核 filter 只认子技是否已授予。
     pub const fn group_children(self) -> &'static [(&'static str, HostBehavior)] {
         match self {
-            HostBehavior::SwdXuanying => &[("xuanying_damage", HostBehavior::SwdXuanyingDamage)],
+            HostBehavior::SwdXuanying => &[("xuanying_use", HostBehavior::SwdXuanyingUse)],
             HostBehavior::U05GwentCharBatchA => &[
                 ("gwhuanshuang_disable", HostBehavior::U05GwentCharBatchA),
                 ("gwjinli_jiu", HostBehavior::U05GwentCharBatchA),
@@ -724,6 +724,12 @@ impl HostBehavior {
             HostBehavior::U05SwdSadengjinhuan => "host:u05_swd_sadengjinhuan",
             HostBehavior::U05SwdGuiyanfadao => "host:u05_swd_guiyanfadao",
             HostBehavior::U05SwdTianxianjiu => "host:u05_swd_tianxianjiu",
+            HostBehavior::SwdTouxi => "host:touxi",
+            HostBehavior::SwdTouxi2 => "host:touxi2",
+            HostBehavior::SwdKbolan2 => "host:kbolan2",
+            HostBehavior::SwdLmazui3 => "host:lmazui3",
+            HostBehavior::SwdXuanyingUse => "host:xuanying_use",
+            HostBehavior::SwdPozhouSealed => "host:pozhou_sealed",
         }
     }
 }

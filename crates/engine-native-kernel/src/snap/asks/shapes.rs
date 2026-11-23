@@ -84,7 +84,8 @@ pub(in crate::snap) fn append_vm_shan_options(
         .copied()
         .unwrap_or(0)
         > 0
-        || crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target);
+        || crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target)
+        || catalog.blocks_hand_cards(core, target);
     let p = core.player(target);
     if !hand_banned {
         for &c in &p.hand {
@@ -98,7 +99,8 @@ pub(in crate::snap) fn append_vm_shan_options(
         }
     }
     for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
-        if (!crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target)
+        if (!(crate::rvm_bridge::modifiers::d34_flags::is_u01_hand_locked(core, catalog, target)
+            || catalog.blocks_hand_cards(core, target))
             || !p.hand.contains(&c))
             && !options.contains(&ChoiceOption::Card(c))
         {

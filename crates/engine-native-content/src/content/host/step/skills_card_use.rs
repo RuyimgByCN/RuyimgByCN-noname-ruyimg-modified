@@ -182,9 +182,12 @@ impl HostMachine {
                     }
                 }
                 HostStage::SelectNature => {
-                    let own = match ctx.answer_first() {
-                        ChoiceOption::Card(c) => c,
-                        _ => return Flow::Done,
+                    let Some(ChoiceOption::Card(own)) = ctx.answer().first().copied() else {
+                        if let Some(c) = self.card.take() {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                        }
+                        return Flow::Done;
                     };
                     self.cards = vec![own];
                     self.stage = HostStage::Act;
@@ -212,9 +215,12 @@ impl HostMachine {
                     }
                 }
                 HostStage::Act => {
-                    let target_card = match ctx.answer_first() {
-                        ChoiceOption::Card(c) => c,
-                        _ => return Flow::Done,
+                    let Some(ChoiceOption::Card(target_card)) = ctx.answer().first().copied() else {
+                        if let Some(c) = self.card.take() {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                        }
+                        return Flow::Done;
                     };
                     let own_card = self.cards.first().copied();
                     let Some(t) = self.target else {

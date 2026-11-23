@@ -343,9 +343,10 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         .catalog
         .skill_by_name(crate::vocabulary::names::BOSS_QIWU)
     {
-        let club = u
-            .suit_in(ctx.core, ctx.catalog)
-            .is_some_and(|s| matches!(s, crate::catalog::Suit::Club));
+        let club = matches!(
+            crate::kernel::card_use_suit(ctx.core, ctx.catalog, &u),
+            Some(crate::catalog::Suit::Club)
+        );
         if club
             && ctx.core.has_skill(u.player, qwdef)
             && ctx.core.player(u.player).alive
@@ -371,12 +372,10 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             .filter(|o| ctx.core.player(*o).alive)
             .collect();
         if let Some(holder) = holders.first() {
-            let red = u.suit_in(ctx.core, ctx.catalog).is_some_and(|s| {
-                matches!(
-                    s,
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                )
-            });
+            let red = matches!(
+                crate::kernel::card_use_suit(ctx.core, ctx.catalog, &u),
+                Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)
+            );
             // 显式目标面：targets 含持有者；闪电自置：targets 空（隐式
             // 自目标，上游 useCardToTargeted target=使用者同口径）
             let is_self_shandian =
@@ -488,31 +487,22 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             // 加成额外杀则置 land_sha_used，否则置常规已用
             // 破月（拓跋玉儿，swd 武将面批 28）：红杀不计入限一次（上
             // 游 stat 回退同口径）
-            let poyue_red_free = u.suit_in(ctx.core, ctx.catalog).is_some_and(|s| {
-                matches!(
-                    s,
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                )
-            }) && ctx
+            let poyue_red_free = matches!(
+                crate::kernel::card_use_suit(ctx.core, ctx.catalog, &u),
+                Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond)
+            ) && ctx
                 .catalog
                 .skill_by_name("poyue")
-                .map(|def| ctx.core.has_skill(u.player, def))
-                .unwrap_or(false);
-            // 愚钝·福面（swd 武将面批 82）：双锦囊当杀不计入出杀次数
-            //（上游 yudun_count useCard 后 stat.card.sha-- 同口径）。
-            // 判据=声明杀且实体非杀族（PlayCard 常态出杀也带 use_as=
-            // 声明位，须按实体牌种区分——批 15 良策勘误同口径）
-            let yudun_free = u.use_as == Some(crate::catalog::CardKind::Sha)
-                && u.card.is_some_and(|c| {
-                    !ctx.catalog
-                        .resolved_card_def(ctx.core, c)
-                        .is_some_and(|d| d.kind.is_sha_like())
-                })
-                && ctx
-                    .catalog
-                    .skill_by_name("yudun")
-                    .map(|def| ctx.core.has_skill(u.player, def))
-                    .unwrap_or(false);
+                .is_some_and(|def| ctx.core.has_skill(u.player, def));
+            // 愚钝·福面（swd 武将面批 82）：仅限愚钝自身转化之杀不计入出杀次数
+            //（由 SwdYudun 挂 swd_yudun_sha:{c} 精准界定，不误豁免还侠/妖童/破晓等其他转化杀）
+            let yudun_free = u.card.is_some_and(|c| {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, format!("swd_yudun_sha:{c}")))
+                    .is_some()
+            });
             let vm_va_free = ctx
                 .core
                 .vm_aux

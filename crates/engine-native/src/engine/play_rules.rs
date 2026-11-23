@@ -30,6 +30,8 @@ pub(super) fn common_play_validation(
     {
         return Err(RejectReason::CardLimit);
     }
+    let sealed = catalog.is_tieji_sealed(core, actor)
+        || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
     // 蛊舞·缚（U05 xianjian 阿奴，规则 v154）：蛊舞生效中每回合
     // 最多使用 3 张牌（上游 anwugu2 mod cardEnabled countUsed>=
     // storage 同口径；countUsed=本出牌阶段已用数——登记差异：
@@ -47,10 +49,11 @@ pub(super) fn common_play_validation(
     // 愚钝·福面（swd 武将面批 82）：锁定——无法使用锦囊牌（上游
     // mod cardEnabled/cardRespondable/cardSavable 全禁；登记差异：
     // 原生仅使用位 PlayCard 校验，打出/响应面同往事封禁口径）
-    if catalog
-        .skill_by_name("yudun")
-        .map(|d| core.has_skill(actor, d))
-        .unwrap_or(false)
+    if !sealed
+        && !catalog.is_rechanyuan_sealed_name(core, actor, "yudun")
+        && catalog
+            .skill_by_name("yudun")
+            .is_some_and(|d| core.has_skill(actor, d))
     {
         let kind = catalog.resolved_card_kind(core, card);
         let is_trick =
@@ -85,6 +88,9 @@ pub(super) fn common_play_validation(
         && (has_mizhilianou_equip_heart
             || catalog
                 .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
+                .contains(&card)
+            || catalog
+                .host_view_as_extra_cards(core, core.turn.current)
                 .contains(&card)
             || (actor_p.equips.contains(&card)
                 && crate::kernel::has_ow_mujing(core, catalog, core.turn.current)
@@ -307,12 +313,13 @@ pub(super) fn play_kind(
         {
             kind = CardKind::Jiu;
         }
-        // 还侠（屈娴，swd 武将面批 27）：红色牌当【杀】（viewAs
-        // 转化，武圣同族；上游 he 区红牌仅使用面不含响应=登记）
-        else if catalog
-            .skill_by_name("huanxia")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
+        // 还侠（屈娴，swd 武将面批 27）：ActivateSkill(huanxia) 主动可转任意红牌（含 8 种锦囊）；
+        // PlayCard 仅在非自然有效牌/目标时回落为【杀】（不劫持正常可用牌与 8 种自然合法锦囊）
+        else if !targets.is_empty()
+            && huanxia_yaotong_play_fallback(core, catalog, actor, kind, targets)
+            && catalog
+                .skill_by_name("huanxia")
+                .is_some_and(|d| core.has_skill(actor, d))
             && red
         {
             kind = CardKind::Sha;
@@ -347,48 +354,13 @@ pub(super) fn play_kind(
         {
             kind = CardKind::Liuxinghuoyu;
         }
-        // 夜影（小黄龙，swd 武将面批㉗）：黑色牌当乾坤镖使用
-        else if catalog
-            .skill_by_name("yeying")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
-            && matches!(
-                catalog.resolved_card_suit(core, card),
-                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-            )
-        {
-            kind = CardKind::Qiankunbiao;
-        }
-        // 归影（虎魄，swd 武将面批㉗）：黑色牌当偷梁换柱使用
-        else if catalog
-            .skill_by_name("guiying")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
-            && matches!(
-                catalog.resolved_card_suit(core, card),
-                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-            )
-        {
-            kind = CardKind::Toulianghuanzhu;
-        }
-        // 凤泽（司徒强，swd 武将面批㉗）：黑色牌当桃园结义使用
-        else if catalog
-            .skill_by_name("fengze")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
-            && matches!(
-                catalog.resolved_card_suit(core, card),
-                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-            )
-        {
-            kind = CardKind::Taoyuan;
-        }
         // 破晓（张烈，swd 武将面批㊞）：装备牌当杀使用（上游
-        // viewAs sha 同口径）
-        else if catalog
-            .skill_by_name("poxiao")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
+        // viewAs sha 同口径；yeying / guiying / fengze 已由 ActivateSkill 显式转化承担，
+        // 不再在 PlayCard 劫持正常黑牌）
+        else if !targets.is_empty()
+            && catalog
+                .skill_by_name("poxiao")
+                .is_some_and(|d| core.has_skill(actor, d))
             && catalog.resolved_card_kind(core, card).is_equip()
         {
             kind = CardKind::Sha;
@@ -406,13 +378,14 @@ pub(super) fn play_kind(
         {
             kind = CardKind::Caoyao;
         }
-        // 妖童（齐，swd deferred 消解批 93）：手牌数为奇数时任意
-        // 手牌当杀使用（上游 viewAs sha 同口径；闪响应面/无懈
-        // 偶数面登记 defer）
-        else if catalog
-            .skill_by_name("yaotong")
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
+        // 妖童（齐，swd deferred 消解批 93）：ActivateSkill(yaotong) 主动可转任意奇数手牌（含 8 种锦囊）；
+        // PlayCard 仅在非自然有效牌/目标时回落为【杀】（不劫持正常可用牌）
+        else if !targets.is_empty()
+            && huanxia_yaotong_play_fallback(core, catalog, actor, kind, targets)
+            && catalog
+                .skill_by_name("yaotong")
+                .is_some_and(|d| core.has_skill(actor, d))
+            && core.player(actor).hand.contains(&card)
             && core.player(actor).hand.len() % 2 == 1
         {
             kind = CardKind::Sha;
@@ -897,4 +870,44 @@ pub(super) fn check_play_use_restrictions(
         }
     }
     Ok(())
+}
+
+/// 还侠 / 妖童在 `PlayCard` 入口的防劫持回落判据：对天然合法的 8 种有目标锦囊不劫持
+/// （请通过 `ActivateSkill(huanxia/yaotong)` 显式当【杀】）；仅当该锦囊对所给目标天然
+/// 不可用时（如单目标借刀、目标全满血草药、目标无牌顺手、目标已挂同延时牌等）方转【杀】。
+fn huanxia_yaotong_play_fallback(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    actor: PlayerId,
+    kind: CardKind,
+    targets: &[PlayerId],
+) -> bool {
+    match kind {
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => false,
+        CardKind::Duel | CardKind::Dismantle | CardKind::Chain => false,
+        CardKind::Jiedao => targets.len() != 2,
+        CardKind::Caoyao => {
+            targets.len() != 1
+                || !core.player(targets[0]).alive
+                || core.player(targets[0]).hp >= core.player(targets[0]).max_hp as i32
+        }
+        CardKind::Snatch => {
+            targets.len() != 1
+                || !core.player(targets[0]).alive
+                || targets[0] == actor
+                || (core.player(targets[0]).hand.is_empty()
+                    && core.player(targets[0]).equips.is_empty())
+        }
+        CardKind::Le | CardKind::Bing => {
+            targets.len() != 1
+                || !core.player(targets[0]).alive
+                || targets[0] == actor
+                || catalog.blocks_delayed_trick(core, targets[0])
+                || core.player(targets[0])
+                    .judge
+                    .iter()
+                    .any(|c| catalog.card_kind(*c) == kind)
+        }
+        _ => true,
+    }
 }

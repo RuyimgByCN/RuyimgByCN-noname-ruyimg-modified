@@ -291,6 +291,9 @@ pub const SWD_JIGUANFENG_KEY: &str = "swd_jiguanfeng";
 
 pub const SWD_FENGYIN_STATE_KEY: &str = "swd_fengyin_state";
 
+/// 破舟·封印触发面内部键（非锁定技失效至目标下一回合结束 phaseAfter）。
+pub const SWD_POZHOU_SEALED_KEY: &str = "pozhou_sealed";
+
 /// 枕流·临月触发面内部键（挂附目标的准备阶段取回+回复）。
 pub const SWD_ZHENJIU2_KEY: &str = "swd_zhenjiu2";
 
