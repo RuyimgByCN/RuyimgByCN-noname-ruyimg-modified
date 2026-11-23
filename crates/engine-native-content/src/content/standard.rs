@@ -616,7 +616,11 @@ pub fn standard_catalog_with_extensions(
                                 behavior,
                                 crate::content::host::HostBehavior::JinlianzhuCancel
                                     | crate::content::host::HostBehavior::U05ZhenfaRecastSkill
-                            ) && p.host_skills.iter().any(|d| d.behavior == behavior)))
+                            ) && p.host_skills.iter().any(|d| d.behavior == behavior))
+                            || (behavior
+                                == crate::content::host::HostBehavior::U05GujianCardBatch
+                                && def.name == "g_shihuifen"
+                                && p.host_skills.iter().any(|d| d.name == def.name)))
                 });
             if is_global && !seen_global_behaviors.contains(&behavior) {
                 seen_global_behaviors.push(behavior);

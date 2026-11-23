@@ -562,6 +562,14 @@ impl Engine {
                                 )
                             })
                     }
+                    "yanjiadan_heart" | "yanjiadan_diamond" | "yanjiadan_club"
+                    | "yanjiadan_spade" => {
+                        *behavior == crate::content::host::HostBehavior::U05GujianCardBatch.tag()
+                            && catalog
+                                .cards
+                                .iter()
+                                .any(|c| c.kind == CardKind::Jiguan && c.name.starts_with("yanjiadan_"))
+                    }
                     _ => false,
                 };
                 if !skill_ok && !card_ok {

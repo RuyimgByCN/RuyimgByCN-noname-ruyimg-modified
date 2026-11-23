@@ -118,10 +118,10 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         return;
     }
     if let Some(card) = u.card {
-        let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+        let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
         let in_hand = ctx.core.player(u.player).hand.contains(&card);
         if !ctx.core.table.contains(&card)
-            && (u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card)) || !in_hand)
+            && (u.use_as.is_some_and(|k| k != ctx.catalog.resolved_card_kind(ctx.core, card)) || !in_hand)
         {
             if let Some(spec) = ctx
                 .catalog
@@ -176,7 +176,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             }
         }
     }
-    let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+    let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
     let nullified = !is_dying_save
         && matches!(
             effective_kind,
@@ -255,13 +255,13 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if !pre_counted {
         ctx.core.player_mut(u.player).total_used += 1;
         // 沐风（swd 桓远之，批㉑）：本回合已使用基本牌（TurnState 旗，换回合清）
-        if u.effective_kind(ctx.catalog).is_basic_kind() {
+        if u.effective_kind_in(ctx.core, ctx.catalog).is_basic_kind() {
             ctx.core.turn.mufeng_used_basic = true;
         }
     }
     // 邪酬（Boss 相柳，规则 v223）：激活态下其他角色使用【桃】/【酒】
     // → 相柳获 1 蛇毒标记（上游 boss_echou global useCard 同口径）
-    let effective_kind = u.effective_kind(ctx.catalog);
+    let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
     if matches!(
         u.use_as.unwrap_or(effective_kind),
         CardKind::Tao | CardKind::Jiu
@@ -341,7 +341,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         .skill_by_name(crate::vocabulary::names::BOSS_QIWU)
     {
         let club = u
-            .suit(ctx.catalog)
+            .suit_in(ctx.core, ctx.catalog)
             .is_some_and(|s| matches!(s, crate::catalog::Suit::Club));
         if club
             && ctx.core.has_skill(u.player, qwdef)
@@ -368,7 +368,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             .filter(|o| ctx.core.player(*o).alive)
             .collect();
         if let Some(holder) = holders.first() {
-            let red = u.suit(ctx.catalog).is_some_and(|s| {
+            let red = u.suit_in(ctx.core, ctx.catalog).is_some_and(|s| {
                 matches!(
                     s,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -398,7 +398,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             });
         } else {
             ctx.log(LogEvent::VirtualCardPlayed {
-                kind: u.effective_kind(ctx.catalog),
+                kind: u.effective_kind_in(ctx.core, ctx.catalog),
                 player: u.player,
                 targets: u.targets.clone(),
                 presentation: None,
@@ -406,7 +406,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
         }
     }
     // view-as 转化（武圣/龙胆）：以声明牌种结算，而非目录牌种
-    let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+    let effective = u.effective_kind_in(ctx.core, ctx.catalog);
     match effective {
         CardKind::Tao => {
             ctx.core.table.extend(u.card);
@@ -490,7 +490,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             // 加成额外杀则置 land_sha_used，否则置常规已用
             // 破月（拓跋玉儿，swd 武将面批 28）：红杀不计入限一次（上
             // 游 stat 回退同口径）
-            let poyue_red_free = u.suit(ctx.catalog).is_some_and(|s| {
+            let poyue_red_free = u.suit_in(ctx.core, ctx.catalog).is_some_and(|s| {
                 matches!(
                     s,
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
@@ -505,8 +505,11 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
             // 判据=声明杀且实体非杀族（PlayCard 常态出杀也带 use_as=
             // 声明位，须按实体牌种区分——批 15 良策勘误同口径）
             let yudun_free = u.use_as == Some(crate::catalog::CardKind::Sha)
-                && u.card
-                    .is_some_and(|c| !ctx.catalog.card_kind(c).is_sha_like())
+                && u.card.is_some_and(|c| {
+                    !ctx.catalog
+                        .resolved_card_def(ctx.core, c)
+                        .is_some_and(|d| d.kind.is_sha_like())
+                })
                 && ctx
                     .catalog
                     .skill_by_name("yudun")
@@ -653,12 +656,12 @@ pub(super) fn dddanzhi_remove_targets(
     u: &mut crate::event::CardUseData,
 ) -> bool {
     if !u
-        .suit(ctx.catalog)
+        .suit_in(ctx.core, ctx.catalog)
         .is_some_and(|s| matches!(s, crate::catalog::Suit::Spade | crate::catalog::Suit::Club))
     {
         return false;
     }
-    let kind = u.effective_kind(ctx.catalog);
+    let kind = u.effective_kind_in(ctx.core, ctx.catalog);
     let mut targets = match kind {
         CardKind::Wugu => ctx.core.alive_players().collect(),
         CardKind::Taoyuan => ctx

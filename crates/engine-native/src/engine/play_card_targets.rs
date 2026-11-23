@@ -127,7 +127,7 @@ pub(super) fn validate_wuzhong_targets(
 ) -> Result<(), RejectReason> {
     if kind == CardKind::Wuzhong {
         let cname = catalog.cards.get(card as usize).map(|c| c.name).unwrap_or("");
-        if kind == catalog.card_kind(card) {
+        if kind == catalog.resolved_card_kind(core, card) {
             let actor = core.turn.current;
             let unseen_in_kingdoms = |p: PlayerId| -> bool {
                 matches!(core.mode, crate::state::GameMode::Kingdoms)
@@ -356,6 +356,14 @@ pub(super) fn validate_tail_ext_targets(
             if targets.len() != 1
                 || targets[0] == core.turn.current
                 || !core.player(targets[0]).alive
+                || (!crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                    core,
+                    catalog,
+                    core.turn.current,
+                    card,
+                    CardKind::Feibiao,
+                    crate::event::DamageNature::Normal,
+                ) && core.computed_distance(catalog, core.turn.current, targets[0]) < 2)
             {
                 return Err(RejectReason::IllegalTargets);
             }
@@ -368,11 +376,16 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
         }
-        CardKind::Shihuifen | CardKind::Liufengsan => {
+        CardKind::Shihuifen => {
             if targets.len() != 1
                 || targets[0] == core.turn.current
                 || !core.player(targets[0]).alive
             {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+        CardKind::Liufengsan => {
+            if targets.len() != 1 || !core.player(targets[0]).alive {
                 return Err(RejectReason::IllegalTargets);
             }
         }
@@ -392,13 +405,7 @@ pub(super) fn validate_tail_ext_targets(
             }
         }
         CardKind::Dinvxuanshuang => {
-            if !targets.is_empty() {
-                return Err(RejectReason::IllegalTargets);
-            }
-            let p = core.player(core.turn.current);
-            if p.hp >= p.max_hp as i32 {
-                return Err(RejectReason::HpFull);
-            }
+            return Err(RejectReason::WrongPhase);
         }
         CardKind::Gjyuheng => {
             if !targets.is_empty() {
@@ -474,10 +481,7 @@ pub(super) fn validate_tail_ext_targets(
                 return Err(RejectReason::IllegalTargets);
             }
             for t in targets {
-                if *t == core.turn.current
-                    || !core.player(*t).alive
-                    || core.player(*t).hand.is_empty()
-                {
+                if !core.player(*t).alive || core.player(*t).hand.is_empty() {
                     return Err(RejectReason::IllegalTargets);
                 }
             }
@@ -503,7 +507,7 @@ pub(super) fn validate_tail_ext_targets(
             }
         }
         CardKind::Shuigong => {
-            let is_tx_shuiyan = kind == catalog.card_kind(card)
+            let is_tx_shuiyan = kind == catalog.resolved_card_kind(core, card)
                 && catalog
                     .cards
                     .get(card as usize)
@@ -606,7 +610,8 @@ pub(super) fn validate_tail_ext_targets(
         CardKind::Shujinsan => {
             if targets.len() != 1
                 || !core.player(targets[0]).alive
-                || core.player(targets[0]).hand.is_empty()
+                || (core.player(targets[0]).hand.is_empty()
+                    && core.player(targets[0]).equips.is_empty())
             {
                 return Err(RejectReason::IllegalTargets);
             }
@@ -646,7 +651,7 @@ pub(super) fn try_recast_l11_trick(
     targets: &[PlayerId],
 ) -> Result<bool, RejectReason> {
     let recastable = kind == CardKind::Wuzhong
-        && kind == catalog.card_kind(card)
+        && kind == catalog.resolved_card_kind(&state.core, card)
         && targets.is_empty()
         && catalog
             .cards
@@ -694,7 +699,7 @@ pub(super) fn push_play_card_frame(
 ) -> Result<(), RejectReason> {
     let player = state.core.turn.current;
     // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
-    let use_as = if kind != catalog.card_kind(card)
+    let use_as = if kind != catalog.resolved_card_kind(&state.core, card)
         || !state.core.player(player).hand.contains(&card)
     {
         Some(kind)

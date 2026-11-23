@@ -905,6 +905,7 @@ pub(in crate::content::host) fn sha_begin_l10_scs(
 
 /// 回合结束（`Phase::End { begin: false }`）归还所有 `scschiyan_get` 暂扣牌并清理本回合计数。
 pub(crate) fn on_phase_end_l10_scs(ctx: &mut Ctx<'_>) {
+    super::u05_b2_gujian::on_phase_end_gujian(ctx);
     let seats = ctx.core.players.len() as PlayerId;
     for p in 0..seats {
         if let Some(cards) = ctx

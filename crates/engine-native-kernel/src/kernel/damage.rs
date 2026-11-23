@@ -273,11 +273,8 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         card: d.card, presentation: None });
     if let (Some(src), Some(sha_c)) = (d.source, d.card) {
         let is_sha = ctx
-            .core
-            .declared_kinds
-            .get(&sha_c)
-            .copied()
-            .unwrap_or_else(|| ctx.catalog.card_kind(sha_c))
+            .catalog
+            .resolved_card_kind(ctx.core, sha_c)
             .is_sha_like();
         if is_sha {
             ctx.core

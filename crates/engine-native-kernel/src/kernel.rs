@@ -61,6 +61,9 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         EventData::CardsMoved { cards, from, to } => {
             commit_cards_moved(ctx, to);
             for &c in &cards {
+                if from != to {
+                    clear_yange_clone_card(ctx.core, c);
+                }
                 if from != to || !ctx.core.player(from).hand.contains(&c) {
                     (ctx.catalog.hooks.on_hand_card_removed)(ctx, from, c);
                 }
@@ -231,7 +234,10 @@ pub use events::{peek_tao_extra_carriers, record_dddanzhi_card, take_tao_extra_c
 use events::*;
 mod equipment;
 use equipment::commit_equip;
-pub use equipment::{discard_armor_for_ssr_luoyi, grant_equip_skills, revoke_equip_skills};
+pub use equipment::{
+    cleanup_discard_to_deck, clear_yange_clone_card, discard_armor_for_ssr_luoyi,
+    grant_equip_skills, release_yanjia_merged_to_discard, revoke_equip_skills,
+};
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;

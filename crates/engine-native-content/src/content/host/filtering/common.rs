@@ -633,6 +633,8 @@ impl HostSkillBehavior {
                 // 雷伤+移除在内核 K13 直推，宿主无机器步骤）
                 EventData::TurnEndWindow { player, after: false } if *player == owner),
             HostBehavior::GujianFoodGudonggeng => matches!(event,
+                EventData::TurnBegin { player } if *player == owner
+            ) || matches!(event,
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented && d.amount > 0
                     && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
@@ -655,6 +657,7 @@ impl HostSkillBehavior {
                     && ctx.state.turn.phase == crate::event::Phase::Play),
             HostBehavior::GujianFoodTanhuadong => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: false }
+                | EventData::TurnEndWindow { player, after: false }
                 if *player == owner),
             // 酉羹（A2 H19）：上游 player phaseBegin＝自己回合开始（原锚
             // 自己判定阶段开始）

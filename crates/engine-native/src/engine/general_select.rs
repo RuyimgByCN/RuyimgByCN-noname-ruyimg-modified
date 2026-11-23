@@ -191,6 +191,10 @@ impl Engine {
                 .flags
                 .insert((seat, "dddxiaoxing_init_done".to_string()), 1);
         }
+        if self.state_core().turn.phase_number == 0 {
+            let catalog = self.catalog().clone();
+            (catalog.hooks.on_game_start)(self.state_core_mut(), &catalog);
+        }
         Ok(())
     }
 

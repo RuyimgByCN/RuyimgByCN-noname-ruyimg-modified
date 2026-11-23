@@ -1,15 +1,45 @@
 use super::super::*;
 
+fn food_skill_inst(owner: crate::ids::PlayerId, rounds: u8) -> crate::state::SkillInstance {
+    crate::state::SkillInstance {
+        owner,
+        enabled: true,
+        once_used: false,
+        expires_end_of_turn: false,
+        rounds,
+    }
+}
+
+fn food_card_kind_from_key(def_key: &str) -> Option<CardKind> {
+    Some(match def_key {
+        GJ_TANHUADONG_CARD_KEY => CardKind::Tanhuadong,
+        GJ_YOUGENG_CARD_KEY => CardKind::Yougeng,
+        GJ_QINGTUAN_CARD_KEY => CardKind::Qingtuan,
+        GJ_YUANBAOROU_CARD_KEY => CardKind::Yuanbaorou,
+        GJ_GUDONGGENG_CARD_KEY => CardKind::Gudonggeng,
+        GJ_MAPODOUFU_CARD_KEY => CardKind::Mapodoufu,
+        GJ_CHUNBING_CARD_KEY => CardKind::Chunbing,
+        GJ_LIYUTANG_CARD_KEY => CardKind::Liyutang,
+        GJ_MOLICHA_CARD_KEY => CardKind::Molicha,
+        GJ_XIAJIAO_CARD_KEY => CardKind::Xiajiao,
+        GJ_MIZHLIANOU_CARD_KEY => CardKind::Mizhilianou,
+        GJ_LUYUGENG_CARD_KEY => CardKind::Luyugeng,
+        GJ_ZIYANGDAN_CARD_KEY => CardKind::Ziyangdan,
+        GJ_YUNVYUANSHEN_CARD_KEY => CardKind::Yunvyuanshen,
+        _ => return None,
+    })
+}
+
 impl HostMachine {
     pub(super) fn step_gujian(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
             HostBehavior::GujianShujinsanCard => match self.stage {
                 HostStage::SelectCard => {
-                    // 目标选任意张手牌（至少 1，可取消；取消则无事发生）
+                    // 目标选任意张牌（手牌+装备，至少 1，可取消；取消则无事发生）
                     let Some(t) = self.target else {
                         return Flow::Done;
                     };
-                    let options: Vec<ChoiceOption> = ctx
+                    let mut options: Vec<ChoiceOption> = ctx
                         .core
                         .player(t)
                         .hand
@@ -17,6 +47,14 @@ impl HostMachine {
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
+                    options.extend(
+                        ctx.core
+                            .player(t)
+                            .equips
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card),
+                    );
                     if options.is_empty() || !ctx.core.player(t).alive {
                         if let Some(c) = self.card {
                             ctx.to_discard(c);
@@ -52,14 +90,19 @@ impl HostMachine {
                         .collect();
                     if !picked.is_empty() {
                         for c in &picked {
-                            ctx.core.player_mut(t).hand.retain(|x| *x != *c);
+                            if ctx.core.player(t).hand.contains(c) {
+                                ctx.core.player_mut(t).hand.retain(|x| *x != *c);
+                            } else if ctx.core.player(t).equips.contains(c) {
+                                ctx.core.player_mut(t).equips.retain(|x| *x != *c);
+                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, *c);
+                            }
+                            ctx.to_discard(*c);
                         }
                         ctx.log(LogEvent::CardDiscarded {
                             player: t,
                             cards: picked.clone(),
                         });
                         // R05-C2：弃所选→摸等量走 R 帧；本体入弃堆挪到续行段
-                        //（同步序＝摸先于本体入弃堆，洗牌边界下序敏感）。
                         ctx.start_draw(t, picked.len() as u32);
                         self.stage = HostStage::DrawSettle;
                         return Flow::Yield;
@@ -149,13 +192,10 @@ impl HostMachine {
                         .map(ChoiceOption::Card)
                         .collect();
                     if options.is_empty() {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            self.card,
-                        )));
+                        ctx.emit(EventData::LoseHp {
+                            player: t,
+                            amount: 1,
+                        });
                         finish(ctx, self.card);
                         return Flow::Done;
                     }
@@ -181,11 +221,7 @@ impl HostMachine {
                     let chosen = ctx.answer().first().copied();
                     match chosen {
                         Some(ChoiceOption::Card(c)) => {
-                            ctx.core.player_mut(t).hand.retain(|x| *x != c);
-                            ctx.log(LogEvent::CardDiscarded {
-                                player: t,
-                                cards: vec![c],
-                            });
+                            ctx.discard_from_hand(t, c);
                         }
                         _ => {
                             ctx.emit(EventData::LoseHp {
@@ -203,11 +239,13 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::GujianFoodTanhuadong => {
-                // 出牌阶段结束：摸 1；倒计时扣减，归零移除状态
-                // R05-C2：摸 1 走 R 帧；food_tick 纯状态翻转（无日志/帧），
-                // 与 R 交付次序不可观测。
-                ctx.start_draw(self.owner, 1);
-                food_tick(ctx, self.owner, &self.def_key);
+                // `phaseUseEnd`（Phase::Play 收束，target == None）摸 1；
+                // `phaseEnd`（TurnEndWindow after:false，target == Some(owner)）扣减倒计时
+                if self.target.is_some() {
+                    food_tick(ctx, self.owner, &self.def_key);
+                } else {
+                    ctx.start_draw(self.owner, 1);
+                }
                 Flow::Done
             }
             HostBehavior::GujianFoodYougeng => {
@@ -235,16 +273,18 @@ impl HostMachine {
                 let Some(c) = self.card else {
                     return Flow::Done;
                 };
-                let (listener, rounds) = match ctx.catalog.card_kind(c) {
+                let effective_kind = food_card_kind_from_key(&self.def_key)
+                    .unwrap_or_else(|| ctx.catalog.card_kind(c));
+                let (listener, rounds) = match effective_kind {
                     CardKind::Tanhuadong => (GJ_FOOD_TANHUADONG_KEY, GJ_FOOD_ROUNDS_TANHUADONG),
                     CardKind::Yougeng => (GJ_FOOD_YOUGENG_KEY, GJ_FOOD_ROUNDS_YOUGENG),
-                    CardKind::Qingtuan => (GJ_FOOD_QINGTUAN_KEY, GJ_FOOD_ROUNDS_DEFAULT),
-                    CardKind::Yuanbaorou => (GJ_FOOD_YUANBAOROU_KEY, GJ_FOOD_ROUNDS_DEFAULT),
+                    CardKind::Qingtuan => (GJ_FOOD_QINGTUAN_KEY, GJ_FOOD_ROUNDS_QINGTUAN),
+                    CardKind::Yuanbaorou => (GJ_FOOD_YUANBAOROU_KEY, GJ_FOOD_ROUNDS_YUANBAOROU),
                     CardKind::Gudonggeng => (GJ_FOOD_GUDONGGENG_KEY, GJ_FOOD_ROUNDS_DEFAULT),
-                    CardKind::Mapodoufu => (GJ_FOOD_MAPODOUFU_KEY, GJ_FOOD_ROUNDS_DEFAULT),
+                    CardKind::Mapodoufu => (GJ_FOOD_MAPODOUFU_KEY, GJ_FOOD_ROUNDS_MAPODOUFU),
                     CardKind::Chunbing => (GJ_FOOD_CHUNBING_KEY, GJ_FOOD_ROUNDS_CHUNBING),
                     CardKind::Liyutang => (GJ_FOOD_LIYUTANG_KEY, GJ_FOOD_ROUNDS_LIYUTANG),
-                    CardKind::Molicha => (GJ_FOOD_MOLICHA_KEY, GJ_FOOD_ROUNDS_DEFAULT),
+                    CardKind::Molicha => (GJ_FOOD_MOLICHA_KEY, GJ_FOOD_ROUNDS_MOLICHA),
                     CardKind::Xiajiao => (GJ_FOOD_XIAJIAO_KEY, GJ_FOOD_ROUNDS_XIAJIAO),
                     CardKind::Mizhilianou => (GJ_FOOD_MIZHLIANOU_KEY, GJ_FOOD_ROUNDS_MIZHLIANOU),
                     CardKind::Luyugeng => (GJ_FOOD_LUYUGENG_KEY, GJ_FOOD_ROUNDS_DEFAULT),
@@ -257,29 +297,27 @@ impl HostMachine {
                 let Some(def) = ctx.catalog.skill_by_name(listener) else {
                     return Flow::Done;
                 };
-                ctx.insert_skill(
-                    (t, def),
-                    crate::state::SkillInstance {
-                        owner: t,
-                        enabled: true,
-                        once_used: false,
-                        expires_end_of_turn: false,
-                        rounds,
-                    },
-                );
-                // 紫阳丹：授予同时获得 3 点护甲（可叠加，登记差异：
-                // 上游每阶段衰减，原生为每回合结束 -1）
-                if ctx.catalog.card_kind(c) == CardKind::Ziyangdan {
+                if effective_kind == CardKind::Ziyangdan {
+                    if let Some(inst) = ctx.core.skills.get_mut(&(t, def)) {
+                        inst.rounds = inst.rounds.saturating_add(rounds);
+                        inst.enabled = true;
+                    } else {
+                        ctx.insert_skill((t, def), food_skill_inst(t, rounds));
+                    }
                     ctx.change_hujia(t, GJ_ZIYANGDAN_HUJIA as i32);
+                } else {
+                    ctx.insert_skill((t, def), food_skill_inst(t, rounds));
+                    if effective_kind == CardKind::Xiajiao {
+                        ctx.core.vm_aux.flags.insert((t, "gj_xiajiao3".to_string()), 1);
+                    }
                 }
                 ctx.to_discard(c);
                 ctx.core.table.retain(|x| *x != c);
                 Flow::Done
             }
             HostBehavior::GujianFoodQingtuan => {
-                // 回合内使用首张杀（once_per_turn 门控）：摸 1
+                // 回合内使用首张杀（once_per_turn 门控）：摸 1；倒计时仅在 phaseAfter 扣减
                 ctx.start_draw(self.owner, 1);
-                food_tick(ctx, self.owner, &self.def_key);
                 Flow::Done
             }
             HostBehavior::GujianFoodYuanbaorou => {
@@ -290,10 +328,15 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::GujianFoodGudonggeng => {
-                // 受到杀伤害：伤害 -1；一次性状态，触发即移除
-                let d = ctx.current_damage_mut();
-                d.amount = d.amount.saturating_sub(1);
-                food_remove(ctx, self.owner, &self.def_key);
+                if self.target.is_some() {
+                    // TurnBegin 倒计时
+                    food_tick(ctx, self.owner, &self.def_key);
+                } else {
+                    // 受到杀伤害：伤害 -1；一次性状态，触发即移除
+                    let d = ctx.current_damage_mut();
+                    d.amount = d.amount.saturating_sub(1);
+                    food_remove(ctx, self.owner, &self.def_key);
+                }
                 Flow::Done
             }
             HostBehavior::GujianFoodMapodoufu => {
@@ -306,6 +349,7 @@ impl HostMachine {
                     .into_iter()
                     .filter(|p| {
                         *p != self.owner
+                            && !ctx.core.is_friend_of(ctx.catalog, self.owner, *p)
                             && ctx.core.player(*p).alive
                             && (!ctx.core.player(*p).hand.is_empty()
                                 || !ctx.core.player(*p).equips.is_empty())
@@ -372,7 +416,7 @@ impl HostMachine {
                 }
                 // R05-C2 续行位：虾饺摸 1 交付后建弃牌询问。
                 HostStage::DrawSettle => {
-                    let options: Vec<ChoiceOption> = ctx
+                    let mut options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
                         .hand
@@ -380,8 +424,15 @@ impl HostMachine {
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
+                    options.extend(
+                        ctx.core
+                            .player(self.owner)
+                            .equips
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card),
+                    );
                     if options.is_empty() || !ctx.core.player(self.owner).alive {
-                        food_tick(ctx, self.owner, &self.def_key);
                         return Flow::Done;
                     }
                     self.stage = HostStage::SelectCard;
@@ -398,15 +449,25 @@ impl HostMachine {
                     }
                 }
                 HostStage::SelectCard => {
-                    // 弃 1（必选）后倒计时扣减
+                    // 弃 1（手牌+装备，必选；回合计数由 TurnEnd/Phase::End 统一扣减）
                     if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
-                        ctx.discard_from_hand(self.owner, c);
+                        if ctx.core.player(self.owner).hand.contains(&c) {
+                            ctx.discard_from_hand(self.owner, c);
+                        } else if ctx.core.player(self.owner).equips.contains(&c) {
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                c,
+                            );
+                            ctx.to_discard(c);
+                        }
                         ctx.log(LogEvent::CardDiscarded {
                             player: self.owner,
                             cards: vec![c],
                         });
                     }
-                    food_tick(ctx, self.owner, &self.def_key);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -453,20 +514,68 @@ impl HostMachine {
                             player: self.owner,
                             cards: vec![c],
                         });
-                        // R05-C2：弃后摸 1 走 R 帧（步末无后续读；food_tick
-                        // 纯状态翻转与交付次序不可观测）。
-                        ctx.start_draw(self.owner, 1);
                     }
-                    food_tick(ctx, self.owner, &self.def_key);
+                    let mut revealed = Vec::new();
+                    for _ in 0..3 {
+                        let Some(c) = ctx.core.deck.pop() else { break };
+                        revealed.push(c);
+                    }
+                    if revealed.is_empty() {
+                        return Flow::Done;
+                    }
+                    ctx.core
+                        .player_mut(self.owner)
+                        .off_court
+                        .extend(revealed.iter().copied());
+                    self.cards = revealed;
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "gj_luyugeng_discover",
+                            options: self.cards.iter().copied().map(ChoiceOption::Card).collect(),
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let picked = ctx.answer().first().and_then(|o| match o {
+                        ChoiceOption::Card(c) => Some(*c),
+                        _ => None,
+                    });
+                    let cards = std::mem::take(&mut self.cards);
+                    for c in cards {
+                        ctx.core
+                            .player_mut(self.owner)
+                            .off_court
+                            .retain(|x| *x != c);
+                        if Some(c) == picked {
+                            ctx.core.player_mut(self.owner).hand.push(c);
+                            ctx.emit(EventData::CardsDrawn {
+                                player: self.owner,
+                                cards: vec![c],
+                            });
+                        } else {
+                            ctx.to_discard(c);
+                        }
+                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
             },
             HostBehavior::GujianFoodZiyangdan => {
-                // A2 H22：上游 player phaseBegin＝自己回合开始护甲 -1（原锚
-                // 自己结束阶段开始＝登记差异对齐收紧）；倒计时扣减，归零移除
-                ctx.change_hujia(self.owner, -1);
+                // A2 H22：上游 player phaseBegin＝自己回合开始护甲 -1；
+                // 倒计时扣减或护甲归零移除
+                if ctx.core.player(self.owner).hujia > 0 {
+                    ctx.change_hujia(self.owner, -1);
+                }
                 food_tick(ctx, self.owner, &self.def_key);
+                if ctx.core.player(self.owner).hujia == 0 {
+                    food_remove(ctx, self.owner, &self.def_key);
+                }
                 Flow::Done
             }
             HostBehavior::GujianYunvyuanshen => {
@@ -572,42 +681,7 @@ impl HostMachine {
             }
             HostBehavior::GujianMutouEquipSkill => Flow::Done,
             HostBehavior::GujianYuhengEquipSkill => {
-                // 随机一名有黑桃手牌的其他角色 → 其随机一张黑桃手牌交给你
-                //（上游 list.randomGet() + randomGet()；逐技对照批四 v78
-                // 种子 RNG 均匀抽取；升级机制仍登记暂缓）
-                let cands: Vec<crate::ids::PlayerId> = ctx
-                    .core
-                    .alive_players()
-                    .filter(|p| {
-                        *p != self.owner
-                            && ctx.core.player(*p).hand.iter().any(|c| {
-                                ctx.catalog.cards[*c as usize].suit == crate::catalog::Suit::Spade
-                            })
-                    })
-                    .collect();
-                if !cands.is_empty() {
-                    let v = cands[ctx.core.rng.gen_range(cands.len() as u32) as usize];
-                    let spades: Vec<usize> = ctx
-                        .core
-                        .player(v)
-                        .hand
-                        .iter()
-                        .enumerate()
-                        .filter(|(_, c)| {
-                            ctx.catalog.cards[**c as usize].suit == crate::catalog::Suit::Spade
-                        })
-                        .map(|(i, _)| i)
-                        .collect();
-                    let i = spades[ctx.core.rng.gen_range(spades.len() as u32) as usize];
-                    let c = ctx.core.player_mut(v).hand.remove(i);
-                    ctx.core.player_mut(self.owner).hand.push(c);
-                    ctx.log(LogEvent::CardsGiven {
-                        from: v,
-                        to: self.owner,
-                        cards: vec![c],
-                    });
-                }
-                Flow::Done
+                super::u05_b2_gujian::cards_and_foods::step_yuheng_active(self, ctx, false)
             }
             _ => unreachable!("behavior routed to the wrong step module"),
         }

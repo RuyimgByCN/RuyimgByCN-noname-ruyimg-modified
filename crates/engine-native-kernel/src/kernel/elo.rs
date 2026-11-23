@@ -396,11 +396,7 @@ pub fn elo_judge_pref_for(
     ordinary: Option<crate::ids::EventId>,
 ) -> Option<EloJudgePref> {
     if let Some(c) = trick {
-        let kind = core
-            .declared_kinds
-            .get(&c)
-            .copied()
-            .unwrap_or_else(|| catalog.card_kind(c));
+        let kind = catalog.resolved_card_kind(core, c);
         return Some(EloJudgePref::Trick(kind));
     }
     if let Some(inv) = ordinary {

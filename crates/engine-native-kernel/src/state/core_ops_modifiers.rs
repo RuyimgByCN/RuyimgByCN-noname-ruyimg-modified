@@ -41,7 +41,7 @@ impl GameStateCore {
                 .player(a)
                 .equips
                 .iter()
-                .any(|c| catalog.card_kind(*c) == crate::catalog::CardKind::Weapon)
+                .any(|c| catalog.equip_card_has_kind(self, *c, crate::catalog::CardKind::Weapon))
         {
             1
         } else {
@@ -186,7 +186,7 @@ impl GameStateCore {
         let count_named = |equips: &[crate::ids::CardId], kind: CardKind| -> u32 {
             equips
                 .iter()
-                .filter(|c| catalog.cards[**c as usize].kind == kind)
+                .filter(|c| catalog.equip_card_has_kind(self, **c, kind))
                 .count() as u32
         };
         let minus = minus
@@ -269,20 +269,29 @@ impl GameStateCore {
     /// 牌种固定射程），无武器为 1；叠算 `dcdichou_eff`（UP37 R01）标记加成及 `VmModifierRule`。
     pub fn attack_range(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> u32 {
         use crate::catalog::CardKind;
+        let kind_range = |c: CardId| -> Option<u32> {
+            let def = catalog.resolved_card_def(self, c)?;
+            if let Some(r) =
+                crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_zhuge_range(self, catalog, c)
+            {
+                Some(r)
+            } else if def.kind == CardKind::Weapon {
+                Some(def.range)
+            } else {
+                def.kind.named_weapon_range()
+            }
+        };
         let base = self
             .player(p)
             .equips
             .iter()
-            .filter_map(|c| {
-                let def = &catalog.cards[*c as usize];
-                if let Some(r) =
-                    crate::rvm_bridge::modifiers::d34_l28_mods::rewrite_zhuge_range(self, catalog, *c)
-                {
-                    Some(r)
-                } else if def.kind == CardKind::Weapon {
-                    Some(def.range)
-                } else {
-                    def.kind.named_weapon_range()
+            .filter_map(|&c| {
+                let r1 = kind_range(c);
+                let r2 = catalog.yanjia_merged_card_id(self, c).and_then(&kind_range);
+                match (r1, r2) {
+                    (Some(a), Some(b)) => Some(a.max(b)),
+                    (Some(a), None) | (None, Some(a)) => Some(a),
+                    (None, None) => None,
                 }
             })
             .max()
@@ -372,6 +381,13 @@ impl GameStateCore {
                             .get(&(p, "mbmowang_resting".to_string()))
                             .copied()
                             .unwrap_or(0)
+                            == 0
+                        && self
+                            .vm_aux
+                            .flags
+                            .get(&(p, "u05_mod:gj_lianjing_out_of_play".to_string()))
+                            .copied()
+                            .unwrap_or(0)
                             == 0)
             })
             .collect();
@@ -394,7 +410,18 @@ impl GameStateCore {
         }
         let alive: Vec<PlayerId> = self
             .alive_players()
-            .filter(|&p| p == a || p == b || !catalog.has_diaohulishan(self, p))
+            .filter(|&p| {
+                p == a
+                    || p == b
+                    || (!catalog.has_diaohulishan(self, p)
+                        && self
+                            .vm_aux
+                            .flags
+                            .get(&(p, "u05_mod:gj_lianjing_out_of_play".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            == 0)
+            })
             .collect();
         let n = alive.len() as i16;
         let ia = alive.iter().position(|p| *p == a).expect("a must be alive") as i16;

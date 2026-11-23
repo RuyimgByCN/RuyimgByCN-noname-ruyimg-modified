@@ -15,7 +15,7 @@
 |---|---|---|
 | 可选性 | `forced: true` / `direct: true` / 都没有 | `TriggerMeta.optional` |
 | 触发事件 | `trigger: { player/global/...: "X" }` | `TriggerMeta.event`（经映射表）|
-| 每阶段一次 | `usable: 1` + `enable:` | `host.rs` 中直接声明 `once_per_turn` 的行为 |
+| 每阶段一次 | `usable: 1` + `enable:` | `host/skill_defs.rs` 中直接声明 `once_per_turn` 的行为 |
 | 每局一次 | `limited: true` | behavior 块里的 once/used 痕迹 |
 
 用法：
@@ -199,7 +199,9 @@ def host_keys() -> dict[str, str]:
 
 def once_allowlist() -> set[str]:
     """只列直接声明的行为；按技能名委托的限制须另查，不能据此判为不限次。"""
-    t = (ROOT / "crates/engine-native-content/src/content/host.rs").read_text(encoding="utf-8")
+    t = (ROOT / "crates/engine-native-content/src/content/host/skill_defs.rs").read_text(
+        encoding="utf-8"
+    )
     t = strip_comments(t)
     function = re.search(r"^pub fn host_skill_limits\b.*?^}", t, re.S | re.M)
     if not function:

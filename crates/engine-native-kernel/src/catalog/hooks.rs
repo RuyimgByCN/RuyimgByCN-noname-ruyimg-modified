@@ -119,6 +119,10 @@ pub struct ContentHooks {
     pub on_card_use_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::EventId, &crate::event::CardUseData),
     /// 建局开局发牌后（`gameDrawEnd`）宿主初始化钩子（如 `xiefang`）。
     pub on_game_start: fn(&mut crate::state::GameStateCore, &Catalog),
+    /// 角色死亡前（`Death` 固有执行前）宿主拦截钩子（如 `yange` 子将致死退场）：返回 `true` 取消死亡。
+    pub on_death_before: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId) -> bool,
+    /// `TurnEndWindow { after: true }`（`phaseAfter`）窗触发队列收集前钩子（例如 `yange` 退出子将）。
+    pub on_turn_phase_after: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 角色死亡结算（`alive=false` 后、`dieEnd`）宿主刷新钩子（如 `xiefang`）。
     pub on_player_died: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId),
     /// 出牌阶段结束（`phaseUseEnd`）宿主临时技清理钩子（如 `new_zhixi`/`new_meibu_range`/`bolan`）。
@@ -227,6 +231,8 @@ impl ContentHooks {
         draw_begin_step: |_, _, _| {},
         on_card_use_after: |_, _, _| {},
         on_game_start: |_, _| {},
+        on_death_before: |_, _| false,
+        on_turn_phase_after: |_, _| {},
         on_player_died: |_, _| {},
         on_phase_use_end: |_, _| {},
         on_round_start: |_| {},

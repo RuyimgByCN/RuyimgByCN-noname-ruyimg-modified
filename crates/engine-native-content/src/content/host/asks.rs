@@ -697,19 +697,23 @@ pub(crate) fn active_ask_host(
         | HostBehavior::SwdNiaoxiangzhenCard => {
             super::step::swd_zhenfa_cards::ask_swd_zhenfa_card(behavior, stage, owner, target, core, catalog)
         }
-        // 舒筋散：目标弃任意张手牌摸等量
+        // 舒筋散：目标弃任意张牌（手牌+装备）摸等量
         HostBehavior::GujianShujinsanCard => {
             if stage != HostStage::Act {
                 return None;
             }
             let t = target?;
-            let hand = &core.player(t).hand;
-            let n = hand.len();
+            let mut options = hand_card_options(&core.player(t).hand);
+            options.extend(core.player(t).equips.iter().copied().map(ChoiceOption::Card));
+            let n = options.len();
+            if n == 0 {
+                return None;
+            }
             Some(ask(
                 t,
                 GJ_SHUJINSAN_DISCARD,
                 ChoiceKind::SelectCards,
-                hand_card_options(hand),
+                options,
                 1,
                 n,
                 true,
@@ -759,42 +763,22 @@ pub(crate) fn active_ask_host(
                 false,
             ))
         }
-        // 菱角：摸牌阶段额外摸 1 后弃 1
+        // 菱角：摸牌阶段额外摸 1 后弃 1（手牌+装备）
         HostBehavior::GujianFoodXiajiao => {
             if stage != HostStage::SelectCard {
                 return None;
             }
+            let mut options = hand_card_options(&core.player(owner).hand);
+            options.extend(
+                core.player(owner)
+                    .equips
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Card),
+            );
             Some(ask(
                 owner,
                 GJ_XIAJIAO_DISCARD,
-                ChoiceKind::SelectCards,
-                hand_card_options(&core.player(owner).hand),
-                1,
-                1,
-                false,
-            ))
-        }
-        // 卤玉羹：弃一张基本牌获得牌堆顶
-        HostBehavior::GujianFoodLuyugeng => {
-            if stage != HostStage::SelectCard {
-                return None;
-            }
-            let options: Vec<ChoiceOption> = core
-                .player(owner)
-                .hand
-                .iter()
-                .copied()
-                .filter(|c| {
-                    matches!(
-                        catalog.card_kind(*c),
-                        CardKind::Sha | CardKind::Shan | CardKind::Tao | CardKind::Jiu
-                    )
-                })
-                .map(ChoiceOption::Card)
-                .collect();
-            Some(ask(
-                owner,
-                GJ_LUYUGENG_COST,
                 ChoiceKind::SelectCards,
                 options,
                 1,
@@ -802,18 +786,62 @@ pub(crate) fn active_ask_host(
                 false,
             ))
         }
-        // 帝女玄霜：回复后可弃任意张手牌摸等量
+        // 鲈鱼羹：弃一张基本牌，然后从亮出 3 张牌中发现选 1
+        HostBehavior::GujianFoodLuyugeng => match stage {
+            HostStage::SelectCard => {
+                let options: Vec<ChoiceOption> = core
+                    .player(owner)
+                    .hand
+                    .iter()
+                    .copied()
+                    .filter(|c| {
+                        matches!(
+                            catalog.card_kind(*c),
+                            CardKind::Sha | CardKind::Shan | CardKind::Tao | CardKind::Jiu
+                        )
+                    })
+                    .map(ChoiceOption::Card)
+                    .collect();
+                Some(ask(
+                    owner,
+                    GJ_LUYUGENG_COST,
+                    ChoiceKind::SelectCards,
+                    options,
+                    1,
+                    1,
+                    false,
+                ))
+            }
+            HostStage::TargetChoice => Some(ask(
+                owner,
+                "gj_luyugeng_discover",
+                ChoiceKind::SelectCards,
+                cards.iter().copied().map(ChoiceOption::Card).collect(),
+                1,
+                1,
+                false,
+            )),
+            _ => None,
+        },
+        // 玉衡：弃 1 张黑桃/黑色手牌
+        HostBehavior::GujianYuhengEquipSkill => {
+            super::step::u05_b2_gujian::asks_card::ask_yuheng_cost_only(owner, core, catalog)
+        }
+        // 帝女玄霜：回复后可弃任意张 he 牌摸等量
         HostBehavior::JiguanDinvCard => {
             if stage != HostStage::SelectCard {
                 return None;
             }
-            let hand = &core.player(owner).hand;
-            let n = hand.len();
+            let tgt = target.unwrap_or(owner);
+            let p = core.player(tgt);
+            let mut options = hand_card_options(&p.hand);
+            options.extend(p.equips.iter().copied().map(ChoiceOption::Card));
+            let n = options.len();
             Some(ask(
-                owner,
+                tgt,
                 GJ_DINVXUANSHUANG_RIDER,
                 ChoiceKind::SelectCards,
-                hand_card_options(hand),
+                options,
                 0,
                 n,
                 true,

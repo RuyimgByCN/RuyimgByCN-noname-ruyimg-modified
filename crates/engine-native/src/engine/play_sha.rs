@@ -37,7 +37,7 @@ pub(super) fn play_sha(
     // + targetInRange=true 同口径）
     let fentian_red = {
         let red = matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         );
         red && catalog
@@ -121,7 +121,7 @@ pub(super) fn play_sha(
             .player(player_id)
             .equips
             .iter()
-            .any(|c| catalog.card_kind(*c) == CardKind::Zhuge);
+            .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Zhuge));
     // 龙颅山峰（mtg 首切片，规则 v100）：地图效果全局
     // 出杀上限 +1（上游 addGlobalSkill cardUsable 同口径）
     let land_sha_bonus =
@@ -134,10 +134,10 @@ pub(super) fn play_sha(
         .map(|def| core.has_skill(core.turn.current, def))
         .unwrap_or(false)
         && matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         );
-    let vm_va_sha = if kind != catalog.card_kind(card)
+    let vm_va_sha = if kind != catalog.resolved_card_kind(core, card)
         || !core.player(player_id).hand.contains(&card)
     {
         catalog
@@ -147,11 +147,11 @@ pub(super) fn play_sha(
         None
     };
     let is_black = matches!(
-        catalog.cards[card as usize].suit,
+        catalog.resolved_card_suit(core, card),
         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
     );
     let is_red = matches!(
-        catalog.cards[card as usize].suit,
+        catalog.resolved_card_suit(core, card),
         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
     );
     let vm_va_no_count = vm_va_sha
@@ -183,15 +183,15 @@ pub(super) fn play_sha(
         }
         // 元宝肉（G1 古剑食物）：出牌阶段额外一张杀
         //（每回合一次；once_used 随回合开始重置）
-        let extra = catalog
-            .skill_by_name(crate::content::host::GJ_FOOD_YUANBAOROU_KEY)
-            .map(|def| {
-                core.skills
-                    .get(&(core.turn.current, def))
-                    .map(|i| i.enabled && !i.once_used)
-                    .unwrap_or(false)
-            })
-            .unwrap_or(false);
+        let extra = [crate::content::host::GJ_FOOD_YUANBAOROU_KEY, "yuanbaorou"]
+            .into_iter()
+            .any(|k| {
+                catalog.skill_by_name(k).is_some_and(|def| {
+                    core.skills
+                        .get(&(core.turn.current, def))
+                        .is_some_and(|i| i.enabled && !i.once_used)
+                })
+            });
         if !extra {
             // 回火（Boss 焰灵，规则 v241）：出牌阶段额外
             // 一张杀（每回合一次额度，元宝肉同款）
@@ -291,7 +291,7 @@ pub(super) fn play_sha(
             .player(player_id)
             .equips
             .iter()
-            .any(|c| catalog.card_kind(*c) == CardKind::Fangtian);
+            .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Fangtian));
     // 抗yin2（U07 批四，规则 v114）：杀额外目标上限 +X
     let kangyin_extra = match core.turn.kangyin2 {
         Some((o, x)) if o == player_id => x as usize,
@@ -302,7 +302,7 @@ pub(super) fn play_sha(
     // 体牌——转化声明牌种不影响）
     let feiren_extra = {
         let club = matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Club
         );
         let sha_kind = kind.is_sha_like();
@@ -370,7 +370,7 @@ pub(super) fn play_sha(
             .player(core.turn.current)
             .equips
             .iter()
-            .any(|c| catalog.card_kind(*c) == crate::catalog::CardKind::Weapon);
+            .any(|c| catalog.equip_card_has_kind(core, *c, crate::catalog::CardKind::Weapon));
     // 疾风（swd 批 150）：单目标牌目标数无限（上游 mod
     // selectTarget range[1]=Infinity 同口径）
     let jifeng_inf = kind.is_sha_like()
@@ -497,7 +497,7 @@ pub(super) fn play_sha(
                             .map(|def| core.has_skill(core.turn.current, def))
                             .unwrap_or(false)
                             && matches!(
-                                catalog.cards[card as usize].suit,
+                                catalog.resolved_card_suit(core, card),
                                 crate::catalog::Suit::Spade
                                     | crate::catalog::Suit::Club
                             ))
@@ -588,9 +588,11 @@ pub(super) fn play_sha(
     };
     let player = core.turn.current;
     if mark_yuanbaorou {
-        if let Some(def) = catalog.skill_by_name(crate::content::host::GJ_FOOD_YUANBAOROU_KEY) {
-            if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
-                inst.once_used = true;
+        for k in [crate::content::host::GJ_FOOD_YUANBAOROU_KEY, "yuanbaorou"] {
+            if let Some(def) = catalog.skill_by_name(k) {
+                if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
+                    inst.once_used = true;
+                }
             }
         }
     }
@@ -602,9 +604,11 @@ pub(super) fn play_sha(
         }
     }
     if mark_mutoumianju {
-        if let Some(def) = catalog.skill_by_name(crate::content::host::GJ_MUTOU_SKILL_KEY) {
-            if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
-                inst.once_used = true;
+        for k in [crate::content::host::GJ_MUTOU_SKILL_KEY, "mutoumianju_skill"] {
+            if let Some(def) = catalog.skill_by_name(k) {
+                if let Some(inst) = state.core.skills.get_mut(&(player_id, def)) {
+                    inst.once_used = true;
+                }
             }
         }
     }
@@ -640,7 +644,7 @@ pub(super) fn play_sha(
                 .flags
                 .insert((player_id, format!("sha_refund_if_no_damage:{card}")), 1);
         }
-        let src_suit = catalog.cards[card as usize].suit;
+        let src_suit = catalog.resolved_card_suit(&state.core, card);
         for &t in &targets {
             let lacks_suit = spec.target_lacks_source_suit_unrespondable
                 && !state
@@ -648,7 +652,7 @@ pub(super) fn play_sha(
                     .player(t)
                     .hand
                     .iter()
-                    .any(|hc| catalog.cards[*hc as usize].suit == src_suit);
+                    .any(|hc| catalog.resolved_card_suit(&state.core, *hc) == src_suit);
             if (spec.red_unrespondable && is_red) || lacks_suit {
                 state
                     .core

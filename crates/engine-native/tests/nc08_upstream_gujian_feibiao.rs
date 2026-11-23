@@ -85,19 +85,48 @@ fn run(seed: u64, target_has_black: bool, discard: bool) -> (i32, Vec<String>) {
         None
     };
     let card = feibiao_card(&mut e);
-    let hp_before = e.debug_hp(1);
-    let out = e.submit(GameCommand {
+    // 距离 1 的 1 号应被拒绝（outrange.globalFrom = 2）
+    let near = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
         dedup_id: next_dedup(),
         action: GameAction::PlayCard { card, targets: vec![1] },
     });
     assert!(
+        matches!(near, CommandOutcome::Rejected(_)),
+        "飞镖距离 1 目标应拒绝：{near:?}"
+    );
+    if target_has_black {
+        e.debug_clear_hand(2);
+        let id = e
+            .catalog()
+            .cards
+            .iter()
+            .enumerate()
+            .find(|(_, c)| {
+                matches!(
+                    c.suit,
+                    engine_native::catalog::Suit::Spade | engine_native::catalog::Suit::Club
+                )
+            })
+            .map(|(i, _)| i as engine_native::CardId)
+            .expect("黑色牌");
+        nc08_common::put_hand(&mut e, 2, id);
+        let _ = black;
+    }
+    let hp_before = e.debug_hp(2);
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card, targets: vec![2] },
+    });
+    assert!(
         matches!(
             out,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "飞镖应可发动：{out:?}"
+        "飞镖对距离>=2 的 2 号应可发动：{out:?}"
     );
     let mut prompts: Vec<String> = Vec::new();
     for _ in 0..16 {
@@ -107,7 +136,7 @@ fn run(seed: u64, target_has_black: bool, discard: bool) -> (i32, Vec<String>) {
         }
         // 目标是否弃牌
         if discard {
-            if let Some(b) = black {
+            if let Some(b) = e.debug_hand(2).first().copied() {
                 if c.spec.options.contains(&ChoiceOption::Card(b)) {
                     let _ = e.submit(GameCommand {
                         actor: c.observer,
@@ -137,7 +166,7 @@ fn run(seed: u64, target_has_black: bool, discard: bool) -> (i32, Vec<String>) {
         });
     }
     drain(&mut e);
-    (e.debug_hp(1) - hp_before, prompts)
+    (e.debug_hp(2) - hp_before, prompts)
 }
 
 /// 上游点 2（**行为面 · 两分支**）：有黑牌弃之免流失；无黑牌（或未弃）则**失去 1 点体力**。

@@ -5,6 +5,7 @@ impl HostSkillBehavior {
     pub(super) fn blocks_delayed_trick(&self) -> bool {
         self.behavior == HostBehavior::MoshouImmunity
             || (self.behavior == HostBehavior::L28ThunderBatchA && self.name == "xinfu_pdgyingshi")
+            || (self.behavior == HostBehavior::U05GujianCharBatchA && self.name == "gjqtwuxie")
     }
 
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
@@ -156,6 +157,14 @@ impl HostSkillBehavior {
             }
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 return super::step::l11_boss_c::machine_l11_boss_c(self, owner, event);
+            }
+            HostBehavior::U05GujianCardBatch
+            | HostBehavior::U05GujianCharBatchA
+            | HostBehavior::U05GujianCharBatchB
+            | HostBehavior::U05GujianCharBatchC
+            | HostBehavior::U05GujianCharBatchD
+            | HostBehavior::U05GujianCharBatchE => {
+                return super::step::u05_b2_gujian::machine_u05_gujian(self, owner, event);
             }
             _ => {}
         }
@@ -618,6 +627,14 @@ impl HostSkillBehavior {
                     begin: false,
                     ..
                 } => (None, Some(2)),
+                _ => (None, None),
+            },
+            HostBehavior::GujianFoodGudonggeng => match event {
+                EventData::TurnBegin { player } => (Some(*player), None),
+                _ => (None, None),
+            },
+            HostBehavior::GujianFoodTanhuadong => match event {
+                EventData::TurnEndWindow { player, after: false } => (Some(*player), None),
                 _ => (None, None),
             },
             _ => (None, None),

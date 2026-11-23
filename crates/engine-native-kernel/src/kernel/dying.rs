@@ -367,8 +367,11 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.asked = false;
                 let answer = ctx.answer().clone();
                 if let Some(ChoiceOption::Skill(rdef)) = answer.first().copied() {
-                    if dying_response_skills(ctx.core, ctx.catalog, responder, self.dying)
-                        .contains(&rdef)
+                    let is_host_dying_skill = ctx.catalog.skill_by_name("shahun") == Some(rdef)
+                        || ctx.catalog.skill_by_name("duhun") == Some(rdef);
+                    if !is_host_dying_skill
+                        && dying_response_skills(ctx.core, ctx.catalog, responder, self.dying)
+                            .contains(&rdef)
                     {
                         let need_ctx = if responder == self.dying { 5 } else { 4 };
                         ctx.core
@@ -459,7 +462,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     .remove(&(responder, "dddfusi_window_refused".to_string()));
                 self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
-                    let raw_kind = ctx.catalog.card_kind(tao);
+                    let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, tao);
                     let in_hand = ctx.core.player(responder).hand.contains(&tao);
                     let eff_kind = if matches!(
                         raw_kind,
@@ -534,6 +537,65 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             cancelled: false,
                         });
                         return Flow::Yield;
+                    } else if let Some(sdef) = ctx.catalog.skill_by_name("shahun")
+                        .filter(|&sd| sd == def && dying_response_skills(ctx.core, ctx.catalog, responder, self.dying).contains(&sd))
+                    {
+                        self.round_used = true;
+                        if let Some(inst) = ctx.core.skills.get_mut(&(responder, sdef)) {
+                            inst.once_used = true;
+                        }
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "shahun",
+                            owner: responder,
+                            presentation: None,
+                        });
+                        let snap = crate::snap::MachineSnapshot::Host {
+                            def_key: "shahun".to_string(),
+                            behavior: crate::vocabulary::host::HostBehavior::U05GujianCharBatchA.tag(),
+                            stage: 0,
+                            owner: responder,
+                            target: None,
+                            card: None,
+                            cards: Vec::new(),
+                            targets: Vec::new(),
+                        };
+                        if let Some(Ok(machine)) = (ctx.catalog.hooks.restore_machine)(&snap, ctx.catalog) {
+                            ctx.res.parks.push(crate::resolution::Park {
+                                resume_depth: ctx.res.stack.len(),
+                                slot: crate::resolution::Slot::Trigger { frame: crate::resolution::NO_FRAME },
+                                machine,
+                                awaiting_answer: false,
+                            });
+                            return Flow::Yield;
+                        }
+                    } else if let Some(_ddef) = ctx.catalog.skill_by_name("duhun")
+                        .filter(|&dd| dd == def && dying_response_skills(ctx.core, ctx.catalog, responder, self.dying).contains(&dd))
+                    {
+                        self.round_used = true;
+                        ctx.log(LogEvent::SkillTriggered {
+                            skill: "duhun",
+                            owner: responder,
+                            presentation: None,
+                        });
+                        let snap = crate::snap::MachineSnapshot::Host {
+                            def_key: "duhun".to_string(),
+                            behavior: crate::vocabulary::host::HostBehavior::U05GujianCharBatchC.tag(),
+                            stage: 0,
+                            owner: responder,
+                            target: None,
+                            card: None,
+                            cards: Vec::new(),
+                            targets: Vec::new(),
+                        };
+                        if let Some(Ok(machine)) = (ctx.catalog.hooks.restore_machine)(&snap, ctx.catalog) {
+                            ctx.res.parks.push(crate::resolution::Park {
+                                resume_depth: ctx.res.stack.len(),
+                                slot: crate::resolution::Slot::Trigger { frame: crate::resolution::NO_FRAME },
+                                machine,
+                                awaiting_answer: false,
+                            });
+                            return Flow::Yield;
+                        }
                     }
                 }
                 continue; // 无论用桃或放弃，继续处理队列（轮转见队首过滤）

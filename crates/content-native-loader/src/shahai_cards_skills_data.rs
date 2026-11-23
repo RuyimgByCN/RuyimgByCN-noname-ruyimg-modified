@@ -37,10 +37,10 @@ pub const U05_GUJIAN_ALL_CARDS: [(&str, CardKind, u32, Suit, u8); 36] = [
     ("liutouge", CardKind::Liutouge, 0, Suit::Heart, 4), // card/gujian/card.js:1017
     ("liufengsan", CardKind::Liufengsan, 0, Suit::Club, 5), // card/gujian/card.js:1043
     ("shihuifen", CardKind::Shihuifen, 0, Suit::Diamond, 6), // card/gujian/card.js:1092
-    ("yanjiadan_heart", CardKind::Jiguan, 0, Suit::Spade, 6), // character/gujian/card.js:4
-    ("yanjiadan_diamond", CardKind::Jiguan, 0, Suit::Heart, 7), // character/gujian/card.js:68
+    ("yanjiadan_heart", CardKind::Jiguan, 0, Suit::Heart, 6), // character/gujian/card.js:4
+    ("yanjiadan_diamond", CardKind::Jiguan, 0, Suit::Diamond, 7), // character/gujian/card.js:68
     ("yanjiadan_club", CardKind::Jiguan, 0, Suit::Club, 8), // character/gujian/card.js:117
-    ("yanjiadan_spade", CardKind::Jiguan, 0, Suit::Diamond, 9), // character/gujian/card.js:149
+    ("yanjiadan_spade", CardKind::Jiguan, 0, Suit::Spade, 9), // character/gujian/card.js:149
 ];
 
 /// `U05` `gwent` cards (`69` items).

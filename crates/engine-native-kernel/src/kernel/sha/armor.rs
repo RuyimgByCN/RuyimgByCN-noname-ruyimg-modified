@@ -15,7 +15,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinggang))
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Qinggang)))
             || ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
@@ -37,7 +37,7 @@ impl ShaResolveMachine {
                 .player(self.target)
                 .equips
                 .iter()
-                .any(|c| crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(ctx.catalog, *c))
+                .any(|c| crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(ctx.core, ctx.catalog, *c))
                 || crate::rvm_bridge::modifiers::eval_virtual_bagua_if_armor_slot_empty(
                     ctx.core,
                     ctx.catalog,
@@ -122,7 +122,7 @@ impl ShaResolveMachine {
                 let has_renwang = !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.target)
                     && equips
                         .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Renwang);
+                        .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Renwang));
                 let tiemian_active = ctx
                     .catalog
                     .skill_by_name(crate::vocabulary::names::BOSS_TIEMIAN)

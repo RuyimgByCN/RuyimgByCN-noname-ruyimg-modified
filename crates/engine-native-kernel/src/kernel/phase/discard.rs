@@ -26,18 +26,18 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
             return;
         }
     }
-    // 庆祝（Boss 明星，规则 v245）：锁定——跳过你的弃牌阶段
-    //（上游 boss_qingzhu phaseDiscardBefore trigger.cancel 同
-    // 口径；与急叮解锁无关，恒跳）
-    if let Some(def) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_QINGZHU)
+    // 庆祝（Boss 明星，规则 v245）/ 羽灵（古剑欧阳少恭）：跳过弃牌阶段
+    if [crate::vocabulary::names::BOSS_QINGZHU, "yuling1", "yuling"]
+        .into_iter()
+        .any(|k| {
+            ctx.catalog
+                .skill_by_name(k)
+                .is_some_and(|def| ctx.core.has_skill(player, def))
+        })
     {
-        if ctx.core.has_skill(player, def) {
-            ctx.core.turn.discard_phase_discarded = 0;
-            ctx.record_phase_skipped(player);
-            return;
-        }
+        ctx.core.turn.discard_phase_discarded = 0;
+        ctx.record_phase_skipped(player);
+        return;
     }
     // 水没墓穴计数（mtg 第三批，规则 v102）：弃牌阶段开始清零
     ctx.core.turn.discard_phase_discarded = 0;

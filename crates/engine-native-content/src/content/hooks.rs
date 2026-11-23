@@ -28,6 +28,8 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     draw_begin_step: crate::content::host::host_draw_begin_step,
     on_card_use_after: crate::content::host::host_card_use_after,
     on_game_start: crate::content::host::host_on_game_start,
+    on_death_before: crate::content::host::host_on_death_before,
+    on_turn_phase_after: crate::content::host::host_on_turn_phase_after,
     on_player_died: crate::content::host::host_on_player_died,
     on_phase_use_end: crate::content::host::host_on_phase_use_end,
     on_round_start: crate::content::host::host_on_round_start,

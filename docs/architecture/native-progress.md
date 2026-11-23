@@ -9,6 +9,11 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-23 Batch U05-2（U05 古剑奇谭 136 项全量等价、`yange`/`yanjia` 与 `declared_kinds` 清理修复）合入
+
+- **合入与计数**：在 `211c32d1ad` 合入 `swarm/conv-u05-2-gujian`（`921a8f499`，`verifier-u05-a` `#95 APPROVE`），完成 42 处 `UU` 合并与 `host/skill_defs.rs` 拆分，修复 `cleanup_discard_to_deck` / `jian_xiong.rs` 清理陈旧 `declared_kinds` 及 `decision34_round4_u05_shahai.rs` VM 下界（`680 -> 600`，现 608）；[inventory_status.json](../migration/g0/inventory_status.json) 将全部 `136` 项 `gujian`（`36` 卡牌/`18` 武将/`82` 技能，零保留）升为 `已复核等价`，**`U05` `224 / 1,397 / 0`**、全局 **`2,544 / 1,880 / 0`**、整包 8 维 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 不变。详见 [Batch U05-2 证据](../operations/evidence/2026-11-23-batch3-8-u05-2-gujian/README.md)。
+- **主线全量实测（2026-11-23）**：`-D warnings` 原生与 `wasm32` 零警告、`4-crate`（`44/44` 块、`2,952/0/6`，`g1_shahai` `234/0/0`、`kernel` `436/0/0`）、`content-native-loader`（`48/0/0`）、`conformance`（`19/19` + `4/0/0`）、`desktop-client`（`20/0/1`）、`--workspace`（`178/178` 块、`8,259/0/8`）、`web-client`（`typecheck` + `test` `540/0` + `smoke:native` `83/0` + `build`）与跨端双检（`native_wasm_match=true`、`ALL CROSS-TARGET CHECKS PASSED`）全过；并入 Batch U05-1 [ci-runs.md](../operations/evidence/ci-runs.md) 实测行（`211c32d1ad` / CI `45097178310` `10/10`）。
+
 ### 2026-11-23 Batch U05-1（U05 杀海拾遗 +87 项及 `part3_d2`/`MachineSnapshot::Jiedao` 修复）合入
 
 - **合入与计数**：在 `5de733e5e9` 合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`），完成 7 处 `UU` 合并与 `generals_bridge.rs`/`snap/asks/standard_skills.rs` 行数拆分，并修复 `part3_d2.rs`（`blk_chain`）与 `MachineSnapshot::Jiedao` 快照恢复/问询；[inventory_status.json](../migration/g0/inventory_status.json) 将精确 `87` 项升为 `已复核等价`（保留 `tip` 及 7 项阻塞/子包开关为 `简化近似`），**`U05` `88 / 1,533 / 0`**、全局 **`2,408 / 2,016 / 0`**、整包 8 维 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch U05-1 证据](../operations/evidence/2026-11-23-batch3-7-u05-1/README.md)。

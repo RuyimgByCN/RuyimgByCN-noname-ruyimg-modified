@@ -708,7 +708,7 @@ impl ShaResolveMachine {
             .iter()
             .copied()
             .filter(|&c| {
-                catalog.card_kind(c) == CardKind::Youdishenru
+                catalog.resolved_card_kind(core, c) == CardKind::Youdishenru
                     && !crate::kernel::jinyan_blocks_black_trick(core, catalog, target, c)
             })
             .map(ChoiceOption::Card)
@@ -721,7 +721,7 @@ impl ShaResolveMachine {
         }
         let red = self.card.is_some_and(|c| {
             matches!(
-                ctx.catalog.cards[c as usize].suit,
+                ctx.catalog.resolved_card_suit(ctx.core, c),
                 crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
             )
         });
@@ -794,7 +794,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Hanbing);
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Hanbing));
         has_hanbing
             && ctx.core.player(self.target).alive
             && (!ctx.core.player(self.target).hand.is_empty()
@@ -876,7 +876,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qilin);
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Qilin));
         if !has_qilin {
             return Vec::new();
         }
@@ -890,10 +890,8 @@ impl ShaResolveMachine {
                     ctx.catalog.card_slot_of(ctx.core, **c)
                         == Some(crate::catalog::EquipSlot::Treasure)
                 } else {
-                    matches!(
-                        ctx.catalog.card_kind(**c),
-                        CardKind::HorsePlus | CardKind::HorseMinus
-                    )
+                    ctx.catalog.equip_card_has_kind(ctx.core, **c, CardKind::HorsePlus)
+                        || ctx.catalog.equip_card_has_kind(ctx.core, **c, CardKind::HorseMinus)
                 }) && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
                     ctx.core,
                     ctx.catalog,

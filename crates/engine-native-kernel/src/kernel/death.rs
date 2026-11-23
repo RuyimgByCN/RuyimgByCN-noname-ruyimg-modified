@@ -58,6 +58,10 @@ impl crate::catalog::SkillMachine for DeathMachine {
         // 护天归还（swd 批 131，规则 v314）：持有者死亡前置（上游 hutian3
         // dieBegin forced）——把其寄存于目标处的牌归还目标并清理双方状态
         hutian_return_deposit(ctx, self.player);
+        if (ctx.catalog.hooks.on_death_before)(ctx, self.player) {
+            ctx.core.player_mut(self.player).dying = false;
+            return Flow::Done;
+        }
         if ctx.core.player(self.player).death_cancelled {
             ctx.core.player_mut(self.player).death_cancelled = false;
             // 取消死亡=脱离濒死（空洞印批⑥：hp 由前置窗口技重置；不清

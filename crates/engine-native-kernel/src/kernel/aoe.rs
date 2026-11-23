@@ -35,7 +35,7 @@ pub fn weimu_blocks_aoe_core(
         return false;
     }
     let black = matches!(
-        catalog.cards[card as usize].suit,
+        catalog.resolved_card_suit(core, card),
         crate::catalog::Suit::Spade | crate::catalog::Suit::Club
     );
     if !black {
@@ -145,7 +145,9 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                     card: c,
                     player: self.target,
                 });
-                if self.need == CardKind::Shan || ctx.catalog.card_kind(c) == CardKind::Shan {
+                if self.need == CardKind::Shan
+                    || ctx.catalog.resolved_card_kind(ctx.core, c) == CardKind::Shan
+                {
                     releiji_on_shan(ctx, self.target);
                 }
                 if (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, self.target) {
@@ -238,7 +240,9 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 super::emit_card_responded_as(ctx, self.target, c, self.need);
                 // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
                 // （南蛮响应为杀，不触发）
-                if self.need == CardKind::Shan || ctx.catalog.card_kind(c) == CardKind::Shan {
+                if self.need == CardKind::Shan
+                    || ctx.catalog.resolved_card_kind(ctx.core, c) == CardKind::Shan
+                {
                     releiji_on_shan(ctx, self.target);
                 }
             } else {

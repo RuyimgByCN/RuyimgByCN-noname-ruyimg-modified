@@ -31,15 +31,10 @@ pub(super) fn is_card_ignored_hand_limit(
     card: CardId,
 ) -> bool {
     let kind = catalog.card_kind(card);
-    // card/gujian/skill.js:151-177 (`chunbing`) & card/mtg/skill.js:32-43 (`mtg_shamolvzhou_skill`)
+    // card/mtg/skill.js:32-43 (`mtg_shamolvzhou_skill`: basic cards ignored in hand limit)
     if kind.is_basic_kind()
-        && (flag_val(state, player, "u05_mod:chunbing") > 0
-            || flag_val(state, player, "u05_mod:mtg_shamolvzhou_skill") > 0)
+        && flag_val(state, player, "u05_mod:mtg_shamolvzhou_skill") > 0
     {
-        return true;
-    }
-    // card/gujian/skill.js:343-371 (`yuanbaorou`): Sha ignored in hand limit
-    if kind.is_sha_like() && flag_val(state, player, "u05_mod:yuanbaorou") > 0 {
         return true;
     }
     false
@@ -94,11 +89,15 @@ pub(super) fn apply_hand_limit(state: &GameStateCore, player: PlayerId, mut limi
     if flag_val(state, player, "u05_mod:nsaiqi") > 0
         || flag_val(state, player, "u05_mod:mtg_shuimomuxue_skill") > 0
         || flag_val(state, player, "u05_mod:hujing") > 0
+        || flag_val(state, player, "u05_mod:chunbing") > 0
         || flag_val(state, player, "u05_debuff:hutian") > 0
         || flag_val(state, player, "u05_buff:xie2") > 0
         || flag_val(state, player, "u05_buff:xuejibingbao") > 0
     {
         delta += 1;
+    }
+    if flag_val(state, player, "u05_mod:gj_juejing") > 0 {
+        delta += 2;
     }
     if flag_val(state, player, "u05_mod:yuling2") > 0 {
         return 5;
@@ -296,6 +295,7 @@ pub(super) fn apply_sha_extra_targets(
 
 pub(super) fn apply_card_distance_unlimited(
     state: &GameStateCore,
+    catalog: &Catalog,
     player: PlayerId,
     kind: CardKind,
     mut unlimited: bool,
@@ -309,6 +309,11 @@ pub(super) fn apply_card_distance_unlimited(
     if flag_val(state, player, "u05_mod:zhufangshenshi") > 0
         || flag_val(state, player, "u05_mod:tanlin4") > 0
         || flag_val(state, player, "u05_mod:mujing") > 0
+        || (kind == CardKind::Feibiao
+            && (flag_val(state, player, "u05_mod:gj_xuanci") > 0
+                || catalog
+                    .skill_by_name("xuanci")
+                    .is_some_and(|d| state.has_skill(player, d) && !catalog.is_tieji_sealed(state, player))))
     {
         unlimited = true;
     }
@@ -317,6 +322,7 @@ pub(super) fn apply_card_distance_unlimited(
 
 pub(super) fn apply_card_target_canceled(
     state: &GameStateCore,
+    catalog: &Catalog,
     actor: PlayerId,
     target: PlayerId,
     kind: CardKind,
@@ -328,7 +334,23 @@ pub(super) fn apply_card_target_canceled(
             kind,
             CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
         )
-        && flag_val(state, target, "u05_mod:gjqtwuxie") > 0
+        && (flag_val(state, target, "u05_mod:gjqtwuxie") > 0
+            || catalog
+                .skill_by_name("gjqtwuxie")
+                .is_some_and(|d| state.has_skill(target, d)))
+    {
+        canceled = true;
+    }
+    // character/gujian/skill.js:1689-1716 (`xlqianhuan`: face-down cannot be targeted)
+    // character/gujian/skill.js:268-314 (`xianju` / `qianxing`: odd-round untargetable by others)
+    // character/gujian/skill.js:603-678 (`lianjing`: out-of-play seats cannot be targeted)
+    if (state.player(target).face_down
+        && (flag_val(state, target, "u05_mod:gj_xlqianhuan") > 0
+            || catalog
+                .skill_by_name("xlqianhuan")
+                .is_some_and(|d| state.has_skill(target, d))))
+        || (actor != target && flag_val(state, target, "u05_mod:gj_qianxing") > 0)
+        || flag_val(state, target, "u05_mod:gj_lianjing_out_of_play") > 0
     {
         canceled = true;
     }
@@ -387,8 +409,24 @@ pub(super) fn apply_card_use_canceled(
 ) -> bool {
     // character/gujian/skill.js:2459-2471 (`yuling4`: maxHp + 2 cards per turn)
     if state.turn.current == actor
-        && flag_val(state, actor, "u05_mod:yuling4") > 0
-        && state.turn.cards_used_play_phase >= state.player(actor).max_hp + 2
+        && ((flag_val(state, actor, "u05_mod:yuling4") > 0
+            && state.turn.cards_used_play_phase >= state.player(actor).max_hp + 2)
+            || (flag_val(state, actor, "u05_mod:gj_yuling4") > 0
+                && state.turn.cards_used_turn >= state.player(actor).max_hp + 2))
+    {
+        canceled = true;
+    }
+    // character/gujian/skill.js:1689-1716 (`xlqianhuan`: face-down cannot use cards)
+    // & `lianjing` out-of-play seats
+    if (state.player(actor).face_down
+        && (flag_val(state, actor, "u05_mod:gj_xlqianhuan") > 0
+            || catalog
+                .skill_by_name("xlqianhuan")
+                .is_some_and(|d| state.has_skill(actor, d))))
+        || flag_val(state, actor, "u05_mod:gj_lianjing_out_of_play") > 0
+        || catalog
+            .skill_by_name("yuling4")
+            .is_some_and(|d| state.has_skill(actor, d) && state.turn.current == actor && state.turn.cards_used_turn >= state.player(actor).max_hp + 2)
     {
         canceled = true;
     }
@@ -481,21 +519,16 @@ pub(super) fn apply_damage_amount(
     {
         amount += 1;
     }
-    // card/gujian/skill.js:313-342 (`molicha`), 456-467 (`heilonglinpian`),
+    // card/gujian/skill.js:313-342 (`molicha`),
     // character/hearth/skill.js:4829 (`xiaorong`), character/xianjian/skill.js:719 (`chengxin`),
     // character/swd/skill.js:1480 (`jinlin`), character/ow/skill.js:1075 (`aqianghua2`): reduce damage > 1
     if amount > 1
-        && (flag_val(state, target, "u05_mod:molicha") > 0
-            || flag_val(state, target, "u05_mod:heilonglinpian") > 0
-            || flag_val(state, target, "u05_mod:xiaorong") > 0
+        && (flag_val(state, target, "u05_mod:xiaorong") > 0
             || flag_val(state, target, "u05_debuff:chengxin") > 0
             || flag_val(state, target, "u05_debuff:jinlin") > 0
             || flag_val(state, target, "u05_buff:aqianghua2") > 0)
     {
         amount -= 1;
-    }
-    if flag_val(state, target, "u05_mod:mingkong2") > 0 {
-        amount = (amount - 1).max(0);
     }
     amount
 }

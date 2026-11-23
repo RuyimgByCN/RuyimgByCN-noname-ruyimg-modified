@@ -145,12 +145,13 @@ fn final_batch_shatang_heilong_liutouge_mutou() {
         })
         .map(|i| i as u32);
     if let Some(ltg2) = ltg2 {
-        // 注入第二张再打
+        // 注入第二张打向敌方：上游随机 6 选 1 减益或友方增益
         let mut snap = e.save();
         purge_all_zones(&mut snap, &[ltg2]);
         snap.core.players[0].hand.push(ltg2);
         let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复2");
         let h1 = e.debug_hand(1).len();
+        let hp1 = e.debug_hp(1);
         let out = submit(
             &mut e,
             0,
@@ -164,7 +165,15 @@ fn final_batch_shatang_heilong_liutouge_mutou() {
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ));
         pass_nullify_window(&mut e);
-        assert_eq!(e.debug_hand(1).len(), h1 - 1, "他人弃首张手牌");
+        let core1 = e.state_core();
+        let debuff_or_buff = e.debug_hand(1).len() != h1
+            || e.debug_hp(1) != hp1
+            || core1.player(1).hujia > 0
+            || core1.player(1).linked
+            || core1.player(1).fengyin_active
+            || !core1.player(1).judge.is_empty()
+            || core1.vm_aux.flags.contains_key(&(1, "u05_mod:gj_qianxing".to_string()));
+        assert!(debuff_or_buff, "六骰格应对 1 号产生增益/减益池效果");
         assert_zone_conservation(&e);
     }
     let _ = (self_draw, h1);

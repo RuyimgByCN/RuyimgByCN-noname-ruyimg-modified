@@ -289,10 +289,11 @@ impl GameStateCore {
                     .collect();
                 (if v.is_empty() { 1 } else { 1 }, 1, v)
             }
-            K::Tao | K::Dinvxuanshuang => {
+            K::Tao => {
                 let wounded = self.player(player).hp < self.player(player).max_hp as i32;
                 (1, 1, if wounded { vec![player] } else { Vec::new() })
             }
+            K::Dinvxuanshuang => (0, 0, Vec::new()),
             K::Jiu | K::Tianxianjiu => (1, 1, vec![player]),
             K::Wuzhong
             | K::Jihuocard
@@ -1093,13 +1094,13 @@ impl GameStateCore {
             .player(b)
             .equips
             .iter()
-            .filter(|c| catalog.cards[**c as usize].kind == CardKind::HorsePlus)
+            .filter(|c| catalog.equip_card_has_kind(self, **c, CardKind::HorsePlus))
             .count() as u32;
         let minus = self
             .player(a)
             .equips
             .iter()
-            .filter(|c| catalog.cards[**c as usize].kind == CardKind::HorseMinus)
+            .filter(|c| catalog.equip_card_has_kind(self, **c, CardKind::HorseMinus))
             .count() as u32;
         // 马术（马超）：锁定技——计算与他人的距离时始终 -1（下限 1）
         let mashu = catalog

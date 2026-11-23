@@ -142,6 +142,8 @@ pub(super) fn is_tao_like(
     {
         return false;
     }
+    let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, card);
+    let raw_suit = ctx.catalog.resolved_card_suit(ctx.core, card);
     if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
         ctx.core,
         ctx.catalog,
@@ -153,26 +155,26 @@ pub(super) fn is_tao_like(
         ctx.catalog,
         responder,
         card,
-        ctx.catalog.card_kind(card),
+        raw_kind,
         crate::event::DamageNature::Normal,
     ) {
         return false;
     }
-    if ctx.catalog.card_kind(card) == CardKind::Tao {
+    if raw_kind == CardKind::Tao {
         // 覆泰2（规则 v214）：全场禁桃时真桃不可救
         return !tao_futai2_banned(ctx.core, ctx.catalog, responder);
     }
     // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
-    if ctx.catalog.card_kind(card) == CardKind::Jiu {
+    if raw_kind == CardKind::Jiu {
         return true;
     }
     // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援
     //（上游 savable: dying === player）
-    if ctx.catalog.card_kind(card) == CardKind::Hufu {
+    if raw_kind == CardKind::Hufu {
         return responder == dying;
     }
     // 天仙酒（U05 swd 第五批，规则 v89）：酒的 swd 变体——濒死自救
-    if ctx.catalog.card_kind(card) == CardKind::Tianxianjiu {
+    if raw_kind == CardKind::Tianxianjiu {
         return true;
     }
     // 急救（v202 对齐上游 viewAsFilter）：限持有者回合外——自己是当前
@@ -188,7 +190,7 @@ pub(super) fn is_tao_like(
         .unwrap_or(false);
     if jijiu
         && matches!(
-            ctx.catalog.cards[card as usize].suit,
+            raw_suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         )
     {
@@ -204,19 +206,24 @@ pub(super) fn is_tao_like(
     if furan
         && ctx.core.is_boss_side(responder) != ctx.core.is_boss_side(dying)
         && matches!(
-            ctx.catalog.cards[card as usize].suit,
+            raw_suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         )
     {
         return true;
     }
-    // 蜜链藕（G1 古剑食物）：持有者红桃手牌可当桃（濒死响应）
+    // 蜜链藕（G1 古剑食物）：持有者红桃牌（he 区）可当桃（濒死响应）
     let mizhilianou = ctx
         .catalog
         .skill_by_name(crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY)
         .map(|d| ctx.core.has_skill(responder, d))
-        .unwrap_or(false);
-    if mizhilianou && ctx.catalog.cards[card as usize].suit == crate::catalog::Suit::Heart {
+        .unwrap_or(false)
+        || ctx
+            .catalog
+            .skill_by_name("mizhilianou")
+            .map(|d| ctx.core.has_skill(responder, d))
+            .unwrap_or(false);
+    if mizhilianou && raw_suit == crate::catalog::Suit::Heart {
         return true;
     }
     if ctx
@@ -237,7 +244,7 @@ pub(super) fn is_tao_like(
     }
     // 帝女玄霜（G1 古剑，濒死可救基本牌）：按桃结算回复 1 体力
     //（弃摸骑乘由 DyingSaveMachine rider 承担）
-    ctx.catalog.card_kind(card) == CardKind::Dinvxuanshuang
+    raw_kind == CardKind::Dinvxuanshuang
 }
 
 pub(super) fn dying_tao_cards(
@@ -263,6 +270,24 @@ pub(super) fn dying_tao_cards(
             .filter(|&c| is_tao_like(ctx, responder, c, dying))
             .collect()
     };
+    let has_mizhilianou = ctx
+        .catalog
+        .skill_by_name(crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY)
+        .is_some_and(|d| ctx.core.has_skill(responder, d))
+        || ctx
+            .catalog
+            .skill_by_name("mizhilianou")
+            .is_some_and(|d| ctx.core.has_skill(responder, d));
+    if has_mizhilianou {
+        for &c in &p.equips {
+            if ctx.catalog.resolved_card_suit(ctx.core, c) == crate::catalog::Suit::Heart
+                && is_tao_like(ctx, responder, c, dying)
+                && !out.contains(&c)
+            {
+                out.push(c);
+            }
+        }
+    }
     for c in ctx
         .catalog
         .player_vm_view_as_extra_cards(ctx.core, responder, false, None)
@@ -321,7 +346,7 @@ pub fn response_kind_cards_core(
                     return need == CardKind::Sha && !sealed;
                 }
                 rw_lanyin
-                    || catalog.card_kind(c) == need
+                    || catalog.resolved_card_kind(core, c) == need
                     || catalog
                         .find_player_vm_view_as(core, responder, c, false, Some(need))
                         .is_some()
@@ -459,7 +484,7 @@ pub fn is_black_trick_card(
     owner: PlayerId,
     card: crate::ids::CardId,
 ) -> bool {
-    let kind = catalog.card_kind(card);
+    let kind = catalog.resolved_card_kind(core, card);
     !kind.is_basic_kind()
         && kind.equip_slot().is_none()
         && kind.is_basic_trick_or_equip()
@@ -500,7 +525,7 @@ pub fn sha_card_use_as(
     if in_hand && core.player(owner).fengyin_active {
         return None;
     }
-    let kind = catalog.card_kind(card);
+    let kind = catalog.resolved_card_kind(core, card);
     if in_hand && kind.is_sha_like() && !core.player(owner).wangshi_ban {
         return Some((None, false));
     }
@@ -567,6 +592,7 @@ fn sha_user_or_target_blocked(
         || has(owner, crate::vocabulary::host::WUDIAN_SHOUHU_KEY)
         || has(owner, crate::vocabulary::host::GW_BIRIN_STATE_KEY)
         || has(owner, crate::vocabulary::host::GJ_FOOD_SHIHUIFEN_BAN_KEY)
+        || has(owner, "shihuifen")
     {
         return true;
     }
@@ -582,11 +608,22 @@ fn sha_user_or_target_blocked(
     {
         return true;
     }
+    let flag = |p: PlayerId, k: &str| {
+        core.vm_aux
+            .flags
+            .get(&(p, k.to_string()))
+            .copied()
+            .unwrap_or(0)
+    };
     if (has(target, crate::vocabulary::names::KONG_CHENG) && core.player(target).hand.is_empty())
         || core.player(target).jidong_active
         || core.player(target).yinshen_active
         || core.player(target).jileng_active
         || core.player(target).yinmi_active
+        || flag(target, "u05_mod:gj_qianxing") > 0
+        || flag(target, "u05_mod:gj_lianjing_out_of_play") > 0
+        || (core.player(target).face_down
+            && (flag(target, "u05_mod:gj_xlqianhuan") > 0 || has(target, "xlqianhuan")))
     {
         return true;
     }
@@ -612,7 +649,10 @@ pub fn usable_sha_options(
     }
     let molicha_target = catalog
         .skill_by_name(crate::vocabulary::host::GJ_FOOD_MOLICHA_KEY)
-        .is_some_and(|d| core.skills.contains_key(&(target, d)));
+        .is_some_and(|d| core.skills.contains_key(&(target, d)))
+        || catalog
+            .skill_by_name("molicha")
+            .is_some_and(|d| core.skills.contains_key(&(target, d)));
     let mut candidates: Vec<crate::ids::CardId> = core.player(owner).hand.clone();
     for c in catalog.player_vm_view_as_extra_cards(core, owner, true, Some(CardKind::Sha)) {
         if !candidates.contains(&c) {
@@ -635,14 +675,14 @@ pub fn usable_sha_options(
             let Some((use_as, _)) = sha_card_use_as(core, catalog, owner, c) else {
                 return false;
             };
-            let kind = use_as.unwrap_or_else(|| catalog.card_kind(c));
+            let kind = use_as.unwrap_or_else(|| catalog.resolved_card_kind(core, c));
             let nature = match kind {
                 CardKind::FireSha => crate::event::DamageNature::Fire,
                 CardKind::LeiSha => crate::event::DamageNature::Thunder,
                 _ => crate::event::DamageNature::Normal,
             };
             let black = matches!(
-                catalog.cards[c as usize].suit,
+                catalog.resolved_card_suit(core, c),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             );
             !(molicha_target && black)
@@ -674,6 +714,49 @@ pub(crate) fn host_response_skills(
     if let Some(def) = (catalog.hooks.scsanruo_response_skill)(core, catalog, responder, resp_ctx) {
         if !out.contains(&def) {
             out.push(def);
+        }
+    }
+    if resp_ctx == 5 {
+        let sealed = catalog.is_tieji_sealed(core, responder)
+            || (core.player(responder).hp <= 1 && catalog.has_rechanyuan(core, responder));
+        if !sealed {
+            if let Some(def) = catalog.skill_by_name("shahun") {
+                if core.has_skill(responder, def)
+                    && !core.skills.get(&(responder, def)).is_some_and(|i| i.once_used)
+                    && core
+                        .vm_aux
+                        .flags
+                        .get(&(responder, "gj_shahun_used".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                    && core
+                        .vm_aux
+                        .flags
+                        .get(&(responder, "gj_shahun_turns".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                    && !out.contains(&def)
+                {
+                    out.push(def);
+                }
+            }
+            if let Some(def) = catalog.skill_by_name("duhun") {
+                let p = core.player(responder);
+                let ok_target = p.max_hp > 1
+                    && !p.hand.is_empty()
+                    && (0..core.players.len() as PlayerId).any(|q| {
+                        q != responder
+                            && core.player(q).alive
+                            && !core.player(q).hand.is_empty()
+                            && core.player(q).hp > 0
+                            && core.player(q).hp <= p.max_hp as i32
+                    });
+                if ok_target && core.has_skill(responder, def) && !out.contains(&def) {
+                    out.push(def);
+                }
+            }
         }
     }
     out

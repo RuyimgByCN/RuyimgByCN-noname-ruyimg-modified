@@ -291,40 +291,19 @@ pub(super) fn try_named_jiguan_card(
     let key = key.strip_prefix("gj_").or_else(|| key.strip_prefix("swd_")).unwrap_or(key);
     let owner = u.player;
     match key {
-        // character/gujian/card.js:4-67: yanjiadan_heart — recover 1 HP if damaged, else draw 2
-        "yanjiadan_heart" => {
-            set_flag(ctx, owner, "u05_card_used:yanjiadan_heart", 1);
-            if !recover_if_damaged(ctx, owner, 1) {
-                ctx.start_draw(owner, 2);
-            }
-            finish_table_card(ctx, card);
-            Some(None)
-        }
-        // character/gujian/card.js:68-116: yanjiadan_diamond — liufengsan/shihuifen tactical draw 2
-        "yanjiadan_diamond" => {
-            set_flag(ctx, owner, "u05_card_used:yanjiadan_diamond", 1);
-            ctx.start_draw(owner, 2);
-            finish_table_card(ctx, card);
-            Some(None)
-        }
-        // character/gujian/card.js:117-148: yanjiadan_club — dismantle 1 from enemy & draw 1
-        "yanjiadan_club" => {
-            set_flag(ctx, owner, "u05_card_used:yanjiadan_club", 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                let _ = discard_up_to(ctx, t, 1);
-            }
-            ctx.start_draw(owner, 1);
-            finish_table_card(ctx, card);
-            Some(None)
-        }
-        // character/gujian/card.js:149-198: yanjiadan_spade — shenhuofeiya/qiankunbiao 1 fire damage
-        "yanjiadan_spade" => {
-            set_flag(ctx, owner, "u05_card_used:yanjiadan_spade", 1);
-            if let Some(t) = first_target_or_other(ctx, u) {
-                deal_damage(ctx, owner, t, 1, DamageNature::Fire);
-            }
-            finish_table_card(ctx, card);
-            Some(None)
+        // character/gujian/card.js:4-205: yanjiadan_{heart,diamond,club,spade} 3选1衍生机关
+        "yanjiadan_heart" | "yanjiadan_diamond" | "yanjiadan_club" | "yanjiadan_spade" => {
+            set_flag(ctx, owner, &format!("u05_card_used:{key}"), 1);
+            Some(Some(Box::new(crate::content::host::HostMachine {
+                def_key: key.to_string(),
+                behavior: crate::content::host::HostBehavior::U05GujianCardBatch,
+                owner,
+                target: u.targets.first().copied(),
+                card: Some(card),
+                cards: Vec::new(),
+                targets: u.targets.clone(),
+                stage: crate::content::host::HostStage::Act,
+            })))
         }
         // card/swd/card.js:1062-1098: lingjiandai — gain 1 Hslingjian card from deck/discard (or draw 1)
         "lingjiandai" => {

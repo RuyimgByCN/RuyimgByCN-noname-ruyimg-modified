@@ -33,7 +33,7 @@ fn has_qinggang_or_zhadao(state: &GameStateCore, catalog: &Catalog, source: Play
         .player(source)
         .equips
         .iter()
-        .any(|c| catalog.card_kind(*c) == CardKind::Qinggang)
+        .any(|c| catalog.equip_card_has_kind(state, *c, CardKind::Qinggang))
         || has_ext_skill(state, catalog, source, crate::vocabulary::names::BOSS_ZHADAO)
 }
 
@@ -179,7 +179,7 @@ pub fn rewrite_renwang_blocks(
 }
 
 pub fn rewrite_zhuge_range(state: &GameStateCore, catalog: &Catalog, card: CardId) -> Option<u32> {
-    (is_jingxie_rewritten(state, card) && catalog.card_kind(card) == CardKind::Zhuge).then_some(3)
+    (is_jingxie_rewritten(state, card) && catalog.equip_card_has_kind(state, card, CardKind::Zhuge)).then_some(3)
 }
 
 /// 精械升级防具 `damageBegin4` 减免：`rewrite_tengjia` 免疫南蛮/万箭/普杀，`rewrite_baiyin` 伤封顶 1。
@@ -250,22 +250,40 @@ pub fn has_rewritten_baiyin_on_lose(
         && !super::is_target_unequip2(state, player)
 }
 
-/// Returns whether `card` carries Bagua Shield dodge-judge semantics.
-pub fn is_bagua_armor(catalog: &Catalog, card: CardId) -> bool {
-    catalog.card_kind(card) == crate::catalog::CardKind::Armor
-        && !matches!(
-            catalog.cards[card as usize].name,
-            "th_taipingyaoshu"
-                | "linglongshimandai"
-                | "hongmianbaihuapao"
-                | "qimenbagua"
-                | "guofengyupao"
-                | "huxinjing"
-                | "heiguangkai"
-                | "lanyinjia"
-                | "tengjia"
-                | "baiyin"
-        )
+fn is_non_bagua_armor_name(name: &str) -> bool {
+    matches!(
+        name,
+        "th_taipingyaoshu"
+            | "linglongshimandai"
+            | "hongmianbaihuapao"
+            | "qimenbagua"
+            | "guofengyupao"
+            | "huxinjing"
+            | "heiguangkai"
+            | "lanyinjia"
+            | "tengjia"
+            | "baiyin"
+    )
+}
+
+/// Static catalog check for Bagua Shield dodge-judge semantics (used by public-view AI without `GameStateCore`).
+pub fn is_bagua_armor_card(catalog: &Catalog, card: CardId) -> bool {
+    let Some(def) = catalog.cards.get(card as usize) else {
+        return false;
+    };
+    def.kind == crate::catalog::CardKind::Armor && !is_non_bagua_armor_name(def.name)
+}
+
+/// Returns whether `card` (or a `yanjia`-merged / `yange`-cloned equip) carries Bagua Shield dodge-judge semantics.
+pub fn is_bagua_armor(state: &GameStateCore, catalog: &Catalog, card: CardId) -> bool {
+    let is_single_bagua = |cid: CardId| -> bool {
+        let Some(def) = catalog.resolved_card_def(state, cid) else {
+            return false;
+        };
+        let kind = catalog.resolved_card_kind(state, cid);
+        kind == crate::catalog::CardKind::Armor && !is_non_bagua_armor_name(def.name)
+    };
+    is_single_bagua(card) || catalog.yanjia_merged_card_id(state, card).is_some_and(is_single_bagua)
 }
 
 #[inline]

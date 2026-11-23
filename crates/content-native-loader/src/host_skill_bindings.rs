@@ -8,6 +8,12 @@ use engine_native::content::names;
 
 /// Look up the native `HostBehavior` for an upstream extension skill symbol, if implemented.
 pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
+    match skill_name {
+        "shahai-gujian__ref_dangping" | "shahai-gujian__ref_xuanning" => {
+            return Some(HostBehavior::U05GujianCharBatchC);
+        }
+        _ => {}
+    }
     let clean = skill_name
         .rsplit_once("__ref_")
         .map(|(_, s)| s)
@@ -440,7 +446,7 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         "g_jinlianzhu" => Some(HostBehavior::JinlianzhuCancel),
         "g_shencaojie" => Some(HostBehavior::SwdShencaojieGuard),
         "g_shenmiguo" => Some(HostBehavior::SwdShenmiguoWindow),
-        "g_shihuifen" => Some(HostBehavior::GujianFoodShihuifenBan),
+        "g_shihuifen" => Some(HostBehavior::U05GujianCardBatch),
         "g_yuchan_swap" => Some(HostBehavior::SwdYuchanSwap),
         "gouhunluo2" => Some(HostBehavior::SwdGouhunluoSub),
         "gw_ciguhanshuang" => Some(HostBehavior::GwentCiguState),
@@ -516,6 +522,90 @@ pub fn lookup_upstream_host_behavior(skill_name: &str) -> Option<HostBehavior> {
         | "dddxuanlun"
         | "dddjiexing"
         | "dddbailei" => Some(HostBehavior::U01DddBatchD),
+        // U05-2 古剑奇谭 CardBatch & Food/Equip (card/gujian/skill.js)
+        "ziyangdan" => Some(HostBehavior::GujianFoodZiyangdan),
+        "luyugeng" => Some(HostBehavior::GujianFoodLuyugeng),
+        "mizhilianou" => Some(HostBehavior::GujianFoodMizhilianou),
+        "chunbing" => Some(HostBehavior::GujianFoodChunbing),
+        "gudonggeng" => Some(HostBehavior::GujianFoodGudonggeng),
+        "qingtuan" => Some(HostBehavior::GujianFoodQingtuan),
+        "liyutang" => Some(HostBehavior::GujianFoodLiyutang),
+        "yougeng" => Some(HostBehavior::GujianFoodYougeng),
+        "molicha" => Some(HostBehavior::GujianFoodMolicha),
+        "yuanbaorou" => Some(HostBehavior::GujianFoodYuanbaorou),
+        "tanhuadong" => Some(HostBehavior::GujianFoodTanhuadong),
+        "mapodoufu" => Some(HostBehavior::GujianFoodMapodoufu),
+        "yunvyuanshen_skill" => Some(HostBehavior::GujianYunvyuanshen),
+        "mutoumianju_skill" => Some(HostBehavior::GujianMutouEquipSkill),
+        "gjyuheng_skill" => Some(HostBehavior::GujianYuhengEquipSkill),
+        "xiajiao2"
+        | "xiajiao3"
+        | "heilonglinpian"
+        | "gjyuheng_plus_temp"
+        | "gjyuheng_plus_skill"
+        | "gjyuheng_pro_skill"
+        | "shihuifen" => Some(HostBehavior::U05GujianCardBatch),
+        // U05-2 古剑奇谭 CharBatchA..E (character/gujian/skill.js)
+        "xuelu"
+        | "fanshi"
+        | "qinglan"
+        | "yuehua"
+        | "gjqtwuxie"
+        | "xlqianhuan"
+        | "meihu"
+        | "xidie"
+        | "xidie2"
+        | "fanyin"
+        | "mingkong"
+        | "mingkong2"
+        | "fumo"
+        | "shahun"
+        | "shahun2" => Some(HostBehavior::U05GujianCharBatchA),
+        "zuiji"
+        | "manwu"
+        | "xfanghua"
+        | "jianwu"
+        | "zuizhan"
+        | "meiying"
+        | "yanjia"
+        | "xiuhua"
+        | "liuying" => Some(HostBehavior::U05GujianCharBatchB),
+        "shishui"
+        | "chizhen"
+        | "shahai-gujian__ref_dangping"
+        | "dangping2"
+        | "yunyin"
+        | "duhun"
+        | "shahai-gujian__ref_xuanning"
+        | "xuanning1"
+        | "xuanning2"
+        | "liuguang"
+        | "yangming"
+        | "yangming2" => Some(HostBehavior::U05GujianCharBatchC),
+        "zhaolu"
+        | "jiehuo"
+        | "jiehuo2"
+        | "yuling"
+        | "yuling1"
+        | "yuling2"
+        | "yuling3"
+        | "yuling4"
+        | "yuling5"
+        | "yuling6" => Some(HostBehavior::U05GujianCharBatchD),
+        "lingyan"
+        | "xunjian"
+        | "woxue"
+        | "yange"
+        | "lianjing"
+        | "cihong"
+        | "zhenying"
+        | "lingnu"
+        | "humeng"
+        | "xianju"
+        | "xuanci"
+        | "qingshu"
+        | "yunyou"
+        | "xuanzhen" => Some(HostBehavior::U05GujianCharBatchE),
         // L28 雷霆万钧 Batch A（武将 1–9）
         "th_dunshi" | "th_bushi" | "th_zhongzhuang" | "th_caiyi" | "th_guili" | "th_chongxu"
         | "miaojian" | "shhlianhua" | "th_shengong" | "olqisi" | "th_pingcai"

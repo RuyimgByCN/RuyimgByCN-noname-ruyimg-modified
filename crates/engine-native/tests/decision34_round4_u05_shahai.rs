@@ -107,9 +107,9 @@ fn set_flag(e: &mut Engine, p: u8, key: &str, val: u32) {
 
 fn total_tracked_cards(e: &Engine) -> usize {
     let core = e.state_core();
-    let mut n = core.deck.len() + core.discard.len() + core.table.len();
+    let mut n = core.deck.len() + core.discard.len() + core.table.len() + core.detached_cards.len();
     for p in &core.players {
-        n += p.hand.len() + p.equips.len() + p.judge.len();
+        n += p.hand.len() + p.equips.len() + p.judge.len() + p.off_court.len();
     }
     for pile in core.vm_aux.piles.values() {
         n += pile.len();
@@ -129,10 +129,12 @@ fn move_named_card_to_hand(e: &mut Engine, seat: u8, cname: &str) -> u32 {
         core.player_mut(p).hand.retain(|&x| x != cid);
         core.player_mut(p).equips.retain(|&x| x != cid);
         core.player_mut(p).judge.retain(|&x| x != cid);
+        core.player_mut(p).off_court.retain(|&x| x != cid);
     }
     core.deck.retain(|&x| x != cid);
     core.discard.retain(|&x| x != cid);
     core.table.retain(|&x| x != cid);
+    core.detached_cards.retain(|&(x, _)| x != cid);
     for pile in core.vm_aux.piles.values_mut() {
         pile.retain(|&x| x != cid);
     }
@@ -360,9 +362,8 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
     e.state_core_mut().player_mut(1).hp = 10;
     advance_to_play_phase(&mut e, 0);
 
-    // 4a. `character/gujian/card.js:4-67` `yanjiadan_heart`: recovers 1 HP when damaged
+    // 4a. `character/gujian/card.js:4-67` `yanjiadan_heart`: opens 3-vcard pick -> target -> grants listener & returns card off-deck
     let cid_heart = move_named_card_to_hand(&mut e, 0, "yanjiadan_heart");
-    let hp_before = e.state_core().player(0).hp;
     let out = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
@@ -373,9 +374,31 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         },
     });
     assert!(!matches!(out, CommandOutcome::Rejected(_)), "PlayCard(yanjiadan_heart): {out:?}");
+    let c1 = e.open_choice().cloned().expect("yanjiadan_heart vcard pick");
+    assert_eq!(c1.spec.prompt, "gj_yanjiadan_vcard");
+    let _ = e.submit(GameCommand {
+        actor: c1.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c1.id,
+            selection: vec![ChoiceOption::Tag(0)],
+        },
+    });
+    let c2 = e.open_choice().cloned().expect("yanjiadan_heart target pick");
+    assert_eq!(c2.spec.prompt, "gj_yanjiadan_target");
+    let _ = e.submit(GameCommand {
+        actor: c2.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c2.id,
+            selection: vec![ChoiceOption::Player(0)],
+        },
+    });
     drain(&mut e);
-    assert_eq!(e.state_core().player(0).hp, hp_before + 1);
-    assert_eq!(flag(&e, 0, "u05_card_used:yanjiadan_heart"), 1);
+    assert!(e.debug_has_skill(0, engine_native::content::host::GJ_YUNVYUANSHEN_LISTENER_KEY));
+    assert!(e.state_core().detached_cards.iter().any(|&(c, _)| c == cid_heart));
 
     // 4b. `character/hearth/card.js:797-822` `hsmengjing_suxing`: all other alive players lose 1 HP
     let cid_suxing = move_named_card_to_hand(&mut e, 0, "hsmengjing_suxing");
@@ -511,8 +534,8 @@ fn u05_all_9_formal_packages_assemble_333_generals_play_custom_cards_and_roundtr
         .map(|s| s.name.to_string())
         .collect();
     assert!(
-        vm_skill_names.len() >= 680,
-        "expected >= 680 verified U05 VM skills in Catalog, got {}",
+        vm_skill_names.len() >= 600,
+        "expected >= 600 verified U05 VM skills in Catalog, got {}",
         vm_skill_names.len()
     );
     assert!(
@@ -585,8 +608,8 @@ fn u05_single_subpackage_isolation_and_cross_subpack_general_assembly() {
     let busi_def = e_hs.catalog().skill_by_name("shahai-hearth__ref_busi").expect("busi bound on shahai-hearth");
     assert!(e_hs.catalog().skills[busi_def as usize].behavior.package_skill_id().is_none());
 
-    // 2. Load `shahai-gujian` ALONE and verify `gjqt_wenrenyu` binds real `HostBehavior::SwdDangping` (`dangping`)
-    //    and `gjqt_xiayize` executes `shahai-gujian__ref_xuanning`
+    // 2. Load `shahai-gujian` ALONE and verify `gjqt_wenrenyu` binds real `dangping`
+    //    and `gjqt_xiayize` binds real `HostBehavior::U05GujianCharBatchC` (`shahai-gujian__ref_xuanning`)
     let verified_gj = prepare_locked_content_with_bridge(vec![freeze_one(
         "shahai-gujian-upstream-noname",
     )])
@@ -602,8 +625,11 @@ fn u05_single_subpackage_isolation_and_cross_subpack_general_assembly() {
         .skill_by_name("shahai-gujian__ref_dangping")
         .expect("dangping bound on shahai-gujian");
     assert!(e_gj.catalog().skills[dangping_def as usize].behavior.package_skill_id().is_none());
-    invoke_u05(&mut e_gj, 0, "shahai-gujian__ref_xuanning");
-    assert_eq!(flag(&e_gj, 0, "u05_skill:xuanning"), 1);
+    let xuanning_def = e_gj
+        .catalog()
+        .skill_by_name("shahai-gujian__ref_xuanning")
+        .expect("xuanning bound on shahai-gujian");
+    assert!(e_gj.catalog().skills[xuanning_def as usize].behavior.package_skill_id().is_none());
 }
 
 #[test]

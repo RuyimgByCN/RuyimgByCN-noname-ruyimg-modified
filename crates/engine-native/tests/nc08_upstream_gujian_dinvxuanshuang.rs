@@ -29,7 +29,7 @@
 //! 未覆盖（登记）：**`savable`（濒死救援）**的使用路径；弃 N 摸 N 的数值面；`ai` 策略面。
 
 mod nc08_common;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase, RejectReason};
 use nc08_common::{advance_to_play, drain, next_dedup};
 
 /// 载入 **古剑包**建局。
@@ -42,8 +42,8 @@ fn gujian_engine(seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 上游点 2（**行为面**）：出牌阶段对自身使用时（`selectTarget: -1` + `savable: true` 单目标自动选定）
-/// 使用者回复 1 点体力，非目标不回复。
+/// 上游 `card/gujian/card.js:551` 无 `enable: true`（仅 `savable: true`）：
+/// 出牌阶段不可主动使用（`WrongPhase`）；濒死救援窗口使用时自身回复 1 点体力至 1，非目标不回复。
 #[test]
 fn upstream_dinvxuanshuang_recovers() {
     let mut e = gujian_engine(20272601);
@@ -51,7 +51,6 @@ fn upstream_dinvxuanshuang_recovers() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 使用者与 1 号**都受伤**（便于区分「仅目标自己回复」与「全员回复」）
     let max0 = e.state_core().player(0).max_hp as i32;
     e.debug_set_hp(0, max0 - 1);
     let max1 = e.state_core().player(1).max_hp as i32;
@@ -68,59 +67,69 @@ fn upstream_dinvxuanshuang_recovers() {
         nc08_common::put_hand(&mut e, 0, id);
         id
     };
-    let hp0_before = e.debug_hp(0);
-    let hp_before = e.debug_hp(1);
-    let out = e.submit(GameCommand {
+    let out_play = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
         dedup_id: next_dedup(),
-        // `selectTarget: -1` + `savable` → 引擎按「无显式目标」形态受理（对照 toself 卡）
         action: GameAction::PlayCard { card, targets: vec![] },
     });
-    eprintln!("DBG 帝女玄霜：发动={out:?}");
+    assert!(
+        matches!(out_play, CommandOutcome::Rejected(RejectReason::WrongPhase)),
+        "帝女玄霜无 enable:true，出牌阶段应拒绝：{out_play:?}"
+    );
+    let sha = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.kind == CardKind::Sha)
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("杀在目录");
+    e.debug_set_hp(0, 1);
+    let hp_before = e.debug_hp(1);
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    drain(&mut e);
+    while !(e.turn().current == 1 && e.turn().phase == Phase::Play) {
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e);
+    }
+    nc08_common::put_hand(&mut e, 1, sha);
+    let _ = e.submit(GameCommand {
+        actor: 1,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: sha, targets: vec![0] },
+    });
+    let c_save = e.open_choice().cloned().expect("0 号应进入 dying_save");
+    assert_eq!(c_save.spec.prompt, "dying_save");
+    let out = e.submit(GameCommand {
+        actor: c_save.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c_save.id,
+            selection: vec![ChoiceOption::Card(card)],
+        },
+    });
     assert!(
         matches!(
             out,
             CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
         ),
-        "帝女玄霜应可发动：{out:?}"
+        "帝女玄霜濒死救援应受理：{out:?}"
     );
-    let mut prompts: Vec<String> = Vec::new();
-    for _ in 0..16 {
-        let Some(c) = e.open_choice().cloned() else { break };
-        if !prompts.iter().any(|p| p == c.spec.prompt) {
-            prompts.push(c.spec.prompt.to_string());
-        }
-        // 后续「弃任意张」询问：本样本**不弃**（验证回复效果即可）
-        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
-            vec![ChoiceOption::Pass]
-        } else if c.spec.allow_cancel {
-            Vec::new()
-        } else {
-            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
-        };
-        let _ = e.submit(GameCommand {
-            actor: c.observer,
-            expected_revision: e.revision(),
-            dedup_id: next_dedup(),
-            action: GameAction::Answer { choice_id: c.id, selection: sel },
-        });
-    }
     drain(&mut e);
-    let hp_after = e.debug_hp(1);
-    let hp0_after = e.debug_hp(0);
-    eprintln!(
-        "DBG 帝女玄霜：询问={prompts:?} 使用者 hp {hp0_before} → {hp0_after}；1 号 hp {hp_before} → {hp_after}"
-    );
-    // 上游 `gujian.js` `dinvxuanshuang` 为单目标药（出牌阶段自动选定自己），使用者回复 1，1 号不回复
-    assert_eq!(
-        hp0_after,
-        hp0_before + 1,
-        "帝女玄霜：使用者应回复 1（{hp0_before} → {hp0_after}）"
-    );
-    assert_eq!(
-        hp_after,
-        hp_before,
-        "帝女玄霜：非目标 1 号不应回复（{hp_before} → {hp_after}）"
-    );
+    assert_eq!(e.debug_hp(0), 1, "帝女玄霜：濒死救援回复 1 点体力");
+    assert_eq!(e.debug_hp(1), hp_before, "帝女玄霜：非目标 1 号不应回复");
 }

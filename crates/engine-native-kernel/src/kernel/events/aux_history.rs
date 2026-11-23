@@ -93,7 +93,7 @@ pub(in crate::kernel) fn record_vm_history(
     if !pre_counted {
         if let EventData::CardUsed(u) = data {
             if !u.cancelled {
-                let eff = u.effective_kind(ctx.catalog);
+                let eff = u.effective_kind_in(ctx.core, ctx.catalog);
                 let is_trick = !eff.is_basic_kind() && eff.equip_slot().is_none();
                 let stamp = ctx.core.turn.round.saturating_mul(100)
                     + u32::from(ctx.core.turn.current)
@@ -261,7 +261,7 @@ pub(in crate::kernel) fn record_vm_history(
                         .remove(&(u.player, format!("l11_gaintag_paiku:{c}")));
                 }
             }
-            let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+            let effective = u.effective_kind_in(ctx.core, ctx.catalog);
             if effective.is_sha_like()
                 && ctx
                     .catalog

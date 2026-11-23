@@ -824,7 +824,7 @@ impl HostBehavior {
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: Vec::new(),
+                extra_events: vec![EventKind::TurnPhaseEnd],
             }),
             // 酉羹（A2 H19）：上游 player phaseBegin＝自己回合开始
             //（原锚自己判定阶段开始）
@@ -852,7 +852,7 @@ impl HostBehavior {
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: Vec::new(),
+                extra_events: vec![EventKind::TurnBegin],
             }),
             HostBehavior::GujianFoodMapodoufu => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,

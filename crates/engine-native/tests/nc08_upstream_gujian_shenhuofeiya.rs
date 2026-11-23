@@ -146,11 +146,11 @@ fn upstream_shenhuofeiya_burns_who_cannot_dodge() {
         hp_after[1] < hp_before[1],
         "神火飞鸦：首目标（无【闪】）应受 1 点火伤（{hp_before:?} → {hp_after:?}）"
     );
-    // 额外影响：与 1 号距离 1 的 2 号（无【闪】）亦应受 1 点火伤
+    // 额外影响：与 1 号纯距离 1 的 2 号和 0 号均应受 1 点火伤（上游 changeTarget 不排除使用者）
     assert!(
-        hp_after[2] < hp_before[2],
-        "神火飞鸦（`changeTarget` 额外影响）：与首目标距离 1 的 2 号亦应受 1 点火伤\
+        hp_after[2] < hp_before[2] && hp_after[0] < hp_before[0],
+        "神火飞鸦（`changeTarget` 额外影响）：与首目标纯距离 1 的 2 号与 0 号均应受 1 点火伤\
          （{hp_before:?} → {hp_after:?}）"
     );
-    assert_eq!(hp_after[0], hp_before[0], "神火飞鸦：使用者不是目标（0 号 hp 不变）");
+    assert_eq!(hp_after[3], hp_before[3], "3 号与 1 号纯距离为 2，不受影响");
 }

@@ -74,7 +74,7 @@ fn tao_save_canceled(
         catalog,
         responder,
         card,
-        catalog.card_kind(card),
+        catalog.resolved_card_kind(core, card),
         crate::event::DamageNature::Normal,
     )
 }
@@ -90,7 +90,7 @@ pub(in crate::snap) fn is_tao_like(
     if tao_save_canceled(core, catalog, responder, card, dying) {
         return false;
     }
-    let kind = catalog.card_kind(card);
+    let kind = catalog.resolved_card_kind(core, card);
     if kind == CardKind::Hufu {
         return responder == dying;
     }
@@ -100,7 +100,7 @@ pub(in crate::snap) fn is_tao_like(
     if matches!(kind, CardKind::Jiu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang) {
         return true;
     }
-    let suit = catalog.cards[card as usize].suit;
+    let suit = catalog.resolved_card_suit(core, card);
     let jijiu = catalog
         .skill_by_name(JI_JIU)
         .map(|d| core.has_skill(responder, d))
@@ -117,7 +117,11 @@ pub(in crate::snap) fn is_tao_like(
     let mizhilianou = catalog
         .skill_by_name(GJ_FOOD_MIZHLIANOU_KEY)
         .map(|d| core.has_skill(responder, d))
-        .unwrap_or(false);
+        .unwrap_or(false)
+        || catalog
+            .skill_by_name("mizhilianou")
+            .map(|d| core.has_skill(responder, d))
+            .unwrap_or(false);
     if mizhilianou && suit == crate::catalog::Suit::Heart {
         return true;
     }
@@ -189,6 +193,23 @@ pub(in crate::snap) fn dying_save_options(
             for &c in &p.hand {
                 if !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
                     && is_tao_like(core, catalog, responder, c, dying)
+                {
+                    options.push(ChoiceOption::Card(c));
+                }
+            }
+        }
+        let has_mizhilianou = catalog
+            .skill_by_name(GJ_FOOD_MIZHLIANOU_KEY)
+            .is_some_and(|d| core.has_skill(responder, d))
+            || catalog
+                .skill_by_name("mizhilianou")
+                .is_some_and(|d| core.has_skill(responder, d));
+        if has_mizhilianou {
+            for &c in &p.equips {
+                if catalog.resolved_card_suit(core, c) == crate::catalog::Suit::Heart
+                    && !crate::kernel::jinyan_blocks_black_trick(core, catalog, responder, c)
+                    && is_tao_like(core, catalog, responder, c, dying)
+                    && !options.contains(&ChoiceOption::Card(c))
                 {
                     options.push(ChoiceOption::Card(c));
                 }

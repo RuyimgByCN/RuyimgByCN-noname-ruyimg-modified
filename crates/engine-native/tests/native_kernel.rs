@@ -1701,6 +1701,8 @@ mod weapon;
 mod wugu;
 #[path = "native_kernel/wuzhong.rs"]
 mod wuzhong;
+#[path = "native_kernel/yange_carriers.rs"]
+mod yange_carriers;
 #[path = "native_kernel/xiahoudun.rs"]
 mod xiahoudun;
 #[path = "native_kernel/xuchu.rs"]

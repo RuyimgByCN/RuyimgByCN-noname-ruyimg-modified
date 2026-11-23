@@ -516,6 +516,7 @@ impl<'a> Ctx<'a> {
     pub fn draw_judge_card(&mut self) -> CardId {
         if self.core.deck.is_empty() {
             let mut cards = std::mem::take(&mut self.core.discard);
+            crate::kernel::cleanup_discard_to_deck(self.core, &mut cards);
             self.core.rng.shuffle(&mut cards);
             crate::kernel::elo_on_wash_deck(self.core, &cards);
             self.core.deck = cards;
@@ -535,6 +536,7 @@ impl<'a> Ctx<'a> {
     ) -> CardId {
         if self.core.deck.is_empty() {
             let mut cards = std::mem::take(&mut self.core.discard);
+            crate::kernel::cleanup_discard_to_deck(self.core, &mut cards);
             self.core.rng.shuffle(&mut cards);
             crate::kernel::elo_on_wash_deck(self.core, &cards);
             self.core.deck = cards;
@@ -561,7 +563,7 @@ impl<'a> Ctx<'a> {
     /// 从手牌或装备区移除一张（鬼道改判用：装备区黑牌可打出）。
     /// 不存在则 panic：调用方先验证。
     pub fn take_owned_card(&mut self, player: PlayerId, card: CardId) {
-        let is_equip = self.catalog.card_kind(card).is_equip();
+        let is_equip = self.catalog.resolved_card_kind(self.core, card).is_equip();
         let in_hand = self
             .core
             .player(player)
@@ -724,6 +726,7 @@ impl<'a> Ctx<'a> {
                 .flags
                 .insert((0, format!("turn_discard_card:{card}")), 1);
         }
+        crate::kernel::release_yanjia_merged_to_discard(self.core, card);
         crate::rvm_bridge::modifiers::d34_l28_mods::note_pro_qinyin_discard(
             self.core,
             self.catalog,

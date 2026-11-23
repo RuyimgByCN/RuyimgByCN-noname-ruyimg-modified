@@ -4,7 +4,7 @@ use super::*;
 /// 替换结果写回帧载荷（哈希可见）。
 /// G1 装备技能生命周期：装备 `card` 时授予其声明的目录技能。
 pub fn grant_equip_skills(ctx: &mut Ctx<'_>, player: PlayerId, card: crate::ids::CardId) {
-    let names: Vec<&'static str> = ctx.catalog.cards[card as usize].equip_skills.clone();
+    let names = ctx.catalog.equip_card_skills(ctx.core, card);
     for name in names {
         if let Some(def) = ctx.catalog.skill_by_name(name) {
             ctx.ensure_skill(
@@ -29,7 +29,7 @@ pub fn revoke_equip_skills(
     player: PlayerId,
     card: crate::ids::CardId,
 ) {
-    let names: Vec<&'static str> = catalog.cards[card as usize].equip_skills.clone();
+    let names = catalog.equip_card_skills(core, card);
     for name in names {
         let Some(def) = catalog.skill_by_name(name) else {
             continue;
@@ -38,7 +38,7 @@ pub fn revoke_equip_skills(
             .player(player)
             .equips
             .iter()
-            .any(|c| catalog.cards[*c as usize].equip_skills.contains(&name));
+            .any(|c| catalog.equip_card_skills(core, *c).contains(&name));
         if !still_provided {
             core.skills.remove(&(player, def));
             if name == "txhj_chongyingshenfu"
@@ -86,12 +86,12 @@ pub fn revoke_equip_skills(
         }
     }
     // G1 索链甲：离场装备声明横置且玩家无其他同类装备 → 重置横置
-    if catalog.cards[card as usize].link_on_equip
-        || catalog.card_kind(card) == crate::catalog::CardKind::Suolianjia
+    if catalog.equip_card_links(core, card)
+        || catalog.resolved_card_kind(core, card) == crate::catalog::CardKind::Suolianjia
     {
         let still = core.player(player).equips.iter().any(|c| {
-            catalog.cards[*c as usize].link_on_equip
-                || catalog.card_kind(*c) == crate::catalog::CardKind::Suolianjia
+            catalog.equip_card_links(core, *c)
+                || catalog.resolved_card_kind(core, *c) == crate::catalog::CardKind::Suolianjia
         });
         if !still
             && core.player(player).linked
@@ -317,7 +317,7 @@ pub(super) fn commit_equip(
     grant_equip_skills(ctx, player, card);
     // 轩辕剑装备钩（swd 批 146，规则 v320）：体力 ≤2 且无「轩辕」→ 弃置；
     // 否则 +1 护甲（上游 onEquip 同口径）
-    if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Xuanyuanjian {
+    if ctx.catalog.equip_card_has_kind(ctx.core, card, crate::catalog::CardKind::Xuanyuanjian) {
         let has_xuanyuan = ctx
             .catalog
             .skill_by_name(crate::vocabulary::host::SWD_XUANYUAN_KEY)
@@ -332,8 +332,8 @@ pub(super) fn commit_equip(
         }
     }
     // G1 索链甲：装备时横置
-    if (ctx.catalog.cards[card as usize].link_on_equip
-        || ctx.catalog.card_kind(card) == crate::catalog::CardKind::Suolianjia)
+    if (ctx.catalog.equip_card_links(ctx.core, card)
+        || ctx.catalog.resolved_card_kind(ctx.core, card) == crate::catalog::CardKind::Suolianjia)
         && crate::rvm_bridge::modifiers::can_gain_link(ctx.core, ctx.catalog, player)
     {
         let was = ctx.core.player(player).linked;
@@ -355,4 +355,73 @@ pub(super) fn commit_equip(
         card,
         replaced,
     });
+}
+
+/// Clears `yange` cloned-card definition/slot overrides when a cloned card leaves its active zone.
+pub fn clear_yange_clone_card(
+    core: &mut crate::state::GameStateCore,
+    card: crate::ids::CardId,
+) {
+    if core
+        .vm_aux
+        .flags
+        .remove(&(0, format!("gj_yange_clone:{card}")))
+        .is_some()
+    {
+        core.declared_kinds.remove(&card);
+        core.declared_slots.remove(&card);
+    }
+}
+
+/// Releases any `yanjia`-merged secondary card (`gj_yanjia_merged:{card}`)
+/// from `detached_cards` back into `core.discard` once `card` is discarded.
+pub fn release_yanjia_merged_to_discard(
+    core: &mut crate::state::GameStateCore,
+    card: crate::ids::CardId,
+) {
+    if let Some(val) = core
+        .vm_aux
+        .flags
+        .remove(&(0, format!("gj_yanjia_merged:{card}")))
+    {
+        if let Some(c2) = val.checked_sub(1) {
+            if let Some(pos) = core.detached_cards.iter().position(|(dc, _)| *dc == c2) {
+                core.detached_cards.remove(pos);
+                if !core.discard.contains(&c2) {
+                    core.discard.push(c2);
+                }
+            }
+        }
+    }
+}
+
+/// Clears transient `yange` clone overrides and unmerges `yanjia` secondary cards
+/// before `washed` cards are shuffled back into `core.deck`.
+pub fn cleanup_discard_to_deck(
+    core: &mut crate::state::GameStateCore,
+    washed: &mut Vec<crate::ids::CardId>,
+) {
+    let mut extra = Vec::new();
+    for &card in washed.iter() {
+        clear_yange_clone_card(core, card);
+        core.declared_kinds.remove(&card);
+        core.declared_slots.remove(&card);
+        if let Some(val) = core
+            .vm_aux
+            .flags
+            .remove(&(0, format!("gj_yanjia_merged:{card}")))
+        {
+            if let Some(c2) = val.checked_sub(1) {
+                if let Some(pos) = core.detached_cards.iter().position(|(dc, _)| *dc == c2) {
+                    core.detached_cards.remove(pos);
+                    core.declared_kinds.remove(&c2);
+                    core.declared_slots.remove(&c2);
+                    if !washed.contains(&c2) && !extra.contains(&c2) {
+                        extra.push(c2);
+                    }
+                }
+            }
+        }
+    }
+    washed.extend(extra);
 }

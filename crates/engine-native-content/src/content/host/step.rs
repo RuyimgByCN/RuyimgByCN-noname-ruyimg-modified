@@ -129,8 +129,9 @@ pub(super) mod l27_batch_b;
 pub(super) mod l27_fixes;
 pub(super) mod l27_fixes_b;
 pub(crate) use l27_fixes::{
-    host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end, host_on_player_died,
-    host_on_round_start as host_on_round_start_l27, host_on_turn_begin, on_skill_removed_all,
+    host_on_death_before, host_on_game_start, host_on_hand_card_removed, host_on_phase_use_end,
+    host_on_player_died, host_on_round_start as host_on_round_start_l27, host_on_turn_begin,
+    host_on_turn_phase_after, on_skill_removed_all,
 };
 pub(super) mod l19_batch_a;
 pub(super) mod l19_batch_b;
@@ -216,6 +217,7 @@ pub(super) mod u05_b1_mtg_subplayer;
 pub(super) mod u05_b1_yunchou;
 pub(super) mod u05_b1_yunchou_cards;
 pub(super) mod u05_b1_zhenfa;
+pub(super) mod u05_b2_gujian;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1257,6 +1259,12 @@ impl HostMachine {
             HostBehavior::L25ZuanBatchF => l25_batch_f::handle_l25_batch_f(self, ctx),
             HostBehavior::L25ZuanBatchG => l25_batch_g::handle_l25_batch_g(self, ctx),
             HostBehavior::L10ScsCompanion => l10_scs::handle_l10_scs(self, ctx),
+            HostBehavior::U05GujianCardBatch
+            | HostBehavior::U05GujianCharBatchA
+            | HostBehavior::U05GujianCharBatchB
+            | HostBehavior::U05GujianCharBatchC
+            | HostBehavior::U05GujianCharBatchD
+            | HostBehavior::U05GujianCharBatchE => u05_b2_gujian::step_u05_gujian(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

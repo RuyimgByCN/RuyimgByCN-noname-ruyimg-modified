@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-23 Batch U05-2（U05 杀海拾遗古剑奇谭 +136→224/1,621，全局 2,544/1,880/0）更新
+
+- **核验与升级**：基线 `211c32d1adcbd8f1810f9896266a60bffd0d800f`（Batch U05-1 CI Run `45097178310` Attempt 1 `10/10 success`）；合入 `swarm/conv-u05-2-gujian`（`921a8f499`，`verifier-u05-a` `#95 APPROVE`）并完成 `host/skill_defs.rs` 拆分、`declared_kinds` 清理与 600 VM 下界校准后，将 U05 杀海拾遗 `gujian` 子包全部 `36` 卡牌、`18` 武将、`82` 技能共 `136` 项全数升为 `已复核等价`（`0` 项保留 `简化近似`）。`U05` 现 **`224 / 1,397 / 0`**，全局 **`2,544 / 1,880 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-2 证据摘要](../../operations/evidence/2026-11-23-batch3-8-u05-2-gujian/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-23 Batch U05-1（U05 杀海拾遗 +87→88/1,621，全局 2,408/2,016/0）更新
 
 - **核验与升级**：基线 `5de733e5e9209320500a9064a5d73f7e7970b537`；合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`）及主线冲突/回归修复后，将 U05 杀海拾遗 `33` 卡牌、`2` 配置（`rand`/`wuxing`）、`12` 武将、`40` 技能共 `87` 项升为 `已复核等价`；保留 Batch UI-7 `tip` 为 `已复核等价`，严格保留 `qixingzhen`、`diy_caiwenji`、`stone_chenshui` 与 4 项子包开关（`mtg`/`zhenfa`/`gwent`/`yunchou`）为 `简化近似`。`U05` 现 **`88 / 1,533 / 0`**，全局 **`2,408 / 2,016 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch U05-1 证据摘要](../../operations/evidence/2026-11-23-batch3-7-u05-1/README.md) 与 [inventory_status.json](inventory_status.json)。

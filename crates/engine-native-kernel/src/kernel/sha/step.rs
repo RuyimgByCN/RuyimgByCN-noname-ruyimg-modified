@@ -73,7 +73,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         let fentian_direct_hit = {
             let red = self.card.is_some_and(|c| {
                 matches!(
-                    ctx.catalog.cards[c as usize].suit,
+                    ctx.catalog.resolved_card_suit(ctx.core, c),
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 )
             });
@@ -169,7 +169,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         let yxs_fanji2_direct_hit = {
             let red = self.card.is_some_and(|c| {
                 matches!(
-                    ctx.catalog.cards[c as usize].suit,
+                    ctx.catalog.resolved_card_suit(ctx.core, c),
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 )
             });
@@ -193,7 +193,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         let poyue_direct_hit = {
             let red = self.card.is_some_and(|c| {
                 matches!(
-                    ctx.catalog.cards[c as usize].suit,
+                    ctx.catalog.resolved_card_suit(ctx.core, c),
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 )
             });
@@ -219,6 +219,15 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     self.source,
                     self.card,
                 );
+            let jianwu_direct_hit = ctx
+                .catalog
+                .skill_by_name("jianwu")
+                .is_some_and(|d| {
+                    ctx.core.has_skill(self.source, d)
+                        && !ctx.catalog.is_tieji_sealed(ctx.core, self.source)
+                })
+                && ctx.core.computed_distance(ctx.catalog, self.target, self.source)
+                    > ctx.core.attack_range(ctx.catalog, self.target);
             let can_bagua = !qinggang_pierce
                 && !fentian_direct_hit
                 && !yxs_fanji2_direct_hit
@@ -226,7 +235,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 && !poyue_direct_hit
                 && !shoulie_hit
                 && !lingshi_direct_hit
-                && !guilong_direct_hit;
+                && !guilong_direct_hit
+                && !jianwu_direct_hit;
             if let Some(flow) = self.try_bagua_dodge(ctx, can_bagua) {
                 return flow;
             }
@@ -307,7 +317,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .iter()
                     .copied()
                     .filter(|c| {
-                        let kind = ctx.catalog.card_kind(*c);
+                        let kind = ctx.catalog.resolved_card_kind(ctx.core, *c);
                         !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
                             ctx.core,
                             ctx.catalog,
@@ -317,7 +327,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             || kind == CardKind::Shan
                             || (qingguo_next
                                 && matches!(
-                                    ctx.catalog.cards[*c as usize].suit,
+                                    ctx.catalog.resolved_card_suit(ctx.core, *c),
                                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                                 )))
                     })
@@ -512,7 +522,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .player(self.source)
                     .equips
                     .iter()
-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Cixiong)
+                    .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Cixiong))
                 && ctx.core.player(self.target).alive
                 && ctx
                     .core
@@ -606,7 +616,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             ctx.discard_from_hand(self.target, c);
                         } else {
                             ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
-                            if ctx.catalog.card_kind(c).is_equip() {
+                            if ctx.catalog.resolved_card_kind(ctx.core, c).is_equip() {
                                 crate::kernel::revoke_equip_skills(
                                     ctx.core,
                                     ctx.catalog,
@@ -623,13 +633,23 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     }
                 }
             }
+            let jianwu_hit = ctx
+                .catalog
+                .skill_by_name("jianwu")
+                .is_some_and(|d| {
+                    ctx.core.has_skill(self.source, d)
+                        && !ctx.catalog.is_tieji_sealed(ctx.core, self.source)
+                })
+                && ctx.core.computed_distance(ctx.catalog, self.target, self.source)
+                    > ctx.core.attack_range(ctx.catalog, self.target);
             return self.ask_respond_shan_or_hit(
                 ctx,
                 poyue_direct_hit
                     || shoulie_hit
                     || lingshi_direct_hit
                     || sbzhaxiang_direct_hit
-                    || yxs_fanji2_direct_hit,
+                    || yxs_fanji2_direct_hit
+                    || jianwu_hit,
             );
         }
         // 已恢复：读取应答

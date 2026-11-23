@@ -139,6 +139,18 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                     {
                         pending += 2;
                     }
+                    if ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(player, "u05_mod:gj_juejing".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+                    {
+                        let p = ctx.core.player(player);
+                        pending += (p.max_hp as i32 - p.hp).max(0);
+                    }
                     for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "combs") {
                         let key = (player, def as u32);
                         let stored = ctx.core.vm_aux.marks.get(&key).copied().unwrap_or(0);
@@ -384,6 +396,7 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         return Flow::Done;
                     }
                     let mut cards = std::mem::take(&mut ctx.core.discard);
+                    crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
                     ctx.core.rng.shuffle(&mut cards);
                     crate::kernel::elo_on_wash_deck(ctx.core, &cards);
                     ctx.core.deck = cards;

@@ -548,9 +548,9 @@ impl ShaResolveMachine {
                         .hand
                         .iter()
                         .filter(|c| {
-                            let kind = ctx.catalog.card_kind(**c);
+                            let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
                             let black = matches!(
-                                ctx.catalog.cards[**c as usize].suit,
+                                ctx.catalog.resolved_card_suit(ctx.core, **c),
                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                             );
                             kind == CardKind::Shan
@@ -806,7 +806,7 @@ impl ShaResolveMachine {
                     ctx.take_hand_card(self.target, c);
                 } else {
                     ctx.core.player_mut(self.target).equips.retain(|x| *x != c);
-                    if ctx.catalog.card_kind(c).is_equip() {
+                    if ctx.catalog.resolved_card_kind(ctx.core, c).is_equip() {
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.target, c);
                     }
                 }

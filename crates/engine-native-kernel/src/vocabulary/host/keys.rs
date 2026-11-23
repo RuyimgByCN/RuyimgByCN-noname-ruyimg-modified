@@ -637,6 +637,12 @@ impl HostBehavior {
             HostBehavior::U05MtgLandExtraBatch => "host:u05_mtg_land_extra",
             HostBehavior::U05YunchouCharBatch => "host:u05_yunchou_char",
             HostBehavior::U05ZhenfaRecastSkill => "host:u05_zhenfa_recast",
+            HostBehavior::U05GujianCardBatch => "host:u05_gujian_card_batch",
+            HostBehavior::U05GujianCharBatchA => "host:u05_gujian_char_batch_a",
+            HostBehavior::U05GujianCharBatchB => "host:u05_gujian_char_batch_b",
+            HostBehavior::U05GujianCharBatchC => "host:u05_gujian_char_batch_c",
+            HostBehavior::U05GujianCharBatchD => "host:u05_gujian_char_batch_d",
+            HostBehavior::U05GujianCharBatchE => "host:u05_gujian_char_batch_e",
         }
     }
 }

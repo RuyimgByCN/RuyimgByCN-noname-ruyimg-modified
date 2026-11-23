@@ -14,7 +14,9 @@ impl JudgePhaseMachine {
             3 => crate::catalog::Suit::Club,
             _ => crate::catalog::Suit::Diamond,
         };
-        let def = &catalog.cards[judge_card as usize];
+        let def = catalog
+            .resolved_card_def(core, judge_card)
+            .unwrap_or(&catalog.cards[judge_card as usize]);
         let (mut suit, mut rank) = (def.suit, def.rank);
         let override_suit = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_suit".to_string())).unwrap_or(0);
         let override_num = core.vm_aux.flags.remove(&(owner, "zhenyi_judge_number".to_string())).unwrap_or(0);
@@ -84,12 +86,7 @@ impl JudgePhaseMachine {
         machine_holds: bool,
     ) -> (CardKind, crate::catalog::Suit) {
         // 国色等 view-as 转化：声明牌种优先于目录牌种（N08 迁移）
-        let trick_kind = ctx
-            .core
-            .declared_kinds
-            .get(&trick)
-            .copied()
-            .unwrap_or_else(|| ctx.catalog.card_kind(trick));
+        let trick_kind = ctx.catalog.resolved_card_kind(ctx.core, trick);
         // 声明消费后移除（牌已结算，残留条目会在后续洗回场景误判）
         ctx.core.declared_kinds.remove(&trick);
         let (suit, rank) = Self::effective_judge_suit_rank(ctx.core, ctx.catalog, owner, judge_card);
@@ -185,7 +182,7 @@ impl JudgePhaseMachine {
                             .player(cand)
                             .judge
                             .iter()
-                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian);
+                            .any(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian);
                         let blocked = crate::rvm_bridge::modifiers::eval_card_target_canceled(
                             ctx.core,
                             ctx.catalog,
@@ -213,7 +210,7 @@ impl JudgePhaseMachine {
                         .player(next)
                         .judge
                         .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::ShanDian);
+                        .any(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian);
                     (!next_has_shandian).then_some(next)
                 };
                 if let Some(dest) = pass_to {

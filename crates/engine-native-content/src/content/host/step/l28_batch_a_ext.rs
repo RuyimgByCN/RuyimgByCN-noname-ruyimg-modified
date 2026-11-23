@@ -90,6 +90,7 @@ pub(crate) fn on_cards_to_discard_chengye(
         return;
     }
     super::l28_batch_a_shengong::intercept_shengong_destroy(ctx, cards);
+    crate::content::host::step::u05_b2_gujian::on_cards_to_discard_gujian(ctx, actor, cards);
     let seats = ctx.core.players.len() as PlayerId;
     if let Some(chengye_def) = ctx.catalog.skill_by_name("th_chengye") {
         let mut pool: Vec<CardId> = cards

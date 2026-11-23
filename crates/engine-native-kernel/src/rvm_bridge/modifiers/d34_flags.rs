@@ -327,6 +327,7 @@ pub fn apply_distance_total(
     if flag_val(state, b, "th_zhongzhuang_mounted") > 0
         || flag_val(state, b, "u05_cross_mod:feiying") > 0
         || flag_val(state, b, "u05_mod:heilonglinpian") > 0
+        || flag_val(state, b, "u05_mod:gj_heilonglinpian") > 0
         || flag_val(state, b, "u05_mod:sliufeng") > 0
     {
         cur += 1;
@@ -508,7 +509,7 @@ pub fn apply_card_distance_unlimited_to(
             unlimited = true;
         }
     }
-    let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, player, kind, unlimited);
+    let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, catalog, player, kind, unlimited);
     d34_l11_mods::apply_card_distance_unlimited_to(
         state, catalog, player, target, card, kind, unlimited,
     )
@@ -626,7 +627,7 @@ pub fn apply_card_target_canceled(
     {
         canceled = true;
     }
-    let canceled = d34_u05_mods::apply_card_target_canceled(state, actor, target, kind, canceled);
+    let canceled = d34_u05_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled);
     d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, Some(card), kind, canceled)
 }
 

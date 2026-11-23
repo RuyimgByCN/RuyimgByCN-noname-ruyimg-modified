@@ -347,6 +347,14 @@ impl HostSkillBehavior {
                 super::step::u05_b1_yunchou::activate_u05_yunchou_char(self, ctx, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
             }
+            HostBehavior::U05GujianCardBatch
+            | HostBehavior::U05GujianCharBatchA
+            | HostBehavior::U05GujianCharBatchB
+            | HostBehavior::U05GujianCharBatchC
+            | HostBehavior::U05GujianCharBatchD
+            | HostBehavior::U05GujianCharBatchE => {
+                super::step::u05_b2_gujian::activate_u05_gujian(self, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -597,6 +605,14 @@ pub(in crate::content::host) fn has_phase_use_activation(
         HostBehavior::U05YunchouCharBatch => {
             matches!(name, "xinfu_jingxie" | "ycnxinfu_qiaosi" | "xinfu_qiaosi")
         }
+        HostBehavior::U05GujianCardBatch
+        | HostBehavior::U05GujianCharBatchA
+        | HostBehavior::U05GujianCharBatchB
+        | HostBehavior::U05GujianCharBatchC
+        | HostBehavior::U05GujianCharBatchD
+        | HostBehavior::U05GujianCharBatchE => {
+            super::step::u05_b2_gujian::is_phase_use_active_u05_gujian(behavior, name)
+        }
         _ => false,
     }
 }
@@ -671,5 +687,8 @@ pub(in crate::content::host) fn is_host_skill_bolan_eligible(
             | "bolan"
             | "bolan_g"
             | "kotomi_chuanxiang"
+            | "jiehuo"
+            | "gjyuheng_plus_skill"
+            | "gjyuheng_pro_skill"
     )
 }

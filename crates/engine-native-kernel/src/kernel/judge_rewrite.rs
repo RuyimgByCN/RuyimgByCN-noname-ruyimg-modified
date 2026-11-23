@@ -79,7 +79,7 @@ pub fn judge_provider_cards(
     let any = name == crate::vocabulary::names::BOSS_TIANDAO || name == "gtiandao";
     let black = |c: &crate::ids::CardId| {
         matches!(
-            catalog.cards[*c as usize].suit,
+            catalog.resolved_card_suit(core, *c),
             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
         )
     };

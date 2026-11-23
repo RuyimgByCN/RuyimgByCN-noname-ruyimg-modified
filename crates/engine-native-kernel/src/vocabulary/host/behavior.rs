@@ -1745,4 +1745,16 @@ pub enum HostBehavior {
     U05YunchouCharBatch,
     /// U05 杀海拾遗 Batch 1 · 阵法重铸主动技（tag 924，`card/zhenfa/card.js` `recastable: true`）。
     U05ZhenfaRecastSkill,
+    /// U05-2 古剑奇谭 CardBatch（tag 980，`card/gujian/skill.js` 6 补充：`xiajiao2`/`heilonglinpian`/`shihuifen`/`g_shihuifen`/`gjyuheng_plus_skill`/`gjyuheng_pro_skill`）。
+    U05GujianCardBatch,
+    /// U05-2 古剑奇谭 CharBatchA（tag 981，`character/gujian/skill.js`：屠苏/晴雪/襄铃/兰生·泛音）。
+    U05GujianCharBatchA,
+    /// U05-2 古剑奇谭 CharBatchB（tag 982，`character/gujian/skill.js`：兰生·明空/灵榣/千觞/红玉/无异）。
+    U05GujianCharBatchB,
+    /// U05-2 古剑奇谭 CharBatchC（tag 983，`character/gujian/skill.js`：闻人羽/夏夷则/欧阳少恭）。
+    U05GujianCharBatchC,
+    /// U05-2 古剑奇谭 CharBatchD（tag 984，`character/gujian/skill.js`：阿阮/巽芳）。
+    U05GujianCharBatchD,
+    /// U05-2 古剑奇谭 CharBatchE（tag 985，`character/gujian/skill.js`：谢衣/偃甲/初七/北洛/云无月/岑缨）。
+    U05GujianCharBatchE,
 }

@@ -23,7 +23,7 @@ pub(in crate::content::host) fn has_unlimited_sha(
         .player(owner)
         .equips
         .iter()
-        .any(|c| catalog.card_kind(*c) == CardKind::Zhuge);
+        .any(|c| catalog.equip_card_has_kind(core, *c, CardKind::Zhuge));
     let baolei = !catalog.is_rechanyuan_sealed_name(core, owner, WUDIAN_BAOLEI_KEY)
         && catalog
             .skill_by_name(WUDIAN_BAOLEI_KEY)

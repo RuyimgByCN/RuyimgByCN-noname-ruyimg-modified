@@ -2,6 +2,7 @@ use super::*;
 
 mod common;
 mod swd;
+mod u05_gujian;
 mod wuxing;
 mod xianjian;
 pub(in crate::content::host) use wuxing::shengke_discard_options;
@@ -974,6 +975,12 @@ impl HostSkillBehavior {
             HostBehavior::U05YunchouCharBatch => {
                 super::step::u05_b1_yunchou::filter_u05_yunchou_char(self, ctx, owner, event)
             }
+            HostBehavior::U05GujianCardBatch
+            | HostBehavior::U05GujianCharBatchA
+            | HostBehavior::U05GujianCharBatchB
+            | HostBehavior::U05GujianCharBatchC
+            | HostBehavior::U05GujianCharBatchD
+            | HostBehavior::U05GujianCharBatchE => self.filter_u05_gujian(ctx, owner, event),
             _ => false,
         }
     }

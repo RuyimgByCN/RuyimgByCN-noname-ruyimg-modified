@@ -88,7 +88,7 @@ pub fn monkey_steal_holders(
     card: crate::ids::CardId,
     in_play: bool,
 ) -> Vec<PlayerId> {
-    let k = catalog.card_kind(card);
+    let k = catalog.resolved_card_kind(core, card);
     if in_play {
         let in_hand = core.player(user).hand.contains(&card);
         if k != CardKind::Tao || !in_hand {
@@ -133,7 +133,7 @@ pub fn monkey_steal_holders(
                     && core.player(*o).equips.iter().any(|c| {
                         catalog.card_slot_of(core, *c)
                             == Some(crate::catalog::EquipSlot::Treasure)
-                            && catalog.card_kind(*c) == CardKind::Monkey
+                            && catalog.equip_card_has_kind(core, *c, CardKind::Monkey)
                     })
                     && !eligible.contains(o)
                 {
@@ -158,7 +158,7 @@ pub fn stage_monkey_steal_carriers(
     in_play: bool,
 ) {
     let in_hand = core.player(user).hand.contains(&card);
-    let extra = if catalog.card_kind(card) != CardKind::Tao || !in_hand {
+    let extra = if catalog.resolved_card_kind(core, card) != CardKind::Tao || !in_hand {
         if let Some(spec) = catalog
             .find_player_vm_view_as(core, user, card, in_play, Some(CardKind::Tao))
             .cloned()

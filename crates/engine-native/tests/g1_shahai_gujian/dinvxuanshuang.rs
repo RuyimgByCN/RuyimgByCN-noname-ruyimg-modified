@@ -25,13 +25,13 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
             .unwrap_or_else(|| panic!("{}在目录", prefix)) as u32
     };
 
-    // —— 帝女玄霜：主动使用（受伤自用：回复 1 + 弃 1 摸 1） ——
+    // —— 帝女玄霜：出牌阶段不可主动使用（WrongPhase）；濒死救援回复 1 + 弃 1 摸 1 ——
     let mut e = Engine::new_with_extensions(5234, 3, &[&pack]).expect("建局");
     advance_to_play(&mut e);
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    let (dvx, disc) = {
+    let (dvx, disc, sha) = {
         let catalog = e.catalog();
         let dvx = find(&e, "gj_dinvxuanshuang");
         let disc = catalog
@@ -39,21 +39,77 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
             .iter()
             .position(|c| c.kind == CardKind::Shan)
             .expect("闪在目录") as u32;
-        (dvx, disc)
+        let sha = catalog
+            .cards
+            .iter()
+            .position(|c| c.kind == CardKind::Sha)
+            .expect("杀在目录") as u32;
+        (dvx, disc, sha)
     };
     let mut snap = e.save();
-    purge_all_zones(&mut snap, &[dvx, disc]);
+    purge_all_zones(&mut snap, &[dvx, disc, sha]);
     snap.core.players[0].hand.push(dvx);
     snap.core.players[0].hand.push(disc);
+    snap.core.players[1].hand.push(sha);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
-    e.debug_set_hp(0, 2); // 已受伤
-    let hp0 = e.debug_hp(0);
-    let out = submit(
+    e.debug_set_hp(0, 2); // 已受伤亦不可在出牌阶段主动使用（无 enable: true）
+    let out_play = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: dvx,
             targets: vec![],
+        },
+    );
+    assert!(
+        matches!(out_play, CommandOutcome::Rejected(RejectReason::WrongPhase)),
+        "expected WrongPhase in Play phase, got {out_play:?}"
+    );
+    assert_eq!(e.debug_hp(0), 2);
+    // 推进至 1 号出牌阶段（0 号手牌 2 <= 体力 2 无需弃牌），再置 0 号为 1 体力并杀至濒死
+    for step in 0..96 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Play && e.open_choice().is_none() {
+            break;
+        }
+        assert!(step < 95, "96 steps without reaching seat 1 Play");
+        let actor = e.turn().current;
+        if let Some(c) = e.open_choice().cloned() {
+            let cid = c.id;
+            let obs = c.observer;
+            let sel = if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+            };
+            let _ = submit(&mut e, obs, GameAction::Answer { choice_id: cid, selection: sel });
+        } else {
+            let _ = submit(&mut e, actor, GameAction::NextPhase);
+        }
+    }
+    e.debug_set_hp(0, 1);
+    let out_sha = submit(&mut e, 1, GameAction::PlayCard { card: sha, targets: vec![0] });
+    assert!(
+        !matches!(out_sha, CommandOutcome::Rejected(_)),
+        "seat 1 Sha rejected: {out_sha:?}"
+    );
+    // 0 号不打闪（弃守），进入濒死救援窗
+    if let Some(c) = e.open_choice().cloned() {
+        if c.spec.prompt == "respond_shan" {
+            let cid = c.id;
+            let _ = submit(&mut e, 0, GameAction::Answer { choice_id: cid, selection: vec![ChoiceOption::Pass] });
+        }
+    }
+    let c_save = e.open_choice().expect("濒死询问应开启");
+    assert_eq!(c_save.spec.prompt, "dying_save");
+    let cid_save = c_save.id;
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: cid_save,
+            selection: vec![ChoiceOption::Card(dvx)],
         },
     );
     assert!(
@@ -63,7 +119,7 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
         ),
         "{out:?}"
     );
-    assert_eq!(e.debug_hp(0), hp0 + 1, "回复 1 点体力");
+    assert_eq!(e.debug_hp(0), 1, "濒死回复 1 点体力");
     // rider：弃任意张（弃 1 摸 1）
     let c = e.open_choice().expect("帝女玄霜 rider 挂起");
     assert_eq!(c.spec.prompt, "gj_dinvxuanshuang_rider");
@@ -82,8 +138,8 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
         out,
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
-    assert_eq!(e.debug_hand(0).len(), 1, "弃 1 摸 1（净不变）");
-    assert_eq!(e.debug_hp(0), hp0 + 1, "回复保持");
+    assert_eq!(e.debug_hand(0).len(), 1, "用 1 弃 1 摸 1（净余 1）");
+    assert_eq!(e.debug_hp(0), 1, "回复保持");
     assert_zone_conservation(&e);
 
     eprintln!("ENTER SEG2");
@@ -93,20 +149,27 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
     for p in 0..3 {
         e.debug_clear_hand(p);
     }
-    let (yhx, spade) = {
+    let enemy = (1..3u8)
+        .find(|&p| !e.state_core().is_friend_of(e.catalog(), 0, p))
+        .unwrap_or(1);
+    let (yhx, cost_spade, spade) = {
         let catalog = e.catalog();
         let yhx = find(&e, "gj_gjyuheng");
-        let spade = catalog
+        let mut spades = catalog
             .cards
             .iter()
-            .position(|c| c.kind == CardKind::Sha && c.suit == Suit::Spade)
-            .expect("黑桃杀在目录") as u32;
-        (yhx, spade)
+            .enumerate()
+            .filter(|(_, c)| c.suit == Suit::Spade)
+            .map(|(i, _)| i as u32);
+        let cost_spade = spades.next().expect("首张黑桃牌在目录");
+        let spade = spades.next().expect("第二张黑桃牌在目录");
+        (yhx, cost_spade, spade)
     };
     let mut snap = e.save();
-    purge_all_zones(&mut snap, &[yhx, spade]);
+    purge_all_zones(&mut snap, &[yhx, cost_spade, spade]);
     snap.core.players[0].hand.push(yhx);
-    snap.core.players[1].hand.push(spade);
+    snap.core.players[0].hand.push(cost_spade);
+    snap.core.players[enemy as usize].hand.push(spade);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
     let def_yh = e
         .catalog()
@@ -128,7 +191,7 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
         e.save().core.skills.contains_key(&(0, def_yh)),
         "装备授予玉衡技"
     );
-    // 发动：座位序首名有黑桃手牌的其他角色（1 号）交出首张黑桃
+    // 发动：弃置手牌中一张黑桃（cost_spade）后从敌方手中夺取黑桃（spade）
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_yh });
     assert!(
         matches!(
@@ -137,8 +200,22 @@ fn dinvxuanshuang_and_gjyuheng_closeout() {
         ),
         "{out:?}"
     );
+    let c = e.open_choice().cloned().expect("玉衡选弃黑桃询问");
+    assert_eq!(c.spec.prompt, "gj_yuheng_cost");
+    let out_ans = submit(
+        &mut e,
+        c.observer,
+        GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![ChoiceOption::Card(cost_spade)],
+        },
+    );
+    assert!(matches!(
+        out_ans,
+        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+    ));
     assert!(e.debug_hand(0).contains(&spade), "黑桃手牌被取走至使用者");
-    assert!(!e.debug_hand(1).contains(&spade), "目标失去黑桃牌");
+    assert!(!e.debug_hand(enemy).contains(&spade), "敌方目标失去黑桃牌");
     // once_per_turn：再次发动被拒
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_yh });
     assert!(

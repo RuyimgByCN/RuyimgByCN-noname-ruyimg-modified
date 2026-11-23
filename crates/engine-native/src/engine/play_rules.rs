@@ -41,7 +41,7 @@ pub(super) fn common_play_validation(
     // 基本牌（上游 mod cardEnabled2 类型禁用→恒定基本牌近似登记；
     // kind 基础集=杀族/闪/桃/酒族/手里剑）；打出面（响应窗）未
     // 落=登记差异（仅使用位 PlayCard 校验）
-    if core.player(actor).wangshi_ban && catalog.card_kind(card).is_basic_kind() {
+    if core.player(actor).wangshi_ban && catalog.resolved_card_kind(core, card).is_basic_kind() {
         return Err(RejectReason::CardLimit);
     }
     // 愚钝·福面（swd 武将面批 82）：锁定——无法使用锦囊牌（上游
@@ -52,7 +52,7 @@ pub(super) fn common_play_validation(
         .map(|d| core.has_skill(actor, d))
         .unwrap_or(false)
     {
-        let kind = catalog.card_kind(card);
+        let kind = catalog.resolved_card_kind(core, card);
         let is_trick =
             !kind.is_basic_kind() && kind.equip_slot().is_none() && kind.is_basic_trick_or_equip();
         if is_trick {
@@ -66,10 +66,23 @@ pub(super) fn common_play_validation(
     }
     let actor_p = core.player(core.turn.current);
     let in_hand = actor_p.hand.contains(&card);
+    let has_mizhilianou_equip_heart = !in_hand
+        && actor_p.equips.contains(&card)
+        && matches!(
+            catalog.resolved_card_suit(core, card),
+            crate::catalog::Suit::Heart
+        )
+        && (catalog
+            .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
+            .is_some_and(|d| core.has_skill(actor, d))
+            || catalog
+                .skill_by_name("mizhilianou")
+                .is_some_and(|d| core.has_skill(actor, d)));
     let in_equip_va = !in_hand
-        && catalog
-            .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
-            .contains(&card);
+        && (has_mizhilianou_equip_heart
+            || catalog
+                .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
+                .contains(&card));
     if !in_hand && !in_equip_va {
         return Err(RejectReason::CardNotInHand);
     }
@@ -123,21 +136,7 @@ pub(super) fn play_kind(
             }
         }
     }
-    let mut kind = if core
-        .vm_aux
-        .flags
-        .get(&(actor, format!("mtongnian_link:{card}")))
-        .copied()
-        .unwrap_or(0)
-        > 0
-    {
-        core.declared_kinds
-            .get(&card)
-            .copied()
-            .unwrap_or_else(|| catalog.card_kind(card))
-    } else {
-        catalog.card_kind(card)
-    };
+    let mut kind = catalog.resolved_card_kind(core, card);
     if sealed {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             kind = spec.as_kind;
@@ -229,7 +228,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Club
             )
         {
@@ -242,7 +241,7 @@ pub(super) fn play_kind(
             .skill_by_name("liangce")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && catalog.card_kind(card).is_basic_kind()
+            && catalog.resolved_card_kind(core, card).is_basic_kind()
         {
             kind = CardKind::Wugu;
         }
@@ -253,7 +252,7 @@ pub(super) fn play_kind(
             .skill_by_name("ycnluweiyan")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && !catalog.card_kind(card).is_basic_kind()
+            && !catalog.resolved_card_kind(core, card).is_basic_kind()
         {
             kind = CardKind::Shuigong;
         }
@@ -265,7 +264,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Spade
             )
         {
@@ -284,7 +283,7 @@ pub(super) fn play_kind(
         // 玉蝉八卦（swd 补切批⑫）：手持 autoViewAs 对应基本牌
         //（你的行动时=PlayCard 自身回合门已限；登记差异随机换形态
         // 与煅造装备面挂后续批）
-        else if let Some(vk) = catalog.cards[card as usize].kind.yuchan_auto_view_as() {
+        else if let Some(vk) = catalog.resolved_card_kind(core, card).yuchan_auto_view_as() {
             kind = vk;
         }
         // 万钧（浊山铸，swd 武将面批㉖）：装备牌当南蛮入侵使用
@@ -294,7 +293,7 @@ pub(super) fn play_kind(
             .skill_by_name("wanjun")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && catalog.card_kind(card).is_equip()
+            && catalog.resolved_card_kind(core, card).is_equip()
         {
             kind = CardKind::SavageAttack;
         }
@@ -305,7 +304,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Heart
             )
         {
@@ -317,7 +316,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             )
         {
@@ -329,7 +328,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             )
         {
@@ -341,7 +340,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             )
         {
@@ -353,7 +352,7 @@ pub(super) fn play_kind(
             .skill_by_name("poxiao")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && catalog.card_kind(card).is_equip()
+            && catalog.resolved_card_kind(core, card).is_equip()
         {
             kind = CardKind::Sha;
         }
@@ -364,7 +363,7 @@ pub(super) fn play_kind(
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
             && matches!(
-                catalog.cards[card as usize].suit,
+                catalog.resolved_card_suit(core, card),
                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
             )
         {
@@ -384,27 +383,28 @@ pub(super) fn play_kind(
             // 木头面具（G1 古剑装备）：出牌阶段限一次，任意
             // 手牌当【杀】（once_used 随回合重置；标记延迟至
             // 借用结束后）
-            let muto_active = catalog
-                .skill_by_name(crate::content::host::GJ_MUTOU_SKILL_KEY)
-                .map(|d| {
-                    core.skills
-                        .get(&(actor, d))
-                        .map(|i| i.enabled && !i.once_used)
-                        .unwrap_or(false)
-                })
-                .unwrap_or(false);
+            let muto_active = [crate::content::host::GJ_MUTOU_SKILL_KEY, "mutoumianju_skill"]
+                .into_iter()
+                .any(|k| {
+                    catalog.skill_by_name(k).is_some_and(|d| {
+                        core.skills
+                            .get(&(actor, d))
+                            .is_some_and(|i| i.enabled && !i.once_used)
+                    })
+                });
             if muto_active {
                 kind = CardKind::Sha;
                 mark_mutoumianju = true;
             } else {
-                // 蜜链藕（G1 古剑食物）：红桃手牌当桃
-                //（持有状态即生效）
-                let mizhilianou = catalog
-                    .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
-                    .map(|d| core.has_skill(actor, d))
-                    .unwrap_or(false);
+                // 蜜链藕（G1 古剑食物）：红桃牌（手牌+装备）当桃（持有状态即生效）
+                let mizhilianou = [
+                    crate::content::host::GJ_FOOD_MIZHLIANOU_KEY,
+                    "mizhilianou",
+                ]
+                .into_iter()
+                .any(|k| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(actor, d)));
                 let is_heart = matches!(
-                    catalog.cards[card as usize].suit,
+                    catalog.resolved_card_suit(core, card),
                     crate::catalog::Suit::Heart
                 );
                 if mizhilianou && is_heart {
@@ -416,17 +416,19 @@ pub(super) fn play_kind(
     if targets.is_empty()
         && !mark_mutoumianju
         && matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Heart
         )
-        && catalog
-            .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
-            .map(|d| core.has_skill(actor, d))
-            .unwrap_or(false)
+        && [
+            crate::content::host::GJ_FOOD_MIZHLIANOU_KEY,
+            "mizhilianou",
+        ]
+        .into_iter()
+        .any(|k| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(actor, d)))
     {
         kind = CardKind::Tao;
     }
-    if kind == catalog.card_kind(card) && !mark_mutoumianju {
+    if kind == catalog.resolved_card_kind(core, card) && !mark_mutoumianju {
         if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
             kind = CardKind::Duel;
         } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
@@ -515,16 +517,22 @@ pub(super) fn check_play_target_restrictions(
     // 目标（登记差异：仅出牌使用路径过滤，不含响应路径）
     {
         let black = matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
         );
         if black && !targets.is_empty() {
-            let molicha = catalog.skill_by_name(crate::content::host::GJ_FOOD_MOLICHA_KEY);
-            if let Some(def) = molicha {
-                for t in targets {
-                    if *t != core.turn.current && core.skills.contains_key(&(*t, def)) {
-                        return Err(RejectReason::IllegalTargets);
-                    }
+            let has_molicha = |t: PlayerId| {
+                [crate::content::host::GJ_FOOD_MOLICHA_KEY, "molicha"]
+                    .into_iter()
+                    .any(|k| {
+                        catalog
+                            .skill_by_name(k)
+                            .is_some_and(|def| core.skills.contains_key(&(t, def)))
+                    })
+            };
+            for t in targets {
+                if *t != core.turn.current && has_molicha(*t) {
+                    return Err(RejectReason::IllegalTargets);
                 }
             }
         }
@@ -532,15 +540,18 @@ pub(super) fn check_play_target_restrictions(
     // 石会粉禁用状态（G1 古剑）：本回合无法对其他角色使用
     // 卡牌（expires_end_of_turn 于其回合结束清除）
     {
-        let ban = catalog
-            .skill_by_name(crate::content::host::GJ_FOOD_SHIHUIFEN_BAN_KEY)
-            .map(|def| {
+        let ban = [
+            crate::content::host::GJ_FOOD_SHIHUIFEN_BAN_KEY,
+            "shihuifen",
+        ]
+        .into_iter()
+        .any(|k| {
+            catalog.skill_by_name(k).is_some_and(|def| {
                 core.skills
                     .get(&(core.turn.current, def))
-                    .map(|i| i.enabled)
-                    .unwrap_or(false)
+                    .is_some_and(|i| i.enabled)
             })
-            .unwrap_or(false);
+        });
         if ban && targets.iter().any(|t| *t != core.turn.current) {
             return Err(RejectReason::IllegalTargets);
         }
@@ -760,7 +771,7 @@ pub(super) fn check_play_use_restrictions(
         CardKind::Snatch | CardKind::Dismantle | CardKind::Duel | CardKind::Le
     ) {
         let black = matches!(
-            catalog.cards[card as usize].suit,
+            catalog.resolved_card_suit(core, card),
             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
         );
         if black {

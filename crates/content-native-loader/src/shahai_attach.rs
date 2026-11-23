@@ -87,7 +87,22 @@ fn attach_card_rows(
                 CardDef::basic(interned, kind)
             }
             .with_suit_rank(suit, rank);
-            def.equip_skills = if kind == CardKind::WuxingPan {
+            if matches!(
+                cname,
+                "gjyuheng_plus"
+                    | "gjyuheng_pro"
+                    | "yanjiadan_heart"
+                    | "yanjiadan_diamond"
+                    | "yanjiadan_club"
+                    | "yanjiadan_spade"
+            ) {
+                def = def.with_off_deck();
+            }
+            def.equip_skills = if cname == "gjyuheng_plus" {
+                vec!["gjyuheng_plus_skill"]
+            } else if cname == "gjyuheng_pro" {
+                vec!["gjyuheng_pro_skill"]
+            } else if kind == CardKind::WuxingPan {
                 vec!["wuxingpan_skill"]
             } else {
                 card_kind_equip_skills(kind).to_vec()
@@ -127,6 +142,7 @@ fn resolve_and_register_u05_skill(
     }
     let sk_owned = map_cross_subpack_skill(package_id, raw_sk);
     if let Some(behavior) = crate::shahai_u05_b1::lookup_shahai_b1_host_behavior(clean)
+        .or_else(|| lookup_upstream_host_behavior(&sk_owned))
         .or_else(|| lookup_upstream_host_behavior(clean))
     {
         push_host_skill_if_unseen(&sk_owned, behavior, &mut pack.host_skills, seen_skills);

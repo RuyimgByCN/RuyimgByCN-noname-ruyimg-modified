@@ -381,6 +381,7 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
             match kind {
                 CardKind::Shan
                 | CardKind::Nullify
+                | CardKind::Dinvxuanshuang
                 | CardKind::Youdishenru
                 | CardKind::Jinlianzhu
                 | CardKind::Shenmiguo => true,

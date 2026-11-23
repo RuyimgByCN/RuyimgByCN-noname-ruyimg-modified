@@ -532,6 +532,14 @@ pub(super) fn active_ask_batches(
                 behavior, stage, owner, target, targets, card, cards, core, catalog,
             )
         }
+        HostBehavior::U05GujianCardBatch
+        | HostBehavior::U05GujianCharBatchA
+        | HostBehavior::U05GujianCharBatchB
+        | HostBehavior::U05GujianCharBatchC
+        | HostBehavior::U05GujianCharBatchD
+        | HostBehavior::U05GujianCharBatchE => super::step::u05_b2_gujian::ask_u05_gujian(
+            behavior, stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

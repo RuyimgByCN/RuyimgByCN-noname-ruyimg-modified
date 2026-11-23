@@ -100,7 +100,7 @@ impl JudgePhaseMachine {
                         .player(*p)
                         .equips
                         .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Haotianta)
+                        .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Haotianta))
             });
             if let Some(h) = haotian_holder {
                 // 次候选=牌堆顶第二张（draw_judge_card 已取顶张；堆空则
@@ -108,6 +108,7 @@ impl JudgePhaseMachine {
                 if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
                     if ctx.core.deck.is_empty() {
                         let mut cards = std::mem::take(&mut ctx.core.discard);
+                        crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
                         ctx.core.rng.shuffle(&mut cards);
                         crate::kernel::elo_on_wash_deck(ctx.core, &cards);
                         ctx.core.deck = cards;
@@ -850,6 +851,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             break;
                         }
                         let mut d = std::mem::take(&mut ctx.core.discard);
+                        crate::kernel::cleanup_discard_to_deck(ctx.core, &mut d);
                         ctx.core.rng.shuffle(&mut d);
                         crate::kernel::elo_on_wash_deck(ctx.core, &d);
                         ctx.core.deck = d;

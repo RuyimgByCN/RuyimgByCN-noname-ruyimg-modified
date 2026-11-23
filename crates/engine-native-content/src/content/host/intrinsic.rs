@@ -128,7 +128,7 @@ pub(crate) fn card_intrinsic(
                 def_key: crate::content::host::GJ_DINVXUANSHUANG_CARD_KEY.to_string(),
                 behavior: crate::content::host::HostBehavior::JiguanDinvCard,
                 owner: u.player,
-                target: Some(u.player),
+                target: Some(u.targets.first().copied().unwrap_or(u.player)),
                 card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
@@ -206,7 +206,7 @@ pub(crate) fn card_intrinsic(
                 def_key: key.to_string(),
                 behavior,
                 owner: u.player,
-                target: Some(u.player),
+                target: Some(u.targets.first().copied().unwrap_or(u.player)),
                 card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
@@ -404,14 +404,11 @@ pub(crate) fn card_intrinsic(
                     Vec::new(),
                 ),
                 _ => {
-                    // 神火飞鸦：目标 + 距离 1 邻座（座位序）响应队列
+                    // 神火飞鸦（card/gujian/card.js:704）：目标 + 纯距 1 邻座（含使用者，座位序）
                     let t = *u.targets.first().expect("shenhuo has one target");
                     let mut q = vec![t];
-                    for p in ctx.core.alive_players() {
-                        if p != t
-                            && p != u.player
-                            && ctx.core.computed_distance(ctx.catalog, t, p) == 1
-                        {
+                    for p in ctx.core.seat_order_from(t) {
+                        if p != t && ctx.core.player(p).alive && ctx.core.seat_distance_alive(t, p) == 1 {
                             q.push(p);
                         }
                     }

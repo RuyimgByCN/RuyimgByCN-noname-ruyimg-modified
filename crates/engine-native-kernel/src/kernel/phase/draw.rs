@@ -13,7 +13,14 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
             .catalog
             .skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU)
             .map(|def| ctx.core.has_skill(player, def))
-            .unwrap_or(false);
+            .unwrap_or(false)
+        || ["yuling1", "yuling"]
+            .into_iter()
+            .any(|k| {
+                ctx.catalog
+                    .skill_by_name(k)
+                    .is_some_and(|d| ctx.core.has_skill(player, d))
+            });
     if skipped {
         if ctx.core.turn.skip_draw_phase {
             ctx.core.turn.skip_draw_phase = false;

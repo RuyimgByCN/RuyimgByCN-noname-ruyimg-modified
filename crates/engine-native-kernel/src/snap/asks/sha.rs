@@ -74,7 +74,7 @@ pub(super) fn active_sha_ask(
             .iter()
             .filter(|c| {
                 matches!(
-                    catalog.card_kind(**c),
+                    catalog.resolved_card_kind(core, **c),
                     CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
                 )
             })
@@ -154,12 +154,12 @@ pub(super) fn active_sha_ask(
             .iter()
             .copied()
             .filter(|c| {
-                let kind = catalog.card_kind(*c);
+                let kind = catalog.resolved_card_kind(core, *c);
                 !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(core, catalog, h, *c)
                     && (kind == CardKind::Shan
                         || (qingguo_h
                             && matches!(
-                                catalog.cards[*c as usize].suit,
+                                catalog.resolved_card_suit(core, *c),
                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                             )))
             })
@@ -181,10 +181,8 @@ pub(super) fn active_sha_ask(
             .equips
             .iter()
             .filter(|c| {
-                matches!(
-                    catalog.card_kind(**c),
-                    CardKind::HorsePlus | CardKind::HorseMinus
-                )
+                catalog.equip_card_has_kind(core, **c, CardKind::HorsePlus)
+                    || catalog.equip_card_has_kind(core, **c, CardKind::HorseMinus)
             })
             .copied()
             .map(ChoiceOption::Card)
@@ -226,7 +224,7 @@ pub(super) fn active_sha_ask(
         let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
         if !hand_locked {
             for c in core.player(target).hand.iter().copied() {
-                let kind = catalog.card_kind(c);
+                let kind = catalog.resolved_card_kind(core, c);
                 if target_can_play && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha))
                 {
                     options.push(ChoiceOption::Card(c));
@@ -235,7 +233,7 @@ pub(super) fn active_sha_ask(
         }
         if qingguo && target_can_play && !hand_locked {
             for c in core.player(target).hand.iter().copied() {
-                let kind = catalog.card_kind(c);
+                let kind = catalog.resolved_card_kind(core, c);
                 let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                 let black = matches!(
                     catalog.effective_card_suit(core, target, c),

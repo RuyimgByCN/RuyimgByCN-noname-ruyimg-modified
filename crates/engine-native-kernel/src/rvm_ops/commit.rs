@@ -8,6 +8,7 @@ pub(super) fn pop_deck(ctx: &mut Ctx<'_>) -> Option<CardId> {
             return None;
         }
         let mut cards = std::mem::take(&mut ctx.core.discard);
+        crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
         ctx.core.rng.shuffle(&mut cards);
         ctx.core.deck = cards;
         ctx.out.push(LogEvent::DeckReshuffled);

@@ -68,7 +68,7 @@ impl ShaResolveMachine {
             .iter()
             .filter(|c| {
                 target_can_play_hand && {
-                    let kind = ctx.catalog.card_kind(**c);
+                    let kind = ctx.catalog.resolved_card_kind(ctx.core, **c);
                     rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha)
                 }
             })
@@ -77,7 +77,7 @@ impl ShaResolveMachine {
             .collect();
         if qingguo && target_can_play_hand {
             for c in ctx.core.player(self.target).hand.iter().copied() {
-                let kind = ctx.catalog.card_kind(c);
+                let kind = ctx.catalog.resolved_card_kind(ctx.core, c);
                 let already =
                     rw_lanyin || kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                 let black = matches!(
@@ -157,7 +157,16 @@ impl ShaResolveMachine {
                 self.source,
                 self.card,
             );
-        let direct_hit = direct_hit_in || guilong_direct_hit;
+        let jianwu_direct_hit = ctx
+            .catalog
+            .skill_by_name("jianwu")
+            .is_some_and(|d| {
+                ctx.core.has_skill(self.source, d)
+                    && !ctx.catalog.is_tieji_sealed(ctx.core, self.source)
+            })
+            && ctx.core.computed_distance(ctx.catalog, self.target, self.source)
+                > ctx.core.attack_range(ctx.catalog, self.target);
+        let direct_hit = direct_hit_in || guilong_direct_hit || jianwu_direct_hit;
         let shengong_borrow = (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
         let sipu_ban_respond = ctx
             .catalog
@@ -220,7 +229,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Fengxueren)
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Fengxueren))
         {
             self.asking_fengxueren = true;
             return Flow::WaitChoice {
@@ -340,7 +349,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglong);
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Qinglong));
         let hand_shas: Vec<ChoiceOption> = ctx
             .core
             .player(self.source)
@@ -348,7 +357,7 @@ impl ShaResolveMachine {
             .iter()
             .filter(|c| {
                 matches!(
-                    ctx.catalog.card_kind(**c),
+                    ctx.catalog.resolved_card_kind(ctx.core, **c),
                     CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
                 )
             })
@@ -380,7 +389,7 @@ impl ShaResolveMachine {
                 .player(self.source)
                 .equips
                 .iter()
-                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Guanshi);
+                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Guanshi));
         if has_guanshi && ctx.core.player(self.source).alive {
             let mut pool: Vec<ChoiceOption> = ctx
                 .core
@@ -395,7 +404,7 @@ impl ShaResolveMachine {
                     .player(self.source)
                     .equips
                     .iter()
-                    .filter(|c| ctx.catalog.card_kind(**c) != CardKind::Guanshi)
+                    .filter(|c| !ctx.catalog.equip_card_has_kind(ctx.core, **c, CardKind::Guanshi))
                     .copied()
                     .map(ChoiceOption::Card),
             );
@@ -420,7 +429,7 @@ impl ShaResolveMachine {
             .player(self.source)
             .equips
             .iter()
-            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Sadengjinhuan);
+            .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Sadengjinhuan));
         if has_sadeng && ctx.core.player(self.source).alive && !self.asking_sadeng {
             self.asking_sadeng = true;
             return Flow::WaitChoice {

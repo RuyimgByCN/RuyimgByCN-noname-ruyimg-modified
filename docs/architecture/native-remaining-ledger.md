@@ -1,5 +1,9 @@
 # 原生收敛剩余工作台帐（2026-10-24 建立，2026-10-28 扫描更新）
 
+## 2026-11-23 Batch U05-2（U05 古剑奇谭 +136→224/1,621；余 1,397 项待后续 U05 批次）
+
+- 合入 `swarm/conv-u05-2-gujian`（`921a8f499`，`verifier-u05-a` `#95 APPROVE`）及集成修复，将 `gujian` 子包全部 `136` 项（`36` 卡牌 + `18` 武将 + `82` 技能，零保留）升为 `已复核等价`（全局 `2,544 / 1,880 / 0`，`U05` `224 / 1,397 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 余下 `1,397` 项 `U05`（含 U05-1 保留 7 项及其余 `gwent`/`swd`/`xianjian`/`ow`/`hearth` 等子包）与全局其余未收敛条目继续按后续批次推进；详见 [Batch U05-2 证据摘要](../operations/evidence/2026-11-23-batch3-8-u05-2-gujian/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。
+
 ## 2026-11-23 Batch U05-1（U05 五行/阵法/MTG/运筹 +87→88/1,621；余 1,533 项待后续 U05 批次）
 
 - 合入 `swarm/conv-u05-1`（`b4fd79501`，`verifier-l11` `#49 APPROVE`）及主线回归修复，升格 `87` 项（全局 `2,408 / 2,016 / 0`，`U05` `88 / 1,533 / 0`，整包 8 维仍 `0/37`）。[inventory_status.json](../migration/g0/inventory_status.json) 保留 `qixingzhen`、`diy_caiwenji`、`stone_chenshui` 及 `mtg`/`zhenfa`/`gwent`/`yunchou` 子包开关（连同剩余 1,526 项 `U05` 与其余全局待收敛条目）待后续规则批次关闭；详见 [Batch U05-1 证据摘要](../operations/evidence/2026-11-23-batch3-7-u05-1/README.md) 与 [native-rules-baseline.md](native-rules-baseline.md)。

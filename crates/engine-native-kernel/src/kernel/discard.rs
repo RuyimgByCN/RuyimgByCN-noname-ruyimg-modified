@@ -82,7 +82,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                     if honglianx
                         && is_hand
                         && matches!(
-                            ctx.catalog.cards[*c as usize].suit,
+                            ctx.catalog.resolved_card_suit(ctx.core, *c),
                             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                         )
                     {
@@ -98,7 +98,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                     }
                     !shamolvzhou
                         || crate::vocabulary::card_skills::yangpijuan_class(
-                            ctx.catalog.card_kind(*c),
+                            ctx.catalog.resolved_card_kind(ctx.core, *c),
                         ) != Some(0)
                 })
                 .map(ChoiceOption::Card)
@@ -124,7 +124,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
         for opt in answer {
             if let ChoiceOption::Card(c) = opt {
                 // 望尘（swd 古月圣，批㉑）：弃牌阶段弃置基本牌置旗
-                if ctx.catalog.card_kind(c).is_basic_kind() {
+                if ctx.catalog.resolved_card_kind(ctx.core, c).is_basic_kind() {
                     ctx.core.turn.wangchen_discard_basic = true;
                 }
                 if ctx.core.player(self.player).hand.contains(&c) {
@@ -173,7 +173,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                         let mut seen: Vec<crate::catalog::Suit> = Vec::new();
                         let mut gain: Vec<crate::ids::CardId> = Vec::new();
                         for c in &discarded {
-                            let suit = ctx.catalog.cards[*c as usize].suit;
+                            let suit = ctx.catalog.resolved_card_suit(ctx.core, *c);
                             if !seen.contains(&suit) {
                                 seen.push(suit);
                                 gain.push(*c);

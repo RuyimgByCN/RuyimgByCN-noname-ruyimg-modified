@@ -312,19 +312,28 @@ impl HostSkillBehavior {
                 }))
             }
             HostBehavior::GujianYuhengEquipSkill => {
-                let has = ctx.state.alive_players().any(|p| {
-                    p != owner
-                        && ctx.state.player(p).hand.iter().any(|c| {
-                            matches!(
-                                ctx.catalog.cards[*c as usize].suit,
-                                crate::catalog::Suit::Spade
-                            )
-                        })
+                let tier_black = ctx.state.player(owner).equips.iter().copied().any(|c| {
+                    (ctx.catalog.cards[c as usize].kind == CardKind::Gjyuheng
+                        || ctx.catalog.cards[c as usize].name.starts_with("gjyuheng"))
+                        && (ctx.catalog.cards[c as usize].name.contains("plus")
+                            || ctx.catalog.cards[c as usize].name.contains("pro")
+                            || ctx
+                                .state
+                                .vm_aux
+                                .flags
+                                .get(&(0, format!("gj_yuheng_tier:{c}")))
+                                .copied()
+                                .unwrap_or(0)
+                                >= 1)
                 });
-                if !has {
+                if !super::super::step::u05_b2_gujian::cards_and_foods::yuheng_can_activate(
+                    ctx.state,
+                    ctx.catalog,
+                    owner,
+                    tier_black,
+                ) {
                     return None;
                 }
-                // 潜偷同款校验已在 SwdShentouEquipSkill 臂单独实现
                 Some(Box::new(HostMachine {
                     def_key: self.name.clone(),
                     behavior: self.behavior,

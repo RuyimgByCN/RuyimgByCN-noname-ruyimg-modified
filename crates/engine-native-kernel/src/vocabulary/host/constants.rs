@@ -15,13 +15,21 @@ pub const GJ_FOOD_ROUNDS_DEFAULT: u8 = 3;
 
 pub const GJ_FOOD_ROUNDS_LIYUTANG: u8 = 2;
 
+pub const GJ_FOOD_ROUNDS_MAPODOUFU: u8 = 2;
+
 pub const GJ_FOOD_ROUNDS_MIZHLIANOU: u8 = 4;
+
+pub const GJ_FOOD_ROUNDS_MOLICHA: u8 = 4;
+
+pub const GJ_FOOD_ROUNDS_QINGTUAN: u8 = 2;
 
 pub const GJ_FOOD_ROUNDS_TANHUADONG: u8 = 3;
 
-pub const GJ_FOOD_ROUNDS_XIAJIAO: u8 = 4;
+pub const GJ_FOOD_ROUNDS_XIAJIAO: u8 = 3;
 
-pub const GJ_FOOD_ROUNDS_YOUGENG: u8 = 3;
+pub const GJ_FOOD_ROUNDS_YOUGENG: u8 = 2;
+
+pub const GJ_FOOD_ROUNDS_YUANBAOROU: u8 = 4;
 
 pub const D3_JINGGOU_TARGET: &str = "d3_jinggou_target";
 

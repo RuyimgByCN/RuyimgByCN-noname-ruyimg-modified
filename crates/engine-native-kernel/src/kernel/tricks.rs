@@ -38,7 +38,7 @@ impl crate::catalog::SkillMachine for WuzhongMachine {
             .core
             .table
             .iter()
-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Wuzhong)
+            .position(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == crate::catalog::CardKind::Wuzhong)
         {
             let card = ctx.core.table.remove(pos);
             ctx.to_discard(card);
@@ -138,7 +138,7 @@ impl crate::catalog::SkillMachine for DizaizhenMachine {
             .core
             .table
             .iter()
-            .position(|c| ctx.catalog.card_kind(*c) == CardKind::Dizaizhen)
+            .position(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::Dizaizhen)
         {
             let c = ctx.core.table.remove(pos);
             ctx.to_discard(c);
@@ -479,7 +479,7 @@ impl JiedaoMachine {
             .core
             .table
             .iter()
-            .position(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Jiedao)
+            .position(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == crate::catalog::CardKind::Jiedao)
         {
             let card = ctx.core.table.remove(pos);
             ctx.to_discard(card);
@@ -646,7 +646,7 @@ impl DismantleMachine {
         if from_hand {
             ctx.take_hand_card(target, c);
         } else {
-            let was_equip = ctx.catalog.card_kind(c).is_equip();
+            let was_equip = from_equip || ctx.catalog.resolved_card_kind(ctx.core, c).is_equip();
             let p = ctx.core.player_mut(target);
             p.equips.retain(|x| *x != c);
             p.judge.retain(|x| *x != c);
@@ -816,7 +816,7 @@ impl SnatchMachine {
                 ctx.core.player_mut(source).hand.push(c);
             }
         } else {
-            let was_equip = ctx.catalog.card_kind(c).is_equip();
+            let was_equip = public_material || ctx.catalog.resolved_card_kind(ctx.core, c).is_equip();
             let p = ctx.core.player_mut(target);
             p.equips.retain(|x| *x != c);
             if was_equip {
@@ -824,6 +824,7 @@ impl SnatchMachine {
             }
             ctx.core.player_mut(source).hand.push(c);
         }
+        crate::kernel::clear_yange_clone_card(ctx.core, c);
         if !public_material && ctx.catalog.vm_card_history {
             ctx.core
                 .vm_aux

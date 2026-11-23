@@ -810,9 +810,7 @@ fn maybe_spawn_post_nullify_shengke(
         }) => targets,
         Some(crate::snap::MachineSnapshot::PlaceDelayed { target, .. }) => vec![target],
         _ => {
-            let eff = card_use
-                .use_as
-                .unwrap_or_else(|| card_use.effective_kind(ctx.catalog));
+            let eff = card_use.effective_kind_in(ctx.core, ctx.catalog);
             match eff {
                 CardKind::Taoyuan => order
                     .iter()

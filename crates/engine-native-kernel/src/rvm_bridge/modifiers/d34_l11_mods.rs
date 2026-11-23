@@ -1031,7 +1031,7 @@ pub(super) fn tpys_damage_prevented(
                     .player(src)
                     .equips
                     .iter()
-                    .any(|&c| catalog.card_kind(c) == CardKind::Qinggang)
+                    .any(|&c| catalog.equip_card_has_kind(state, c, CardKind::Qinggang))
                     || catalog
                         .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
                         .is_some_and(|def| state.has_skill(src, def))))

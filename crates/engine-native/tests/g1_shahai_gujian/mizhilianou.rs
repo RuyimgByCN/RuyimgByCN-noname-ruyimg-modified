@@ -256,9 +256,34 @@ fn mizhilianou_viewas_and_luyugeng_discover() {
         ),
         "{out:?}"
     );
+    // 发现 3 选 1（gj_luyugeng_discover）：置入 off_court 3 张，选 1 加入手牌、余下弃置
+    let c2 = e.open_choice().expect("卤玉羹发现 3 选 1 挂起");
+    assert_eq!(c2.spec.prompt, "gj_luyugeng_discover");
+    assert_eq!(c2.observer, 0);
+    assert_eq!(c2.spec.options.len(), 3);
+    let ChoiceOption::Card(picked) = c2.spec.options[0] else {
+        panic!("expected card choice");
+    };
+    let cid2 = c2.id;
+    let out2 = submit(
+        &mut e,
+        0,
+        GameAction::Answer {
+            choice_id: cid2,
+            selection: vec![ChoiceOption::Card(picked)],
+        },
+    );
+    assert!(
+        matches!(
+            out2,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "{out2:?}"
+    );
     let hand0 = e.debug_hand(0);
-    assert!(hand0.contains(&deck_top), "获得牌堆顶牌");
+    assert!(hand0.contains(&picked), "获得发现选中的牌");
     assert!(!hand0.contains(&shan2), "基本牌已弃");
+    let _ = deck_top;
     // 每回合限一次：再次发动被拒
     let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: def_lyg });
     assert!(

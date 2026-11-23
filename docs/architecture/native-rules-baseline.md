@@ -1,5 +1,13 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-23 Batch U05-2（U05 古剑奇谭 136 项全量语义对齐、`yange`/`yanjia` 载体生命周期与 `declared_kinds` 清理）
+
+- **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与生命周期对齐**：
+  - `HostBehavior` 新增 `980..=985`（`U05GujianCardBatch`/`CharBatchA..E`，`HostBehavior::ALL=611`），独立追加 `known_prompts_u05_2.rs`，`host.rs` 拆分 `host/skill_defs.rs`；`d34_l28_mods::is_bagua_armor_card` 保留无 `GameStateCore` 公共信息 AI 八卦判断。
+  - `Catalog::resolved_base_card_id` / `resolved_card_def` / `resolved_card_kind` / `resolved_card_suit` / `equip_card_*` 统一覆盖 `yange` 克隆载体（`gj_yange_clone` + `declared_kinds`/`declared_slots`）与 `yanjia` 副装备合并（`gj_yanjia_merged` + `detached_cards`）；`dinvxuanshuang` 限定濒死救命不可出牌阶段主动使用，`feibiao`、`shihuifen`/`liufengsan`、`bingpotong`、`shujinsan` 均对齐上游目标与范围。
+  - `cleanup_discard_to_deck`（`crates/engine-native-kernel/src/kernel/equipment.rs`）与 `jian_xiong.rs`（以及 `u05_b1_fixes.rs` 测试区迁移助手）在卡牌离弃牌堆重回牌堆或手牌时同步清除陈旧 `declared_kinds`/`declared_slots`，确保 `u05_b1_r3_fix04`（`huyizhen` 用作虚拟杀的防具重新入手后可正常装备）与 `zhangba_two_cards_as_sha`、`yange_carriers` 并行成立。
+
 ## 2026-11-23 Batch U05-1（U05 杀海拾遗 87 项语义对齐、`Jiedao` 武器与快照修复及 7 项保留边界）
 
 - **不变量保持**：`RULES_VERSION=333`、`NGSA=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

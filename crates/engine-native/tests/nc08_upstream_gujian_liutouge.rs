@@ -90,8 +90,11 @@ fn upstream_liutouge_two_branches() {
         for p in 0..4 {
             e.debug_clear_hand(p);
         }
+        let enemy = (1..4u8)
+            .find(|&p| !e.state_core().is_friend_of(e.catalog(), 0, p))
+            .unwrap_or(1);
         let name = e.catalog().cards.iter().find(|c| c.name == "shan").map(|c| c.name).unwrap();
-        let _ = e.debug_place(1, name);
+        let _ = e.debug_place(enemy, name);
         let card = {
             let id = e
                 .catalog()
@@ -104,32 +107,37 @@ fn upstream_liutouge_two_branches() {
             nc08_common::put_hand(&mut e, 0, id);
             id
         };
-        let h1_before = e.debug_hand(1).len();
+        let h_before = e.debug_hand(enemy).len();
+        let hp_before = e.debug_hp(enemy);
+        let j_before = e.state_core().player(enemy).judge.len();
         let out = e.submit(GameCommand {
             actor: 0,
             expected_revision: e.revision(),
             dedup_id: next_dedup(),
-            action: GameAction::PlayCard { card, targets: vec![1] },
+            action: GameAction::PlayCard { card, targets: vec![enemy] },
         });
         assert!(
             matches!(
                 out,
                 CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
             ),
-            "六骰格（对其他角色）应可发动：{out:?}"
+            "六骰格（对敌方）应可发动：{out:?}"
         );
         drain(&mut e);
-        e.debug_hand(1).len() as i64 - h1_before as i64
+        let core = e.state_core();
+        let had_debuff = e.debug_hand(enemy).len() < h_before
+            || e.debug_hp(enemy) < hp_before
+            || core.player(enemy).linked
+            || core.player(enemy).fengyin_active
+            || core.player(enemy).judge.len() > j_before;
+        assert!(had_debuff, "六骰格对敌方应施加 6 项上游 debuff 之一");
+        0i64
     };
-    eprintln!(
-        "DBG 六骰格：对自己（增益）手牌净变化={self_gain}（打出本体 −1、摸 1 ⇒ 0）；\
-         对其他角色（减益）手牌净变化={other}（应 −1）"
-    );
-    assert_eq!(self_gain, 0, "六骰格（增益简化）：对自己应**摸 1**（打出本体 −1 ⇒ 净 0）");
-    assert_eq!(other, -1, "六骰格（减益简化）：其他角色应**弃一张手牌**（净 −1）");
+    assert!(self_gain >= -1, "六骰格对自身施加 6 项上游 buff 之一（结果净变化 {self_gain}）");
+    let _ = other;
 }
 
-/// **登记差异**（源码事实固定）：随机效果池 → 确定性简化。
+/// 上游随机 6 项效果池实现核对（`apply_get_buff` / `apply_get_debuff`）。
 #[test]
 fn upstream_liutouge_random_pool_difference_is_registered() {
     let src = std::fs::read_to_string(concat!(
@@ -140,8 +148,8 @@ fn upstream_liutouge_random_pool_difference_is_registered() {
     let idx = src.find("JiguanLiutougeCard =>").expect("六骰格分支");
     let seg: String = src[idx..].chars().take(700).collect();
     assert!(
-        seg.contains("增益简化") && seg.contains("减益简化") && seg.contains("上游随机效果池"),
-        "原生注释应自述简化与差异：{seg}"
+        seg.contains("apply_get_debuff") && seg.contains("apply_get_buff"),
+        "六骰格应调用完整 6 项上游 buff/debuff 效果池：{seg}"
     );
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(

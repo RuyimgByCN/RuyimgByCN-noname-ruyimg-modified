@@ -202,7 +202,7 @@ fn reserved_shan_blocked_by_skills(
     let def_unequip = me.skills.iter().any(|s| *s == "unequip2");
     if !att_unequip && !def_unequip {
         let has_bagua = me.equips.iter().any(|c| {
-            crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(catalog, *c)
+            crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor_card(catalog, *c)
         });
         if has_bagua || me.skills.iter().any(|s| matches!(*s, "bazhen" | "八阵")) {
             return true;

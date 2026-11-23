@@ -58,6 +58,8 @@ impl SkillMachine for JianXiongMachine {
             self.asked = true;
             if let Some(pos) = ctx.core.discard.iter().position(|c| *c == self.card) {
                 ctx.core.discard.remove(pos);
+                ctx.core.declared_kinds.remove(&self.card);
+                ctx.core.declared_slots.remove(&self.card);
                 ctx.core.player_mut(self.owner).hand.push(self.card);
             }
         }

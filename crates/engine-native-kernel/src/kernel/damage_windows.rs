@@ -52,7 +52,7 @@ pub(super) fn apply_native_damage(
                                 .player(src)
                                 .equips
                                 .iter()
-                                .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chilongya)
+                                .any(|c| ctx.catalog.equip_card_has_kind(ctx.core, *c, CardKind::Chilongya))
                         {
                             amount += 1;
                         }

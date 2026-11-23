@@ -899,7 +899,13 @@ impl HostBehavior {
             | HostBehavior::U05MtgCharBatch
             | HostBehavior::U05MtgLandExtraBatch
             | HostBehavior::U05YunchouCharBatch
-            | HostBehavior::U05ZhenfaRecastSkill => None,
+            | HostBehavior::U05ZhenfaRecastSkill
+            | HostBehavior::U05GujianCardBatch
+            | HostBehavior::U05GujianCharBatchA
+            | HostBehavior::U05GujianCharBatchB
+            | HostBehavior::U05GujianCharBatchC
+            | HostBehavior::U05GujianCharBatchD
+            | HostBehavior::U05GujianCharBatchE => None,
             HostBehavior::L01YiyiCard
             | HostBehavior::L01FirstKs
             | HostBehavior::L01NeiKey

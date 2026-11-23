@@ -610,6 +610,12 @@ impl HostBehavior {
             922 => HostBehavior::U05MtgLandExtraBatch,
             923 => HostBehavior::U05YunchouCharBatch,
             924 => HostBehavior::U05ZhenfaRecastSkill,
+            980 => HostBehavior::U05GujianCardBatch,
+            981 => HostBehavior::U05GujianCharBatchA,
+            982 => HostBehavior::U05GujianCharBatchB,
+            983 => HostBehavior::U05GujianCharBatchC,
+            984 => HostBehavior::U05GujianCharBatchD,
+            985 => HostBehavior::U05GujianCharBatchE,
             _ => return None,
         })
     }

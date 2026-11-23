@@ -85,7 +85,7 @@ pub(super) fn clear_xingchong_state(core: &mut GameStateCore, catalog: &Catalog,
     clear_skill_marks_by_name(core, catalog, owner, "xingchong");
 }
 
-/// `gameDrawEnd` 开局钩子：为建局即持 `xiefang` 的角色初始化存活女性计数标记。
+/// `gameDrawEnd` 开局钩子：为建局即持 `xiefang` 的角色初始化存活女性计数标记，并初始化 U05-2 古剑局内标记。
 pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
     let seats = core.players.len() as PlayerId;
     for owner in 0..seats {
@@ -94,6 +94,17 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
         }
     }
     super::l01_rules::l01_on_game_start(core, catalog);
+    super::u05_b2_gujian::on_game_start_gujian(core, catalog);
+}
+
+/// `Death` 执行前钩子：当前用于 `yange`/`humeng` 子武将阵亡时退出子将并恢复主将，阻止角色死亡。
+pub(crate) fn host_on_death_before(ctx: &mut Ctx<'_>, dying: PlayerId) -> bool {
+    super::u05_b2_gujian::on_death_before_gujian(ctx, dying)
+}
+
+/// `TurnEndWindow { after: true }`（`phaseAfter`）前钩子：`yange` 子将在拷贝技 `phaseEnd` 之后、`lianjing` 之前退出。
+pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
+    super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
 }
 
 /// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi`。
@@ -184,6 +195,7 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
         set_flag(ctx.core, p, "clandianzhan_used_round_mask", 0);
         set_flag(ctx.core, p, "clandianzhan_used_round", 0);
     }
+    super::u05_b2_gujian::on_round_start_gujian(ctx);
 }
 
 /// 角色回合开始（`phaseBegin` / `TurnBegin` Commit 段）钩子：清理 `mhuanyi_target` 等跨回合临时状态。

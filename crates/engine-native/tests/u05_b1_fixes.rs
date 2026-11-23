@@ -187,6 +187,8 @@ fn move_card_to_hand(e: &mut Engine, seat: u8, cid: u32) {
     for pile in core.vm_aux.piles.values_mut() {
         pile.retain(|&c| c != cid);
     }
+    core.declared_kinds.remove(&cid);
+    core.declared_slots.remove(&cid);
     core.player_mut(seat).hand.push(cid);
 }
 
@@ -203,6 +205,8 @@ fn put_deck_top(e: &mut Engine, cid: u32) {
     for pile in core.vm_aux.piles.values_mut() {
         pile.retain(|&c| c != cid);
     }
+    core.declared_kinds.remove(&cid);
+    core.declared_slots.remove(&cid);
     core.deck.push(cid);
 }
 

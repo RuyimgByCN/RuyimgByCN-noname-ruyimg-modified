@@ -105,7 +105,7 @@ pub fn intrinsic_machine(
                 return None;
             }
             if dying_save.is_none() {
-                let excl_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+                let excl_kind = u.effective_kind_in(ctx.core, ctx.catalog);
                 let excl_targets = match excl_kind {
                     CardKind::Wugu if u.targets.is_empty() => ctx.core.alive_players().collect(),
                     CardKind::Taoyuan if u.targets.is_empty() => {
@@ -172,9 +172,27 @@ pub fn intrinsic_machine(
                 } else if ctx.core.player(dying).alive {
                     ctx.recover(dying, 1, None);
                 }
+                let eff = u.effective_kind_in(ctx.core, ctx.catalog);
+                if eff == CardKind::Dinvxuanshuang && ctx.core.player(dying).alive {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((u.player, "dinv_already_recovered".to_string()), 1);
+                    let mut saved_u = u.clone();
+                    saved_u.targets = vec![dying];
+                    if let Some(machine) =
+                        (ctx.catalog.hooks.card_intrinsic)(ctx, &saved_u, CardKind::Dinvxuanshuang)
+                    {
+                        return machine;
+                    }
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(u.player, "dinv_already_recovered".to_string()));
+                }
                 return None;
             }
-            let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+            let effective_kind = u.effective_kind_in(ctx.core, ctx.catalog);
             if effective_kind == CardKind::Tao {
                 let bonus = ctx
                     .core
@@ -557,7 +575,12 @@ pub fn intrinsic_machine(
                         Box::new(effect),
                     )))
                 }
-                _ => None,
+                _ => {
+                    if u.use_as.is_some() {
+                        discard_remaining_carriers(ctx);
+                    }
+                    None
+                }
             }
         }
         EventData::Phase {
@@ -613,6 +636,8 @@ pub fn intrinsic_machine(
             let mut skip_discard = [
                 crate::vocabulary::names::BOSS_TANYU,
                 crate::vocabulary::names::BOSS_QINGZHU,
+                "yuling1",
+                "yuling",
             ]
             .iter()
             .any(|name| {
@@ -689,19 +714,21 @@ pub fn intrinsic_machine(
                         }
                     }
                     // 春饼（G1 古剑食物）：手牌上限 +1（持有状态即生效）
-                    if let Some(def) = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::host::GJ_FOOD_CHUNBING_KEY)
-                    {
-                        if ctx
-                            .core
-                            .skills
-                            .get(&(player, def))
-                            .map(|i| i.enabled)
-                            .unwrap_or(false)
-                        {
-                            limit += 1;
-                        }
+                    let has_chunbing = [
+                        crate::vocabulary::host::GJ_FOOD_CHUNBING_KEY,
+                        "chunbing",
+                    ]
+                    .into_iter()
+                    .any(|k| {
+                        ctx.catalog.skill_by_name(k).is_some_and(|def| {
+                            ctx.core
+                                .skills
+                                .get(&(player, def))
+                                .is_some_and(|i| i.enabled)
+                        })
+                    });
+                    if has_chunbing {
+                        limit += 1;
                     }
                     // 壶境（壶中仙，swd 卡牌面补切批③）：装备炼妖壶时手牌上限
                     // +2（上游 hujing mod maxHandcard getEquip("lianyaohu") 同口径）

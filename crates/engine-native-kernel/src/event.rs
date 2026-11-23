@@ -525,7 +525,25 @@ impl CardUseData {
             .or_else(|| self.card.map(|c| catalog.card_kind(c)))
             .expect("validated card use meaning")
     }
+    pub fn effective_kind_in(
+        &self,
+        core: &crate::state::GameStateCore,
+        catalog: &crate::catalog::Catalog,
+    ) -> crate::catalog::CardKind {
+        self.use_as
+            .or_else(|| self.card.map(|c| catalog.resolved_card_kind(core, c)))
+            .expect("validated card use meaning")
+    }
     pub fn suit(&self, catalog: &crate::catalog::Catalog) -> Option<crate::catalog::Suit> {
         self.card.map(|c| catalog.cards[c as usize].suit)
+    }
+    pub fn suit_in(
+        &self,
+        core: &crate::state::GameStateCore,
+        catalog: &crate::catalog::Catalog,
+    ) -> Option<crate::catalog::Suit> {
+        self.card
+            .and_then(|c| catalog.resolved_card_def(core, c))
+            .map(|d| d.suit)
     }
 }

@@ -253,7 +253,9 @@ fn on_card_use_popped(
     core.vm_aux
         .flags
         .remove(&(u.player, format!("sha_jiu_extra:{popped_id}")));
-    let eff_kind = u.use_as.or_else(|| u.card.map(|c| catalog.card_kind(c)));
+    let eff_kind = u
+        .use_as
+        .or_else(|| u.card.map(|c| catalog.resolved_card_kind(core, c)));
     if eff_kind == Some(crate::catalog::CardKind::Tao) {
         core.vm_aux
             .flags
@@ -338,7 +340,10 @@ fn on_card_use_popped(
             }
         }
     }
-    if u.use_as.is_none() || u.card.is_some_and(|c| u.use_as == Some(catalog.card_kind(c))) {
+    if u.use_as.is_none()
+        || u.card
+            .is_some_and(|c| u.use_as == catalog.resolved_card_def(core, c).map(|d| d.kind))
+    {
         if let Some(c) = u.card.filter(|id| core.discard.contains(id)) {
             let mut ctx = Ctx {
                 core,

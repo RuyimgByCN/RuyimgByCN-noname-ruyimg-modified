@@ -108,15 +108,18 @@ impl HostMachine {
                                 )
                             };
                             if color(own) == color(tc) {
-                                ctx.core.player_mut(self.owner).hand.retain(|x| *x != own);
-                                ctx.log(LogEvent::CardDiscarded {
-                                    player: self.owner,
-                                    cards: vec![own],
-                                });
+                                ctx.discard_from_hand(self.owner, own);
                                 ctx.emit(EventData::LoseHp {
                                     player: t,
                                     amount: 1,
                                 });
+                                if let Some(c) = self.card {
+                                    if ctx.core.table.contains(&c) {
+                                        ctx.to_discard(c);
+                                        ctx.core.table.retain(|x| *x != c);
+                                    }
+                                }
+                                return Flow::Done;
                             }
                         }
                         continue;
@@ -125,16 +128,15 @@ impl HostMachine {
                 }
             },
             HostBehavior::JiguanQiankunCard => {
-                // 目标 + 距离 1 邻座：各弃首张手牌（无手牌弃首张装备）
-                //（登记差异：随机牌改确定性首张）
+                // 目标 + 纯距 1 邻座（含使用者，card/gujian/card.js:658）：各随机弃一张 he 牌
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
                 let mut victims = vec![t];
-                for p in ctx.core.alive_players() {
+                for p in ctx.core.seat_order_from(t) {
                     if p != t
-                        && p != self.owner
-                        && ctx.core.computed_distance(ctx.catalog, t, p) == 1
+                        && ctx.core.player(p).alive
+                        && ctx.core.seat_distance_alive(t, p) == 1
                     {
                         victims.push(p);
                     }
@@ -369,8 +371,12 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::JiguanHeilongCard => {
-                // 获得 1 点护甲（登记差异：防御距离 +1 临时技暂缓）
+                // 获得 1 点护甲 + 临时防御距离 +1（至自己下回合开始）
                 ctx.change_hujia(self.owner, 1);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.owner, "u05_mod:gj_heilonglinpian".to_string()), 1);
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);
@@ -378,20 +384,14 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::JiguanLiutougeCard => {
-                // 自己 → 摸 1（增益简化）；其他角色 → 弃首张手牌
-                //（减益简化；登记差异：上游随机效果池）
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
                 if ctx.core.player(t).alive {
-                    if t == self.owner {
-                        ctx.start_draw(t, 1);
-                    } else if let Some(c) = ctx.core.player(t).hand.first().copied() {
-                        ctx.discard_from_hand(t, c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
+                    if t != self.owner && !ctx.core.is_friend_of(ctx.catalog, self.owner, t) {
+                        super::u05_b2_gujian::helpers::apply_get_debuff(ctx, t, false);
+                    } else {
+                        super::u05_b2_gujian::helpers::apply_get_buff(ctx, t);
                     }
                 }
                 if let Some(c) = self.card {
@@ -402,27 +402,55 @@ impl HostMachine {
             }
             HostBehavior::JiguanDinvCard => match self.stage {
                 HostStage::Act => {
-                    // 回复 1 点体力，然后可弃任意张手牌摸等量（可取消）
-                    ctx.recover(self.owner, 1, None);
-                    let options: Vec<ChoiceOption> = ctx
+                    // 目标（濒死救回者或主动自用者）回复 1 点体力，然后可弃任意张 he 牌摸等量
+                    let tgt = self.target.unwrap_or(self.owner);
+                    let already_recovered = ctx
                         .core
-                        .player(self.owner)
+                        .vm_aux
+                        .flags
+                        .remove(&(self.owner, "dinv_already_recovered".to_string()))
+                        .is_some();
+                    if !already_recovered {
+                        ctx.recover(tgt, 1, None);
+                    }
+                    if !ctx.core.player(tgt).alive {
+                        if let Some(c) = self.card {
+                            if ctx.core.table.contains(&c) {
+                                ctx.to_discard(c);
+                                ctx.core.table.retain(|x| *x != c);
+                            }
+                        }
+                        return Flow::Done;
+                    }
+                    let mut options: Vec<ChoiceOption> = ctx
+                        .core
+                        .player(tgt)
                         .hand
                         .iter()
                         .copied()
                         .map(ChoiceOption::Card)
                         .collect();
+                    options.extend(
+                        ctx.core
+                            .player(tgt)
+                            .equips
+                            .iter()
+                            .copied()
+                            .map(ChoiceOption::Card),
+                    );
                     if options.is_empty() {
                         if let Some(c) = self.card {
-                            ctx.to_discard(c);
-                            ctx.core.table.retain(|x| *x != c);
+                            if ctx.core.table.contains(&c) {
+                                ctx.to_discard(c);
+                                ctx.core.table.retain(|x| *x != c);
+                            }
                         }
                         return Flow::Done;
                     }
                     let n = options.len();
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
-                        observer: self.owner,
+                        observer: tgt,
                         spec: ChoiceSpec {
                             kind: ChoiceKind::SelectCards,
                             prompt: GJ_DINVXUANSHUANG_RIDER,
@@ -434,6 +462,7 @@ impl HostMachine {
                     }
                 }
                 HostStage::SelectCard => {
+                    let tgt = self.target.unwrap_or(self.owner);
                     let picked: Vec<CardId> = ctx
                         .answer()
                         .iter()
@@ -443,18 +472,43 @@ impl HostMachine {
                         })
                         .collect();
                     if !picked.is_empty() {
-                        for c in &picked {
-                            ctx.core.player_mut(self.owner).hand.retain(|x| *x != *c);
+                        let mut lost = Vec::new();
+                        let mut origins = Vec::new();
+                        for &c in &picked {
+                            if ctx.core.player(tgt).hand.contains(&c) {
+                                ctx.take_hand_card(tgt, c);
+                                ctx.to_discard(c);
+                                lost.push(c);
+                                origins.push(crate::event::LostOrigin::Hand);
+                            } else if ctx.core.player(tgt).equips.contains(&c) {
+                                ctx.core.player_mut(tgt).equips.retain(|x| *x != c);
+                                ctx.core.declared_slots.remove(&c);
+                                crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, tgt, c);
+                                ctx.to_discard(c);
+                                lost.push(c);
+                                origins.push(crate::event::LostOrigin::Equip);
+                            }
                         }
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: picked.clone(),
-                        });
-                        ctx.start_draw(self.owner, picked.len() as u32);
+                        if !lost.is_empty() {
+                            ctx.note_cards_lost(tgt, &lost);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: tgt,
+                                cards: lost.clone(),
+                            });
+                            let draw_cnt = lost.len() as u32;
+                            ctx.start_draw(tgt, draw_cnt);
+                            ctx.emit(EventData::CardsLost {
+                                player: tgt,
+                                cards: lost,
+                                origins,
+                            });
+                        }
                     }
                     if let Some(c) = self.card {
-                        ctx.to_discard(c);
-                        ctx.core.table.retain(|x| *x != c);
+                        if ctx.core.table.contains(&c) {
+                            ctx.to_discard(c);
+                            ctx.core.table.retain(|x| *x != c);
+                        }
                     }
                     Flow::Done
                 }

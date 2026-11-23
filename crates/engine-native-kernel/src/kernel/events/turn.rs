@@ -213,6 +213,7 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 .flags
                 .remove(&(seat, "dddanzhi_stamp".to_string()));
         }
+        (ctx.catalog.hooks.on_turn_phase_after)(ctx, player);
         ctx.emit(EventData::TurnEndWindow {
             player,
             after: true,
@@ -275,7 +276,7 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
                 }
                 if let Some(v) = victim {
                     let c = ctx.core.player(v).hand[0];
-                    let kind = ctx.catalog.card_kind(c);
+                    let kind = ctx.catalog.resolved_card_kind(ctx.core, c);
                     ctx.take_hand_card(v, c);
                     if let Some(slot) = kind.equip_slot() {
                         // 装备牌自动使用：同栏替换（旧装备入弃
@@ -588,16 +589,70 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
             .flags
             .retain(|(_, k), _| k != "sha_played_this_turn" && k != "damaged_this_turn");
     }
-    let queued_extra = (0..ctx.core.players.len() as PlayerId).find(|&s| {
-        ctx.core.player(s).alive
-            && ctx
+    let lianjing_next = {
+        let len = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(0, "gj_lianjing_len".to_string()))
+            .copied()
+            .unwrap_or(0);
+        let mut idx = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(0, "gj_lianjing_idx".to_string()))
+            .copied()
+            .unwrap_or(0);
+        let mut found = None;
+        while idx < len {
+            let s = ctx
                 .core
                 .vm_aux
                 .flags
-                .get(&(s, "extra_turn_insert_queued".to_string()))
+                .get(&(0, format!("gj_lianjing_q:{idx}")))
                 .copied()
-                .unwrap_or(0)
-                > 0
+                .unwrap_or(0) as PlayerId;
+            idx += 1;
+            if (s as usize) < ctx.core.players.len() && ctx.core.player(s).alive {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((0, "gj_lianjing_idx".to_string()), idx);
+                found = Some(s);
+                break;
+            }
+        }
+        if found.is_none() && len > 0 {
+            ctx.core.vm_aux.flags.remove(&(0, "gj_lianjing_len".to_string()));
+            ctx.core.vm_aux.flags.remove(&(0, "gj_lianjing_idx".to_string()));
+            for i in 0..len {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(0, format!("gj_lianjing_q:{i}")));
+            }
+            for s in 0..ctx.core.players.len() as PlayerId {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(s, "u05_mod:gj_lianjing_out_of_play".to_string()));
+            }
+        }
+        found
+    };
+    let queued_extra = lianjing_next.or_else(|| {
+        (0..ctx.core.players.len() as PlayerId).find(|&s| {
+            ctx.core.player(s).alive
+                && ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(s, "extra_turn_insert_queued".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0
+        })
     });
     let (next, suppress_round_bump) = if let Some(es) = queued_extra {
         ctx.core
@@ -830,6 +885,15 @@ pub(in crate::kernel) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerI
     ctx.core.turn.sheying_used = false;
     // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
     ctx.core.turn.zhangmu_used = false;
+    // 古剑奇谭 黑龙鳞片（card/gujian/skill.js:456-467）：持续至使用者下回合开始前清除
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "u05_mod:gj_heilonglinpian".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "u05_mod:heilonglinpian".to_string()));
     // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌堆前缀红牌至多
     // 3 张，并对座位序前至多 3 名其他角色各造成 1 点火伤
     if let Some(hdef) = ctx

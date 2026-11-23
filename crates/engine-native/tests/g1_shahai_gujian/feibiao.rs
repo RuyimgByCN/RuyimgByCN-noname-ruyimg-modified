@@ -17,9 +17,9 @@ fn feibiao_discard_black_or_damage() {
     };
     let json = std::fs::read_to_string(meta.root.join("assets/cards.json")).unwrap();
     let (pack, _) = bridge(&json).expect("桥接");
-    let mut e = Engine::new_with_extensions(5204, 3, &[&pack]).expect("建局");
+    let mut e = Engine::new_with_extensions(5204, 4, &[&pack]).expect("建局");
     advance_to_play(&mut e);
-    for p in 0..3 {
+    for p in 0..4 {
         e.debug_clear_hand(p);
     }
     let (fb, black, red) = {
@@ -44,16 +44,29 @@ fn feibiao_discard_black_or_damage() {
     let mut snap = e.save();
     purge_all_zones(&mut snap, &[fb, black, red]);
     snap.core.players[0].hand.push(fb);
-    snap.core.players[1].hand.push(black);
-    snap.core.players[1].hand.push(red);
+    snap.core.players[2].hand.push(black);
+    snap.core.players[2].hand.push(red);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复");
-    let hp1 = e.debug_hp(1);
-    let out = submit(
+    // 距离 1 的 1 号被拒绝（outrange.globalFrom = 2）
+    let reject_near = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: fb,
             targets: vec![1],
+        },
+    );
+    assert!(
+        matches!(reject_near, CommandOutcome::Rejected(RejectReason::IllegalTargets)),
+        "expected IllegalTargets: {reject_near:?}"
+    );
+    let hp2 = e.debug_hp(2);
+    let out = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: fb,
+            targets: vec![2],
         },
     );
     assert!(
@@ -67,7 +80,7 @@ fn feibiao_discard_black_or_damage() {
     // 目标选牌挂起：选项只含黑色手牌
     let c = e.open_choice().expect("飞镖目标选牌挂起");
     assert_eq!(c.spec.prompt, "gj_feibiao_discard");
-    assert_eq!(c.observer, 1);
+    assert_eq!(c.observer, 2);
     assert_eq!(
         c.spec.options,
         vec![ChoiceOption::Card(black)],
@@ -77,34 +90,34 @@ fn feibiao_discard_black_or_damage() {
     let cid = c.id;
     submit(
         &mut e,
-        1,
+        2,
         GameAction::Answer {
             choice_id: cid,
             selection: vec![ChoiceOption::Card(black)],
         },
     );
-    assert_eq!(e.debug_hp(1), hp1, "弃黑牌免伤");
-    assert!(!e.debug_hand(1).contains(&black), "黑牌已弃");
+    assert_eq!(e.debug_hp(2), hp2, "弃黑牌免伤");
+    assert!(!e.debug_hand(2).contains(&black), "黑牌已弃");
     assert_zone_conservation(&e);
 
-    // 取消分支：目标取消 → 受 1 点伤害
-    let mut e = Engine::new_with_extensions(5205, 3, &[&pack]).expect("建局2");
+    // 取消分支：目标取消 → 受 1 点体力流失
+    let mut e = Engine::new_with_extensions(5205, 4, &[&pack]).expect("建局2");
     advance_to_play(&mut e);
-    for p in 0..3 {
+    for p in 0..4 {
         e.debug_clear_hand(p);
     }
     let mut snap = e.save();
     purge_all_zones(&mut snap, &[fb, black]);
     snap.core.players[0].hand.push(fb);
-    snap.core.players[1].hand.push(black);
+    snap.core.players[2].hand.push(black);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复2");
-    let hp1 = e.debug_hp(1);
+    let hp2 = e.debug_hp(2);
     let out = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: fb,
-            targets: vec![1],
+            targets: vec![2],
         },
     );
     assert!(matches!(
@@ -116,38 +129,38 @@ fn feibiao_discard_black_or_damage() {
     let cid = c.id;
     submit(
         &mut e,
-        1,
+        2,
         GameAction::Answer {
             choice_id: cid,
             selection: vec![],
         },
     );
-    assert_eq!(e.debug_hp(1), hp1 - 1, "取消 → 失去 1 点体力（规则 v77）");
+    assert_eq!(e.debug_hp(2), hp2 - 1, "取消 → 失去 1 点体力（规则 v77）");
     assert!(
         !e.log()
             .iter()
-            .any(|l| matches!(l, LogEvent::DamageDealt { target: 1, .. })),
+            .any(|l| matches!(l, LogEvent::DamageDealt { target: 2, .. })),
         "飞镖取消分支为失去体力而非伤害"
     );
 
-    // 无黑色手牌：直接受伤，无选择
-    let mut e = Engine::new_with_extensions(5206, 3, &[&pack]).expect("建局3");
+    // 无黑色手牌：直接流失体力，无选择
+    let mut e = Engine::new_with_extensions(5206, 4, &[&pack]).expect("建局3");
     advance_to_play(&mut e);
-    for p in 0..3 {
+    for p in 0..4 {
         e.debug_clear_hand(p);
     }
     let mut snap = e.save();
     purge_all_zones(&mut snap, &[fb, red]);
     snap.core.players[0].hand.push(fb);
-    snap.core.players[1].hand.push(red);
+    snap.core.players[2].hand.push(red);
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复3");
-    let hp1 = e.debug_hp(1);
+    let hp2 = e.debug_hp(2);
     let out = submit(
         &mut e,
         0,
         GameAction::PlayCard {
             card: fb,
-            targets: vec![1],
+            targets: vec![2],
         },
     );
     assert!(matches!(
@@ -156,6 +169,6 @@ fn feibiao_discard_black_or_damage() {
     ));
     pass_nullify_window(&mut e);
     assert!(e.open_choice().is_none(), "无黑色手牌不应挂起选择");
-    assert_eq!(e.debug_hp(1), hp1 - 1, "无黑牌直接受伤");
+    assert_eq!(e.debug_hp(2), hp2 - 1, "无黑牌直接流失体力");
     assert_zone_conservation(&e);
 }

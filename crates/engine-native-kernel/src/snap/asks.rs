@@ -686,7 +686,7 @@ pub fn active_ask(
                 .copied()
                 .filter(|c| {
                     matches!(
-                        catalog.cards[*c as usize].suit,
+                        catalog.resolved_card_suit(core, *c),
                         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                     )
                 })
@@ -694,7 +694,7 @@ pub fn active_ask(
                 .collect();
             for c in core.player(t).equips.iter().copied() {
                 if matches!(
-                    catalog.cards[c as usize].suit,
+                    catalog.resolved_card_suit(core, c),
                     crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
                 ) {
                     candidates.push(ChoiceOption::Card(c));

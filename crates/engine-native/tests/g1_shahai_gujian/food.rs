@@ -64,14 +64,18 @@ fn food_state_grant_tick_and_expire() {
         .clone();
     assert_eq!(inst.rounds, 3, "初始 3 回合");
     let h0 = e.debug_hand(0).len();
-    // 出牌阶段结束（Play→Discard 触发 Phase{Play, end}）
+    // 出牌阶段结束（Play→Discard 触发 phaseUseEnd 摸 1；rounds 在 phaseEnd 才扣减）
     let out = submit(&mut e, 0, GameAction::NextPhase);
     assert!(matches!(
         out,
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
     assert_eq!(e.debug_hand(0).len(), h0 + 1, "出牌阶段结束摸 1");
-    assert_eq!(e.save().core.skills.get(&(0, def_td)).unwrap().rounds, 2);
+    assert_eq!(e.save().core.skills.get(&(0, def_td)).unwrap().rounds, 3, "phaseUseEnd 不扣回合数");
+    // 推进 Discard → End → TurnEndWindow (`phaseEnd`)：rounds 3 → 2
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    assert_eq!(e.save().core.skills.get(&(0, def_td)).unwrap().rounds, 2, "phaseEnd 扣减 1 回合");
     // 挂起无关机器——字节恢复（rounds 入存档）
     let bytes = engine_native::archive::encode_archive(&e.save());
     let restored = Engine::restore_with_extensions(
@@ -91,7 +95,7 @@ fn food_state_grant_tick_and_expire() {
     );
     drop(restored);
 
-    // 归零移除：注入 rounds=1 → 下一次出牌阶段结束移除
+    // 归零移除：注入 rounds=1 → 下一回合 phaseUseEnd 摸 1 且 phaseEnd 归零移除
     e.debug_set_hp(0, 9);
     let mut snap = e.save();
     for ((_owner, def), inst) in snap.core.skills.iter_mut() {
@@ -100,7 +104,7 @@ fn food_state_grant_tick_and_expire() {
         }
     }
     let mut e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入恢复（rounds=1）");
-    // 回到 0 号出牌阶段（当前在弃牌阶段之后推进一个回合）
+    // 回到 0 号出牌阶段
     let mut steps = 0;
     loop {
         steps += 1;
@@ -131,11 +135,14 @@ fn food_state_grant_tick_and_expire() {
         submit(&mut e, actor, GameAction::NextPhase);
     }
     let h0 = e.debug_hand(0).len();
-    submit(&mut e, 0, GameAction::NextPhase);
-    assert_eq!(e.debug_hand(0).len(), h0 + 1, "最后一回合仍摸 1");
+    submit(&mut e, 0, GameAction::NextPhase); // Play -> Discard: draw 1
+    assert_eq!(e.debug_hand(0).len(), h0 + 1, "最后一回合出牌结束仍摸 1");
+    assert!(e.save().core.skills.get(&(0, def_td)).is_some(), "phaseEnd 前状态仍在");
+    submit(&mut e, 0, GameAction::NextPhase); // Discard -> End
+    submit(&mut e, 0, GameAction::NextPhase); // End -> TurnEndWindow (`phaseEnd`) -> 归零移除
     assert!(
         e.save().core.skills.get(&(0, def_td)).is_none(),
-        "归零后实例移除"
+        "phaseEnd 归零后实例移除"
     );
 
     // —— 有更：阶段开始已受伤且体力最少 → 回复 1（对他人授予） ——
@@ -215,7 +222,7 @@ fn food_state_grant_tick_and_expire() {
         submit(&mut e, actor, GameAction::NextPhase);
     }
     assert_eq!(e.debug_hp(1), hp1 + 1, "判定阶段开始回复 1（准备阶段替位）");
-    assert_eq!(e.save().core.skills.get(&(1, def_yg)).unwrap().rounds, 2);
+    assert_eq!(e.save().core.skills.get(&(1, def_yg)).unwrap().rounds, 1);
     assert_zone_conservation(&e);
 }
 

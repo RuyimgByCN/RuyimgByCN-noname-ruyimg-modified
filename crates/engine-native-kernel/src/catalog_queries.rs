@@ -1,6 +1,8 @@
 //! State-dependent card/skill/target queries on [`Catalog`].
 
-use super::{CardId, Catalog, EquipSlot, EventKind, SkillDefId, Suit, TriggerMeta};
+use super::{CardDef, CardId, CardKind, Catalog, EquipSlot, EventKind, SkillDefId, Suit, TriggerMeta};
+use crate::ids::PlayerId;
+use crate::state::GameStateCore;
 
 impl Catalog {
     /// L20 标记补充 (`xinhongyan` / `hongyan`, `extension.js:1105-1135`, `shenhua.js:6887`):
@@ -11,7 +13,7 @@ impl Catalog {
         owner: crate::ids::PlayerId,
         card: CardId,
     ) -> Suit {
-        let raw = self.cards.get(card as usize).map_or(Suit::Club, |c| c.suit);
+        let raw = self.resolved_card_suit(core, card);
         if raw == Suit::Spade
             && !self.is_chanyuan_sealed(core, owner)
             && ["xinhongyan", "hongyan", "红颜"]
@@ -346,7 +348,7 @@ impl Catalog {
             if self.txhj_equip5_active(core) && self.is_txhj_equip5_card(card) {
                 Some(EquipSlot::Treasure)
             } else {
-                self.card_kind(card).equip_slot()
+                self.resolved_card_kind(core, card).equip_slot()
             }
         })
     }
@@ -461,6 +463,109 @@ impl Catalog {
 
     /// Whether a skill has `persevereSkill / forever: true` (`持恒技`):
     /// exempt from skill-disable effects such as `mbcmfangzhu`.
+    /// `yange` 等临时牌面克隆标志 `gj_yange_clone:{card}` 指向的原模板牌号。
+    pub fn resolved_base_card_id(
+        &self,
+        core: &GameStateCore,
+        card: crate::ids::CardId,
+    ) -> crate::ids::CardId {
+        if let Some(&v) = core.vm_aux.flags.get(&(0, format!("gj_yange_clone:{card}"))) {
+            if let Some(id) = v.checked_sub(1) {
+                if (id as usize) < self.cards.len() {
+                    return id;
+                }
+            }
+        }
+        card
+    }
+
+    pub fn resolved_card_def(
+        &self,
+        core: &GameStateCore,
+        card: crate::ids::CardId,
+    ) -> Option<&CardDef> {
+        self.cards
+            .get(self.resolved_base_card_id(core, card) as usize)
+    }
+
+    pub fn resolved_card_kind(&self, core: &GameStateCore, card: crate::ids::CardId) -> CardKind {
+        core.declared_kinds.get(&card).copied().unwrap_or_else(|| {
+            self.resolved_card_def(core, card)
+                .map(|d| d.kind)
+                .unwrap_or(CardKind::Sha)
+        })
+    }
+
+    pub fn resolved_card_suit(&self, core: &GameStateCore, card: crate::ids::CardId) -> Suit {
+        self.resolved_card_def(core, card)
+            .map_or(Suit::Club, |d| d.suit)
+    }
+
+    pub fn yanjia_merged_card_id(
+        &self,
+        core: &GameStateCore,
+        card: crate::ids::CardId,
+    ) -> Option<crate::ids::CardId> {
+        let raw = core
+            .vm_aux
+            .flags
+            .get(&(0, format!("gj_yanjia_merged:{card}")))
+            .and_then(|v| v.checked_sub(1))?;
+        let base = self.resolved_base_card_id(core, raw);
+        ((base as usize) < self.cards.len()).then_some(base)
+    }
+
+    pub fn equip_card_has_kind(
+        &self,
+        core: &GameStateCore,
+        card: crate::ids::CardId,
+        want: CardKind,
+    ) -> bool {
+        if self.resolved_card_kind(core, card) == want {
+            return true;
+        }
+        self.yanjia_merged_card_id(core, card)
+            .is_some_and(|c2| self.resolved_card_kind(core, c2) == want)
+    }
+
+    pub fn player_has_equip_kind(
+        &self,
+        core: &GameStateCore,
+        player: PlayerId,
+        want: CardKind,
+    ) -> bool {
+        core.player(player)
+            .equips
+            .iter()
+            .any(|&c| self.equip_card_has_kind(core, c, want))
+    }
+
+    pub fn equip_card_skills(
+        &self,
+        core: &GameStateCore,
+        card: crate::ids::CardId,
+    ) -> Vec<&'static str> {
+        let mut out = Vec::new();
+        if let Some(def) = self.resolved_card_def(core, card) {
+            out.extend_from_slice(&def.equip_skills);
+        }
+        if let Some(c2) = self.yanjia_merged_card_id(core, card) {
+            if let Some(def2) = self.cards.get(c2 as usize) {
+                out.extend_from_slice(&def2.equip_skills);
+            }
+        }
+        out
+    }
+
+    pub fn equip_card_links(&self, core: &GameStateCore, card: crate::ids::CardId) -> bool {
+        self.resolved_card_def(core, card)
+            .is_some_and(|d| d.link_on_equip)
+            || self
+                .yanjia_merged_card_id(core, card)
+                .and_then(|c2| self.cards.get(c2 as usize))
+                .is_some_and(|d| d.link_on_equip)
+    }
+
     pub fn is_forever_skill(&self, def: crate::ids::SkillDefId) -> bool {
         self.skills
             .get(def as usize)

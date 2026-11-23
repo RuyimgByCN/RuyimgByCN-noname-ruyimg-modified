@@ -107,7 +107,7 @@ pub(super) fn play_card(
                     }
                     // 铁索为结算型锦囊：走 CardUsed → 无懈窗口 → ChainMachine
                     // 翻转（旧实现只推 Linked 帧，牌从未离手，ADR 0705 修复）。
-                    let use_as = (kind != catalog.card_kind(card)
+                    let use_as = (kind != catalog.resolved_card_kind(core, card)
                         || !core.player(core.turn.current).hand.contains(&card))
                     .then_some(CardKind::Chain);
                     crate::resolution::push_frame(
@@ -167,7 +167,7 @@ pub(super) fn play_card(
                     if kongcheng && core.player(target).hand.is_empty() {
                         return Err(RejectReason::IllegalTargets);
                     }
-                    let use_as = (kind != catalog.card_kind(card)
+                    let use_as = (kind != catalog.resolved_card_kind(core, card)
                         || !core.player(core.turn.current).hand.contains(&card))
                     .then_some(CardKind::Duel);
                     crate::resolution::push_frame(
@@ -244,7 +244,7 @@ pub(super) fn play_card(
                     // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
                     let fentian_red_free = {
                         let red = matches!(
-                            catalog.cards[card as usize].suit,
+                            catalog.resolved_card_suit(core, card),
                             crate::catalog::Suit::Heart
                                 | crate::catalog::Suit::Diamond
                         );
@@ -257,7 +257,7 @@ pub(super) fn play_card(
                     // 探囊（U05 xianjian 韩菱纱，规则 v148）：视为的顺手
                     // 牵羊无距离限制（上游 mod targetInRange 同口径；仅
                     // 声明转化命中——实体牌非顺牵即视为路径）
-                    let tannang_free = catalog.card_kind(card) != CardKind::Snatch
+                    let tannang_free = catalog.resolved_card_kind(core, card) != CardKind::Snatch
                         && (catalog
                             .skill_by_name(crate::content::host::XJ_TANNANG_KEY)
                             .map(|def| core.has_skill(from, def))
@@ -362,13 +362,12 @@ pub(super) fn play_card(
                             return Err(RejectReason::IllegalTargets);
                         }
                     }
-                    if core.player(target).judge.iter().any(|c| {
-                        core.declared_kinds
-                            .get(c)
-                            .copied()
-                            .unwrap_or_else(|| catalog.card_kind(*c))
-                            == kind
-                    }) {
+                    if core
+                        .player(target)
+                        .judge
+                        .iter()
+                        .any(|c| catalog.resolved_card_kind(core, *c) == kind)
+                    {
                         return Err(RejectReason::IllegalTargets);
                     }
                     let use_as = (kind != catalog.card_kind(card) || limu_self_le).then_some(kind);
@@ -498,13 +497,13 @@ pub(super) fn play_card(
                         .player(player)
                         .judge
                         .iter()
-                        .any(|c| catalog.card_kind(*c) == kind)
+                        .any(|c| catalog.resolved_card_kind(core, *c) == kind)
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
                     // 良策转化（玩点论杀批 15）：基本牌当五谷——use_as 声明
                     // 必须随帧（否则机器工厂回退目录种）。
-                    let use_as = (kind != catalog.card_kind(card)
+                    let use_as = (kind != catalog.resolved_card_kind(core, card)
                         || !core.player(player).hand.contains(&card))
                     .then_some(kind);
                     crate::resolution::push_frame(
@@ -672,7 +671,7 @@ pub(super) fn play_card(
                     // viewAs 转化（万钧装备牌当南蛮等）须随帧声明——工厂按
                     // 声明种路由 AOE 机，实体种会把机路由丢空
                     let declared =
-                        if kind != catalog.card_kind(card) {
+                        if kind != catalog.resolved_card_kind(core, card) {
                             Some(kind)
                         } else {
                             None
@@ -777,7 +776,7 @@ pub(super) fn play_card(
                         || core.player(targets[0])
                             .judge
                             .iter()
-                            .any(|c| catalog.card_kind(*c) == CardKind::Guiyoujie)
+                            .any(|c| catalog.resolved_card_kind(core, *c) == CardKind::Guiyoujie)
                     {
                         return Err(RejectReason::IllegalTargets);
                     }
@@ -876,7 +875,7 @@ pub(super) fn play_card(
                     // 限制（上游 mod cardUsable Infinity 同口径）
                     let fentian_red_jiu = {
                         let red = matches!(
-                            catalog.cards[card as usize].suit,
+                            catalog.resolved_card_suit(core, card),
                             crate::catalog::Suit::Heart
                                 | crate::catalog::Suit::Diamond
                         );
@@ -909,8 +908,10 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                 }
-                // 闪/无懈可击：仅在响应窗口打出，不可主动使用
-                CardKind::Shan | CardKind::Nullify => return Err(RejectReason::WrongPhase),
+                // 闪/无懈可击/帝女玄霜：仅在响应或濒死窗口使用，不可主动使用
+                CardKind::Shan | CardKind::Nullify | CardKind::Dinvxuanshuang => {
+                    return Err(RejectReason::WrongPhase);
+                }
                 CardKind::Shuigong
                 | CardKind::Fudichouxin
                 | CardKind::Chenhuodajie
@@ -934,7 +935,6 @@ pub(super) fn play_card(
                 | CardKind::Liutouge
                 | CardKind::Heilonglinpian
                 | CardKind::Mutoumianju
-                | CardKind::Dinvxuanshuang
                 | CardKind::Gjyuheng
                 | CardKind::Dunpaigedang
                 | CardKind::Xingjiegoutong
