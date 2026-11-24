@@ -98,6 +98,8 @@ pub(crate) fn attach_taixu_pack(
         }
     }
 
+    crate::taixu_vm_fix_b::attach_l11_vm_fix_b_cards(extra_cards, seen_cards);
+
     // P3-E1: strip-safe native VM Fix A bindings + `xiangle` (avoid U01 stub).
     crate::push_host_skill_if_unseen(
         "xiangle",
@@ -113,6 +115,7 @@ pub(crate) fn attach_taixu_pack(
             seen_skills,
         );
     }
+    crate::taixu_vm_fix_b::attach_l11_vm_fix_b_skills(extra_host_skills, seen_skills);
 
     // P3-C1a: Part A 80 跨包 NPC 技 + 3 派生技 (`olhuoji`, `olkanpo`, `rexuanfeng`)
     // 统一绑定到原生行为组 `HostBehavior::L11CrossNpcA`；同时保证 `bazhen` / `reyingzi` 派生基础技可查。
@@ -164,6 +167,7 @@ pub(crate) fn attach_taixu_pack(
     for &s in &crate::L11_TAIXU_CROSS_SKILLS {
         if crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s)
             || crate::taixu_vm_fix_a::is_stripped_vm_skill(s)
+            || crate::taixu_vm_fix_b::is_stripped_vm_skill(s)
         {
             continue;
         }

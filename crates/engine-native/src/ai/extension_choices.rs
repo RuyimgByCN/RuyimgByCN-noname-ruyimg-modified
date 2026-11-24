@@ -58,6 +58,8 @@ mod extension_choices_q4;
 mod extension_choices_l11_npc;
 #[path = "extension_choices_l11_vm_a.rs"]
 mod extension_choices_l11_vm_a;
+#[path = "extension_choices_l11_vm_b.rs"]
+mod extension_choices_l11_vm_b;
 
 pub(super) use extension_choices_common::{extension_card_value, public_attitude};
 
@@ -279,6 +281,18 @@ pub(super) fn plan_extension_choice_action(
             )
             .or_else(|| {
                 extension_choices_l11_b3::plan_l11_b3_choice_action(
+                    catalog,
+                    input,
+                    id,
+                    prompt,
+                    options,
+                    min,
+                    max,
+                    allow_cancel,
+                )
+            })
+            .or_else(|| {
+                extension_choices_l11_vm_b::plan_l11_vm_fix_b_choice_action(
                     catalog,
                     input,
                     id,

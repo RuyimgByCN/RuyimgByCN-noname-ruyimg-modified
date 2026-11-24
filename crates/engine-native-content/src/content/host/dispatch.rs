@@ -65,6 +65,7 @@ pub(crate) fn host_card_use_after_all(
     step::l11_npc_b::on_card_use_after_l11_npc_b(ctx, fid, u);
     step::l11_npc_a::on_card_use_after_l11_npc_a(ctx, fid, u);
     step::l11_vm_fix_a::on_card_use_after(ctx, fid, u);
+    step::l11_vm_fix_b::on_card_use_after_l11_vm_fix_b(ctx, fid, u);
 }
 
 pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
@@ -133,6 +134,7 @@ pub(crate) fn host_on_turn_begin_all(ctx: &mut Ctx<'_>, player: PlayerId) {
 pub(crate) fn host_on_equip_gained_all(ctx: &mut Ctx<'_>, player: PlayerId, card: CardId) {
     host_on_equip_gained_hearth(ctx, player, card);
     step::l11_npc_a::on_equip_changed_l11_npc_a(ctx.core, ctx.catalog, player, card, false);
+    step::l11_vm_fix_b::on_equip_gained_l11_vm_fix_b(ctx, player);
 }
 
 pub(crate) fn host_on_equip_revoked_all(
@@ -169,6 +171,7 @@ pub(crate) fn host_on_phase_skipped_all(ctx: &mut Ctx<'_>, player: PlayerId) {
 pub(crate) fn host_on_host_event_all(ctx: &mut Ctx<'_>, event: &EventData) {
     on_l25_host_event(ctx, event);
     step::l11_npc_b::on_host_event_l11_npc_b(ctx, event);
+    step::l11_vm_fix_b::on_host_event_l11_vm_fix_b(ctx, event);
 }
 
 pub(crate) fn host_on_hp_changed_all(ctx: &mut Ctx<'_>, player: PlayerId, delta: i32) {

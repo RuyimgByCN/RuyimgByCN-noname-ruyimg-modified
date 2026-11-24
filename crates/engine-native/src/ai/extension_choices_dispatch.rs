@@ -267,4 +267,16 @@ pub(super) fn plan_extension_choice_fallback(
             allow_cancel,
         )
     })
+    .or_else(|| {
+        extension_choices_l11_vm_b::plan_l11_vm_fix_b_choice_action(
+            catalog,
+            input,
+            id,
+            prompt,
+            options,
+            min,
+            max,
+            allow_cancel,
+        )
+    })
 }

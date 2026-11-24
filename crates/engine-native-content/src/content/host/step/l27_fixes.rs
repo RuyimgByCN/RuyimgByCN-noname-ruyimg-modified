@@ -114,6 +114,7 @@ pub(crate) fn host_on_death_before(ctx: &mut Ctx<'_>, dying: PlayerId) -> bool {
 pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
     super::l11_own_npc::on_turn_phase_after_l11_own_npc(ctx, player);
+    super::l11_vm_fix_b::on_turn_phase_after_l11_vm_fix_b(ctx, player);
 }
 
 /// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` / `hearth` / `gwent` 死亡监听。
@@ -123,6 +124,7 @@ pub(crate) fn host_on_player_died(
     killer: Option<PlayerId>,
 ) {
     super::l11_own_npc::on_player_died_l11_own_npc(ctx, dead, killer);
+    super::l11_vm_fix_b::on_player_died_l11_vm_fix_b(ctx, dead, killer);
     super::u05_ow::host_on_player_died_ow(ctx, dead);
     super::u05_hearth::host_on_player_died_hearth(ctx, dead, killer);
     crate::content::host::step::u05_b5b_gwent::u05_b5b_on_player_died(ctx, dead);
@@ -203,6 +205,7 @@ pub(crate) fn host_on_phase_use_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     set_flag(ctx.core, player, "bolan_granted_def", 0);
     set_flag(ctx.core, player, "bolan_temp_skill", 0);
     super::u05_hearth::host_on_phase_use_end_hearth(ctx, player);
+    super::l11_vm_fix_b::on_phase_use_end_l11_vm_fix_b(ctx, player);
 }
 
 /// `roundStart` 轮次开始钩子：清除 `xingchong` 上轮展示牌与标记、`clandianzhan` 本轮花色记录。
@@ -223,6 +226,7 @@ pub(crate) fn host_on_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
     set_flag(ctx.core, player, "u05_mhuanyi_tgt", 0);
     set_flag(ctx.core, player, "u05_mhuanyi_cls", 0);
     super::l11_own_npc::on_turn_begin_l11_own_npc(ctx, player);
+    super::l11_vm_fix_b::on_turn_begin_l11_vm_fix_b(ctx, player);
 }
 
 /// 手牌移除钩子：处理 `mtg_du_*` 离手失血（非交出/保留在他人手牌），以及 `xingchong` 展示牌离手摸 2。
@@ -315,6 +319,7 @@ pub(crate) fn on_skill_removed_all(
         core, owner, skill_name,
     ));
     super::l11_npc_b::on_skill_removed_l11_npc_b(core, catalog, owner, skill_name);
+    super::l11_vm_fix_b::on_skill_removed_l11_vm_fix_b(core, owner, skill_name);
     cards
 }
 

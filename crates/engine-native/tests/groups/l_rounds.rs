@@ -82,6 +82,9 @@ mod l11_npc_b_triggers;
 #[path = "../l11_npc_b_save_ai.rs"]
 mod l11_npc_b_save_ai;
 
+#[path = "../l11_vm_fix_b.rs"]
+mod l11_vm_fix_b;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

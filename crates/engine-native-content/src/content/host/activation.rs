@@ -427,6 +427,9 @@ impl HostSkillBehavior {
                 super::step::l11_npc_b::activate_l11_npc_b(self, ctx.state, ctx.catalog, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
             }
+            HostBehavior::L11VmFixB => {
+                super::step::l11_vm_fix_b::activate_l11_vm_fix_b(self, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -737,6 +740,7 @@ pub(in crate::content::host) fn has_phase_use_activation(
         HostBehavior::L11CrossNpcB => super::step::l11_npc_b::has_phase_use_activation_l11_npc_b(name),
         HostBehavior::L11CrossNpcA => super::step::l11_npc_a::has_phase_use_l11_npc_a(name),
         HostBehavior::L11VmFixA => super::step::l11_vm_fix_a::has_phase_use(name),
+        HostBehavior::L11VmFixB => super::step::l11_vm_fix_b::has_phase_use_l11_vm_fix_b(name),
         _ => false,
     }
 }

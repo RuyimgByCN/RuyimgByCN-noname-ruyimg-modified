@@ -748,6 +748,9 @@ impl SkillBehavior for HostSkillBehavior {
                 step::l11_own_npc::trigger_meta_l11_own_npc(&self.name, Some(kind))
             }
             HostBehavior::L11CrossNpcB => step::l11_npc_b::trigger_meta_l11_npc_b(&self.name, kind),
+            HostBehavior::L11VmFixB => {
+                step::l11_vm_fix_b::trigger_meta_l11_vm_fix_b(&self.name, Some(kind))
+            }
             _ => None,
         }
     }
@@ -868,6 +871,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11OwnNpc
                 | HostBehavior::L11CrossNpcA
                 | HostBehavior::L11VmFixA
+                | HostBehavior::L11VmFixB
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
                 | HostBehavior::L11CrossNpcB

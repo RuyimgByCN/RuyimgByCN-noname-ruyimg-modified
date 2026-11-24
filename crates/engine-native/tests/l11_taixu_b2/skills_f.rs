@@ -259,7 +259,7 @@ fn l11_b2_skills_f_yongguan_chengyuan_benji_yonglve_jiang_oldhuxiao() {
     let _ = top_deck_rank(&mut e_yl, 12); // deck top 12 > 5 -> owner wins via txyonglve!
     e_yl.debug_set_turn(0, Phase::Play, 1);
     let _ = activate_skill(&mut e_yl, 0, "tianyi");
-    let c_ty_t = expect_pending(&e_yl, "rvm_choice");
+    let c_ty_t = expect_pending(&e_yl, "l11_vm_b:tianyi_target");
     let _ = answer(&mut e_yl, &c_ty_t, vec![ChoiceOption::Player(1)]);
     let c_yl = expect_pending(&e_yl, "txyonglve:confirm");
     let e_yl_done = save_restore_and_compare_pending(&e_yl, &c_yl, vec![ChoiceOption::Confirm]);

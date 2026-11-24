@@ -112,6 +112,9 @@ pub fn eval_sha_unlimited_for_targets(
         }
     });
     unlimited
+        || super::d34_flags::d34_l11_mods::d34_l11_mods_vm_b::eval_sha_unlimited_for_targets(
+            state, catalog, player, targets,
+        )
 }
 
 /// 评估指定实体/虚拟【杀】是否豁免出牌阶段次数计数（`ShaNoUseCountRankGtMark`，如 `qiangwu`）。

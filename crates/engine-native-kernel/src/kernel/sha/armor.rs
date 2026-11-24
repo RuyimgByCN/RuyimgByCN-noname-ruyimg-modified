@@ -115,7 +115,7 @@ impl ShaResolveMachine {
         });
         // 判定牌判定后即弃置（八卦阵判定无获得路径）
         let settled_spawned = ctx.settle_inline_judge_card(self.target, j_suit, judged);
-        if success {
+        if success && !self.shanxie_excludes_shan(ctx, None) {
             if let Some(flow) = self.try_open_sadeng_on_miss(ctx) {
                 return Some(flow);
             }

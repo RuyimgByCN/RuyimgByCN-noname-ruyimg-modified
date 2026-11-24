@@ -631,3 +631,48 @@ pub fn lookup_l25_zuan_host_behavior(
         _ => None,
     }
 }
+
+pub(super) fn apply_zuan_post_overrides_raw(
+    prior_packs: &[engine_native::content::extension::ExtensionPack],
+    pack: &mut engine_native::content::extension::ExtensionPack,
+    extra_vm_skills: &mut Vec<engine_native::content::extension::VmSkillDecl>,
+    extra_host_skills: &mut Vec<engine_native::content::host::HostSkillDecl>,
+    seen_skills: &mut std::collections::BTreeSet<String>,
+) {
+    let pyzhuren_in_prior = prior_packs.iter().any(|p| {
+        p.host_skills.iter().any(|s| s.name == "pyzhuren_diamond")
+            || p.vm_skills.iter().any(|s| s.name == "pyzhuren_diamond")
+    });
+    if !pyzhuren_in_prior {
+        pack.vm_skills.retain(|v| v.name != "pyzhuren_diamond");
+        extra_vm_skills.retain(|v| v.name != "pyzhuren_diamond");
+        seen_skills.remove("pyzhuren_diamond");
+    }
+    for &(ov, beh) in &[
+        ("gongxin", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("_anshaskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("_seadreammodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("_relifeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("_guanmodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("_dietime", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("ansha_zhong", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("ansha_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("huanhaicls", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("guanfu", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("guifu_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("guifu_fire", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("guifu_dam", engine_native::content::host::HostBehavior::L25ZuanBatchA),
+        ("pyzhuren_diamond", engine_native::content::host::HostBehavior::L25ZuanBatchE),
+    ] {
+        if let Some(decl) = pack
+            .host_skills
+            .iter_mut()
+            .chain(extra_host_skills.iter_mut())
+            .find(|d| d.name == ov)
+        {
+            decl.behavior = beh;
+        } else {
+            super::push_host_skill_if_unseen(ov, beh, extra_host_skills, seen_skills);
+        }
+    }
+}

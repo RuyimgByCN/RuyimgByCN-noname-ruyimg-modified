@@ -1945,4 +1945,6 @@ pub enum HostBehavior {
     L11CrossNpcA,
     /// P3-E1 L11 `taixu` 跨包 NPC / 疑点 VM 技能全量迁移宿主分发（tag 1392）。
     L11VmFixA,
+    /// Batch L11 VM Fix B（`P3-E2`：`taixu-upstream-liuli` 34 技及伴生状态宿主真实现与交互询问；tag 1393）。
+    L11VmFixB,
 }

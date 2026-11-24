@@ -790,6 +790,7 @@ const fn is_post_commit_host_event(event: &EventData) -> bool {
             | EventData::Recover { .. }
             | EventData::LoseHp { .. }
             | EventData::CardsDrawn { .. }
+            | EventData::CardResponded { .. }
             | EventData::Death { .. }
             | EventData::TurnEnded { .. }
     )

@@ -175,10 +175,16 @@ fn on_frame_popped_inner(
             .remove(&(*player, format!("l11_prev_eq_play:{}", popped.id)));
         core.vm_aux
             .flags
+            .remove(&(*player, format!("l11_vm_b_equip_use:{}", popped.id)));
+        core.vm_aux
+            .flags
             .remove(&(*player, format!("l11_equip_from_hand:{card}")));
         core.vm_aux
             .flags
             .remove(&(*player, format!("l11_move_equip_evt:{card}")));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("eq_swap1:{}", popped.id)));
         let twzhian_eq = core
             .vm_aux
             .flags

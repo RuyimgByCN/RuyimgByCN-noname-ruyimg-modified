@@ -118,5 +118,15 @@ pub(super) fn play_equip(
             .flags
             .insert((player, format!("l11_play_equip_use:{frame}")), 1);
     }
+    if ["xinfu_qinguo", "qiangzhi_draw", "twshengxi", "zhengjian_mark"]
+        .iter()
+        .any(|n| catalog.skill_by_name(n).is_some())
+    {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player, format!("l11_vm_b_equip_use:{frame}")), 1);
+    }
     Ok(())
 }

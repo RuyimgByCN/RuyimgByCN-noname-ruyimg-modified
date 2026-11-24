@@ -271,6 +271,23 @@ pub(super) fn validate_wuzhong_targets(
                     }
                     return Err(RejectReason::IllegalTargets);
                 }
+                "tiaojiyanmei"
+                | "tiaojiyanmei_heart"
+                | "tiaojiyanmei_club"
+                | "tiaojiyanmei_diamond" => {
+                    if targets.is_empty() {
+                        return Ok(());
+                    }
+                    if targets.len() == 2
+                        && targets[0] != targets[1]
+                        && core.player(targets[0]).alive
+                        && core.player(targets[1]).alive
+                        && core.player(targets[0]).hand.len() != core.player(targets[1]).hand.len()
+                    {
+                        return Ok(());
+                    }
+                    return Err(RejectReason::IllegalTargets);
+                }
                 "huogong" => {
                     if targets.len() == 1
                         && core.player(targets[0]).alive
@@ -854,7 +871,15 @@ pub(super) fn try_recast_l11_trick(
         && kind == catalog.resolved_card_kind(&state.core, card)
         && targets.is_empty()
         && catalog.cards.get(card as usize).is_some_and(|cd| {
-            matches!(base_l11_card_name(cd.name), "txhj_zhijizhibi" | "txhj_shengdong")
+            matches!(
+                base_l11_card_name(cd.name),
+                "txhj_zhijizhibi"
+                    | "txhj_shengdong"
+                    | "tiaojiyanmei"
+                    | "tiaojiyanmei_heart"
+                    | "tiaojiyanmei_club"
+                    | "tiaojiyanmei_diamond"
+            )
         });
     if !recastable {
         return Ok(false);

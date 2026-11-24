@@ -238,6 +238,7 @@ pub(in crate::rvm_bridge::modifiers) fn apply_ignore_armor(
     {
         ignore = true;
     }
+    let ignore = super::d34_l11_mods_vm_b::apply_ignore_armor(state, catalog, source, target, ignore);
     d34_l25_mods::apply_ignore_armor(state, catalog, source, target, card, ignore)
 }
 

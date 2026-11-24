@@ -585,7 +585,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                     u.card,
                     u.effective_kind(ctx.catalog),
                 );
-                if !qiangwu_no_count {
+                if !qiangwu_no_count && !vm_va_free {
                     if crate::rvm_bridge::modifiers::player_tracks_sha_used_count(
                         ctx.core,
                         ctx.catalog,

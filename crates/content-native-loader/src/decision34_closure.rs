@@ -597,3 +597,6 @@ pub(crate) mod shahai_u05_hearth;
 pub mod shahai_attach;
 pub use shahai_attach::*;
 
+#[path = "taixu_vm_fix_b.rs"]
+pub mod taixu_vm_fix_b;
+

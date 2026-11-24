@@ -18,6 +18,9 @@ pub(crate) fn card_intrinsic(
     u: &CardUseData,
     effective_kind: CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>> {
+    if let Some(res) = super::step::l11_vm_fix_b::try_tiaojiyanmei_intrinsic(ctx, u, effective_kind) {
+        return Some(res);
+    }
     if let Some(res) = super::step::l11_cards::try_l11_card_intrinsic(ctx, u, effective_kind) {
         return Some(res);
     }

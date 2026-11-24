@@ -456,7 +456,8 @@ pub fn attach_formal_package_upstream_rules(
             && (super::lookup_upstream_host_behavior(&vs.name).is_some()
                 || crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&vs.name.as_str())
                 || vs.name == "jueqing"
-                || crate::taixu_vm_fix_a::is_stripped_vm_skill(&vs.name))
+                || crate::taixu_vm_fix_a::is_stripped_vm_skill(&vs.name)
+                || crate::taixu_vm_fix_b::is_stripped_vm_skill(&vs.name))
         {
             return false;
         }
@@ -820,47 +821,13 @@ pub fn attach_formal_package_upstream_rules(
         _ => {}
     }
     if (namespace, package_id) == ("upstream-liuli", "zuan") {
-        let pyzhuren_in_prior = prior_packs.iter().any(|p| {
-            p.host_skills.iter().any(|s| s.name == "pyzhuren_diamond")
-                || p.vm_skills.iter().any(|s| s.name == "pyzhuren_diamond")
-        });
-        if !pyzhuren_in_prior {
-            pack.vm_skills.retain(|v| v.name != "pyzhuren_diamond");
-            extra_vm_skills.retain(|v| v.name != "pyzhuren_diamond");
-            seen_skills.remove("pyzhuren_diamond");
-        }
-        for &(ov, beh) in &[
-            ("gongxin", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("_anshaskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("_seadreammodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("_relifeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("_guanmodeskill", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("_dietime", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("ansha_zhong", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("ansha_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("huanhaicls", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("guanfu", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("guifu_nei", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("guifu_fire", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("guifu_dam", engine_native::content::host::HostBehavior::L25ZuanBatchA),
-            ("pyzhuren_diamond", engine_native::content::host::HostBehavior::L25ZuanBatchE),
-        ] {
-            if let Some(decl) = pack
-                .host_skills
-                .iter_mut()
-                .chain(extra_host_skills.iter_mut())
-                .find(|d| d.name == ov)
-            {
-                decl.behavior = beh;
-            } else {
-                super::push_host_skill_if_unseen(
-                    ov,
-                    beh,
-                    &mut extra_host_skills,
-                    &mut seen_skills,
-                );
-            }
-        }
+        crate::zuan_data::apply_zuan_post_overrides_raw(
+            prior_packs,
+            pack,
+            &mut extra_vm_skills,
+            &mut extra_host_skills,
+            &mut seen_skills,
+        );
     }
     pack.generals.extend(extra_generals);
     pack.cards.extend(extra_cards);

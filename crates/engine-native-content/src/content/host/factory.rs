@@ -260,6 +260,9 @@ impl HostSkillBehavior {
             HostBehavior::L11CrossNpcB => {
                 return super::step::l11_npc_b::machine_l11_npc_b(self, owner, event);
             }
+            HostBehavior::L11VmFixB => {
+                return super::step::l11_vm_fix_b::machine_l11_vm_fix_b(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

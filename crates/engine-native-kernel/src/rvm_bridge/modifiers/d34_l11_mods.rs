@@ -13,6 +13,8 @@ use super::has_ext_skill;
 
 #[path = "d34_l25_mods.rs"]
 mod d34_l25_mods;
+#[path = "d34_l11_mods_vm_b.rs"]
+pub(in crate::rvm_bridge::modifiers) mod d34_l11_mods_vm_b;
 
 fn has_armor(state: &GameStateCore, catalog: &Catalog, seat: PlayerId) -> bool {
     state
@@ -89,12 +91,13 @@ pub fn is_card_ignored_in_discard_phase(
         catalog.effective_card_suit(state, player, card),
         Suit::Spade | Suit::Club
     );
-    is_black
+    (is_black
         && state.alive_players().any(|h| {
             state.is_friend_of(catalog, player, h)
                 && (has_ext_skill(state, catalog, h, "cxyJiaoXia")
                     || flag_val(state, h, "l11_mod:cxyJiaoXia") > 0)
-        })
+        }))
+        || d34_l11_mods_vm_b::is_card_ignored_in_discard_phase(state, catalog, player, card)
 }
 
 pub(super) fn is_card_ignored_hand_limit(
@@ -519,6 +522,7 @@ pub(super) fn apply_sha_use_limit(
     }
     // `extension_skill.js:4370` (`txhj_zhuwei_eff`: Sha cardUsable +X this turn)
     cur += flag_val(state, player, "skill_turn:l11_zhuwei_eff") as i32;
+    let (cur, unlimited) = d34_l11_mods_vm_b::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     d34_l25_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
 }
 
@@ -537,6 +541,7 @@ pub(super) fn apply_sha_extra_targets(
         extra += flag_val(state, player, "l11_mod:guju_extra") as i32;
         extra += flag_val(state, player, "l11_mod:twhengjiang_extra") as i32;
     }
+    let extra = d34_l11_mods_vm_b::apply_sha_extra_targets(state, catalog, player, kind, extra);
     d34_l25_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
@@ -624,6 +629,9 @@ pub(super) fn apply_card_distance_unlimited_to(
             unlimited = true;
         }
     }
+    let unlimited = d34_l11_mods_vm_b::apply_card_distance_unlimited_to(
+        state, catalog, player, target, card, kind, unlimited,
+    );
     d34_l25_mods::apply_card_distance_unlimited_to(
         state, catalog, player, target, card, kind, unlimited,
     )
@@ -831,6 +839,9 @@ pub(super) fn apply_card_target_canceled(
     if flag_val(state, actor, &format!("skill_turn:xinfu_tanbei_forbid:{target}")) > 0 {
         canceled = true;
     }
+    let canceled = d34_l11_mods_vm_b::apply_card_target_canceled(
+        state, catalog, actor, target, card, kind, canceled,
+    );
     d34_l25_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled)
 }
 
@@ -867,6 +878,7 @@ pub(super) fn apply_card_use_canceled(
     {
         canceled = true;
     }
+    let canceled = d34_l11_mods_vm_b::apply_card_use_canceled(state, catalog, actor, kind, canceled);
     d34_l25_mods::apply_card_use_canceled(state, catalog, actor, kind, in_hand, canceled)
 }
 

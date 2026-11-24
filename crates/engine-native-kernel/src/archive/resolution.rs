@@ -98,6 +98,8 @@ mod known_prompts_l11_b3;
 mod known_prompts_l11_b4;
 #[path = "known_prompts_l11_b5.rs"]
 mod known_prompts_l11_b5;
+#[path = "known_prompts_l11_vm_b.rs"]
+mod known_prompts_l11_vm_b;
 #[path = "known_prompts_u05_2.rs"]
 mod known_prompts_u05_2;
 #[path = "known_prompts_u05_3.rs"]
@@ -185,6 +187,12 @@ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> 
         })
         .or_else(|| {
             known_prompts_l11_b5::KNOWN_PROMPTS_L11_B5
+                .iter()
+                .find(|k| **k == s)
+                .copied()
+        })
+        .or_else(|| {
+            known_prompts_l11_vm_b::KNOWN_PROMPTS_L11_VM_B
                 .iter()
                 .find(|k| **k == s)
                 .copied()

@@ -149,6 +149,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11VmFixB {
+            return super::step::l11_vm_fix_b::filter_l11_vm_fix_b(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if self.behavior == HostBehavior::L11GeneralSkillsF {
             return super::step::l11_skills_f::filter_l11_skills_f_with_frames(
                 self, ctx, frames, Some(frame), owner, event,
@@ -1190,6 +1195,9 @@ impl HostSkillBehavior {
             HostBehavior::L11CrossNpcB => super::step::l11_npc_b::filter_l11_npc_b_with_frames(
                 self, ctx, &[], None, owner, event,
             ),
+            HostBehavior::L11VmFixB => {
+                super::step::l11_vm_fix_b::filter_l11_vm_fix_b(self, ctx, &[], None, owner, event)
+            }
             _ => false,
         }
     }

@@ -376,7 +376,9 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         }
                         super::respond::note_longdan_sha_source(ctx, holder, self.source);
                         crate::kernel::emit_card_responded_as(ctx, holder, shan, CardKind::Shan);
-                        self.dodges_used += 1;
+                        if !self.shanxie_excludes_shan(ctx, Some(shan)) {
+                            self.dodges_used += 1;
+                        }
                         if self.dodges_used >= needed {
                             // Upstream `hujia` (`standard/skill.js:287-305`): helper's
                             // `CardResponded` triggers (`dddfushi`, `tuqiang`, etc.) must settle

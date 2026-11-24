@@ -1,10 +1,52 @@
 use super::*;
+use crate::ids::CardId;
 
 impl ShaResolveMachine {
-    pub(super) fn complete_shan_dodge(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+    /// Upstream `shanxie_exclude` (`shiji.js:1404`): a Shan (or virtual Shan) whose rank is 0 or <= 2 * owner.attack_range is excluded.
+    pub(super) fn shanxie_excludes_shan(&self, ctx: &mut Ctx<'_>, shan_card: Option<CardId>) -> bool {
+        let Some(sdef) = ctx.catalog.skill_by_name("shanxie") else {
+            return false;
+        };
+        if ctx.catalog.skills[sdef as usize].behavior.as_host_behavior()
+            != Some(crate::vocabulary::host::HostBehavior::L11VmFixB)
+        {
+            return false;
+        }
+        let ex_def = ctx.catalog.skill_by_name("shanxie_exclude");
+        let active = ctx.core.has_skill(self.source, sdef)
+            || ex_def.is_some_and(|ed| ctx.core.has_skill(self.source, ed));
+        if !active
+            || !ctx.core.player(self.source).alive
+            || ctx.catalog.is_chanyuan_sealed(ctx.core, self.source)
+            || ctx.catalog.is_tieji_sealed(ctx.core, self.source)
+            || ctx.catalog.is_xj_fengyin_sealed(ctx.core, self.source)
+        {
+            return false;
+        }
+        let rank = shan_card
+            .and_then(|c| ctx.catalog.resolved_card_def(ctx.core, c).map(|d| d.rank as i32))
+            .unwrap_or(0);
+        let atk = ctx.core.attack_range(ctx.catalog, self.source);
+        if rank == 0 || u32::try_from(rank).is_ok_and(|r| r <= atk.saturating_mul(2)) {
+            ctx.log(LogEvent::SkillTriggered {
+                skill: ctx
+                    .catalog
+                    .skill_by_name("shanxie_exclude")
+                    .map_or("shanxie_exclude", |d| ctx.catalog.skills[d as usize].name),
+                owner: self.source,
+                presentation: None,
+            });
+            return true;
+        }
+        false
+    }
+
+    pub(super) fn complete_shan_dodge(&mut self, ctx: &mut Ctx<'_>, shan_card: Option<CardId>) -> Flow {
         // 雷击（Boss 青龙，规则 v234）：响应闪后判定雷击（无双第二闪重入本臂=每张闪各触发一次）
         super::super::releiji_on_shan(ctx, self.target);
-        self.dodges_used += 1;
+        if !self.shanxie_excludes_shan(ctx, shan_card) {
+            self.dodges_used += 1;
+        }
         self.post_dodge_step(ctx)
     }
 
@@ -37,7 +79,13 @@ impl ShaResolveMachine {
             .remove(&(self.target, format!("sha_u01_shan_pending:{fid}")))
             .is_some()
         {
-            return Some(self.complete_shan_dodge(ctx));
+            let shan_card = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.target, format!("sha_u01_shan_pending_card:{fid}")))
+                .and_then(|v| v.checked_sub(1));
+            return Some(self.complete_shan_dodge(ctx, shan_card));
         }
         None
     }
@@ -78,6 +126,10 @@ impl ShaResolveMachine {
                     (self.target, format!("sha_u01_shan_pending:{fid}")),
                     1,
                 );
+                ctx.core.vm_aux.flags.insert(
+                    (self.target, format!("sha_u01_shan_pending_card:{fid}")),
+                    card_ovr.map_or(0, |c| c.saturating_add(1)),
+                );
                 ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                     card: card_ovr,
                     player: self.target,
@@ -94,7 +146,7 @@ impl ShaResolveMachine {
                 }
                 return Some(Flow::Yield);
             }
-            Some(self.complete_shan_dodge(ctx))
+            Some(self.complete_shan_dodge(ctx, None))
         } else {
             self.asked = false;
             None
@@ -161,6 +213,10 @@ impl ShaResolveMachine {
             ctx.core.vm_aux.flags.insert(
                 (self.target, format!("sha_u01_shan_pending:{fid}")),
                 1,
+            );
+            ctx.core.vm_aux.flags.insert(
+                (self.target, format!("sha_u01_shan_pending_card:{fid}")),
+                card_ovr.map_or(0, |c| c.saturating_add(1)),
             );
             ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                 card: card_ovr,

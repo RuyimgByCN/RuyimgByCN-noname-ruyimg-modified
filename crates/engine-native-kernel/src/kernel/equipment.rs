@@ -350,6 +350,10 @@ pub(super) fn commit_equip(
             .vm_aux
             .flags
             .remove(&(player, format!("zhilian_equip_use:{frame_id}")));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("l11_vm_b_equip_use:{frame_id}")));
         ctx.to_discard(card);
         ctx.log(LogEvent::CardNullified { player, card });
         // 未执行装备效果，不得再派发 equipAfter（如劫行重置）。
@@ -380,6 +384,10 @@ pub(super) fn commit_equip(
                 .vm_aux
                 .flags
                 .remove(&(player, format!("zhilian_equip_use:{frame_id}")));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, format!("l11_vm_b_equip_use:{frame_id}")));
             ctx.to_discard(card);
             ctx.log(LogEvent::CardNullified { player, card });
             ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
@@ -480,6 +488,17 @@ pub(super) fn install_equip_card(
             .collect()
     };
     let replaced = to_replace.first().copied();
+    if to_replace.len() == 1
+        && (ctx.catalog.skill_by_name("xinfu_qinguo").is_some()
+            || ctx.catalog.skill_by_name("xinfu_qinguo_recover").is_some())
+    {
+        if let Some(fid) = frame_id {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, format!("eq_swap1:{fid}")), 1);
+        }
+    }
     for &old in &to_replace {
         ctx.core.player_mut(player).equips.retain(|c| *c != old);
         revoke_equip_skills(ctx.core, ctx.catalog, player, old);

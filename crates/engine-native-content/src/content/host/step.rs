@@ -15,6 +15,7 @@ pub(in crate::content::host) mod q4_boss_skills;
 pub(crate) use q4_boss_skills::q4_boss_on_deck_washed;
 pub mod q4_fool_skills;
 pub(in crate::content::host) mod l11_own_npc;
+pub(in crate::content::host) mod l11_vm_fix_b;
 pub(crate) use l10_reguhuo::{
     reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
     reguhuo_spawn_response,
@@ -1334,6 +1335,7 @@ impl HostMachine {
             HostBehavior::Q4BossPlaySkill => q4_boss_skills::handle_q4_boss(self, ctx),
             HostBehavior::Q4FoolSkill => q4_fool_skills::handle_q4_fool(self, ctx),
             HostBehavior::L11OwnNpc => l11_own_npc::handle_l11_own_npc(self, ctx),
+            HostBehavior::L11VmFixB => l11_vm_fix_b::handle_l11_vm_fix_b(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

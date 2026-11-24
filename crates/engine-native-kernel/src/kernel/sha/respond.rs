@@ -303,10 +303,16 @@ impl ShaResolveMachine {
                 .vm_aux
                 .flags
                 .insert((self.target, format!("sha_u01_shan_pending:{fid}")), 1);
+            ctx.core.vm_aux.flags.insert(
+                (self.target, format!("sha_u01_shan_pending_card:{fid}")),
+                shan.saturating_add(1),
+            );
             return Flow::Yield;
         }
         releiji_on_shan(ctx, self.target);
-        self.dodges_used += 1;
+        if !self.shanxie_excludes_shan(ctx, Some(shan)) {
+            self.dodges_used += 1;
+        }
         let has_anruo = ctx
             .core
             .vm_aux

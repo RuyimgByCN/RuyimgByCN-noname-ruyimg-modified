@@ -679,6 +679,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11OwnNpc => super::step::l11_own_npc::ask_l11_own_npc(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11VmFixB => super::step::l11_vm_fix_b::ask_l11_vm_fix_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;
