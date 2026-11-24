@@ -111,7 +111,7 @@ fn deal_damage(
     )));
 }
 
-fn base_card_key(raw: &str) -> &str {
+pub(in crate::content::host) fn base_card_key(raw: &str) -> &str {
     // Strip optional `<prefix>` / `_<index>` suffix added by `cards.json` bridging if present.
     let s = if let Some((stem, tail)) = raw.rsplit_once('_') {
         if !tail.is_empty() && tail.bytes().all(|b| b.is_ascii_digit()) {

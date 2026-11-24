@@ -564,7 +564,7 @@ impl ShaResolveMachine {
                     ctx.core
                         .vm_aux
                         .flags
-                        .insert((self.source, format!("sha_used_jiu:{fid}")), 1);
+                        .insert((self.source, format!("sha_used_jiu:{fid}")), self.jiu_damage_bonus(ctx, Some(fid)).max(1));
                 }
             }
             if self.card.is_none() && ctx.catalog.skills.len() > 24 {

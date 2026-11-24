@@ -108,13 +108,18 @@ pub(super) fn build_l11_card_ask(
         ASK_HUOGONG_DISCARD => {
             let show_card = cards.get(1).or(cards.first()).copied()?;
             let show_suit = catalog.effective_card_suit(core, tgt, show_card);
-            let use_color = crate::rvm_bridge::modifiers::has_wolongmice(core, catalog, owner);
-            let show_red = matches!(show_suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
-            let matching: Vec<CardId> = core
-                .player(owner)
-                .hand
-                .iter()
-                .copied()
+            let ol_huoji = super::l11_cards::ol_huoji_active(core, catalog, owner);
+            let use_color =
+                ol_huoji || crate::rvm_bridge::modifiers::has_wolongmice(core, catalog, owner);
+            let show_red =
+                matches!(show_suit, crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond);
+            let pool = if ol_huoji {
+                he_cards(core, owner)
+            } else {
+                core.player(owner).hand.clone()
+            };
+            let matching: Vec<CardId> = pool
+                .into_iter()
                 .filter(|&c| {
                     let s = catalog.effective_card_suit(core, owner, c);
                     if use_color {

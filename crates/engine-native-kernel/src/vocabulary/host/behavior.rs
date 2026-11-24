@@ -1941,4 +1941,6 @@ pub enum HostBehavior {
     L11OwnNpc,
     /// L11 太虚幻境跨包 NPC 技能 Part B（tag 1390：`satomi_luodao`..=`zongkui`）。
     L11CrossNpcB,
+    /// Phase 3 P3-C1a L11 太虚幻境跨包 NPC 武将技 Part A 80+3 技家族（tag 1391）。
+    L11CrossNpcA,
 }

@@ -108,7 +108,7 @@ fn l11_own_npc_beiming_wangzu_juhun_shiyuan_wangyuan_and_zhuhun() {
         for sk in ["txhj_shiyuan", "txhj_wangyuan", "txhj_zhuhun"] {
             assert!(npc_has_skill(&e, 0, sk), "seat 0 missing {sk}");
         }
-        // Seat 3 (`txhj_changyuanshibing`, hp=2 < seat 1 hp=3) has a Tao in hand, yet on lethal `leiji` (+`txhj_shiyuan`) it MUST die immediately without DyingSave ask!
+        // Seat 3 (`txhj_changyuanshibing`, hp=2) has a Tao in hand, yet on lethal damage (+`txhj_shiyuan`) it MUST die immediately without DyingSave ask!
         advance_to_play(&mut e, 0);
         e.debug_clear_hand(0);
         e.debug_clear_hand(1);
@@ -119,9 +119,9 @@ fn l11_own_npc_beiming_wangzu_juhun_shiyuan_wangyuan_and_zhuhun() {
         e.debug_set_hp(1, 3);
         e.debug_set_hp(3, 2);
         e.debug_set_hp(0, 5); // below max_hp=12
-        let wz = npc_take_card(&mut e, |d| d.kind == CardKind::Wuzhong && d.name == "wuzhong");
-        let _ = npc_play_card(&mut e, 0, wz, vec![]);
-        // `leiji` picks lowest-HP enemy seat 3 (2+1=3 dmg) -> Dying -> txhj_shiyuan skips rescue -> Death!
+        let sha_kill = npc_take_card(&mut e, |d| d.kind == CardKind::Sha);
+        let _ = npc_play_card(&mut e, 0, sha_kill, vec![3]);
+        // `Sha` deals 1 + 1 (`txhj_shiyuan`) = 2 dmg -> Dying (with Tao) -> `txhj_shiyuan` skips rescue -> Death!
         // `txhj_wangyuan` triggers (+1 max_hp -> 13, recover 1 -> 6, mark -> 1) AND `txhj_shiyuan` converts & revives seat 3 as ally `txhj_changyuanshibing`!
         drain_to_pass(&mut e);
         assert!(e.state_core().player(3).alive, "txhj_shiyuan must revive slain enemy as txhj_changyuanshibing");
@@ -147,7 +147,7 @@ fn l11_own_npc_beiming_wangzu_juhun_shiyuan_wangyuan_and_zhuhun() {
         advance_to_play(&mut e, 0);
         e.debug_clear_hand(0);
         e.debug_clear_hand(1);
-        e.debug_set_hp(3, 10); // keep seat 3 alive if leiji targets lowest-HP hostile
+        e.debug_set_hp(3, 10);
         e.debug_set_hp(1, 10);
         e.debug_set_hujia(1, 0);
         let fsha = npc_take_card(&mut e, |d| d.kind == CardKind::FireSha);
@@ -158,7 +158,7 @@ fn l11_own_npc_beiming_wangzu_juhun_shiyuan_wangyuan_and_zhuhun() {
             e.log()[log_fsha..].iter().any(|ev| matches!(ev, LogEvent::DamageDealt { target: 1, amount: 4, card: Some(c), .. } if *c == fsha)),
             "shiyuan(+1)+wangyuan(+2) on FireSha = 4 total dmg"
         );
-        assert_eq!(e.state_core().player(1).hp, 1, "leiji(+5) + FireSha(+4) = 9 elemental dmg");
+        assert_eq!(e.state_core().player(1).hp, 6, "shiyuan(+1) + wangyuan(+2) on FireSha = 4 elemental dmg");
 
         // Activate `txhj_zhuhun` to revive dead ally seat 2 as `txhj_changyuanshibing` (3/3, draw 4)!
         let zh_id = e.catalog().skill_by_name("txhj_zhuhun").unwrap();

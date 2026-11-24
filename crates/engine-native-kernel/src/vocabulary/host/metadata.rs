@@ -7,6 +7,7 @@ mod swd_cards;
 mod swd_u05_7d;
 mod xianjian;
 mod l01;
+mod l11_npc_a;
 mod source_order;
 
 impl HostBehavior {
@@ -1005,6 +1006,7 @@ impl HostBehavior {
             | HostBehavior::Q4FoolSkill
             | HostBehavior::L11OwnNpc
             | HostBehavior::L11CrossNpcB => None,
+            HostBehavior::L11CrossNpcA => self.trigger_meta_l11_npc_a(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

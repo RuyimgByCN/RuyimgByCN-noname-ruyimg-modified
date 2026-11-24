@@ -69,6 +69,9 @@ impl Catalog {
     pub fn blocks_hand_cards(&self, core: &GameStateCore, p: PlayerId) -> bool {
         if self.blocks_all_cards(core, p)
             || crate::rvm_bridge::modifiers::d34_flags::is_dddtongyu_hand_locked(core, p)
+            || crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::is_new_yijue_hand_locked(
+                core, p,
+            )
             || core
                 .vm_aux
                 .flags

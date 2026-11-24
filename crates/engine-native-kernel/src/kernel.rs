@@ -320,6 +320,7 @@ pub use equipment::{
     release_yanjia_merged_to_discard, revoke_equip_skills, trigger_gw_dieyi_lost,
 };
 mod intrinsic;
+mod intrinsic_card_use;
 pub use intrinsic::*;
 mod combat_rules;
 mod combat_rules_sha;

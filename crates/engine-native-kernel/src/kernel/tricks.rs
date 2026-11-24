@@ -53,13 +53,14 @@ impl crate::catalog::SkillMachine for WuzhongMachine {
             .vm_aux
             .flags
             .remove(&(self.owner, draw_started_key));
-        // 弃置锦囊本体（按牌种扫表：恢复期安全，不依赖快照携带 card）。
-        if let Some(pos) = ctx
-            .core
-            .table
-            .iter()
-            .position(|c| ctx.catalog.resolved_card_kind(ctx.core, *c) == crate::catalog::CardKind::Wuzhong)
-        {
+        // 弃置锦囊本体（优先匹配显式卡号或当前使用帧卡号，再按牌种扫表兼容恢复期）。
+        let active_cid = self
+            .card
+            .or_else(|| ctx.current_card_use().ok().and_then(|u| u.card));
+        if let Some(pos) = ctx.core.table.iter().position(|c| {
+            active_cid == Some(*c)
+                || ctx.catalog.resolved_card_kind(ctx.core, *c) == crate::catalog::CardKind::Wuzhong
+        }) {
             let card = ctx.core.table.remove(pos);
             ctx.to_discard(card);
         }

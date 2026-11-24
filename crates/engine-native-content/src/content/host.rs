@@ -3,7 +3,7 @@
 //!（2026-10-10 事故重建：臂库自 db.part 重放+挖掘恢复；部分行为臂
 //! 为占位待重写——见 file-loss-recovery-20261010 记忆）
 
-use crate::catalog::{CardKind, QueryCtx, SkillBehavior};
+use crate::catalog::{CardKind, Catalog, QueryCtx, SkillBehavior};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::EventData;
 use crate::ids::{CardId, PlayerId};
@@ -62,148 +62,8 @@ pub(crate) use step::{
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
 };
 
-pub(crate) fn host_on_outer_settled(ctx: &mut Ctx<'_>) {
-    on_outer_settled_taipingyaoshu(ctx);
-    host_on_outer_settled_hearth(ctx);
-    step::l11_npc_b::on_outer_settled_l11_npc_b(ctx);
-}
-
-pub(crate) fn host_on_phase_end(ctx: &mut Ctx<'_>) {
-    on_phase_end_l10_scs(ctx);
-    host_on_phase_end_hearth(ctx);
-    step::l11_npc_b::on_phase_end_l11_npc_b(ctx);
-}
-
-pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
-    play_begin_tianshu(ctx, player);
-    play_begin_l19(ctx, player);
-    host_play_begin_xianjian(ctx, player);
-}
-
-pub(crate) fn host_sha_hit_step_all(
-    ctx: &mut Ctx<'_>,
-    sha_frame_id: crate::ids::EventId,
-    source: PlayerId,
-    target: PlayerId,
-    sha_card: Option<CardId>,
-) -> bool {
-    step::swd_u05_7b::host_sha_hit_step_u05_7b(ctx, sha_frame_id, source, target, sha_card)
-}
-
-pub(crate) fn host_sha_end_step_all(
-    ctx: &mut Ctx<'_>,
-    sha_frame_id: crate::ids::EventId,
-    source: PlayerId,
-    target: PlayerId,
-    sha_card: Option<CardId>,
-    is_damage: bool,
-) -> bool {
-    let u05_yield = step::swd_u05_7b::host_sha_end_step_u05_7b(ctx, source, is_damage);
-    let step_yield = host_sha_end_step(ctx, sha_frame_id, source, target, sha_card, is_damage);
-    let xianjian_yield = host_sha_end_xianjian(ctx, sha_frame_id, source, target);
-    u05_yield || step_yield || xianjian_yield
-}
-
-pub(crate) fn host_draw_begin_step_all(ctx: &mut Ctx<'_>, player: PlayerId, pending: &mut i32) {
-    host_draw_begin_step(ctx, player, pending);
-    host_draw_begin_xianjian(ctx, player, pending);
-    step::swd_u05_7b::host_draw_begin_step_u05_7b(ctx, player, pending);
-    step::l11_npc_b::on_draw_begin_step_l11_npc_b(ctx, player, pending);
-}
-
-pub(crate) fn host_card_use_after_all(
-    ctx: &mut Ctx<'_>,
-    fid: crate::ids::EventId,
-    u: &crate::event::CardUseData,
-) {
-    host_card_use_after(ctx, fid, u);
-    host_card_use_after_xianjian(ctx, u);
-    step::swd_u05_7a::host_card_use_after_swd(ctx, u);
-    step::swd_u05_7b::host_card_use_after_u05_7b(ctx, u);
-    step::l11_npc_b::on_card_use_after_l11_npc_b(ctx, fid, u);
-}
-
-pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
-    host_on_outer_settled(ctx);
-    step::swd_u05_7b::on_outer_settled_u05_7b(ctx);
-}
-
-pub(crate) fn host_on_phase_use_end_all(ctx: &mut Ctx<'_>, player: PlayerId) {
-    host_on_phase_use_end(ctx, player);
-    host_on_phase_use_end_xianjian(ctx, player);
-    step::l11_npc_b::on_phase_use_end_l11_npc_b(ctx, player);
-}
-
-pub(crate) fn host_on_round_start_all(ctx: &mut Ctx<'_>) {
-    host_on_round_start(ctx);
-    host_on_round_start_xianjian(ctx);
-    step::l11_npc_b::on_round_start_l11_npc_b(ctx);
-}
-
-pub(crate) fn host_on_hand_card_removed_all(ctx: &mut Ctx<'_>, player: PlayerId, card: CardId) {
-    host_on_hand_card_removed(ctx, player, card);
-    host_on_hand_card_removed_xianjian(ctx, player, card);
-}
-
-pub(crate) fn host_on_phase_end_all(ctx: &mut Ctx<'_>) {
-    host_on_phase_end(ctx);
-    host_on_phase_end_xianjian(ctx);
-    step::swd_u05_7b::on_phase_end_u05_7b(ctx);
-}
-
-pub(crate) fn host_on_turn_begin_all(ctx: &mut Ctx<'_>, player: PlayerId) {
-    host_on_turn_begin(ctx, player);
-    step::l11_npc_b::on_turn_begin_l11_npc_b(ctx, player);
-}
-
-pub(crate) fn host_on_turn_phase_after_all(ctx: &mut Ctx<'_>, player: PlayerId) {
-    host_on_turn_phase_after(ctx, player);
-    step::l11_npc_b::on_turn_phase_after_l11_npc_b(ctx, player);
-}
-
-pub(crate) fn host_on_player_died_all(
-    ctx: &mut Ctx<'_>,
-    dead: PlayerId,
-    killer: Option<PlayerId>,
-) {
-    host_on_player_died(ctx, dead, killer);
-    step::l11_npc_b::on_player_died_l11_npc_b(ctx, dead, killer);
-}
-
-pub(crate) fn host_on_phase_skipped_all(ctx: &mut Ctx<'_>, player: PlayerId) {
-    u01_phase_skipped_hook(ctx, player);
-    step::l11_npc_b::on_phase_skipped_l11_npc_b(ctx, player);
-}
-
-pub(crate) fn host_on_host_event_all(ctx: &mut Ctx<'_>, event: &EventData) {
-    on_l25_host_event(ctx, event);
-    step::l11_npc_b::on_host_event_l11_npc_b(ctx, event);
-}
-
-pub(crate) fn host_on_equip_revoked_all(
-    core: &mut crate::state::GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: PlayerId,
-    card: CardId,
-) {
-    host_on_equip_revoked_hearth(core, catalog, player, card);
-    step::l11_npc_b::on_equip_revoked_l11_npc_b(core, catalog, player, card);
-}
-
-pub(crate) fn host_on_hp_changed_all(ctx: &mut Ctx<'_>, player: PlayerId, delta: i32) {
-    host_on_hp_changed_xianjian(ctx, player, delta);
-    step::l11_npc_b::on_hp_changed_l11_npc_b(ctx, player, delta);
-}
-
-pub(crate) fn host_on_damage_end_all(ctx: &mut Ctx<'_>, d: &crate::event::DamageData) {
-    host_on_damage_end_xianjian(ctx, d);
-    step::l11_npc_b::on_damage_end_l11_npc_b(ctx, d);
-}
-
-pub(crate) fn host_on_recover_before_all(ctx: &mut Ctx<'_>, player: PlayerId, amount: &mut u32) {
-    host_on_recover_before(ctx, player, amount);
-    host_on_recover_before_xianjian(ctx, player, amount);
-}
+mod dispatch;
+pub(crate) use dispatch::*;
 pub(crate) use support::{niepan_effect, sync_land_skill};
 
 /// 机关牌名目标规则（按上游 filterTarget 与引擎 PlayCard 校验同口径）。
@@ -527,6 +387,9 @@ impl SkillBehavior for HostSkillBehavior {
         _event: &EventData,
         kind: crate::event::EventKind,
     ) -> Option<crate::catalog::TriggerMeta> {
+        if self.behavior == HostBehavior::L11CrossNpcA {
+            return step::l11_npc_a::window_trigger_meta_l11_npc_a(ctx, &self.name, kind);
+        }
         if self.behavior == HostBehavior::Q4BossPlaySkill && self.name == "shenqu" {
             if kind == crate::event::EventKind::PhaseBegin {
                 return Some(crate::catalog::TriggerMeta {
@@ -1002,6 +865,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11GeneralBossC
                 | HostBehavior::L11BossLingfeng
                 | HostBehavior::L11OwnNpc
+                | HostBehavior::L11CrossNpcA
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
                 | HostBehavior::L11CrossNpcB

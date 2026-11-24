@@ -44,7 +44,7 @@ pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
-pub(super) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> Option<VmSkillDecl> {
+pub(crate) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> Option<VmSkillDecl> {
     let (event, inner_filter) = classify_skill_trigger(name_str)?;
     let mod_name = format!("{name_str}#d34p9");
     let mut code = Vec::with_capacity(14);
@@ -536,6 +536,25 @@ pub fn attach_formal_package_upstream_rules(
     let mut extra_host_skills: Vec<engine_native::content::host::HostSkillDecl> = Vec::new();
     let mut extra_vm_skills: Vec<VmSkillDecl> = Vec::new();
 
+    if (namespace, package_id) == ("upstream-liuli", "taixu") {
+        let mut idx = pack.vm_skills.len();
+        crate::taixu_pack_attach::attach_taixu_pack(
+            &mut seen_generals,
+            &mut seen_cards,
+            &mut seen_skills,
+            &mut extra_generals,
+            &mut extra_cards,
+            &mut extra_host_skills,
+            &mut extra_vm_skills,
+            &mut idx,
+        );
+        pack.generals.extend(extra_generals);
+        pack.cards.extend(extra_cards);
+        pack.host_skills.extend(extra_host_skills);
+        pack.vm_skills.extend(extra_vm_skills);
+        return;
+    }
+
     let mut push_general =
         |sym: &str, faction: Faction, gender: Gender, max_hp: u32, sk_list: &[&str], seen: &BTreeSet<String>| {
             if seen_generals.insert(sym.to_string()) {
@@ -731,100 +750,7 @@ pub fn attach_formal_package_upstream_rules(
             }
             push_skill("l20_mark_dispatch", super::L20_MARK_DISPATCH_ID);
         }
-        ("upstream-liuli", "taixu") => {
-            for &(cname, kind, range, suit, rank) in &super::L11_TAIXU_CARDS {
-                if seen_cards.insert(cname.to_string()) {
-                    let interned = names::intern(cname.to_string());
-                    let mut card_def = if kind == CardKind::Weapon {
-                        CardDef::weapon(interned, range).with_suit_rank(suit, rank)
-                    } else {
-                        CardDef::basic(interned, kind).with_suit_rank(suit, rank)
-                    };
-                    if kind.equip_slot().is_some() {
-                        card_def.equip_skills = vec![interned];
-                    }
-                    extra_cards.push(card_def);
-                }
-            }
-            for &s in super::L11_TAIXU_SKILLS
-                .iter()
-                .chain(super::L11_TAIXU_OWN_NPC_SKILLS.iter())
-                .chain(super::L11_TAIXU_EQUIP_CARD_SKILLS.iter())
-                .chain(super::L11_TAIXU_B1_AUX_SUBSKILLS.iter())
-                .chain(super::L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.iter())
-            {
-                if s != "xinfu_sidao"
-                    && !crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s)
-                {
-                    push_skill(s, L11_TAIXU_SKILL_ID);
-                }
-            }
-            // Bind genuine native HostSkillDecls and real U01/U05/U08/L19/L20/L27 resolvers;
-            // precompiled ported rule-vm cross-skills are already bridged from
-            // `taixu-upstream-liuli/package.npack.json` into `pack.vm_skills` (`seen_skills`),
-            // and the 9 upstream-undefined IDs (`L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS`)
-            // remain inert without fabricating fake skills.
-            for &s in &super::L11_TAIXU_CROSS_SKILLS {
-                if crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s) {
-                    continue;
-                }
-                if super::lookup_upstream_host_behavior(s).is_some() {
-                    push_skill(s, L11_TAIXU_SKILL_ID);
-                } else if matches!(s, "dddfenji" | "dddjiexing" | "dddqiaoduan") {
-                    push_skill(s, DDD_SKILL_DISPATCH_ID);
-                } else if matches!(s, "chajue" | "yxs_fanji" | "qianglue" | "xiadao") {
-                    push_skill(s, super::U08_YXS_SKILL_ID);
-                } else if s == "xueji" {
-                    // Handled immediately below after `push_skill` releases `extra_host_skills`.
-                } else if matches!(s, "kuanshi" | "xinfu_langxi" | "xinfu_lingren") {
-                    push_skill(s, L20_SKILL_DISPATCH_ID);
-                } else if matches!(s, "dcxiaoxi" | "rehuashen" | "twxiafeng") {
-                    push_skill(s, L27_SELECT_SKILL_ID);
-                } else if s == "feiying" {
-                    // Handled immediately below as pure passive DistanceFromOthers modifier once `push_skill` drops.
-                } else if crate::shahai_attach::shahai_implemented_skills::is_implemented_u05_vm_skill(s)
-                    && super::lookup_standard_catalog_skill_zh(s).is_none()
-                {
-                    push_skill(s, super::U05_SHAHAI_SKILL_ID);
-                }
-            }
-            crate::taixu_pack_attach_b::attach_taixu_native_extras(
-                L11_TAIXU_SKILL_ID,
-                &mut extra_host_skills,
-                &mut extra_vm_skills,
-                &mut extra_cards,
-                &mut seen_skills,
-                &mut seen_cards,
-            );
-            for &(sym, faction, gender, max_hp, sk_list) in &super::L11_TAIXU_GENERALS {
-                push_general(sym, faction, gender, max_hp, sk_list, &seen_skills);
-            }
-            for &(sym, faction, gender, max_hp, sk_list) in &[
-                (
-                    "lijue",
-                    Faction::Qun,
-                    Gender::Male,
-                    6u32,
-                    &["xinfu_langxi", "xinfu_yisuan"][..],
-                ),
-                (
-                    "guosi",
-                    Faction::Qun,
-                    Gender::Male,
-                    4u32,
-                    &["xinfu_tanbei", "xinfu_sidao"][..],
-                ),
-                (
-                    "zhangji",
-                    Faction::Qun,
-                    Gender::Male,
-                    4u32,
-                    &["xinfu_lveming", "xinfu_tunjun"][..],
-                ),
-            ] {
-                push_general(sym, faction, gender, max_hp, sk_list, &seen_skills);
-            }
-        }
+        ("upstream-liuli", "taixu") => {}
         ("upstream-liuli", "zuan") => {
             for &(cname, kind, suit, rank) in &super::L25_ZUAN_FORMAL_CARDS {
                 push_card(cname, kind, suit, rank);

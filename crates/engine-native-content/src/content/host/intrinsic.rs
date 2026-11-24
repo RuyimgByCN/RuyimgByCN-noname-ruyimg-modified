@@ -9,7 +9,7 @@ use crate::kernel::*;
 #[path = "intrinsic_named_ext.rs"]
 mod intrinsic_named_ext;
 pub(in crate::content::host) use intrinsic_named_ext::{
-    is_named_jiguan_unwrapped, is_named_wuzhong_unwrapped, resolve_huogong_effect,
+    base_card_key, is_named_jiguan_unwrapped, is_named_wuzhong_unwrapped, resolve_huogong_effect,
 };
 
 /// 内容牌种的固有结算机器；`None` = 不是内容牌种，由内核继续分派。

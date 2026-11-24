@@ -1322,6 +1322,8 @@ impl Catalog {
 
 #[path = "catalog_queries.rs"]
 mod catalog_queries;
+#[path = "catalog_queries_equip.rs"]
+mod catalog_queries_equip;
 #[path = "catalog_queries_q4.rs"]
 mod catalog_queries_q4;
 #[path = "catalog_queries_seals.rs"]

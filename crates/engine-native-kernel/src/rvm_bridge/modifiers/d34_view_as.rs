@@ -625,9 +625,9 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
-            // `reguose` (`refresh.js:2443`) / `xinfu_limu` (`sp2.js:1760`): Diamond card -> Le
+            // `reguose` (`refresh.js:13736`): 主动出牌阶段技能（限 1 次 + 摸 1 牌），仅由显式旗标放行。
             D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag("reguose", "l11_viewas:reguose"),
+                activation: D34ViewAsActivation::Flag("l11_viewas:reguose"),
                 spec: make_spec(
                     1_926_900_063,
                     "reguose",
@@ -757,6 +757,67 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     spec
                 },
             },
+            // `kyou_zhidian` (`diy.js:3461`): 锦囊手牌当无距离限制【杀】
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag(
+                    "kyou_zhidian",
+                    "l11_viewas:kyou_zhidian",
+                ),
+                spec: make_spec(
+                    1_926_900_321,
+                    "kyou_zhidian",
+                    CardKind::Sha,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Trick,
+                    true,
+                ),
+            },
+            // `dclbjiuxian` (`collab.js:2492`): 多目标锦囊手牌当【酒】使用
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag(
+                    "dclbjiuxian",
+                    "l11_viewas:dclbjiuxian",
+                ),
+                spec: make_spec(
+                    1_926_900_322,
+                    "dclbjiuxian",
+                    CardKind::Jiu,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::MultiTargetTrick,
+                    false,
+                ),
+            },
+            // `olkanpo` (`refresh.js:1221`): 黑色手牌当【无懈可击】使用
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::SkillOrFlag(
+                    "olkanpo",
+                    "l11_viewas:olkanpo",
+                ),
+                spec: make_spec(
+                    1_926_900_323,
+                    "olkanpo",
+                    CardKind::Nullify,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Black,
+                    false,
+                ),
+            },
+            // `reshuangxiong` (`refresh.js:11120`): 与所获牌颜色不同的手牌当【决斗】使用
+            D34ViewAsRule {
+                activation: D34ViewAsActivation::Flag("l11_mod:reshuangxiong_duel"),
+                spec: make_spec(
+                    1_926_900_324,
+                    "reshuangxiong",
+                    CardKind::Duel,
+                    VmViewAsWindow::PlayPhase,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::ColorNeShuangxiong,
+                    false,
+                ),
+            },
         ];
 
         let u05_flag_map: &[(&str, CardKind)] = &[
@@ -784,10 +845,7 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
             ("u05_viewas:liuxinghuoyu", CardKind::FireSha),
             ("u05_viewas:jingleishan", CardKind::LeiSha),
             ("u05_viewas:chiyuxi", CardKind::FireSha),
-            ("l11_viewas:kyou_zhidian", CardKind::Sha),
-            ("l11_viewas:dclbjiuxian", CardKind::Jiu),
             ("l11_viewas:reluanji", CardKind::ArcheryAttack),
-            ("l11_mod:reshuangxiong_duel", CardKind::Duel),
             ("l11_viewas:weijing", CardKind::Sha),
             ("l11_viewas:zhanyi_basic", CardKind::Sha),
             ("l11_viewas:mozhi", CardKind::Sha),

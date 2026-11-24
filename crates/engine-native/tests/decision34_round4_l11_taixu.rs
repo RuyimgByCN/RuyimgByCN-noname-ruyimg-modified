@@ -795,11 +795,57 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     use engine_native::catalog::Suit;
     use engine_native::event::DamageNature;
     use engine_native::rvm_bridge::modifiers::{
-        d34_flags::find_d34_flag_view_as, eval_card_target_canceled, eval_card_unrespondable,
-        eval_damage_amount,
+        d34_flags::find_d34_flag_view_as, eval_card_unrespondable,
     };
 
     let (_verified, mut e) = start_formal_taixu_engine(2026_1120);
+    let verified = _verified;
+    let answer_open = |eng: &mut Engine, sel: Vec<ChoiceOption>| {
+        let ch = eng.open_choice().expect("open choice");
+        let obs = ch.observer;
+        let prompt = ch.spec.prompt;
+        let opts = ch.spec.options.clone();
+        let out = eng.submit(GameCommand {
+            actor: obs,
+            expected_revision: eng.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: ch.id,
+                selection: sel.clone(),
+            },
+        });
+        assert!(
+            !matches!(out, CommandOutcome::Rejected(_)),
+            "answer rejected on `{prompt}` (sel={sel:?}, opts={opts:?}): {out:?}"
+        );
+    };
+    let goto_play = |eng: &mut Engine, seat: u8| {
+        for _ in 0..40 {
+            if eng.state_core().turn.current == seat && eng.state_core().turn.phase == Phase::Play {
+                return;
+            }
+            if let Some(ch) = eng.open_choice().cloned() {
+                let sel = if ch.spec.options.contains(&ChoiceOption::Pass) {
+                    vec![ChoiceOption::Pass]
+                } else if ch.spec.allow_cancel {
+                    Vec::new()
+                } else {
+                    ch.spec.options.iter().take(ch.spec.min.max(1)).copied().collect()
+                };
+                answer_open(eng, sel);
+            } else {
+                let cur = eng.state_core().turn.current;
+                let _ = eng.submit(GameCommand {
+                    actor: cur,
+                    expected_revision: eng.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::NextPhase,
+                });
+            }
+        }
+        assert_eq!(eng.state_core().turn.current, seat);
+        assert_eq!(eng.state_core().turn.phase, Phase::Play);
+    };
 
     // 1. All 9 upstream-undefined dangling skill IDs (`extension_character.js:321-337`,
     //    `extension_csrank.js:3540-3587`) must remain inert without fabricated skills in Catalog:
@@ -1043,59 +1089,151 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     }
 
     // (c) `dualside` (`game.js:34262`): flips `face_down`, restores HP to `max_hp`, clears `dying`, and draws 2 cards
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(0).max_hp = 6;
-    e.state_core_mut().player_mut(0).hp = 0;
-    e.state_core_mut().player_mut(0).dying = true;
-    e.state_core_mut().player_mut(0).face_down = false;
-    let hand_before_dual = e.state_core().player(0).hand.len();
-    invoke_l11(&mut e, 0, "dualside");
-    assert!(e.state_core().player(0).face_down);
-    assert!(!e.state_core().player(0).dying);
-    assert_eq!(e.state_core().player(0).hp, 6);
-    assert!(e.state_core().player(0).hand.len() >= hand_before_dual + 2);
+    {
+        let mut e_dual = start_locked_engine(2026_1121, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_dual.debug_grant(0, "dualside");
+        e_dual.debug_set_max_hp(0, 6);
+        e_dual.debug_set_hp(0, 1);
+        e_dual.debug_set_hujia(0, 0);
+        e_dual.debug_set_face_down(0, false);
+        e_dual.debug_clear_hand(0);
+        goto_play(&mut e_dual, 1);
+        let hand_before_dual = e_dual.state_core().player(0).hand.len();
+        let sha = e_dual.debug_place(1, "sha");
+        let _ = e_dual.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_dual.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![0],
+            },
+        });
+        drain(&mut e_dual);
+        assert!(e_dual.state_core().player(0).face_down);
+        assert!(!e_dual.state_core().player(0).dying);
+        assert_eq!(e_dual.state_core().player(0).hp, 6);
+        assert!(e_dual.state_core().player(0).hand.len() >= hand_before_dual + 2);
+    }
 
     // (d) `qingzhongx` (`sp/skill.js:35220` / `markskill.js:18544`): draws 2 cards and swaps hand with the character who has fewer handcards
-    e.state_core_mut().vm_aux.flags.clear();
-    while e.state_core().player(0).hand.len() > 3 {
-        let cid = e.state_core_mut().player_mut(0).hand.pop().unwrap();
-        e.state_core_mut().discard.push(cid);
+    {
+        let mut e_qz = start_locked_engine(2026_1122, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_qz.debug_grant(0, "qingzhongx");
+        e_qz.debug_clear_hand(0);
+        e_qz.debug_clear_hand(1);
+        e_qz.debug_place(0, "sha");
+        e_qz.debug_place(1, "sha");
+        e_qz.debug_set_turn(0, Phase::Draw, 1);
+        let _ = e_qz.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_qz.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        assert_eq!(
+            e_qz.open_choice().map(|c| c.spec.prompt),
+            Some("qingzhongx:confirm")
+        );
+        answer_open(&mut e_qz, vec![ChoiceOption::Confirm]);
+        assert!(e_qz.open_choice().is_none());
+        let _ = e_qz.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_qz.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        assert_eq!(
+            e_qz.open_choice().map(|c| c.spec.prompt),
+            Some("qingzhongx:choose_target")
+        );
+        answer_open(&mut e_qz, vec![ChoiceOption::Player(1)]);
+        assert!(e_qz.state_core().player(1).hand.len() >= 3);
     }
-    while e.state_core().player(1).hand.len() > 1 {
-        let cid = e.state_core_mut().player_mut(1).hand.pop().unwrap();
-        e.state_core_mut().discard.push(cid);
-    }
-    invoke_l11(&mut e, 0, "qingzhongx");
-    assert!(e.state_core().player(1).hand.len() >= 3);
 
     // (e) `leiji` (`shenhua.js:7205`): flips 1 judge card and deals 2 Thunder damage to opponent
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(1).hp = 6;
-    e.state_core_mut().player_mut(1).hujia = 0;
-    invoke_l11(&mut e, 0, "leiji");
-    assert_eq!(e.state_core().player(1).hp, 4);
+    {
+        let mut e_lj = start_locked_engine(2026_1123, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_lj.debug_grant(0, "leiji");
+        e_lj.debug_set_max_hp(1, 6);
+        e_lj.debug_set_hp(1, 6);
+        e_lj.debug_set_hujia(1, 0);
+        goto_play(&mut e_lj, 1);
+        e_lj.debug_clear_hand(0);
+        let shan = e_lj.debug_place(0, "shan");
+        e_lj.debug_set_deck_top_by(|c| c.suit == Suit::Spade);
+        let sha = e_lj.debug_place(1, "sha");
+        let _ = e_lj.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_lj.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![0],
+            },
+        });
+        answer_open(&mut e_lj, vec![ChoiceOption::Card(shan)]);
+        assert_eq!(
+            e_lj.open_choice().map(|c| c.spec.prompt),
+            Some("trigger_confirm")
+        );
+        answer_open(&mut e_lj, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_lj.open_choice().map(|c| c.spec.prompt),
+            Some("leiji:choose_target")
+        );
+        answer_open(&mut e_lj, vec![ChoiceOption::Player(1)]);
+        assert_eq!(e_lj.state_core().player(1).hp, 4);
+    }
 
-    // (f) `retianxiang` (`shenhua.js:7913`): prevents damage (`l11_mod:retianxiang_ward`), redirects 1 damage to opponent, and target draws lost_hp
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(1).max_hp = 6;
-    e.state_core_mut().player_mut(1).hp = 5;
-    e.state_core_mut().player_mut(1).hujia = 0;
-    let p1_hand_before = e.state_core().player(1).hand.len();
-    invoke_l11(&mut e, 0, "retianxiang");
-    assert_eq!(e.state_core().player(1).hp, 4);
-    assert!(e.state_core().player(1).hand.len() >= p1_hand_before + 1);
-    assert_eq!(
-        eval_damage_amount(
-            e.state_core(),
-            e.catalog(),
-            Some(1),
-            0,
-            Some(heart_sha),
-            DamageNature::Normal,
-            2,
-        ),
-        0
-    );
+    // (f) `retianxiang` (`shenhua.js:7913`): prevents damage, redirects 1 damage to opponent, and target draws lost_hp
+    {
+        let mut e_tx = start_locked_engine(2026_1124, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_tx.debug_grant(0, "retianxiang");
+        e_tx.debug_set_max_hp(0, 6);
+        e_tx.debug_set_hp(0, 6);
+        e_tx.debug_set_hujia(0, 0);
+        e_tx.debug_set_max_hp(1, 6);
+        e_tx.debug_set_hp(1, 5);
+        e_tx.debug_set_hujia(1, 0);
+        goto_play(&mut e_tx, 1);
+        e_tx.debug_clear_hand(0);
+        let red_card = e_tx.debug_place_suit(0, Suit::Heart);
+        let p1_hand_before = e_tx.state_core().player(1).hand.len();
+        let sha = e_tx.debug_place(1, "sha");
+        let _ = e_tx.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_tx.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![0],
+            },
+        });
+        assert_eq!(
+            e_tx.open_choice().map(|c| c.spec.prompt),
+            Some("trigger_confirm")
+        );
+        answer_open(&mut e_tx, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_tx.open_choice().map(|c| c.spec.prompt),
+            Some("retianxiang:discard_card")
+        );
+        answer_open(&mut e_tx, vec![ChoiceOption::Card(red_card)]);
+        assert_eq!(
+            e_tx.open_choice().map(|c| c.spec.prompt),
+            Some("retianxiang:choose_target")
+        );
+        answer_open(&mut e_tx, vec![ChoiceOption::Player(1)]);
+        assert_eq!(
+            e_tx.open_choice().map(|c| c.spec.prompt),
+            Some("retianxiang:choose_mode")
+        );
+        answer_open(&mut e_tx, vec![ChoiceOption::Tag(0)]);
+        assert_eq!(e_tx.state_core().player(0).hp, 6);
+        assert_eq!(e_tx.state_core().player(1).hp, 4);
+        assert!(e_tx.state_core().player(1).hand.len() >= p1_hand_before + 1);
+    }
 
     // (g) `sbliegong` (`sb.js:3439`), `nzry_kuizhu` (`shenhua.js:1931`), `twlinglu` (`tw/skill.js:15134`), `mouzhu` (`sp.js:12799`), `shefu` (`sp/skill.js:39282`), `xinfu_daigong` (`mobile/skill.js:30818`)
     {
@@ -1133,11 +1271,54 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         assert!(e_sb.state_core().player(1).hp <= 7, "sbliegong real Sha deals damage cleanly");
     }
 
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(0).hp = 2;
-    e.state_core_mut().player_mut(1).hp = 6;
-    invoke_l11(&mut e, 0, "nzry_kuizhu");
-    assert_eq!(e.state_core().player(1).hp, 5);
+    {
+        let mut e_kz = start_locked_engine(2026_1125, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_kz.debug_grant(0, "nzry_kuizhu");
+        e_kz.debug_set_max_hp(0, 6);
+        e_kz.debug_set_hp(0, 2);
+        e_kz.debug_set_max_hp(1, 6);
+        e_kz.debug_set_hp(1, 2);
+        e_kz.debug_set_hujia(1, 0);
+        goto_play(&mut e_kz, 0);
+        e_kz.debug_clear_hand(0);
+        let c1 = e_kz.debug_place(0, "sha");
+        let c2 = e_kz.debug_place(0, "shan");
+        e_kz.debug_place(0, "tao");
+        e_kz.debug_place(0, "jiu");
+        let _ = e_kz.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_kz.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        assert_eq!(
+            e_kz.open_choice().map(|c| c.spec.prompt),
+            Some("discard_to_limit")
+        );
+        answer_open(&mut e_kz, vec![ChoiceOption::Card(c1), ChoiceOption::Card(c2)]);
+        let _ = e_kz.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_kz.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        assert_eq!(
+            e_kz.open_choice().map(|c| c.spec.prompt),
+            Some("trigger_confirm")
+        );
+        answer_open(&mut e_kz, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_kz.open_choice().map(|c| c.spec.prompt),
+            Some("nzry_kuizhu:choose_mode")
+        );
+        answer_open(&mut e_kz, vec![ChoiceOption::Tag(1)]);
+        assert_eq!(
+            e_kz.open_choice().map(|c| c.spec.prompt),
+            Some("nzry_kuizhu:damage_targets")
+        );
+        answer_open(&mut e_kz, vec![ChoiceOption::Player(1)]);
+        assert_eq!(e_kz.state_core().player(1).hp, 1);
+    }
 
     {
         let (_v2, mut e_ll) = start_formal_taixu_engine(2026_1124);
@@ -1164,19 +1345,46 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         assert_eq!(e_ll.state_core().player(1).hp, 5, "twlinglu loses 1 HP at turn end if 0 damage");
     }
 
-    e.state_core_mut().vm_aux.flags.clear();
-    for _ in 0..4 {
-        if let Some(cid) = e.state_core_mut().deck.pop() {
-            e.state_core_mut().player_mut(0).hand.push(cid);
+    {
+        let mut e_mz = start_locked_engine(2026_1126, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_mz.debug_grant(0, "mouzhu");
+        e_mz.debug_set_max_hp(1, 6);
+        e_mz.debug_set_hp(1, 6);
+        e_mz.debug_set_hujia(1, 0);
+        goto_play(&mut e_mz, 0);
+        e_mz.debug_clear_hand(0);
+        e_mz.debug_clear_hand(1);
+        let give_c = e_mz.debug_place(1, "shan");
+        let sha0 = e_mz.debug_place(0, "sha");
+        let mz_id = e_mz.catalog().skill_by_name("mouzhu").unwrap();
+        let out = e_mz.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_mz.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::ActivateSkill { skill: mz_id },
+        });
+        assert!(!matches!(out, CommandOutcome::Rejected(_)));
+        assert_eq!(
+            e_mz.open_choice().map(|c| c.spec.prompt),
+            Some("mouzhu:choose_target")
+        );
+        answer_open(&mut e_mz, vec![ChoiceOption::Player(1)]);
+        assert_eq!(
+            e_mz.open_choice().map(|c| c.spec.prompt),
+            Some("mouzhu:target_give")
+        );
+        answer_open(&mut e_mz, vec![ChoiceOption::Card(give_c)]);
+        assert_eq!(
+            e_mz.open_choice().map(|c| c.spec.prompt),
+            Some("mouzhu:choose_mode")
+        );
+        answer_open(&mut e_mz, vec![ChoiceOption::Tag(1)]);
+        if e_mz.open_choice().is_some_and(|c| c.spec.prompt == "duel_sha") {
+            answer_open(&mut e_mz, vec![ChoiceOption::Card(sha0)]);
         }
+        drain(&mut e_mz);
+        assert_eq!(e_mz.state_core().player(1).hp, 5);
     }
-    while e.state_core().player(1).hand.len() > 1 {
-        let cid = e.state_core_mut().player_mut(1).hand.pop().unwrap();
-        e.state_core_mut().discard.push(cid);
-    }
-    e.state_core_mut().player_mut(1).hp = 6;
-    invoke_l11(&mut e, 0, "mouzhu");
-    assert_eq!(e.state_core().player(1).hp, 5);
 
     {
         let (_v2, mut e_sf) = start_formal_taixu_engine(2026_1125);
@@ -1224,34 +1432,24 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     }
 
     // 3. Exhaustively verify all 164 `L11_TAIXU_IMPLEMENTED_CROSS_SKILLS`:
-    // - Part A `[..80]` executes via `invoke_l11` (`decision34_l11_npc_a.rs`) with 0 unhandled flags;
+    // - Part A `[..80]` + 3 derived (`olhuoji`, `olkanpo`, `rexuanfeng`) bind natively via `HostBehavior::L11CrossNpcA`
     // - Part B `[80..164]` (83 skills on `HostBehavior::L11CrossNpcB` + `xinfu_sidao` on `HostBehavior::L11GeneralBossC`)
     //   plus the 11 Part-B companion/card skills bind natively with `package_skill_id() == None`.
     assert_eq!(L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.len(), 164);
-    for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[..80] {
-        for seat in [0u8, 1u8] {
-            e.state_core_mut().player_mut(seat).max_hp = 10;
-            e.state_core_mut().player_mut(seat).hp = 6;
-            e.state_core_mut().player_mut(seat).alive = true;
-            e.state_core_mut().player_mut(seat).dying = false;
-            while e.state_core().player(seat).hand.len() < 3 {
-                if let Some(cid) = e
-                    .state_core_mut()
-                    .deck
-                    .pop()
-                    .or_else(|| e.state_core_mut().discard.pop())
-                {
-                    e.state_core_mut().player_mut(seat).hand.push(cid);
-                } else {
-                    break;
-                }
-            }
-        }
-        assert!(
-            e.catalog().skill_by_name(sk).is_some(),
-            "L11 cross-package NPC skill {sk} must be registered in formal locked Catalog"
+    for &sk in L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[..80]
+        .iter()
+        .chain(["olhuoji", "olkanpo", "rexuanfeng"].iter())
+    {
+        let def = e
+            .catalog()
+            .skill_by_name(sk)
+            .unwrap_or_else(|| panic!("Part-A NPC skill {sk} missing from formal locked Catalog"));
+        assert_eq!(
+            e.catalog().skills[def as usize].behavior.as_host_behavior(),
+            Some(HostBehavior::L11CrossNpcA),
+            "Part-A NPC skill {sk} must bind natively to HostBehavior::L11CrossNpcA"
         );
-        invoke_l11(&mut e, 0, sk);
+        assert_eq!(e.catalog().skills[def as usize].behavior.package_skill_id(), None);
     }
 
     let unhandled: Vec<String> = e
@@ -1264,7 +1462,7 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         .collect();
     assert!(
         unhandled.is_empty(),
-        "All 80 Part-A L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
+        "All L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
     );
 
     for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[80..] {
@@ -1350,53 +1548,130 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
             "zili must not reduce max_hp a second time after awakening"
         );
     }
+    // (b2) `requanji` damage trigger places a card into `l11_requanji_quan` pile
+    {
+        let mut e_zili =
+            start_locked_engine(2026_1127, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_zili.debug_grant(0, "requanji");
+        e_zili.debug_set_max_hp(0, 5);
+        e_zili.debug_set_hp(0, 5);
+        e_zili.debug_set_hujia(0, 0);
+        e_zili.debug_set_max_hp(1, 5);
+        e_zili.debug_set_hp(1, 5);
+        e_zili.debug_set_hujia(1, 0);
+        goto_play(&mut e_zili, 1);
+        e_zili.debug_clear_hand(0);
+        let sha = e_zili.debug_place(1, "sha");
+        let _ = e_zili.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_zili.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![0],
+            },
+        });
+        assert_eq!(
+            e_zili.open_choice().map(|c| c.spec.prompt),
+            Some("requanji:confirm")
+        );
+        answer_open(&mut e_zili, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_zili.open_choice().map(|c| c.spec.prompt),
+            Some("requanji:choose_card")
+        );
+        let qcard = *e_zili.state_core().player(0).hand.last().unwrap();
+        answer_open(&mut e_zili, vec![ChoiceOption::Card(qcard)]);
+        assert_eq!(e_zili.state_core().player(0).hp, 4);
+        assert!(
+            !e_zili
+                .state_core()
+                .vm_aux
+                .piles
+                .get(&(0, "l11_requanji_quan".to_string()))
+                .is_none_or(|p| p.is_empty()),
+            "real requanji damage trigger must place a card into `l11_requanji_quan` pile"
+        );
+    }
 
-    // (c) `jieyuan` distinguishes black card (+1 damage) vs red card (-1 damage)
-    let black_card = (0..e.catalog().cards.len() as u32)
-        .find(|&cid| matches!(e.catalog().cards[cid as usize].suit, Suit::Spade | Suit::Club))
-        .unwrap();
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(0).hand = vec![black_card];
-    e.state_core_mut().player_mut(0).equips.clear();
-    invoke_l11(&mut e, 0, "jieyuan");
-    assert_eq!(
-        e.state_core()
-            .vm_aux
-            .flags
-            .get(&(0, "l11_mod:jieyuan_more".to_string()))
-            .copied()
-            .unwrap_or(0),
-        1
-    );
-    assert_eq!(
-        e.state_core()
-            .vm_aux
-            .flags
-            .get(&(0, "l11_mod:jieyuan_less".to_string()))
-            .copied()
-            .unwrap_or(0),
-        0
-    );
-    e.state_core_mut().player_mut(0).hand = vec![heart_sha];
-    invoke_l11(&mut e, 0, "jieyuan");
-    assert_eq!(
-        e.state_core()
-            .vm_aux
-            .flags
-            .get(&(0, "l11_mod:jieyuan_less".to_string()))
-            .copied()
-            .unwrap_or(0),
-        1
-    );
-    assert_eq!(
-        e.state_core()
-            .vm_aux
-            .flags
-            .get(&(0, "l11_mod:jieyuan_more".to_string()))
-            .copied()
-            .unwrap_or(0),
-        0
-    );
+    // (c) `jieyuan` distinguishes black card (+1 damage dealt) vs red card (-1 damage taken) on real DamageBefore
+    {
+        let mut e_jy =
+            start_locked_engine(2026_1128, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_jy.debug_grant(0, "jieyuan");
+        e_jy.debug_set_max_hp(0, 6);
+        e_jy.debug_set_hp(0, 4);
+        e_jy.debug_set_hujia(0, 0);
+        e_jy.debug_set_max_hp(1, 6);
+        e_jy.debug_set_hp(1, 4);
+        e_jy.debug_set_hujia(1, 0);
+        e_jy.debug_clear_hand(0);
+        e_jy.debug_clear_hand(1);
+        let blk = e_jy.debug_place_suit(0, Suit::Spade);
+        let sha0 = e_jy.debug_place(0, "sha");
+        e_jy.debug_set_turn(0, Phase::Play, 1);
+        let _ = e_jy.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_jy.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha0,
+                targets: vec![1],
+            },
+        });
+        assert_eq!(
+            e_jy.open_choice().map(|c| c.spec.prompt),
+            Some("trigger_confirm")
+        );
+        answer_open(&mut e_jy, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_jy.open_choice().map(|c| c.spec.prompt),
+            Some("jieyuan:more_card")
+        );
+        answer_open(&mut e_jy, vec![ChoiceOption::Card(blk)]);
+        assert_eq!(e_jy.state_core().player(1).hp, 2);
+
+        // Red discard: when incoming damage >= 2 from player with hp >= owner.hp
+        e_jy.debug_set_hp(1, 4);
+        e_jy.debug_set_hp(0, 4);
+        goto_play(&mut e_jy, 1);
+        e_jy.debug_clear_hand(0);
+        let red = e_jy.debug_place_suit(0, Suit::Heart);
+        let jiu1 = e_jy.debug_place(1, "jiu");
+        let sha1 = e_jy.debug_place(1, "sha");
+        let _ = e_jy.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_jy.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: jiu1,
+                targets: vec![],
+            },
+        });
+        let _ = e_jy.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_jy.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha1,
+                targets: vec![0],
+            },
+        });
+        if e_jy.open_choice().is_some_and(|c| c.spec.prompt == "respond_shan") {
+            answer_open(&mut e_jy, vec![ChoiceOption::Pass]);
+        }
+        assert_eq!(
+            e_jy.open_choice().map(|c| c.spec.prompt),
+            Some("trigger_confirm")
+        );
+        answer_open(&mut e_jy, vec![ChoiceOption::Confirm]);
+        assert_eq!(
+            e_jy.open_choice().map(|c| c.spec.prompt),
+            Some("jieyuan:less_card")
+        );
+        answer_open(&mut e_jy, vec![ChoiceOption::Card(red)]);
+        assert_eq!(e_jy.state_core().player(0).hp, 3);
+    }
 
     // (d) `twlingfa`: round 2 prompt `twlingfa:choose_mode`, Tao triggers target card give or 1 damage
     {
@@ -1430,18 +1705,37 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         );
     }
 
-    // (e) `bmcanshi` marks target with `l11_kui_mark` and cancels single-target cards from that actor
-    e.state_core_mut().vm_aux.flags.clear();
-    invoke_l11(&mut e, 0, "bmcanshi");
-    assert!(eval_card_target_canceled(
-        e.state_core(),
-        e.catalog(),
-        1,
-        0,
-        heart_sha,
-        CardKind::Sha,
-        DamageNature::Normal,
-    ));
+    // (e) `bmcanshi` cancels single-target cards from `l11_kui_mark` actor and clears `l11_kui_mark`
+    {
+        let mut e_bm =
+            start_locked_engine(2026_1129, 2, LockedStartMode::Prototype, &verified).unwrap();
+        e_bm.debug_grant(0, "bmcanshi");
+        e_bm.state_core_mut()
+            .vm_aux
+            .flags
+            .insert((1, "l11_kui_mark".to_string()), 1);
+        e_bm.debug_clear_hand(0);
+        e_bm.debug_set_hp(0, 5);
+        goto_play(&mut e_bm, 1);
+        e_bm.debug_clear_hand(0);
+        let sha1 = e_bm.debug_place(1, "sha");
+        let _ = e_bm.submit(GameCommand {
+            actor: 1,
+            expected_revision: e_bm.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: sha1,
+                targets: vec![0],
+            },
+        });
+        assert_eq!(
+            e_bm.open_choice().map(|c| c.spec.prompt),
+            Some("bmcanshi:cancel_confirm")
+        );
+        answer_open(&mut e_bm, vec![ChoiceOption::Confirm]);
+        assert_eq!(e_bm.state_core().player(0).hp, 5, "bmcanshi must cancel Sha targeting owner");
+        assert_eq!(flag(&e_bm, 1, "l11_kui_mark"), 0, "bmcanshi cancel must remove actor kui mark");
+    }
 
     // (f) Unhandled skill guard sets `l11_unhandled_skill:*` when an unknown skill is dispatched
     e.state_core_mut().vm_aux.flags.clear();

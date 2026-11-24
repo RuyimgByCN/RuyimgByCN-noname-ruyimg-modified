@@ -307,7 +307,13 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         });
                         self.nullified = !self.nullified;
                         self.set_stateplayer(ctx.core, resp);
-                        self.queue = ctx.core.seat_order_from(ctx.core.next_alive(resp));
+                        self.queue = if crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::has_npc_a_skill_unsealed(
+                            ctx.core, ctx.catalog, resp, "olkanpo",
+                        ) {
+                            Vec::new()
+                        } else {
+                            ctx.core.seat_order_from(ctx.core.next_alive(resp))
+                        };
                         let has_final =
                             (ctx.catalog.hooks.reguhuo_has_pending_final)(ctx.core, resp);
                         let has_anruo = ctx
@@ -346,7 +352,13 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                             .unwrap_or(0);
                         self.queue.remove(0);
                         self.nullified = !self.nullified;
-                        self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                        self.queue = if crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::has_npc_a_skill_unsealed(
+                            ctx.core, ctx.catalog, responder, "olkanpo",
+                        ) {
+                            Vec::new()
+                        } else {
+                            ctx.core.seat_order_from(ctx.core.next_alive(responder))
+                        };
                         let new_fid = ctx.res.next_event_id;
                         self.note_nullify_for_twhengjiang(ctx, responder, new_fid);
                         ctx.emit(EventData::CardUsed(crate::event::CardUseData {
@@ -526,7 +538,13 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                                 .unwrap_or(0);
                             self.queue.remove(0);
                             self.nullified = !self.nullified;
-                            self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                            self.queue = if crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::has_npc_a_skill_unsealed(
+                                ctx.core, ctx.catalog, responder, "olkanpo",
+                            ) {
+                                Vec::new()
+                            } else {
+                                ctx.core.seat_order_from(ctx.core.next_alive(responder))
+                            };
                             let new_fid = ctx.res.next_event_id;
                             self.note_nullify_for_twhengjiang(ctx, responder, new_fid);
                             ctx.emit(EventData::CardUsed(crate::event::CardUseData {
@@ -567,7 +585,13 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                     super::emit_card_responded_as(ctx, responder, c, CardKind::Nullify);
                     self.nullified = !self.nullified;
                     self.set_stateplayer(ctx.core, responder);
-                    self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
+                    self.queue = if crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::has_npc_a_skill_unsealed(
+                        ctx.core, ctx.catalog, responder, "olkanpo",
+                    ) {
+                        Vec::new()
+                    } else {
+                        ctx.core.seat_order_from(ctx.core.next_alive(responder))
+                    };
                     if ctx.catalog.vm_card_history {
                         ctx.core.vm_aux.flags.insert(
                             (self.source, format!("nullify_last:{}", self.card)),

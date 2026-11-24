@@ -524,10 +524,12 @@ pub(super) fn play_kind(
         if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
             kind = CardKind::Duel;
         } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
-            if spec.skill_name != "xinfu_limu"
-                && ((kind != CardKind::Sha
-                    && kind != CardKind::Le
-                    && !(kind == CardKind::Tao && targets.is_empty()))
+            if !matches!(
+                spec.skill_name.as_str(),
+                "xinfu_limu" | "kyou_zhidian" | "dclbjiuxian" | "olkanpo"
+            ) && ((kind != CardKind::Sha
+                && kind != CardKind::Le
+                && !(kind == CardKind::Tao && targets.is_empty()))
                     || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
                     || (spec.as_kind.is_sha_like() && !targets.is_empty())
                     || (targets.is_empty() && kind != CardKind::Tao)

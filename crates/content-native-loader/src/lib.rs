@@ -57,6 +57,7 @@ mod skin_switch;
 pub mod taixu;
 pub mod taixu_mode;
 mod taixu_pack_attach_b;
+mod taixu_pack_attach;
 mod thunder;
 mod update_guard;
 mod wuxing;

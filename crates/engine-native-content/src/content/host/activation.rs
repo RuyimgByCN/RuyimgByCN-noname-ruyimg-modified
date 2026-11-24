@@ -354,6 +354,9 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 super::step::l11_boss_c::activate_l11_boss_c(self, ctx, owner)
             }
+            HostBehavior::L11CrossNpcA => {
+                super::step::l11_npc_a::activate_l11_npc_a(self, ctx, owner)
+            }
             HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
                 super::step::u05_b1_zhenfa::activate_u05_zhenfa(self, ctx, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
@@ -731,6 +734,7 @@ pub(in crate::content::host) fn has_phase_use_activation(
         HostBehavior::Q4FoolSkill => super::step::q4_fool_skills::has_phase_use_q4_fool(name),
         HostBehavior::L11OwnNpc => super::step::l11_own_npc::has_phase_use_l11_own_npc(name),
         HostBehavior::L11CrossNpcB => super::step::l11_npc_b::has_phase_use_activation_l11_npc_b(name),
+        HostBehavior::L11CrossNpcA => super::step::l11_npc_a::has_phase_use_l11_npc_a(name),
         _ => false,
     }
 }

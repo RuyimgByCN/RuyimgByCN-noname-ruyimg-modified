@@ -146,8 +146,13 @@ pub(super) fn apply_hand_limit(
     }
     // `shenhua.js:7047` (`buqu`: hand limit equals `创` count when `创` present)
     let buqu = flag_val(state, player, "l11_mod:buqu_chuang");
-    if buqu > 0 {
-        limit = limit.max(buqu as i32);
+    let mut base_hp = state.player(player).hp.max(0);
+    if buqu > 0 && !matches!(state.mode, GameMode::Kingdoms) {
+        limit = (limit - base_hp) + buqu as i32;
+        base_hp = buqu as i32;
+    }
+    if flag_val(state, player, "l11_mod:jigong_active") > 0 {
+        limit = (limit - base_hp) + flag_val(state, player, "l11_source_dmg_turn") as i32;
     }
     // `yijiang.js:7487` (`jigong`), `yijiang.js:8886` (`mingjian`), `mobile/skill.js:23519` (`requanji`),
     // `sb/skill.js:9647` (`sbyingzi`), `sp2/skill.js:9985` (`shunshi`)
@@ -319,7 +324,9 @@ pub(super) fn apply_distance_total(
 ) -> i32 {
     // `sp.js:15556` (`fenxun`) & `sp.js:11358` (`refenxun`): distance to target treated as 1
     // (`tspowei` `inRangeOf` is one-way attack range in `GameStateCore::in_attack_range`, NOT distance=1!)
-    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0 {
+    if flag_val(state, from, "l11_mod:fenxun_dist1") > 0
+        || flag_val(state, from, &format!("l11_mod:fenxun_to:{to}")) > 0
+    {
         return 1;
     }
     // `sp.js:7210` (`olzhuiji`: distance to characters with hp <= owner.hp is 1)
@@ -496,9 +503,7 @@ pub(super) fn apply_sha_extra_targets(
 ) -> i32 {
     if kind.is_sha_like() {
         // `sp2.js:9417` (`bmcanshi`) & `tw/skill.js:26877` (`twhengjiang`)
-        if flag_val(state, player, "l11_mod:bmcanshi") > 0
-            || has_ext_skill(state, catalog, player, "bmcanshi")
-        {
+        if flag_val(state, player, "l11_mod:bmcanshi") > 0 {
             extra += 1;
         }
         extra += flag_val(state, player, "l11_mod:guju_extra") as i32;
@@ -527,6 +532,12 @@ pub(super) fn apply_card_distance_unlimited_to(
         || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "txshouyi")
         || has_ext_skill(state, catalog, player, "kyou_zhidian")
+        || super::super::d34_l11_mods_npc_a::chenglve_card_unlimited(
+            state,
+            catalog,
+            player,
+            Some(card),
+        )
     {
         unlimited = true;
     }
@@ -654,8 +665,7 @@ pub(super) fn apply_card_target_canceled(
     // `sp2.js:9417` (`bmcanshi`: cancel card from `傀`-marked actor)
     if actor != target
         && flag_val(state, actor, "l11_kui_mark") > 0
-        && (flag_val(state, target, "l11_mod:bmcanshi") > 0
-            || has_ext_skill(state, catalog, target, "bmcanshi"))
+        && flag_val(state, target, "l11_mod:bmcanshi") > 0
     {
         canceled = true;
     }
@@ -808,11 +818,8 @@ pub(super) fn apply_card_use_canceled(
         canceled = true;
     }
     // `refresh.js:9638` (`rejinjiu`: others cannot use Jiu during owner's turn)
-    let cur_turn = state.turn.current;
     if kind == CardKind::Jiu
-        && cur_turn != actor
-        && (flag_val(state, cur_turn, "l11_mod:rejinjiu") > 0
-            || has_ext_skill(state, catalog, cur_turn, "rejinjiu"))
+        && super::super::d34_l11_mods_npc_a::rejinjiu_blocks_jiu(state, catalog, actor)
     {
         canceled = true;
     }
@@ -856,10 +863,8 @@ pub(super) fn apply_damage_amount(
     // extension.js:5851 (`txyongguan`), `shenhua.js:7913` (`retianxiang`), `refresh/skill.js:10339` (`wulie`),
     // `mobile/skill.js:30818` (`xinfu_daigong`), `shiji.js:4013` (`mjmouzhi`)
     if flag_val(state, target, "l11_mod:txyongguan_ward") > 0
-        || flag_val(state, target, "l11_mod:retianxiang_ward") > 0
         || flag_val(state, target, "l11_mod:wulie_lie") > 0
         || flag_val(state, target, "l11_mod:xinfu_daigong_ward") > 0
-        || (flag_val(state, target, "l11_mod:mjmouzhi_suit") > 0 && card.is_some())
         || (flag_val(state, target, "l11_jiuwei_misi_active") > 0 && state.player(target).hp <= 1)
     {
         return 0;
@@ -937,11 +942,15 @@ pub(super) fn apply_damage_amount(
     if let Some(src) = source {
         // extension.js:554, 572, 699, 1344, 3355, 5809 & cross-package damage boosts
         if flag_val(state, src, "l11_mod:damage_plus1") > 0
-            || flag_val(state, src, "l11_mod:jieyuan_more") > 0
-            || flag_val(state, src, "l11_mod:kyou_zhidian_dmg") > 0
-            || flag_val(state, src, "l11_mod:new_yijue_heart_plus1") > 0
-            || flag_val(state, src, "l11_mod:reluoyi_dmg_plus1") > 0
-            || flag_val(state, src, "l11_mod:repojun_dmg_plus1") > 0
+            || (flag_val(state, src, "l11_mod:kyou_zhidian_dmg") > 0
+                && (is_sha || card.is_none_or(|c| flag_val(state, src, &format!("l11_kyou_dmg_card:{c}")) > 0)))
+            || (is_sha
+                && card.is_some_and(|c| {
+                    matches!(catalog.effective_card_suit(state, src, c), crate::catalog::Suit::Heart)
+                })
+                && flag_val(state, src, &format!("l11_yijue_heart_target:{target}")) > 0)
+            || ((is_sha || matches!(ckind, Some(CardKind::Duel)))
+                && flag_val(state, src, "l11_mod:reluoyi_dmg_plus1") > 0)
             || flag_val(state, src, "l11_mod:sbliegong_dmg") > 0
             || flag_val(state, src, "l11_mod:xinfu_zengdao_dao") > 0
         {
@@ -1056,6 +1065,7 @@ pub(super) fn apply_ignore_armor(
     // `mobile.js:16944` (`gnsheque`) & `diy.js:3461` (`kyou_zhidian`)
     if flag_val(state, source, "l11_mod:gnsheque_pierce") > 0
         || flag_val(state, source, "l11_mod:kyou_zhidian_pierce") > 0
+        || super::super::d34_l11_mods_npc_a::card_ignore_armor(state, source, card)
     {
         ignore = true;
     }

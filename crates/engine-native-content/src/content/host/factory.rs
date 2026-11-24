@@ -165,6 +165,9 @@ impl HostSkillBehavior {
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 return super::step::l11_boss_c::machine_l11_boss_c(self, owner, event);
             }
+            HostBehavior::L11CrossNpcA => {
+                return super::step::l11_npc_a::machine_l11_npc_a(self, owner, event);
+            }
             HostBehavior::U05GujianCardBatch
             | HostBehavior::U05GujianCharBatchA
             | HostBehavior::U05GujianCharBatchB

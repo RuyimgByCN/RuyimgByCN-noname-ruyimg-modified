@@ -201,6 +201,13 @@ pub(super) fn is_shihuawuqi_card(
         })
 }
 
+fn base_l11_card_name(raw: &str) -> &str {
+    match raw.rsplit_once('_') {
+        Some((stem, tail)) if !tail.is_empty() && tail.bytes().all(|b| b.is_ascii_digit()) => stem,
+        _ => raw,
+    }
+}
+
 pub(super) fn validate_wuzhong_targets(
     core: &GameStateCore,
     catalog: &SharedCatalog,
@@ -209,7 +216,7 @@ pub(super) fn validate_wuzhong_targets(
     targets: &[PlayerId],
 ) -> Result<(), RejectReason> {
     if kind == CardKind::Wuzhong {
-        let cname = catalog.cards.get(card as usize).map(|c| c.name).unwrap_or("");
+        let cname = base_l11_card_name(catalog.cards.get(card as usize).map(|c| c.name).unwrap_or(""));
         if kind == catalog.resolved_card_kind(core, card) {
             let actor = core.turn.current;
             let unseen_in_kingdoms = |p: PlayerId| -> bool {
@@ -717,11 +724,21 @@ pub(super) fn validate_jiu_or_tianxianjiu(
         kind,
         crate::event::DamageNature::Normal,
     );
+    let dclbjiuxian_unlimited =
+        crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::dclbjiuxian_jiu_unlimited(
+            core, catalog, user,
+        ) || crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::chenglve_card_unlimited(
+            core,
+            catalog,
+            user,
+            Some(card),
+        );
     if core.turn.jiu_used
         && !fentian_red_jiu
         && !bushi_unlimited
         && !fengnu_unlimited
         && !card_use_unlimited
+        && !dclbjiuxian_unlimited
     {
         return Err(RejectReason::CardLimit);
     }
@@ -836,10 +853,9 @@ pub(super) fn try_recast_l11_trick(
     let recastable = kind == CardKind::Wuzhong
         && kind == catalog.resolved_card_kind(&state.core, card)
         && targets.is_empty()
-        && catalog
-            .cards
-            .get(card as usize)
-            .is_some_and(|cd| matches!(cd.name, "txhj_zhijizhibi" | "txhj_shengdong"));
+        && catalog.cards.get(card as usize).is_some_and(|cd| {
+            matches!(base_l11_card_name(cd.name), "txhj_zhijizhibi" | "txhj_shengdong")
+        });
     if !recastable {
         return Ok(false);
     }

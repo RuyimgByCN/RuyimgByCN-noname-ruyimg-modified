@@ -91,6 +91,11 @@ impl Engine {
                     hand_count: p.hand.len(),
                     equips: p.equips.clone(),
                     judge: p.judge.clone(),
+                    judge_kinds: p
+                        .judge
+                        .iter()
+                        .map(|&j| self.catalog.resolved_card_kind(core, j))
+                        .collect(),
                     turned_over: p.face_down,
                     linked: p.linked,
                     skills: {

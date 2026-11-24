@@ -112,13 +112,17 @@ pub(in crate::content::host) fn try_l11_card_intrinsic(
         "huogong"
     } else if virtual_cid_flag > 0 {
         set_flag(ctx.core, owner, VIRTUAL_TRICK_CID_FLAG, 0);
-        ctx.catalog.cards.get((virtual_cid_flag - 1) as usize)?.name
+        crate::content::host::intrinsic::base_card_key(
+            ctx.catalog.cards.get((virtual_cid_flag - 1) as usize)?.name,
+        )
     } else {
         let card = u.card?;
         if u.use_as.is_some() {
             return None;
         }
-        ctx.catalog.cards.get(card as usize)?.name
+        crate::content::host::intrinsic::base_card_key(
+            ctx.catalog.cards.get(card as usize)?.name,
+        )
     };
 
     if !matches!(
@@ -226,29 +230,37 @@ pub(in crate::content::host) fn handle_l11_trick_card(
     ctx: &mut Ctx<'_>,
 ) -> Flow {
     let owner = m.owner;
-    match m.def_key.as_str() {
-        "txhj_yiyi__loop" => {
-            if let Some(next_t) = m.targets.first().copied() {
-                m.targets.remove(0);
-                if ctx.core.player(next_t).alive {
-                    let card_id = m.card.unwrap_or(0);
-                    let eff = Box::new(HostMachine {
-                        def_key: "txhj_yiyi__one".to_string(),
-                        behavior: HostBehavior::L11TrickCard,
-                        owner,
-                        target: Some(next_t),
-                        card: None,
-                        cards: Vec::new(),
-                        targets: vec![next_t],
-                        stage: HostStage::Act,
-                    });
-                    spawn_child_nullify(ctx, card_id, owner, eff);
-                    return Flow::Yield;
-                }
-                return handle_l11_trick_card(m, ctx);
+    if let Some(base) = m.def_key.strip_suffix("__loop") {
+        let one_key = match base {
+            "txhj_yiyi" => "txhj_yiyi__one".to_string(),
+            _ => "txhj_jiuchiroulin__one".to_string(),
+        };
+        while let Some(next_t) = m.targets.first().copied() {
+            m.targets.remove(0);
+            if ctx.core.player(next_t).alive {
+                let card_id = m.card.unwrap_or(0);
+                let cards = if base == "txhj_yiyi" {
+                    Vec::new()
+                } else {
+                    m.card.into_iter().collect()
+                };
+                let eff = Box::new(HostMachine {
+                    def_key: one_key,
+                    behavior: HostBehavior::L11TrickCard,
+                    owner,
+                    target: Some(next_t),
+                    card: None,
+                    cards,
+                    targets: vec![next_t],
+                    stage: HostStage::Act,
+                });
+                spawn_child_nullify(ctx, card_id, owner, eff);
+                return Flow::Yield;
             }
-            cleanup_loop_done(m, ctx)
         }
+        return cleanup_loop_done(m, ctx);
+    }
+    match m.def_key.as_str() {
         "txhj_yiyi__one" => {
             let Some(t) = m.target else {
                 return Flow::Done;
@@ -315,28 +327,6 @@ pub(in crate::content::host) fn handle_l11_trick_card(
                 }
                 _ => cleanup_and_done(m, ctx),
             }
-        }
-        "txhj_jiuchiroulin__loop" => {
-            if let Some(next_t) = m.targets.first().copied() {
-                m.targets.remove(0);
-                if ctx.core.player(next_t).alive {
-                    let card_id = m.card.unwrap_or(0);
-                    let eff = Box::new(HostMachine {
-                        def_key: "txhj_jiuchiroulin__one".to_string(),
-                        behavior: HostBehavior::L11TrickCard,
-                        owner,
-                        target: Some(next_t),
-                        card: None,
-                        cards: m.card.into_iter().collect(),
-                        targets: vec![next_t],
-                        stage: HostStage::Act,
-                    });
-                    spawn_child_nullify(ctx, card_id, owner, eff);
-                    return Flow::Yield;
-                }
-                return handle_l11_trick_card(m, ctx);
-            }
-            cleanup_loop_done(m, ctx)
         }
         "txhj_jiuchiroulin__one" => {
             let Some(t) = m.target else {
@@ -685,40 +675,19 @@ pub(in crate::content::host) fn handle_l11_trick_card(
                     if !ctx.core.player(t).alive || ctx.core.player(t).hand.is_empty() {
                         return cleanup_and_done(m, ctx);
                     }
+                    if ol_huoji_active(ctx.core, ctx.catalog, owner) {
+                        let len = ctx.core.player(t).hand.len();
+                        let idx = ctx.core.rng.gen_range(len as u32) as usize;
+                        let show_c = ctx.core.player(t).hand[idx];
+                        return finish_huogong_show(m, ctx, owner, t, show_c);
+                    }
                     wait_card_ask(m, ctx, HostStage::TargetChoice, ASK_HUOGONG_SHOW)
                 }
                 HostStage::TargetChoice => {
                     let Some(show_c) = answered_cards(ctx).into_iter().next() else {
                         return cleanup_and_done(m, ctx);
                     };
-                    ctx.out.push(LogEvent::CardsRevealed {
-                        cards: vec![show_c],
-                        to: Vec::new(),
-                    });
-                    if m.cards.len() < 2 {
-                        m.cards.push(show_c);
-                    } else {
-                        m.cards[1] = show_c;
-                    }
-                    let show_suit = ctx.catalog.effective_card_suit(ctx.core, t, show_c);
-                    let use_color = crate::rvm_bridge::modifiers::has_wolongmice(
-                        ctx.core,
-                        ctx.catalog,
-                        owner,
-                    );
-                    let show_red = matches!(show_suit, Suit::Heart | Suit::Diamond);
-                    let has_match = ctx.core.player(owner).hand.iter().any(|&c| {
-                        let s = ctx.catalog.effective_card_suit(ctx.core, owner, c);
-                        if use_color {
-                            matches!(s, Suit::Heart | Suit::Diamond) == show_red
-                        } else {
-                            s == show_suit
-                        }
-                    });
-                    if !has_match {
-                        return cleanup_and_done(m, ctx);
-                    }
-                    wait_card_ask(m, ctx, HostStage::SelectCard, ASK_HUOGONG_DISCARD)
+                    finish_huogong_show(m, ctx, owner, t, show_c)
                 }
                 HostStage::SelectCard => {
                     if let Some(disc_c) = answered_cards(ctx).into_iter().next() {
@@ -1002,4 +971,55 @@ pub(in crate::content::host) fn filter_l11_trick(
     _event: &EventData,
 ) -> bool {
     false
+}
+
+pub(super) fn ol_huoji_active(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+) -> bool {
+    flag(core, owner, "l11_olhuoji_active") > 0
+        || crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::has_npc_a_skill_unsealed(
+            core, catalog, owner, "olhuoji",
+        )
+}
+
+fn finish_huogong_show(
+    m: &mut HostMachine,
+    ctx: &mut Ctx<'_>,
+    owner: PlayerId,
+    t: PlayerId,
+    show_c: CardId,
+) -> Flow {
+    ctx.out.push(LogEvent::CardsRevealed {
+        cards: vec![show_c],
+        to: Vec::new(),
+    });
+    if m.cards.len() < 2 {
+        m.cards.push(show_c);
+    } else {
+        m.cards[1] = show_c;
+    }
+    let show_suit = ctx.catalog.effective_card_suit(ctx.core, t, show_c);
+    let ol_huoji = ol_huoji_active(ctx.core, ctx.catalog, owner);
+    let use_color =
+        ol_huoji || crate::rvm_bridge::modifiers::has_wolongmice(ctx.core, ctx.catalog, owner);
+    let show_red = matches!(show_suit, Suit::Heart | Suit::Diamond);
+    let pool = if ol_huoji {
+        he_cards(ctx.core, owner)
+    } else {
+        ctx.core.player(owner).hand.clone()
+    };
+    let has_match = pool.into_iter().any(|c| {
+        let s = ctx.catalog.effective_card_suit(ctx.core, owner, c);
+        if use_color {
+            matches!(s, Suit::Heart | Suit::Diamond) == show_red
+        } else {
+            s == show_suit
+        }
+    });
+    if !has_match {
+        return cleanup_and_done(m, ctx);
+    }
+    wait_card_ask(m, ctx, HostStage::SelectCard, ASK_HUOGONG_DISCARD)
 }

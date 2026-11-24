@@ -54,21 +54,12 @@ mod wudian_diaobing;
 pub(in crate::content::host) use wudian_cards::wudian_zhucheng_he_options;
 pub(in crate::content::host) use wudian_diaobing::wudian_choudu_targets;
 
-pub(super) fn sha_card_use_data(
-    ctx: &Ctx<'_>,
-    actor: PlayerId,
-    card: CardId,
-    targets: Vec<PlayerId>,
-    use_as: Option<CardKind>,
-) -> crate::event::CardUseData {
-    let eff_kind = use_as.unwrap_or_else(|| ctx.catalog.card_kind(card));
-    let nature = match eff_kind {
-        CardKind::FireSha => crate::event::DamageNature::Fire,
-        CardKind::LeiSha => crate::event::DamageNature::Thunder,
-        _ => crate::event::DamageNature::Normal,
-    };
-    crate::machine::card_use_with_nature(card, actor, targets, nature, use_as)
-}
+mod respond_round;
+pub(super) use respond_round::sha_card_use_data;
+pub(crate) use respond_round::{
+    host_on_round_start, u01_respond_skill_options, u01_try_activate_respond_skill,
+};
+
 pub(in crate::content::host) mod swd_u05_7a;
 mod swd_u05_7a_forging;
 mod swd_u05_7a_hufu;
@@ -101,44 +92,6 @@ pub(super) mod u01_fixes_1;
 pub(super) mod u01_fixes_2;
 pub(super) mod u01_fixes_3;
 pub(crate) use u01_fixes_2::u01_phase_skipped_hook;
-
-pub(crate) fn u01_respond_skill_options(
-    core: &crate::state::GameStateCore,
-    catalog: &crate::catalog::Catalog,
-    player: crate::ids::PlayerId,
-    need: CardKind,
-    is_use: bool,
-) -> Vec<crate::choice::ChoiceOption> {
-    let mut out = u01_fixes_1::u01_respond_skill_options(core, catalog, player, need, is_use);
-    u01_fixes_2::u01_respond_skill_options_2(core, catalog, player, need, is_use, &mut out);
-    u01_fixes_3::u01_respond_skill_options_3(core, catalog, player, need, is_use, &mut out);
-    l11_npc_b::respond_skill_options_l11_npc_b(core, catalog, player, need, is_use, &mut out);
-    out
-}
-
-pub(crate) fn u01_try_activate_respond_skill(
-    ctx: &mut Ctx<'_>,
-    player: crate::ids::PlayerId,
-    def: crate::ids::SkillDefId,
-    need: CardKind,
-    fid: crate::ids::EventId,
-) -> Option<bool> {
-    if let Some(res) = u01_fixes_1::u01_try_activate_respond_skill(ctx, player, def, need, fid) {
-        return Some(res);
-    }
-    let vs_sha = ctx.res.stack.last().is_some_and(|f| {
-        matches!(&f.data, crate::event::EventData::CardUsed(u) if u.effective_kind(ctx.catalog).is_sha_like())
-    });
-    let is_use = matches!(need, CardKind::Tao | CardKind::Nullify)
-        || (need == CardKind::Shan && vs_sha);
-    u01_fixes_2::u01_try_activate_respond_skill_2(ctx, player, def, need, fid, is_use)
-        .or_else(|| {
-            u01_fixes_3::u01_try_activate_respond_skill_3(ctx, player, def, need, fid, is_use)
-        })
-        .or_else(|| {
-            l11_npc_b::try_activate_respond_skill_l11_npc_b(ctx, player, def, need, fid, is_use)
-        })
-}
 pub(super) mod l28_batch_a;
 pub(crate) use l28_batch_a::{
     on_cards_to_discard_chengye, on_outer_settled_taipingyaoshu, on_skill_removed_l28,
@@ -161,15 +114,6 @@ pub(crate) use l19_fixes::{
     host_on_recover_before, host_on_round_start as host_on_round_start_l19,
     host_preserves_skills_on_death, play_begin_l19,
 };
-
-/// 轮次开始复合宿主钩子：依次执行 L27 轮标/展示清理、L19 `_relifeskill` 倒数复活与 U05-6a hearth 清理。
-pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
-    host_on_round_start_l27(ctx);
-    host_on_round_start_l19(ctx);
-    u05_hearth::host_on_round_start_hearth(ctx);
-    u05_b5a_gwent::u05_gwent_on_round_start(ctx);
-    l11_own_npc::on_round_start_l11_own_npc(ctx);
-}
 pub(super) mod u05_b5a_gwent;
 pub(super) mod u05_hearth;
 pub(crate) use u05_hearth::{
@@ -250,6 +194,7 @@ pub(super) mod l11_system_asks;
 pub(super) mod l11_weapons;
 pub(super) mod l11_weapons_asks;
 pub(super) mod l11_boss_c;
+pub(super) mod l11_npc_a;
 pub(super) mod l11_boss_c2;
 pub(super) mod l11_boss_c_asks;
 pub(super) mod l11_effect_pack;
@@ -1418,6 +1363,7 @@ impl HostMachine {
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 l11_boss_c::handle_l11_boss_c(self, ctx)
             }
+            HostBehavior::L11CrossNpcA => l11_npc_a::handle_l11_npc_a(self, ctx),
             HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
                 u05_b1_zhenfa::handle_u05_main_stone(self, ctx)
             }

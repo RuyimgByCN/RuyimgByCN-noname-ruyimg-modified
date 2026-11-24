@@ -44,6 +44,8 @@ pub struct PlayerCellView {
     pub equips: Vec<CardId>,
     /// 判定区：公开。
     pub judge: Vec<CardId>,
+    /// 判定区各牌的公开声明类别（含木马/国色/断粮等声明变更，与 `judge` 等长同序）。
+    pub judge_kinds: Vec<crate::catalog::CardKind>,
     /// 已配置的双将槽：本人和裁判两槽可见；普通他人仅在国战隐藏暗置槽。
     pub generals: [Option<GeneralView>; 2],
     /// 明置状态：公开信息（明置行为本身可见）。

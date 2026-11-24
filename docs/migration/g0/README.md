@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-24 Batch P3-C1a（L11 跨包 NPC Part A +47→645/936，全局 4,128/296/0）更新
+
+- **核验与升级**：基线 `12ba5f8c7fce6abc3f2911a2f9e61785f1b89724`（Batch `P3-C1b` CI Run `45363047982` Attempt 1 `10/10 success`）；合入 `swarm/p3-l11-npc-a`（`5a0511c24b81021bc6a332d9513688fb6aae98ea`，`verifier-u05-a` `#266 APPROVE`），将 `HostBehavior::L11CrossNpcA` 重编号至 **`1391`**（保留 `L11OwnNpc` `1389` 与 `L11CrossNpcB` `1390`，`ALL=704`）闭环 `80` 项 Part A 跨包 NPC 技 + `olhuoji`/`olkanpo`/`rexuanfeng` 与 `bazhen`/`reyingzi` 派生绑定并完成 R2/R3 修复，将 `#284` 核准之 **`47`** 名无其余阻塞 `L11:generals:*`（`31` `PART_A_ONLY` + `16` clean `both_ab`）升为 `已复核等价`（`L11` **`645 / 291 / 0`**；保留 `txhj_rexiaoqiao`/`txhj_huzhen` 等 `120` 名阻塞武将、`171` 模式节点及 `5` 项冻结项）。全局现 **`4,128 / 296 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[Batch P3-C1a 证据摘要](../../operations/evidence/2026-11-24-p3-c1a/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-24 Batch P3-C1b（L11 跨包 NPC Part B +20→598/936，全局 4,081/343/0）更新
 
 - **核验与升级**：基线 `48ac34db771adc7c4d744485f8160506b321fde5`（Batch `P3-B` CI Run `45350449191` Attempt 1 `10/10 success`）；合入 `swarm/p3-l11-npc-b`（`e8244d6ed..f63f4c8523715c154e11b467d557e1b7e2d97e44`，`verifier-u05-b` `#246 APPROVE`），将 `HostBehavior::L11CrossNpcB` 重编号至 **`1390`**（保留 `L11OwnNpc` `1389`，`ALL=703`）闭环 `94` 项 `L11_NPC_B_SKILLS` 与 Round 2 `9` 项修复，将 `#246` 批准之 **`20`** 名无其余阻塞 `L11:generals:*` 升为 `已复核等价`（`L11` **`598 / 338 / 0`**；保留 `167` 名阻塞武将、`171` 模式节点及 `5` 项冻结项）。全局现 **`4,081 / 343 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[Batch P3-C1b 证据摘要](../../operations/evidence/2026-11-24-p3-c1b/README.md) 与 [inventory_status.json](inventory_status.json)。

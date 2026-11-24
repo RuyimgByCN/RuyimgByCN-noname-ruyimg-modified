@@ -192,3 +192,15 @@ mod l19_doomsday_fixes;
 
 #[path = "../q4_remaining_fixes.rs"]
 mod q4_remaining_fixes;
+
+#[path = "../l11_npc_a_support/mod.rs"]
+mod l11_npc_a_support;
+
+#[path = "../l11_npc_a_active.rs"]
+mod l11_npc_a_active;
+
+#[path = "../l11_npc_a_triggers.rs"]
+mod l11_npc_a_triggers;
+
+#[path = "../l11_npc_a_save_ai.rs"]
+mod l11_npc_a_save_ai;

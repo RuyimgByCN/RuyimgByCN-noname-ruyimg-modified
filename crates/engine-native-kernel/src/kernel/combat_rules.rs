@@ -297,9 +297,11 @@ pub fn is_tao_like_core(
         // 覆泰2（规则 v214）：全场禁桃时真桃不可救
         return !tao_futai2_banned(core, catalog, responder);
     }
-    // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力
+    // 酒（G1 cardpile 前置）：濒死时对自身使用回复 1 点体力（rejinjiu 回合内禁用）
     if raw_kind == CardKind::Jiu {
-        return true;
+        return !crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::rejinjiu_blocks_jiu(
+            core, catalog, responder,
+        );
     }
     // 护符（U05 swd 首切片，规则 v85）：仅濒死者本人的桃形救援牌
     //（上游 savable: dying === player）
@@ -376,6 +378,9 @@ pub fn is_tao_like_core(
         return true;
     }
     if responder == dying
+        && !crate::rvm_bridge::modifiers::d34_l11_mods_npc_a::rejinjiu_blocks_jiu(
+            core, catalog, responder,
+        )
         && catalog
             .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Jiu))
             .is_some()

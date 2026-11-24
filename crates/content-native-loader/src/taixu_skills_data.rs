@@ -810,6 +810,11 @@ pub fn lookup_l11_b5_host_behavior(
         | "txqyyouji" => Some(HostBehavior::L11OwnNpc),
         "guofengyupao" | "wushuangfangtianji_skill" => Some(HostBehavior::L28ThunderBatchA),
         "twzhouhu" | "twharvestinori" | "twzuhuo" => Some(HostBehavior::L27BeautifyBatchB),
+        s if L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[..80].contains(&s)
+            || matches!(s, "olhuoji" | "olkanpo" | "rexuanfeng") =>
+        {
+            Some(HostBehavior::L11CrossNpcA)
+        }
         _ => None,
     }
 }

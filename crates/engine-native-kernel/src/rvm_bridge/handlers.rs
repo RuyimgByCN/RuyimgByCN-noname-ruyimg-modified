@@ -184,6 +184,7 @@ pub enum VmViewAsFilter {
     Equip,
     NonEquip,
     Trick,
+    MultiTargetTrick,
     DamageTrick,
     Sha,
     Shan,
@@ -259,6 +260,9 @@ impl VmViewAsFilter {
             Self::Equip => kind.is_equip(),
             Self::NonEquip => !kind.is_equip(),
             Self::Trick => is_trick,
+            Self::MultiTargetTrick => super::modifiers::d34_l11_mods_npc_a::is_multi_target_trick_for_jiuxian(
+                kind, def.name,
+            ),
             Self::DamageTrick => matches!(
                 kind,
                 crate::catalog::CardKind::SavageAttack
@@ -455,7 +459,18 @@ impl VmViewAsSpec {
             if self.as_kind == crate::catalog::CardKind::Tao && p.hp >= p.max_hp as i32 {
                 return false;
             }
-            if self.as_kind == crate::catalog::CardKind::Jiu && state.turn.jiu_used {
+            if self.as_kind == crate::catalog::CardKind::Jiu
+                && state.turn.jiu_used
+                && !super::modifiers::d34_l11_mods_npc_a::dclbjiuxian_jiu_unlimited(
+                    state, catalog, owner,
+                )
+                && !super::modifiers::d34_l11_mods_npc_a::chenglve_card_unlimited(
+                    state,
+                    catalog,
+                    owner,
+                    Some(card),
+                )
+            {
                 return false;
             }
         }

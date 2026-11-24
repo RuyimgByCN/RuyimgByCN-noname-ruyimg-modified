@@ -172,6 +172,18 @@ pub(super) fn plan_extension_choice_fallback(
         )
     })
     .or_else(|| {
+        extension_choices_l11_npc_a::plan_l11_npc_a_choice_action(
+            catalog,
+            input,
+            id,
+            prompt,
+            options,
+            min,
+            max,
+            allow_cancel,
+        )
+    })
+    .or_else(|| {
         extension_choices_u05_2::plan_u05_2_choice_action(
             catalog,
             input,

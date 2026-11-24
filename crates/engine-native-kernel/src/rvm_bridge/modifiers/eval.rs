@@ -311,6 +311,9 @@ pub fn eval_sha_use_limit(
         super::d34_flags::apply_sha_use_limit(state, catalog, player, card, cur, unlimited);
     (cur, unlimited) =
         super::d34_l11_npc_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
+    if super::d34_l11_mods_npc_a::chenglve_card_unlimited(state, catalog, player, card) {
+        unlimited = true;
+    }
     (cur.max(0) as u32, unlimited)
 }
 
@@ -522,6 +525,11 @@ pub fn eval_card_use_canceled(
                 canceled = true;
             }
         });
+    }
+    if in_hand
+        && super::d34_l11_mods_npc_a::is_jinglve_sishi_card_locked(state, actor, card)
+    {
+        canceled = true;
     }
     super::d34_flags::apply_card_use_canceled(state, catalog, actor, card, kind, in_hand, canceled)
 }

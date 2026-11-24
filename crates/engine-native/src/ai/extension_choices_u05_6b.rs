@@ -375,6 +375,7 @@ mod tests {
             hand_count,
             equips: vec![],
             judge: vec![],
+            judge_kinds: vec![],
             generals: [None, None],
             revealed_generals: [false, false],
             turned_over: false,
