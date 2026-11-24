@@ -456,6 +456,17 @@ pub(super) fn install_equip_card(
         ctx.note_cards_lost(player, &[old]);
         ctx.to_discard(old);
         (ctx.catalog.hooks.on_cards_to_discard)(ctx, player, &[old], false);
+        if ["xuanfeng", "olxuanfeng", "rexuanfeng"].iter().any(|n| {
+            ctx.catalog
+                .skill_by_name(n)
+                .is_some_and(|def| ctx.core.has_skill(player, def))
+        }) {
+            ctx.emit(EventData::CardsLost {
+                player,
+                cards: vec![old],
+                origins: vec![crate::event::LostOrigin::Equip],
+            });
+        }
     }
     if !to_replace.is_empty() && ctx.catalog.vm_card_history {
         let origins = vec![crate::event::LostOrigin::Equip; to_replace.len()];

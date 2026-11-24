@@ -1,11 +1,16 @@
 # G0 · U04 coin
 
+## 2026-11-24 Batch Q4-remaining（`coin_init`＋`game.changeCoin` 等价，与 UI-7 会师→7/0/0）合入更新
+
+基线 HEAD `8fa7589963bbbe724dc89e656ffcdf6b1afdd8ea`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#114 **`APPROVE`**）与主线 `apply_coin_to_engine` / `q4_remaining/martial_coin_fool.rs` 实测，本源剩余 `2` 项（`coin_init`、`game.changeCoin`）升为 `已复核等价`，与 `Batch UI-7` 已先行闭环之 `haveFun.*`＋`coin_arenaReady` 会师达 **`7 / 0 / 0`**（100% 单项等价；整包八项仍 `0/37`）。详见 [Batch Q4-remaining 证据摘要](../../operations/evidence/2026-11-24-q4-remaining/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-22 Batch UI-7（4 表面＋1 钩子→5/7；其余 2 项待核）合入更新（待提交／发布）
 
 基线 HEAD `f6cd6acb9228d8ca2ab490d61c26f1d856f6c502`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-ui` 独立审查（#126 **`APPROVE`**）与主线 `batch7-ui-cdp.mjs` 实测，本源 `4` 项表面（`haveFun.{firework,snow,star,blink}`）＋`1` 项钩子（`coin_arenaReady`）共 **5 项**升为 `已复核等价`，本源现 **`5 / 2 / 0`**（整包八项仍 `0/37`）。详见 [Batch UI-7 证据摘要](../../operations/evidence/2026-11-21-ui-batch7-closure/README.md) 与 [inventory_status.json](inventory_status.json)。
 
 | 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
 | --- | ---: | ---: | ---: |
+| 2026-11-24 Batch Q4-remaining U04 | 7 | 0 | 0 |
 | 2026-11-22 Batch UI-7 U04 | 5 | 2 | 0 |
 
 > 核验日期：2026-11-11 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/coin`  

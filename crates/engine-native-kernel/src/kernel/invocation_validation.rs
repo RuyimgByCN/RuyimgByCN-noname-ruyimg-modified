@@ -126,22 +126,43 @@ impl NativeInvocation {
                         return Err(bad());
                     };
                     let judge = res.stack.iter().find(|f| f.id == frame).ok_or_else(bad)?;
-                    let is_host_judge = matches!(
+                    if !queue.is_empty()
+                        || current
+                            .as_ref()
+                            .is_some_and(|c| c.trick.is_some() || !*started)
+                    {
+                        return Err(bad());
+                    }
+                    if *invocation == frame {
+                        if !matches!(
+                            judge.data,
+                            EventData::OrdinaryJudge {
+                                owner: p,
+                                invocation: i,
+                            } if p == *owner && i == u32::MAX
+                        ) {
+                            return Err(bad());
+                        }
+                    } else if !matches!(
                         judge.data,
                         EventData::OrdinaryJudge {
                             owner: p,
-                            invocation: u32::MAX,
-                        } if p == *owner && *invocation == frame
-                    );
-                    if is_host_judge {
-                        if !queue.is_empty()
-                            || current
-                                .as_ref()
-                                .is_some_and(|c| c.trick.is_some() || !*started)
-                        {
-                            return Err(bad());
-                        }
-                    } else if !matches!(judge.data,EventData::OrdinaryJudge{owner:p,invocation:i}if p==*owner&&i==*invocation)||judge.parent!=Some(*invocation)||!queue.is_empty()||current.as_ref().is_some_and(|c|c.trick.is_some()||!*started)||!res.parks.iter().any(|p|p.slot==Slot::Intrinsic{frame:*invocation}&&matches!(&p.machine,M::NativeInvocation{progress:P::AwaitJudge{child,target,..},..}if *child==frame&&*target==*owner)){return Err(bad());}
+                            invocation: i,
+                        } if p == *owner && i == *invocation
+                    ) || judge.parent != Some(*invocation)
+                        || !res.parks.iter().any(|p| {
+                            p.slot == Slot::Intrinsic { frame: *invocation }
+                                && matches!(
+                                    &p.machine,
+                                    M::NativeInvocation {
+                                        progress: P::AwaitJudge { child, target, .. },
+                                        ..
+                                    } if *child == frame && *target == *owner
+                                )
+                        })
+                    {
+                        return Err(bad());
+                    }
                 } else if current.as_ref().is_some_and(|c| c.trick.is_none()) {
                     return Err(bad());
                 }

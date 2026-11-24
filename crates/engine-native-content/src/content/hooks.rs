@@ -70,6 +70,7 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     on_hp_changed: crate::content::host::host_on_hp_changed_xianjian,
     on_choose_respond_begin: crate::content::host::host_on_choose_respond_begin_xianjian,
     on_damage_end_step: crate::content::host::host_on_damage_end_xianjian,
+    on_deck_washed: crate::content::host::q4_boss_on_deck_washed,
 };
 
 /// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。

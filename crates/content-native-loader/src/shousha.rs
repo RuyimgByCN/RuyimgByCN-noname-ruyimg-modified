@@ -119,6 +119,22 @@ impl ShoushaConfig {
         self.tables.base.len()
     }
 
+    pub fn contains_base(&self, id: &str) -> bool {
+        self.tables.base.contains_key(id)
+    }
+
+    pub fn contains_doudizhu(&self, id: &str) -> bool {
+        self.tables.doudizhu.contains_key(id)
+    }
+
+    pub fn contains_huanyuan(&self, id: &str) -> bool {
+        self.tables.huanyuan.contains_key(id)
+    }
+
+    pub fn contains_yinjian(&self, id: &str) -> bool {
+        self.tables.yinjian.contains_key(id)
+    }
+
     pub fn doudizhu_len(&self) -> usize {
         self.tables.doudizhu.len()
     }

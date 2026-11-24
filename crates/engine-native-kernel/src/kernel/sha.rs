@@ -374,17 +374,17 @@ impl ShaResolveMachine {
             {
                 return Some(Flow::Yield);
             }
-            if !self.shoulie_direct {
-                let cid = self.card.unwrap_or(0);
-                if ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .remove(&(self.source, format!("sha_unrespondable:{cid}:{}", self.target)))
-                    .is_some()
-                {
-                    self.shoulie_direct = true;
-                }
+        }
+        if !self.shoulie_direct {
+            let cid = self.card.unwrap_or(0);
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_unrespondable:{cid}:{}", self.target)))
+                .is_some()
+            {
+                self.shoulie_direct = true;
             }
         }
         None

@@ -108,12 +108,7 @@ impl JudgePhaseMachine {
                 // 洗弃堆，堆弃双空则不开窗）
                 if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
                     if ctx.core.deck.is_empty() {
-                        let mut cards = std::mem::take(&mut ctx.core.discard);
-                        crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
-                        ctx.core.rng.shuffle(&mut cards);
-                        crate::kernel::elo_on_wash_deck(ctx.core, &cards);
-                        ctx.core.deck = cards;
-                        ctx.log(LogEvent::DeckReshuffled);
+                        let _ = ctx.reshuffle_discard_into_deck();
                     }
                     let other = ctx
                         .core
@@ -904,15 +899,9 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 let mut cards: Vec<crate::ids::CardId> = Vec::new();
                 for _ in 0..7 {
                     if ctx.core.deck.is_empty() {
-                        if ctx.core.discard.is_empty() {
+                        if !ctx.reshuffle_discard_into_deck() {
                             break;
                         }
-                        let mut d = std::mem::take(&mut ctx.core.discard);
-                        crate::kernel::cleanup_discard_to_deck(ctx.core, &mut d);
-                        ctx.core.rng.shuffle(&mut d);
-                        crate::kernel::elo_on_wash_deck(ctx.core, &d);
-                        ctx.core.deck = d;
-                        ctx.log(LogEvent::DeckReshuffled);
                     }
                     cards.push(ctx.core.deck.pop().expect("deck non-empty"));
                 }

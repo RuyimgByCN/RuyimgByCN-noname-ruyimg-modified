@@ -135,6 +135,18 @@ pub fn apply_general_assembly(
         p.hlss_count = 0;
         p.hlss_damage = 0;
     }
+    if state.boss_mode().is_some_and(|(boss, _)| boss == player)
+        && skills.contains(&"boss_baonu")
+    {
+        state
+            .vm_aux
+            .flags
+            .insert((0, "q4_boss_baonuwash_armed".to_string()), 1);
+        state
+            .vm_aux
+            .flags
+            .remove(&(0, "q4_boss_baonuwash_triggered".to_string()));
+    }
     for skill in skills {
         let def = catalog
             .skill_by_name(skill)
@@ -244,4 +256,16 @@ pub fn sync_dddfusi_global(
     };
     sync_pair(state, "dddfusi", "dddfusi_global");
     sync_pair(state, "dddfengzheng", "dddfengzheng_global");
+}
+
+/// Combine dual-general HP caps using upstream `double_hp` rule code:
+/// 0=`hejiansan`, 1=`pingjun`, 2=`zuidazhi`, 3=`zuixiaozhi`, 4=`zonghe`.
+pub fn combine_double_hp(rule: u32, hp1: u32, hp2: u32) -> u32 {
+    match rule {
+        1 => ((hp1 + hp2) / 2).max(1),
+        2 => hp1.max(hp2).max(1),
+        3 => hp1.min(hp2).max(1),
+        4 => (hp1 + hp2).max(1),
+        _ => (hp1 + hp2).saturating_sub(3).max(1),
+    }
 }

@@ -241,6 +241,12 @@ impl HostSkillBehavior {
             | HostBehavior::U05SwdTianxianjiu => {
                 return super::step::swd_u05_7b::machine(self, owner, event);
             }
+            HostBehavior::Q4BossPlaySkill => {
+                return super::step::q4_boss_skills::machine_q4_boss(self, owner, event);
+            }
+            HostBehavior::Q4FoolSkill => {
+                return super::step::q4_fool_skills::machine_q4_fool(self, owner, event);
+            }
             _ => {}
         }
         let (target, card) = match self.behavior {

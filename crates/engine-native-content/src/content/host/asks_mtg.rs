@@ -662,6 +662,14 @@ pub(super) fn active_ask_batches(
             }
             _ => None,
         },
+        HostBehavior::Q4BossPlaySkill => {
+            super::step::q4_boss_skills::q4_boss_asks::ask_q4_boss(
+                stage, owner, target, targets, card, cards, core, catalog,
+            )
+        }
+        HostBehavior::Q4FoolSkill => {
+            super::step::q4_fool_skills::ask_q4_fool(stage, owner, card, cards, core, catalog)
+        }
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

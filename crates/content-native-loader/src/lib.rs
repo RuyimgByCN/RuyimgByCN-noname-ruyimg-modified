@@ -20,7 +20,7 @@ use std::collections::BTreeSet;
 use std::ops::RangeInclusive;
 
 use engine_native::catalog::{CardDef, CardKind, EquipSlot, Faction, Suit};
-use engine_native::content::extension::{ExtensionDef, ExtensionGeneral, ExtensionPack, InitHook};
+use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
 use engine_native::content::host::{
     card_kind_equip_skills, card_kind_host_skills, HostBehavior, HostSkillDecl,
 };
@@ -29,6 +29,7 @@ use engine_native::content::standard::Gender;
 use serde_json::Value;
 
 mod ai_tuning;
+pub mod boss_play_data;
 mod boss_playpack;
 mod coin;
 pub mod decade_ui;
@@ -42,6 +43,7 @@ mod fool;
 mod longxue;
 mod martial;
 mod omnisearch;
+mod q4_engine_bridge;
 mod qhly;
 pub mod rzsh;
 mod shahai_u05_b1;
@@ -161,120 +163,8 @@ pub use update_guard::{
 };
 pub use zuan::*;
 
-/// 装载错误：坏包、未知键与宿主 API 版本不符给出明确原因。
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum BridgeError {
-    /// JSON 解析失败。
-    BadJson(String),
-    /// 缺少必需字段。
-    MissingField(&'static str),
-    /// 字段类型或取值非法。
-    InvalidField { field: &'static str, reason: String },
-    /// `kind` 不是 engine-native 的牌种键。
-    UnknownCardKind(String),
-    /// 未知花色。
-    UnknownSuit(String),
-    /// `mapping` 不是 engine-native 的宿主行为键。
-    UnknownBehaviorKey(String),
-    /// 未知势力。
-    UnknownFaction(String),
-    /// 未知性别。
-    UnknownGender(String),
-    /// 未知开局钩子键。
-    UnknownInitHook(String),
-    /// 装备技既不是本包 `skills` 映射，也不是牌种伴随技能。
-    UnknownEquipSkill(String),
-    /// 包内宿主技能重名。
-    DuplicateSkill(String),
-    /// cards.json 声明的引擎 API 版本与当前运行时不符。
-    HostVersionMismatch { declared: u64, current: u32 },
-    /// 名称符号表已达总量上限（ADR 0779）：拒绝装载而非无界增长。
-    SymbolTableLimit { limit: usize },
-    /// 包声明了原生桥接尚不承载的 DSL 滤镜（PA12 批①：装载期拒绝——
-    /// 此前静默跳过会让技能「装上但不触发」）。
-    UnsupportedVmFilters { filters: Vec<String> },
-}
-
-impl std::fmt::Display for BridgeError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            BridgeError::BadJson(e) => write!(f, "包数据解析失败: {e}"),
-            BridgeError::MissingField(fld) => write!(f, "包数据缺少字段 {fld}"),
-            BridgeError::InvalidField { field, reason } => {
-                write!(f, "包数据字段 {field} 非法: {reason}")
-            }
-            BridgeError::UnknownCardKind(k) => write!(f, "未知牌种键 {k}"),
-            BridgeError::UnknownSuit(s) => write!(f, "未知花色 {s}"),
-            BridgeError::UnknownBehaviorKey(k) => write!(f, "未知宿主行为键 {k}"),
-            BridgeError::UnknownFaction(s) => write!(f, "未知势力 {s}"),
-            BridgeError::UnknownGender(s) => write!(f, "未知性别 {s}"),
-            BridgeError::UnknownInitHook(s) => write!(f, "未知开局钩子 {s}"),
-            BridgeError::UnknownEquipSkill(s) => write!(f, "装备技 {s} 未在本包登记"),
-            BridgeError::DuplicateSkill(s) => write!(f, "包内宿主技能重名 {s}"),
-            BridgeError::HostVersionMismatch { declared, current } => write!(
-                f,
-                "包声明的引擎 API 版本 {declared} 与运行时 {current} 不符"
-            ),
-            BridgeError::UnsupportedVmFilters { filters } => {
-                write!(
-                    f,
-                    "VM 技能滤镜原生不承载（整包拒装）: {}",
-                    filters.join(", ")
-                )
-            }
-            BridgeError::SymbolTableLimit { limit } => {
-                write!(f, "名称符号表已达总量上限 {limit}，拒绝装载（ADR 0779）")
-            }
-        }
-    }
-}
-
-impl std::error::Error for BridgeError {}
-
-/// 装载产物：扩展包 + 未映射（暂缓）牌清单。
-pub struct BridgedPack {
-    pub pack: ExtensionPack,
-    /// cards.json `deferred` 数组的牌名（登记暂缓，不阻断装载）。
-    pub deferred: Vec<String>,
-    /// cards.json 声明的 definition_id。
-    pub definition_ids: BridgedDefinitionIds,
-}
-
-/// 武将技能装载产物。
-pub struct BridgedGenerals {
-    pub generals: Vec<ExtensionGeneral>,
-    /// 命中宿主行为的技能声明（按名去重，并入 ExtensionPack 用）。
-    pub host_skills: Vec<HostSkillDecl>,
-    /// 命中宿主行为的技能键（逐武将出现次序；内容锁/断言用）。
-    pub mapped_skill_keys: Vec<&'static str>,
-    /// 未映射（暂缓）的技能计数。
-    pub unmapped_skills: usize,
-    /// generals[].definition_id 与 generals[].skills[].definition_id。
-    pub definition_ids: BridgedDefinitionIds,
-}
-
-pub(crate) fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
-    BridgeError::InvalidField {
-        field,
-        reason: reason.into(),
-    }
-}
-
-/// 符号表总量上限门（ADR 0779）：三个生产入口（bridge_pack/
-/// bridge_generals/bridge_pile）装载前检查，超限一律拒装。表项不回收，
-/// 唯一名称数是单调量——入口检查即足以在重复安装/损坏包流下 fail-fast；
-/// 单个包自身可一次 intern 逼近上限（受包文件大小界定，登记为已知边界）。
-/// T8 增量 3/6：npack 内 rule-vm 触发模块 → engine-native `VmSkillDecl`
-///（数据驱动装载：DSL→编译 npack→装载器→引擎，不重编译）。事件名严
-/// 格映射（phase_end/phase_begin/damage/card_used/death）；未知事件名
-/// 拒装。filter 走 `map_vm_filter`：精确策略、参数化族、具名编译；无法
-/// 承载的名称**装载期拒绝整包**并列出（PA12 批①；此前跳过入 deferred
-/// 会让技能静默不触发）。
-#[derive(Debug)]
-pub struct VmBridgeOutcome {
-    /// 可装载声明。
-    pub decls: Vec<engine_native::content::extension::VmSkillDecl>,
-}
+mod bridge_types;
+pub use bridge_types::*;
 
 mod vm_active;
 mod vm_modifiers;
@@ -954,6 +844,16 @@ mod generals_bridge;
 pub(crate) use generals_bridge::bridge_generals_inner;
 pub use generals_bridge::{bridge_generals, bridge_generals_with_known};
 mod pile_bridge;
+pub use boss_play_data::{
+    append_boss_play_content, boss_play_extension_pack, boss_play_skill_behavior, BossGeneralEntry,
+    L03_BOSS_GENERALS, U02_BOSS_GENERALS,
+};
 pub use pile_bridge::{bridge_pile, parse_pile_factors};
+pub use q4_engine_bridge::{
+    apply_coin_to_engine, apply_douzhuan_request_to_engine, apply_douzhuan_to_engine,
+    apply_fool_to_engine, apply_shousha_to_engine, boss_play_arena_ready,
+    boss_play_init_and_arena_ready, cardpile_arena_ready_pack, fool_extension_pack,
+    martial_engine_from_config, verify_pile_json_buckets,
+};
 pub mod decision34_closure;
 pub use decision34_closure::*;

@@ -13,6 +13,7 @@ use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::rng::RuleRng;
 mod core_ops;
 mod core_ops_modifiers;
+mod core_ops_teams;
 
 /// 单个玩家的实例级状态。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1061,8 +1062,8 @@ pub struct GameState {
 
 mod general_assembly;
 pub use general_assembly::{
-    apply_general_assembly, general_starting_hp, general_starting_hujia, has_custom_starting_hp,
-    sync_dddfusi_global,
+    apply_general_assembly, combine_double_hp, general_starting_hp, general_starting_hujia,
+    has_custom_starting_hp, sync_dddfusi_global,
 };
 pub mod scoped_storage;
 pub use scoped_storage::{

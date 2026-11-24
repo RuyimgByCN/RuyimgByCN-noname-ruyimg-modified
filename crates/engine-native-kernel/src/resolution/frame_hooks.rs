@@ -32,6 +32,24 @@ pub(super) fn on_frame_popped(
     catalog: &crate::catalog::Catalog,
     out: &mut Vec<LogEvent>,
 ) {
+    on_frame_popped_inner(popped, core, res, catalog, out, true);
+}
+
+pub(super) fn cleanup_unwound_frame(
+    popped: &Frame,
+    ctx: &mut Ctx<'_>,
+) {
+    on_frame_popped_inner(popped, ctx.core, ctx.res, ctx.catalog, ctx.out, false);
+}
+
+fn on_frame_popped_inner(
+    popped: &Frame,
+    core: &mut GameStateCore,
+    res: &mut Resolution,
+    catalog: &crate::catalog::Catalog,
+    out: &mut Vec<LogEvent>,
+    run_after_hooks: bool,
+) {
     if let EventData::CardsDiscarded { player, cards } = &popped.data {
         if catalog.vm_card_history || catalog.skill_by_name("txhj_xuanwuSkill2").is_some() {
             for &c in cards {
@@ -100,7 +118,19 @@ pub(super) fn on_frame_popped(
                 .remove(&(p, format!("sha_damage_frame:{}", popped.id)));
         }
     }
-    if super::is_post_commit_host_event(&popped.data) {
+    if let EventData::Dying { player, .. } = &popped.data {
+        if !run_after_hooks {
+            core.player_mut(*player).dying = false;
+        }
+        if !core.players.iter().any(|pl| pl.alive && pl.dying) {
+            for p in 0..core.players.len() as PlayerId {
+                core.vm_aux
+                    .flags
+                    .remove(&(p, "q4_rewansha_sealed".to_string()));
+            }
+        }
+    }
+    if run_after_hooks && super::is_post_commit_host_event(&popped.data) {
         let mut ctx = Ctx {
             core,
             res,
@@ -176,22 +206,24 @@ pub(super) fn on_frame_popped(
             .remove(&(*owner, format!("l11_resolved_ordinary_judge:{invocation}")));
     }
     if let EventData::CardUsed(u) = &popped.data {
-        on_card_use_popped(popped.id, u, core, res, catalog, out);
+        on_card_use_popped(popped.id, u, core, res, catalog, out, run_after_hooks);
     }
-    if matches!(
-        popped.kind,
-        crate::event::EventKind::CardUsed
-            | crate::event::EventKind::CardsDiscarded
-            | crate::event::EventKind::CardResponded
-            | crate::event::EventKind::OrdinaryJudge
-            | crate::event::EventKind::Equipped
-    ) && core
-        .vm_aux
-        .flags
-        .get(&(0, "u01_yulv_q_len".to_string()))
-        .copied()
-        .unwrap_or(0)
-        > 0
+    if run_after_hooks
+        && matches!(
+            popped.kind,
+            crate::event::EventKind::CardUsed
+                | crate::event::EventKind::CardsDiscarded
+                | crate::event::EventKind::CardResponded
+                | crate::event::EventKind::OrdinaryJudge
+                | crate::event::EventKind::Equipped
+        )
+        && core
+            .vm_aux
+            .flags
+            .get(&(0, "u01_yulv_q_len".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
     {
         let actor = core.turn.current;
         let mut ctx = Ctx {
@@ -202,6 +234,32 @@ pub(super) fn on_frame_popped(
         };
         (catalog.hooks.on_cards_to_discard)(&mut ctx, actor, &[], false);
     }
+    if !run_after_hooks {
+        if let EventData::Draw { held_cards, .. } = &popped.data {
+            let mut ctx = Ctx {
+                core,
+                res,
+                catalog,
+                out,
+            };
+            for &c in held_cards {
+                let ccore = &*ctx.core;
+                let present = ccore.deck.contains(&c)
+                    || ccore.discard.contains(&c)
+                    || ccore.table.contains(&c)
+                    || ccore.detached_cards.iter().any(|&(id, _)| id == c)
+                    || ccore.players.iter().any(|pl| {
+                        pl.hand.contains(&c)
+                            || pl.equips.contains(&c)
+                            || pl.judge.contains(&c)
+                            || pl.off_court.contains(&c)
+                    });
+                if !present {
+                    ctx.to_discard(c);
+                }
+            }
+        }
+    }
 }
 
 fn on_card_use_popped(
@@ -211,6 +269,7 @@ fn on_card_use_popped(
     res: &mut Resolution,
     catalog: &crate::catalog::Catalog,
     out: &mut Vec<LogEvent>,
+    run_after_hooks: bool,
 ) {
     super::pop_cleanup::clear_jifeng_more_flags(core, u.player, popped_id);
     core.vm_aux
@@ -258,6 +317,9 @@ fn on_card_use_popped(
     core.vm_aux
         .flags
         .remove(&(u.player, format!("sha_pending_end:{popped_id}")));
+    core.vm_aux.flags.retain(|(owner, key), _| {
+        !(*owner == u.player && key.starts_with(&format!("q4_retieji_done:{popped_id}:")))
+    });
     core.vm_aux
         .flags
         .remove(&(u.player, format!("u05_sha_hit_resume:{popped_id}")));
@@ -368,9 +430,10 @@ fn on_card_use_popped(
             }
         }
     }
-    if u.use_as.is_none()
-        || u.card
-            .is_some_and(|c| u.use_as == catalog.resolved_card_def(core, c).map(|d| d.kind))
+    if run_after_hooks
+        && (u.use_as.is_none()
+            || u.card
+                .is_some_and(|c| u.use_as == catalog.resolved_card_def(core, c).map(|d| d.kind)))
     {
         if let Some(c) = u.card.filter(|id| core.discard.contains(id)) {
             let mut ctx = Ctx {
@@ -407,22 +470,24 @@ fn on_card_use_popped(
                 .remove(&(p, "dddfusi_window_refused".to_string()));
         }
     }
-    core.vm_aux.flags.insert(
-        (u.player, "last_popped_card_use_fid".to_string()),
-        popped_id,
-    );
-    {
-        let mut ctx = Ctx {
-            core,
-            res,
-            catalog,
-            out,
-        };
-        (catalog.hooks.on_card_use_after)(&mut ctx, popped_id, u);
+    if run_after_hooks {
+        core.vm_aux.flags.insert(
+            (u.player, "last_popped_card_use_fid".to_string()),
+            popped_id,
+        );
+        {
+            let mut ctx = Ctx {
+                core,
+                res,
+                catalog,
+                out,
+            };
+            (catalog.hooks.on_card_use_after)(&mut ctx, popped_id, u);
+        }
+        core.vm_aux
+            .flags
+            .remove(&(u.player, "last_popped_card_use_fid".to_string()));
     }
-    core.vm_aux
-        .flags
-        .remove(&(u.player, "last_popped_card_use_fid".to_string()));
     core.vm_aux
         .flags
         .remove(&(u.player, format!("dddxianxi_added:{popped_id}")));

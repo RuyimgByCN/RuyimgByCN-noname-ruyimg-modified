@@ -195,12 +195,36 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
                     .remove(&(player, "xj_last_discard_count".to_string()));
             }
         }
+        if !begin
+            && ctx.core.turn.discard_phase_discarded >= 2
+            && ["xuanfeng", "rexuanfeng"].iter().any(|n| {
+                ctx.catalog
+                    .skill_by_name(n)
+                    .is_some_and(|def| ctx.core.has_skill(player, def))
+            })
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, "q4_xuanfeng_discard_ready".to_string()), 1);
+        } else {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, "q4_xuanfeng_discard_ready".to_string()));
+        }
         if ctx.core.current_land == Some(crate::catalog::CardKind::Shuimomuxue)
             && ctx.core.turn.discard_phase_discarded > 0
         {
             ctx.start_draw(player, 1);
         }
         ctx.core.turn.discard_phase_discarded = 0;
+    }
+    if !begin && phase == Phase::End {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "q4_xuanfeng_discard_ready".to_string()));
     }
     // 光塔（K13，A2；规则 v119→333）：♠子技持有者于**下一次整回合结束**
     // 受 1 无源雷伤（上游 trigger phaseEnd；intro 写「下个结束阶段」与
@@ -225,6 +249,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
             }
         }
         (ctx.catalog.hooks.on_phase_use_end)(ctx, player);
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "q4_play_sha_count".to_string()));
     }
     // 护天（swd 批 131，规则 v314）：寄存只跨一个阶段边界（上游 `hutian4`
     // 临时技在下一阶段边界移除 → `hutian3` 于下一次阶段收束归还）。原生
@@ -289,6 +317,21 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         ctx.emit(EventData::Phase {
             player,
             phase: next,
+            begin: true,
+        });
+        pushed_next_phase = true;
+    } else if phase == Phase::Prepare
+        && crate::rvm_bridge::modifiers::d34_q4_boss_mods::skips_judge_phase(
+            ctx.core,
+            ctx.catalog,
+            player,
+        )
+    {
+        ctx.record_phase_skipped(player);
+        ctx.core.turn.phase = Phase::Draw;
+        ctx.emit(EventData::Phase {
+            player,
+            phase: Phase::Draw,
             begin: true,
         });
         pushed_next_phase = true;

@@ -318,15 +318,8 @@ pub(super) fn commit_combat_or_state_effect(
             }
             let mut drawn = Vec::new();
             for _ in 0..count {
-                if ctx.core.deck.is_empty() {
-                    if ctx.core.discard.is_empty() {
-                        break;
-                    }
-                    let mut cards = std::mem::take(&mut ctx.core.discard);
-                    crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
-                    ctx.core.rng.shuffle(&mut cards);
-                    ctx.core.deck = cards;
-                    ctx.out.push(LogEvent::DeckReshuffled);
+                if ctx.core.deck.is_empty() && !ctx.reshuffle_discard_into_deck() {
+                    break;
                 }
                 let card = ctx.core.deck.remove(0);
                 ctx.core.player_mut(p).hand.push(card);

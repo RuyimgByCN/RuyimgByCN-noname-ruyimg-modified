@@ -795,11 +795,13 @@ impl GameStateCore {
         }
         // 神威（Boss 庞统浴火授予，批 118 规则 v306）：手牌上限
         // +min(3, 其他角色数)（上游 shenwei mod maxHandcard 同口径）
-        if let Some(def) = catalog.skill_by_name(crate::vocabulary::host::BOSS_SHENWEI_KEY) {
-            if self.has_skill(p, def) {
-                let others = self.alive_players().filter(|q| *q != p).count();
-                limit += others.min(3);
-            }
+        if [crate::vocabulary::host::BOSS_SHENWEI_KEY, "shenwei"]
+            .into_iter()
+            .filter_map(|n| catalog.skill_by_name(n))
+            .any(|def| self.has_skill(p, def))
+        {
+            let others = self.alive_players().filter(|q| *q != p).count();
+            limit += others.min(3);
         }
         // 神恩（Boss 太昊/炎帝 光环，规则 v238）：挑战者侧手牌上限 +1
         //（上游 boss_shenen2 mod maxHandcard `!side → num+1` 同口径；

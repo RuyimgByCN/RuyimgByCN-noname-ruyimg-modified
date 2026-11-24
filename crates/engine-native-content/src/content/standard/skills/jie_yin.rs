@@ -142,9 +142,7 @@ impl SkillMachine for JieYinMachine {
                 if !ctx.core.player(target).alive {
                     return Flow::Done;
                 }
-                for c in &self.cards {
-                    ctx.discard_from_hand(self.owner, *c);
-                }
+                ctx.discard_hand_batch(self.owner, &self.cards);
                 ctx.recover(self.owner, 1, None);
                 ctx.recover(target, 1, None);
                 Flow::Done

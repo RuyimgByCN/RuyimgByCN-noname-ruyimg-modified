@@ -97,6 +97,12 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
     super::l01_rules::l01_on_game_start(core, catalog);
     super::u05_b2_gujian::on_game_start_gujian(core, catalog);
     super::u05_hearth::host_on_game_start_hearth(core, catalog);
+    if core
+        .boss_mode()
+        .is_some_and(|(boss, _)| has_skill_named(core, catalog, boss, "boss_baonu"))
+    {
+        set_flag(core, 0, "q4_boss_baonuwash_armed", 1);
+    }
 }
 
 /// `Death` 执行前钩子：当前用于 `yange`/`humeng` 子武将阵亡时退出子将并恢复主将，阻止角色死亡。

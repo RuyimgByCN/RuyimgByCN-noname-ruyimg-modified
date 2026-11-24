@@ -999,6 +999,14 @@ pub fn attach_formal_package_upstream_rules(
                 }
             }
         }
+        ("upstream-noname", "boss-play")
+        | ("upstream-liuli", "boss-play")
+        | ("upstream-liuli", "fool-plugin") => {
+            crate::q4_engine_bridge::append_q4_formal_rules(
+                namespace, package_id, &mut seen_generals, &mut seen_skills,
+                &mut extra_generals, &mut extra_host_skills,
+            );
+        }
         _ => {}
     }
     if (namespace, package_id) == ("upstream-liuli", "zuan") {

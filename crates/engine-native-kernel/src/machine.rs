@@ -521,15 +521,25 @@ impl<'a> Ctx<'a> {
         );
     }
 
+    /// 洗入弃牌堆回牌库并派发洗牌钩子（`elo_on_wash_deck` / `boss_baonuwash`）。
+    pub fn reshuffle_discard_into_deck(&mut self) -> bool {
+        if self.core.discard.is_empty() {
+            return false;
+        }
+        let mut cards = std::mem::take(&mut self.core.discard);
+        crate::kernel::cleanup_discard_to_deck(self.core, &mut cards);
+        self.core.rng.shuffle(&mut cards);
+        crate::kernel::elo_on_wash_deck(self.core, &cards);
+        self.core.deck = cards;
+        self.out.push(LogEvent::DeckReshuffled);
+        (self.catalog.hooks.on_deck_washed)(self);
+        true
+    }
+
     /// 翻判定牌：牌库顶；牌库不足时先洗回弃牌堆。不进入任何玩家手牌。
     pub fn draw_judge_card(&mut self) -> CardId {
         if self.core.deck.is_empty() {
-            let mut cards = std::mem::take(&mut self.core.discard);
-            crate::kernel::cleanup_discard_to_deck(self.core, &mut cards);
-            self.core.rng.shuffle(&mut cards);
-            crate::kernel::elo_on_wash_deck(self.core, &cards);
-            self.core.deck = cards;
-            self.out.push(LogEvent::DeckReshuffled);
+            let _ = self.reshuffle_discard_into_deck();
         }
         self.core
             .deck
@@ -544,12 +554,7 @@ impl<'a> Ctx<'a> {
         pref: Option<crate::kernel::EloJudgePref>,
     ) -> CardId {
         if self.core.deck.is_empty() {
-            let mut cards = std::mem::take(&mut self.core.discard);
-            crate::kernel::cleanup_discard_to_deck(self.core, &mut cards);
-            self.core.rng.shuffle(&mut cards);
-            crate::kernel::elo_on_wash_deck(self.core, &cards);
-            self.core.deck = cards;
-            self.out.push(LogEvent::DeckReshuffled);
+            let _ = self.reshuffle_discard_into_deck();
         }
         if let Some(pref) = pref {
             crate::kernel::elo_on_skill_judge_begin(self.core, self.catalog, player, pref);
@@ -821,6 +826,28 @@ impl<'a> Ctx<'a> {
             player,
             cards: vec![card],
         });
+    }
+
+    /// 批量从手牌弃置多张（`zhiheng`/`jieyin`/`shenzhi`/`boss_keding` 等）；持有 `olxuanfeng` 且一次性弃置 `>=2` 张时补发 `CardsDiscarded`。
+    pub fn discard_hand_batch(&mut self, player: PlayerId, cards: &[CardId]) {
+        let mut discarded = Vec::with_capacity(cards.len());
+        for &c in cards {
+            if self.core.player(player).hand.contains(&c) {
+                self.discard_from_hand(player, c);
+                discarded.push(c);
+            }
+        }
+        if discarded.len() >= 2
+            && self
+                .catalog
+                .skill_by_name("olxuanfeng")
+                .is_some_and(|def| self.core.has_skill(player, def))
+        {
+            self.emit(EventData::CardsDiscarded {
+                player,
+                cards: discarded,
+            });
+        }
     }
 
     /// 义山记录（swd 批 123，规则 v310）：持有者失去牌时登记（上游

@@ -1001,6 +1001,8 @@ impl HostBehavior {
             | HostBehavior::SwdSusheng2
             | HostBehavior::SwdMoyu
             | HostBehavior::SwdU05_7dSub => self.trigger_meta_swd_u05_7d(),
+            HostBehavior::Q4BossPlaySkill
+            | HostBehavior::Q4FoolSkill => None,
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
             meta.timing = timing;

@@ -88,7 +88,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 }
             }
         }
-        // versus 替补（规则 v206）：死亡座位所在队替补池非空 → 弹队首
+        // versus / L21 martial 替补（规则 v206）：死亡座位所在队或 KOF 替补池非空 → 弹队首
         // 换将复活（上游 revive+uninit/init+摸 4+濒死链取消同口径：死亡
         // 执行被替补替代——本座位不进入死亡结算，奖惩/终局判定不发生；
         // 登记差异：上游 dieAfter 展示与「出场」日志不入原生日志，替补
@@ -108,38 +108,69 @@ impl crate::catalog::SkillMachine for DeathMachine {
                         }
                         _ => unreachable!("versus_team_of 只在 Versus 模式"),
                     };
-                    // 换将前清本座位技能与区域（上游 uninit/init 重建面：
-                    // 手牌/装备/判定区离场入弃堆，替补从零开始）
-                    let removed: Vec<crate::ids::SkillDefId> = ctx
+                    revive_with_substitute_generals(ctx, self.player, g, None, None, 4);
+                    return Flow::Done;
+                }
+            } else if ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(0, "l21_martial_active".to_string()))
+                .copied()
+                .unwrap_or(0)
+                != 0
+            {
+                let si = self.player as usize;
+                let has_backup = matches!(
+                    &ctx.core.mode,
+                    crate::state::GameMode::Kof { pools, .. }
+                        if pools.get(si).is_some_and(|p| !p.is_empty())
+                );
+                if has_backup {
+                    let double_char = ctx
                         .core
-                        .skills
-                        .keys()
-                        .filter(|(o, _)| *o == self.player)
-                        .map(|(_, d)| *d)
-                        .collect();
-                    for def in removed {
-                        let name = ctx.catalog.skill_name(def);
-                        ctx.core.remove_skill_and_r05_mark(ctx.catalog, self.player, def);
-                        let mut extra =
-                            (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, self.player, name);
-                        flush_discard_with_hook(ctx, self.player, &mut extra);
-                    }
-                    let mut leftover = {
-                        let p = ctx.core.player_mut(self.player);
-                        let mut leftover = std::mem::take(&mut p.hand);
-                        leftover.extend(std::mem::take(&mut p.equips));
-                        leftover.extend(std::mem::take(&mut p.judge));
-                        p.alive = true;
-                        p.dying = false;
-                        p.death_cancelled = false;
-                        p.general_slots = [Some(g), None];
-                        leftover
+                        .vm_aux
+                        .flags
+                        .get(&(0, "l21_double_char".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        != 0;
+                    let auto_join = double_char
+                        && ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(0, "l21_auto_join".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            != 0;
+                    let hp_rule = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(0, "l21_double_hp".to_string()))
+                        .copied()
+                        .unwrap_or(0);
+                    let (g1, g2, rest_len) = match &mut ctx.core.mode {
+                        crate::state::GameMode::Kof { pools, .. } => {
+                            let g1 = pools[si].remove(0);
+                            let g2 = if auto_join && !pools[si].is_empty() {
+                                Some(pools[si].remove(0))
+                            } else {
+                                None
+                            };
+                            (g1, g2, pools[si].len())
+                        }
+                        _ => unreachable!("checked Kof mode above"),
                     };
-                    flush_discard_with_hook(ctx, self.player, &mut leftover);
-                    crate::state::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
-                    let p = ctx.core.player_mut(self.player);
-                    p.hp = p.max_hp as i32;
-                    ctx.start_draw(self.player, 4);
+                    revive_with_substitute_generals(
+                        ctx,
+                        self.player,
+                        g1,
+                        g2,
+                        Some((hp_rule, rest_len)),
+                        4,
+                    );
                     return Flow::Done;
                 }
             }
@@ -619,6 +650,72 @@ impl crate::catalog::SkillMachine for DeathMachine {
         }
         Flow::Done
     }
+}
+
+/// Shared substitute-pool revival helper for Versus substitutes and L21 martial KOF backups.
+fn revive_with_substitute_generals(
+    ctx: &mut Ctx<'_>,
+    seat: PlayerId,
+    g1: u16,
+    g2: Option<u16>,
+    martial_hp_and_rest: Option<(u32, usize)>,
+    default_draw: u32,
+) {
+    let removed: Vec<crate::ids::SkillDefId> = ctx
+        .core
+        .skills
+        .keys()
+        .filter(|(o, _)| *o == seat)
+        .map(|(_, d)| *d)
+        .collect();
+    for def in removed {
+        let name = ctx.catalog.skill_name(def);
+        ctx.core.remove_skill_and_r05_mark(ctx.catalog, seat, def);
+        let mut extra =
+            (ctx.catalog.hooks.on_skill_removed)(ctx.core, ctx.catalog, seat, name);
+        flush_discard_with_hook(ctx, seat, &mut extra);
+    }
+    let mut leftover = {
+        let p = ctx.core.player_mut(seat);
+        let mut leftover = std::mem::take(&mut p.hand);
+        leftover.extend(std::mem::take(&mut p.equips));
+        leftover.extend(std::mem::take(&mut p.judge));
+        p.alive = true;
+        p.dying = false;
+        p.death_cancelled = false;
+        p.general_slots = [Some(g1), g2];
+        p.revealed_generals = [true, g2.is_some()];
+        leftover
+    };
+    flush_discard_with_hook(ctx, seat, &mut leftover);
+    crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+    if let Some(sub) = g2 {
+        crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 1);
+        let hp1 = ctx.catalog.general_meta(g1).map(|m| m.3).unwrap_or(4);
+        let hp2 = ctx.catalog.general_meta(sub).map(|m| m.3).unwrap_or(4);
+        let hp_rule = martial_hp_and_rest.map(|(r, _)| r).unwrap_or(0);
+        let combined = crate::state::combine_double_hp(hp_rule, hp1, hp2);
+        let p = ctx.core.player_mut(seat);
+        p.max_hp = combined;
+        p.hp = combined as i32;
+    } else {
+        let p = ctx.core.player_mut(seat);
+        p.hp = p.max_hp as i32;
+    }
+    let draw_n = if let Some((_, rest_len)) = martial_hp_and_rest {
+        if ctx
+            .catalog
+            .skill_by_name("cuorui")
+            .is_some_and(|d| ctx.core.has_skill(seat, d))
+        {
+            2 + rest_len as u32
+        } else {
+            default_draw
+        }
+    } else {
+        default_draw
+    };
+    ctx.start_draw(seat, draw_n);
 }
 
 /// 将遗留手牌/装备/判定牌（及 `onremove` 武将牌上标记牌）移入弃牌堆并触发入堆回调。

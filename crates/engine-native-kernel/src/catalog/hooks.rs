@@ -280,6 +280,8 @@ pub struct ContentHooks {
     pub on_choose_respond_begin: fn(&mut crate::machine::Ctx<'_>, crate::ids::PlayerId, u8),
     /// 伤害后窗（`DamageWindowKind::End`）宿主直通钩子（如 `U05 tianjian_discard` / `qianfang_draw` / `ywuhun_end`）。
     pub on_damage_end_step: fn(&mut crate::machine::Ctx<'_>, &crate::event::DamageData),
+    /// 弃牌堆洗入牌库后钩子（如 `boss_baonuwash`）。
+    pub on_deck_washed: fn(&mut crate::machine::Ctx<'_>),
 }
 
 impl ContentHooks {
@@ -346,5 +348,6 @@ impl ContentHooks {
         on_hp_changed: |_, _, _| {},
         on_choose_respond_begin: |_, _, _| {},
         on_damage_end_step: |_, _| {},
+        on_deck_washed: |_| {},
     };
 }

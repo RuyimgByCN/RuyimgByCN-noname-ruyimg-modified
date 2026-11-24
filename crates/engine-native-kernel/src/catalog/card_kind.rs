@@ -182,6 +182,11 @@ impl CardKind {
         )
     }
 
+    /// Delayed tricks (`type == 'delay'`) carry `allowMultiple: false` implicitly in Noname.
+    pub fn is_delayed_trick(self) -> bool {
+        self.is_delay_trick_kind()
+    }
+
     /// 普通（即时）锦囊（上游 `get.type(card) === "trick"`）：含普通锦囊、不含延时锦囊与基本/装备/特殊牌。
     pub fn is_ordinary_trick_kind(self) -> bool {
         self.is_trick_kind() && !self.is_delay_trick_kind()
@@ -209,6 +214,44 @@ impl CardKind {
                 | CardKind::Liuxinghuoyu
                 | CardKind::Zhufangshenshi
                 | CardKind::Guisheqi
+        )
+    }
+
+    /// Upstream `allowMultiple !== false && !multitarget` gate for skills like `boss_keding`
+    /// that add extra targets onto `Sha` or ordinary tricks.
+    pub fn allows_multiple_targets(self) -> bool {
+        if self.is_sha_like() {
+            return true;
+        }
+        if !self.is_trick_kind() || self.is_delayed_trick() {
+            return false;
+        }
+        !matches!(
+            self,
+            CardKind::Nullify
+                | CardKind::SavageAttack
+                | CardKind::ArcheryAttack
+                | CardKind::Wugu
+                | CardKind::Taoyuan
+                | CardKind::Wuzhong
+                | CardKind::Jiedao
+                | CardKind::Shuigong
+                | CardKind::Shezhanqunru
+                | CardKind::Youdishenru
+                | CardKind::Geanguanhuo
+                | CardKind::Dunpaigedang
+                | CardKind::Xingjiegoutong
+                | CardKind::Chuansongmen
+                | CardKind::Tanshezhiren
+                | CardKind::Yuansuhuimie
+                | CardKind::Shijieshu
+                | CardKind::Jihuocard
+                | CardKind::Jinlianzhu
+                | CardKind::Heilonglinpian
+                | CardKind::Yangpijuan
+                | CardKind::Jingleishan
+                | CardKind::Chiyuxi
+                | CardKind::Xianluhui
         )
     }
 

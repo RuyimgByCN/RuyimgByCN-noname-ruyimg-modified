@@ -11,6 +11,9 @@ mod skills_card_use;
 pub(super) mod skills_cards;
 pub(in crate::content::host) mod l10_reguhuo;
 pub(in crate::content::host) mod l10_scs;
+pub(in crate::content::host) mod q4_boss_skills;
+pub(crate) use q4_boss_skills::q4_boss_on_deck_washed;
+pub mod q4_fool_skills;
 pub(crate) use l10_reguhuo::{
     reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
     reguhuo_spawn_response,
@@ -1374,6 +1377,8 @@ impl HostMachine {
             | HostBehavior::SwdLmazui3 => self.step_u05_7c_skills(ctx),
             HostBehavior::SwdXuanyingUse => self.step_swd_damage_targets(ctx),
             HostBehavior::SwdPozhouSealed => self.step_swd_status(ctx),
+            HostBehavior::Q4BossPlaySkill => q4_boss_skills::handle_q4_boss(self, ctx),
+            HostBehavior::Q4FoolSkill => q4_fool_skills::handle_q4_fool(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

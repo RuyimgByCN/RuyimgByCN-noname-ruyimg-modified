@@ -410,6 +410,24 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
     ctx.core.turn.jtjubao_used = false;
     ctx.core.turn.kangyin2 = None;
     ctx.core.turn.ciqiu_dying.clear();
+    for seat in [prev, next] {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(seat, "q4_play_sha_count".to_string()));
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(seat, "q4_minsi2_active".to_string()))
+            .is_some()
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .retain(|(p, k), _| !(*p == seat && k.starts_with("q4_minsi2_card:")));
+        }
+    }
     reset_new_turn_state(ctx, next);
     ctx.emit(EventData::TurnBegin { player: next });
     if should_round_start {

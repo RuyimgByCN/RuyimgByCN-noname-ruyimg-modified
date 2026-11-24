@@ -83,13 +83,16 @@ impl SkillMachine for ZhiHengMachine {
                 }
             }
             ZhiHengStage::Draw => {
-                let answer = ctx.answer().clone();
-                let n = answer.len();
-                for c in answer {
-                    if let ChoiceOption::Card(card) = c {
-                        ctx.discard_from_hand(self.owner, card);
-                    }
-                }
+                let cards: Vec<crate::ids::CardId> = ctx
+                    .answer()
+                    .iter()
+                    .filter_map(|c| match *c {
+                        ChoiceOption::Card(card) => Some(card),
+                        _ => None,
+                    })
+                    .collect();
+                let n = cards.len();
+                ctx.discard_hand_batch(self.owner, &cards);
                 if n > 0 {
                     ctx.start_draw(self.owner, n as u32);
                 }

@@ -204,6 +204,7 @@ impl Engine {
             let catalog = self.catalog().clone();
             (catalog.hooks.on_game_start)(self.state_core_mut(), &catalog);
         }
+        crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
         Ok(())
     }
 

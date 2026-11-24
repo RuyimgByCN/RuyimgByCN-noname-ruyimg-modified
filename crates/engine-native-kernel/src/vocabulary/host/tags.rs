@@ -708,6 +708,8 @@ impl HostBehavior {
             HostBehavior::SwdSusheng2 => 1384,
             HostBehavior::SwdMoyu => 1385,
             HostBehavior::SwdU05_7dSub => 1386,
+            HostBehavior::Q4BossPlaySkill => 1387,
+            HostBehavior::Q4FoolSkill => 1388,
         }
     }
 

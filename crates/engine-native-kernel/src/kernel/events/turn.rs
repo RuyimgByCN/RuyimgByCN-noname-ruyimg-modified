@@ -25,186 +25,8 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
                 }
             }
         }
-        // K50：封冻解除（Boss 应昭）——回合结束全清封印。
-        for p in ctx.core.players.iter_mut() {
-            p.fengyin_active = false;
-        }
-        // 仙剑 debuff 封印（qiongguang/tianwu `fengyin`）：仅至被封印者本人 phaseAfter 解除。
-        ctx.core
-            .vm_aux
-            .flags
-            .remove(&(player, "xj_fengyin_sealed".to_string()));
-        let xj_disabled: Vec<u16> = ctx
-            .core
-            .vm_aux
-            .flags
-            .keys()
-            .filter_map(|(seat, k)| {
-                (*seat == player)
-                    .then(|| k.strip_prefix("xj_fengyin_disabled:"))
-                    .flatten()
-                    .and_then(|d| d.parse::<u16>().ok())
-            })
-            .collect();
-        for def in xj_disabled {
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(player, format!("xj_fengyin_disabled:{def}")));
-            if !ctx
-                .core
-                .vm_aux
-                .flags
-                .contains_key(&(player, format!("mbcmfangzhu_disabled:{def}")))
-            {
-                if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
-                    inst.enabled = true;
-                }
-            }
-        }
-        for seat in 0..ctx.core.players.len() as PlayerId {
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "fz_new_tieji_target_sealed".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "sbtieji_target_sealed".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "tspowei_in_range".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "rekuanshi_turn_dmg".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "u05_dujian2_turn".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_noda_axe2_turn".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_phase_sha_count".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_turn_used_suits_mask".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_turn_used_ranks_mask".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_turn_used_types_mask".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "l11_jiuwei1_holder".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .retain(|(s, k), _| !(*s == seat && k.starts_with("l11_jiuwei2_ts:")));
-            for tmp_sk in [
-                "txhj_noda_axe2",
-                "txhj_daiyuanA",
-                "txhj_daiyuanB",
-                "txshixin_red",
-                "txhj_jiuweiSkill1_disable",
-            ] {
-                if let Some(def) = ctx.catalog.skill_by_name(tmp_sk) {
-                    ctx.core.skills.remove(&(seat, def));
-                }
-            }
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "dddlianer_rank_cap".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "dddyulv_turn_cnt".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "dddxuanlun_choose".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "hs_shihuawuqi_used_turn".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "u05_tianxianjiu_used_turn".to_string()));
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(seat, "u05_tianxianjiu_active_fallback".to_string()));
-            let had_after = ctx
-                .core
-                .vm_aux
-                .flags
-                .remove(&(seat, "u05_yinmi_until_phase_after".to_string()))
-                .is_some();
-            if had_after
-                && ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .get(&(seat, "u05_yinmi_until_phase_begin".to_string()))
-                    .copied()
-                    .unwrap_or(0)
-                    == 0
-            {
-                ctx.core.player_mut(seat).yinmi_active = false;
-            }
-            ctx.core
-                .vm_aux
-                .flags
-                .retain(|(p, k), _| *p != seat || !k.starts_with("zhufangshenshi_extra:"));
-        }
-        if let Some(tdef) = ctx.catalog.skill_by_name("tianxianjiu") {
-            let seats = ctx.core.players.len() as u8;
-            for seat in 0..seats {
-                ctx.core.skills.remove(&(seat, tdef));
-            }
-        }
-        ctx.core
-            .vm_aux
-            .flags
-            .remove(&(player, "hs_jinzhou_sealed".to_string()));
-        if ctx
-            .core
-            .vm_aux
-            .flags
-            .remove(&(player, "hs_xuetu_clear_phase_after".to_string()))
-            .is_some()
-        {
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(player, "hs_fengyin_xuetu".to_string()));
-            if let Some(def) = ctx.catalog.skill_by_name("zhoujiang") {
-                ctx.core.skills.remove(&(player, def));
-            }
-        }
-        ctx.core.vm_aux.flags.retain(|(_, k), _| {
-            !k.starts_with("u01_zhuanshe_used:")
-                && !k.starts_with("u01_cj_len:")
-                && !k.starts_with("u01_cj_card:")
-                && !k.starts_with("dddzhuanshe_given:")
-                && k != "u01_turn_trick_used_stamp"
-        });
-        // K52：往事封禁清零（十殿阎罗孟婆）。
-        for p in ctx.core.players.iter_mut() {
-            p.wangshi_ban = false;
-        }
+        // K50：封冻解除（Boss 应昭）与本回合结束窗临时封印清理。
+        clear_turn_after_window_flags(ctx, player);
         // K53：巨源记体力（Boss 朱厌；上游 phaseAfter storage=hp）。
         if let Some(jdef) = ctx
             .catalog
@@ -306,6 +128,22 @@ pub(in crate::kernel) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: Playe
             for seat in 0..seats {
                 ctx.core.skills.remove(&(seat, s2_def));
             }
+        }
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(player, "q4_boss_baonuwash_game_over".to_string()))
+            .is_some()
+            && ctx
+                .core
+                .boss_mode()
+                .is_some_and(|(boss, _)| ctx.core.player(boss).alive)
+        {
+            ctx.core.outcome = Some(crate::state::Outcome {
+                winner: crate::state::Winner::Boss { boss_won: true },
+            });
+            return;
         }
         if ctx.core.turn.extra_phases.is_empty()
             && ctx.core.player(player).alive
@@ -729,65 +567,288 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
     });
 }
 
-pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
-    if ctx.core.turn.extra_phases.is_empty() {
-        let disabled_turn: Vec<(u8, u16)> = ctx
+fn clear_turn_after_window_flags(ctx: &mut Ctx<'_>, player: PlayerId) {
+    for p in ctx.core.players.iter_mut() {
+        p.fengyin_active = false;
+        p.wangshi_ban = false;
+    }
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "xj_fengyin_sealed".to_string()));
+    let xj_disabled: Vec<u16> = ctx
+        .core
+        .vm_aux
+        .flags
+        .keys()
+        .filter_map(|(seat, k)| {
+            (*seat == player)
+                .then(|| k.strip_prefix("xj_fengyin_disabled:"))
+                .flatten()
+                .and_then(|d| d.parse::<u16>().ok())
+        })
+        .collect();
+    for def in xj_disabled {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("xj_fengyin_disabled:{def}")));
+        if !ctx
             .core
             .vm_aux
             .flags
-            .keys()
-            .filter_map(|(p, k)| {
-                k.strip_prefix("skill_disabled_turn:")
-                    .and_then(|d| d.parse::<u16>().ok())
-                    .map(|def| (*p, def))
-            })
-            .collect();
-        for (p, def) in disabled_turn {
-            if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+            .contains_key(&(player, format!("mbcmfangzhu_disabled:{def}")))
+        {
+            if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
                 inst.enabled = true;
             }
         }
-        ctx.core
-            .vm_aux
-            .flags
-            .remove(&(player, "mbcmfangzhu_ban".to_string()));
-        ctx.core
-            .vm_aux
-            .flags
-            .remove(&(player, "mbcmfangzhu_baiban".to_string()));
-        let fangzhu_disabled: Vec<u16> = ctx
-            .core
-            .vm_aux
-            .flags
-            .keys()
-            .filter_map(|(p, k)| {
-                (*p == player)
-                    .then(|| k.strip_prefix("mbcmfangzhu_disabled:"))
-                    .flatten()
-                    .and_then(|d| d.parse::<u16>().ok())
-            })
-            .collect();
-        for def in fangzhu_disabled {
-            ctx.core
-                .vm_aux
-                .flags
-                .remove(&(player, format!("mbcmfangzhu_disabled:{def}")));
-            if !ctx
-                .core
-                .vm_aux
-                .flags
-                .contains_key(&(player, format!("xj_fengyin_disabled:{def}")))
-            {
-                if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
-                    inst.enabled = true;
-                }
-            }
+    }
+    for seat in 0..ctx.core.players.len() as PlayerId {
+        for flag in [
+            "fz_new_tieji_target_sealed",
+            "sbtieji_target_sealed",
+            "q4_retieji_target_sealed",
+            "q4_rewansha_sealed",
+            "tspowei_in_range",
+            "rekuanshi_turn_dmg",
+            "u05_dujian2_turn",
+            "l11_noda_axe2_turn",
+            "l11_phase_sha_count",
+            "l11_turn_used_suits_mask",
+            "l11_turn_used_ranks_mask",
+            "l11_turn_used_types_mask",
+            "l11_jiuwei1_holder",
+            "dddlianer_rank_cap",
+            "dddyulv_turn_cnt",
+            "dddxuanlun_choose",
+            "hs_shihuawuqi_used_turn",
+            "u05_tianxianjiu_used_turn",
+            "u05_tianxianjiu_active_fallback",
+        ] {
+            ctx.core.vm_aux.flags.remove(&(seat, flag.to_string()));
         }
         ctx.core
             .vm_aux
             .flags
-            .retain(|(p, k), _| !(*p == player && k.starts_with("ssr_lieren_temp:")));
-        ctx.core.vm_aux.clear_turn();
+            .retain(|(s, k), _| !(*s == seat && k.starts_with("l11_jiuwei2_ts:")));
+        for tmp_sk in [
+            "txhj_noda_axe2",
+            "txhj_daiyuanA",
+            "txhj_daiyuanB",
+            "txshixin_red",
+            "txhj_jiuweiSkill1_disable",
+        ] {
+            if let Some(def) = ctx.catalog.skill_by_name(tmp_sk) {
+                ctx.core.skills.remove(&(seat, def));
+            }
+        }
+        let had_after = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(seat, "u05_yinmi_until_phase_after".to_string()))
+            .is_some();
+        if had_after
+            && ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(seat, "u05_yinmi_until_phase_begin".to_string()))
+                .copied()
+                .unwrap_or(0)
+                == 0
+        {
+            ctx.core.player_mut(seat).yinmi_active = false;
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .retain(|(p, k), _| *p != seat || !k.starts_with("zhufangshenshi_extra:"));
+    }
+    if let Some(tdef) = ctx.catalog.skill_by_name("tianxianjiu") {
+        let seats = ctx.core.players.len() as u8;
+        for seat in 0..seats {
+            ctx.core.skills.remove(&(seat, tdef));
+        }
+    }
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "hs_jinzhou_sealed".to_string()));
+    if ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(player, "hs_xuetu_clear_phase_after".to_string()))
+        .is_some()
+    {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, "hs_fengyin_xuetu".to_string()));
+        if let Some(def) = ctx.catalog.skill_by_name("zhoujiang") {
+            ctx.core.skills.remove(&(player, def));
+        }
+    }
+    ctx.core.vm_aux.flags.retain(|(_, k), _| {
+        !k.starts_with("u01_zhuanshe_used:")
+            && !k.starts_with("u01_cj_len:")
+            && !k.starts_with("u01_cj_card:")
+            && !k.starts_with("dddzhuanshe_given:")
+            && k != "u01_turn_trick_used_stamp"
+    });
+}
+
+fn clear_turn_ended_temp_state(ctx: &mut Ctx<'_>, player: PlayerId) {
+    let disabled_turn: Vec<(u8, u16)> = ctx
+        .core
+        .vm_aux
+        .flags
+        .keys()
+        .filter_map(|(p, k)| {
+            k.strip_prefix("skill_disabled_turn:")
+                .and_then(|d| d.parse::<u16>().ok())
+                .map(|def| (*p, def))
+        })
+        .collect();
+    for (p, def) in disabled_turn {
+        if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+            inst.enabled = true;
+        }
+    }
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "mbcmfangzhu_ban".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "mbcmfangzhu_baiban".to_string()));
+    let fangzhu_disabled: Vec<u16> = ctx
+        .core
+        .vm_aux
+        .flags
+        .keys()
+        .filter_map(|(p, k)| {
+            (*p == player)
+                .then(|| k.strip_prefix("mbcmfangzhu_disabled:"))
+                .flatten()
+                .and_then(|d| d.parse::<u16>().ok())
+        })
+        .collect();
+    for def in fangzhu_disabled {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(player, format!("mbcmfangzhu_disabled:{def}")));
+        if !ctx
+            .core
+            .vm_aux
+            .flags
+            .contains_key(&(player, format!("xj_fengyin_disabled:{def}")))
+        {
+            if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
+                inst.enabled = true;
+            }
+        }
+    }
+    ctx.core.vm_aux.flags.retain(|(p, key), _| {
+        *p != player
+            || (!key.starts_with("q4_fengjian_ban:") && !key.starts_with("ssr_lieren_temp:"))
+    });
+    ctx.core.vm_aux.clear_turn();
+}
+
+fn clear_turn_ephemeral_fields(ctx: &mut Ctx<'_>) {
+    for state in &mut ctx.core.players {
+        state.zlfanshi_terra = false;
+    }
+    ctx.core.turn.skip_draw_phase = false;
+    ctx.core.turn.skip_play_phase = false;
+    ctx.core.turn.huanxia_track.clear();
+    ctx.core.turn.shenmiguo_used = false;
+    ctx.core.turn.shuchui_armed = false;
+    ctx.core.turn.shuchui_hit = false;
+    ctx.core.turn.lianda_used = false;
+}
+
+/// Unwind an interrupted turn cleanly for `boss_baonu` before handing `phaseLoop` to `next_owner`.
+pub fn cleanup_interrupted_turn_for_phase_loop(
+    ctx: &mut Ctx<'_>,
+    interrupted: PlayerId,
+    next_owner: PlayerId,
+) {
+    ctx.core.turn.extra_phases.clear();
+    ctx.core.turn.extra_phase_lingwu = false;
+    for seat in 0..ctx.core.players.len() as PlayerId {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(seat, "extra_turn_insert_queued".to_string()));
+    }
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_in_progress".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_resume_next".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_resume_prev".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(0, "extra_turn_force_round_bump".to_string()));
+    clear_turn_ended_temp_state(ctx, interrupted);
+    clear_turn_after_window_flags(ctx, interrupted);
+    clear_turn_ephemeral_fields(ctx);
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(interrupted, "q4_play_sha_count".to_string()));
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(interrupted, "q4_xuanfeng_discard_ready".to_string()));
+    if ctx.catalog.vm_card_history {
+        ctx.core
+            .vm_aux
+            .flags
+            .retain(|(_, k), _| k != "sha_played_this_turn" && k != "damaged_this_turn");
+    }
+    ctx.expire_temporary_skills(interrupted);
+    ctx.core.player_mut(interrupted).boss_mad = false;
+    ctx.core.turn.qizuo_copy = None;
+    ctx.core.turn.discard_phase_discarded = 0;
+    ctx.core.turn.minwan_targets.clear();
+    let seats = ctx.core.players.len() as PlayerId;
+    if next_owner < seats {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(next_owner, "q4_play_sha_count".to_string()));
+    }
+}
+
+/// Start `owner`'s immediate turn from `phaseLoop` step 0 (`TurnBegin` -> `Prepare`).
+pub fn begin_phase_loop_turn_for(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    ctx.core.turn.current = owner;
+    ctx.core.turn.phase = Phase::Judge;
+    ctx.core.turn.sha_used_play_phase = false;
+    ctx.core.turn.land_used = false;
+    ctx.core.turn.land_sha_used = false;
+    ctx.core.turn.turn_opened = false;
+    reset_new_turn_state(ctx, owner);
+    ctx.emit(EventData::TurnBegin { player: owner });
+}
+
+pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if ctx.core.turn.extra_phases.is_empty() {
+        clear_turn_ended_temp_state(ctx, player);
     }
     for p in 0..ctx.core.players.len() as PlayerId {
         ctx.core
@@ -807,19 +868,7 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
         player,
         after: false,
     });
-    for state in &mut ctx.core.players {
-        state.zlfanshi_terra = false;
-    }
-    // 清残留跳阶段旗标（正常流程已被消费）
-    ctx.core.turn.skip_draw_phase = false;
-    ctx.core.turn.skip_play_phase = false;
-    // 还侠跟踪清残留（正常流程已被阶段末回收消费）
-    ctx.core.turn.huanxia_track.clear();
-    // 神秘果/鼠槌窗口旗清残留（正常流程已被窗口机消费；防御换回合残留）
-    ctx.core.turn.shenmiguo_used = false;
-    ctx.core.turn.shuchui_armed = false;
-    ctx.core.turn.shuchui_hit = false;
-    ctx.core.turn.lianda_used = false;
+    clear_turn_ephemeral_fields(ctx);
     // Boss 模式（P2/N08 模式入口批三-a，规则 v82）：死亡座位不跳过——
     // 轮到其回合时执行重整 tick（上游 bossPhaseLoop）：计数 +1、hp<上限
     // 则 +1（否则手牌 <4 摸 1），计数达阈值复活；连续死亡座位逐个 tick

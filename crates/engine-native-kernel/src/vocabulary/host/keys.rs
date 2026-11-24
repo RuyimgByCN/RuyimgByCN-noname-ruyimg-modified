@@ -752,6 +752,8 @@ impl HostBehavior {
             HostBehavior::SwdSusheng2 => "host:swd_susheng2",
             HostBehavior::SwdMoyu => "host:swd_moyu",
             HostBehavior::SwdU05_7dSub => "host:swd_u05_7d_sub",
+            HostBehavior::Q4BossPlaySkill => "host:q4_boss_play_skill",
+            HostBehavior::Q4FoolSkill => "host:q4_fool_skill",
         }
     }
 }

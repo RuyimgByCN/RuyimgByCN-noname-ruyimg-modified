@@ -99,6 +99,10 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
         }
     }
     ctx.core.turn.sha_used_play_phase = false;
+    ctx.core
+        .vm_aux
+        .flags
+        .remove(&(player, "q4_play_sha_count".to_string()));
     // 极略（swd 批 136，规则 v315）：出牌阶段开始清零已用次数
     ctx.core.player_mut(player).jilve_used = 0;
     // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零

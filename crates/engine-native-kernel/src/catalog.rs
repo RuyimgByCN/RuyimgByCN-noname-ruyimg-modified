@@ -1322,6 +1322,8 @@ impl Catalog {
 
 #[path = "catalog_queries.rs"]
 mod catalog_queries;
+#[path = "catalog_queries_q4.rs"]
+mod catalog_queries_q4;
 
 /// `Arc` 化目录别名：引擎全程共享一份。
 pub type SharedCatalog = Arc<Catalog>;

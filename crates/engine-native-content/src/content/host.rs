@@ -55,8 +55,8 @@ pub(crate) use step::{
     host_turn_before_skip_hearth, is_hearth_named_wuzhong_unwrapped,
     is_hearth_vanish_card_hook, on_cards_to_discard_chengye, on_l25_host_event,
     on_outer_settled_taipingyaoshu, on_phase_end_l10_scs, on_skill_removed_all, play_begin_l19,
-    play_begin_tianshu, play_end_rui_skill1, reguhuo_consume_resp, reguhuo_has_pending_final,
-    reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
+    play_begin_tianshu, play_end_rui_skill1, q4_boss_on_deck_washed, reguhuo_consume_resp,
+    reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final, reguhuo_spawn_response,
     resolve_hearth_dying_save, scsanruo_response_skill, u01_phase_skipped_hook,
     u01_respond_skill_options as u01_respond_skill_options_hook,
     u01_try_activate_respond_skill as u01_try_activate_respond_skill_hook,
@@ -452,6 +452,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | "gwzhanjiang2"
                 | "huandie_discard"
                 | "xuezhou_hp2"
+                | "boss_aozhan"
         )
     }
     fn hand_limit_base(
@@ -471,6 +472,19 @@ impl SkillBehavior for HostSkillBehavior {
         _event: &EventData,
         kind: crate::event::EventKind,
     ) -> Option<crate::catalog::TriggerMeta> {
+        if self.behavior == HostBehavior::Q4BossPlaySkill && self.name == "shenqu" {
+            if kind == crate::event::EventKind::PhaseBegin {
+                return Some(crate::catalog::TriggerMeta {
+                    event: crate::event::EventKind::PhaseBegin,
+                    timing: crate::event::Timing::Normal,
+                    priority: 0,
+                    order_selectable: false,
+                    optional: true,
+                    extra_events: vec![crate::event::EventKind::DamageAfter],
+                });
+            }
+            return self.kind_trigger_meta(kind);
+        }
         if kind == crate::event::EventKind::CardUsed
             && matches!(
                 self.behavior,

@@ -497,3 +497,5 @@ mod play_equip;
 use play_equip::*;
 
 mod choice_source;
+pub mod q4_ext;
+pub use q4_ext::*;

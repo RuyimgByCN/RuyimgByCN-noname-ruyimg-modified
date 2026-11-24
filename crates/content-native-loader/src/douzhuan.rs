@@ -213,14 +213,7 @@ pub fn rank_score(saved: Option<&[i64]>, identity: &str, rarity: Option<&str>) -
 }
 
 pub fn rewrite_skill_text(text: &str) -> String {
-    let swapped = text
-        .replace("不大于", "temp")
-        .replace("不小于", "≥")
-        .replace("temp", "≤");
-    swapped
-        .replace('阴', "temp")
-        .replace('阳', "阴")
-        .replace("temp", "阳")
+    engine_native::rewrite_douzhuan_skill_text(text)
 }
 
 /// 上游导出把数组用单引号拼起来。空数组拼出来是 `['']`，不是 `[]`。

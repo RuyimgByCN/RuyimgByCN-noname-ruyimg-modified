@@ -325,10 +325,15 @@ fn host_pending_adjust(ctx: &Ctx<'_>, player: PlayerId) -> i32 {
         delta += 1;
     }
     // 神威：+min(3, 其他角色数)
-    if name(crate::vocabulary::host::BOSS_SHENWEI_KEY) {
+    if name(crate::vocabulary::host::BOSS_SHENWEI_KEY) || name("shenwei") {
         let others = ctx.core.alive_players().filter(|p| *p != player).count();
         delta += others.min(3) as i32;
     }
+    delta += crate::rvm_bridge::modifiers::d34_q4_boss_mods::draw_phase_delta(
+        ctx.core,
+        ctx.catalog,
+        player,
+    );
     // 灭道／诈降：+已损失体力
     for key in [
         crate::vocabulary::host::SWD_MIEDAO_KEY,
@@ -406,7 +411,7 @@ impl crate::catalog::SkillMachine for DrawMachine {
             }
             if held_cards.len() < requested as usize {
                 if ctx.core.deck.is_empty() {
-                    if ctx.core.discard.is_empty() {
+                    if !ctx.reshuffle_discard_into_deck() {
                         // 双枯竭：held 原子转入 detached_cards（唯一物理 owner），本次无 gain（§4）。
                         for c in held_cards.drain(..) {
                             ctx.core.detached_cards.push((c, DetachedKind::Unclaimed));
@@ -429,12 +434,6 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         }
                         return Flow::Done;
                     }
-                    let mut cards = std::mem::take(&mut ctx.core.discard);
-                    crate::kernel::cleanup_discard_to_deck(ctx.core, &mut cards);
-                    ctx.core.rng.shuffle(&mut cards);
-                    crate::kernel::elo_on_wash_deck(ctx.core, &cards);
-                    ctx.core.deck = cards;
-                    ctx.log(LogEvent::DeckReshuffled);
                 }
                 let from_bottom = nearest_draw_phase(ctx, self.root).is_some()
                     && ctx

@@ -39,9 +39,7 @@ impl SkillMachine for ShenZhiMachine {
             return Flow::Done;
         }
         let enough = hand.len() as i32 >= ctx.core.player(self.owner).hp;
-        for card in hand {
-            ctx.discard_from_hand(self.owner, card);
-        }
+        ctx.discard_hand_batch(self.owner, &hand);
         if enough && ctx.core.player(self.owner).alive {
             ctx.recover(self.owner, 1, None);
         }

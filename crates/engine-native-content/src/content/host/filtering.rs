@@ -1147,6 +1147,12 @@ impl HostSkillBehavior {
             | HostBehavior::SwdSusheng2
             | HostBehavior::SwdMoyu
             | HostBehavior::SwdU05_7dSub => self.filter_swd_u05_7d(ctx, owner, event),
+            HostBehavior::Q4BossPlaySkill => {
+                super::step::q4_boss_skills::filter_q4_boss(self, ctx, owner, event)
+            }
+            HostBehavior::Q4FoolSkill => {
+                super::step::q4_fool_skills::filter_q4_fool(self, ctx, owner, event)
+            }
             _ => false,
         }
     }

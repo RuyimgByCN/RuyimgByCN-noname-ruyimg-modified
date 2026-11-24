@@ -639,6 +639,7 @@ pub mod d34_flags;
 pub mod d34_l11_buff_mods;
 pub mod d34_l28_mods;
 pub mod d34_u05_b1_mods;
+pub mod d34_q4_boss_mods;
 pub use d34_flags::{
     d34_u05_mods, has_yaya_protected, is_card_ignored_in_discard_phase, is_target_unequip2,
     tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,

@@ -231,6 +231,7 @@ pub fn is_tao_like_core(
     if mbcmfangzhu_banned(core, responder)
         || is_guijiang_savable_blocked(core, catalog, dying)
         || jinyan_blocks_black_trick(core, catalog, responder, card)
+        || catalog.wansha_blocks_rescue(core, responder, dying)
     {
         return false;
     }

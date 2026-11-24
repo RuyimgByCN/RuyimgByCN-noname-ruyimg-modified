@@ -410,6 +410,12 @@ impl HostSkillBehavior {
             | HostBehavior::SwdTanlin
             | HostBehavior::SwdOldLiaoyuan
             | HostBehavior::SwdOldLiaoyuan2 => self.activate_swd_u05_7d(ctx, owner),
+            HostBehavior::Q4BossPlaySkill => {
+                super::step::q4_boss_skills::activate_q4_boss(self, ctx, owner)
+            }
+            HostBehavior::Q4FoolSkill => {
+                super::step::q4_fool_skills::activate_q4_fool(self, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -714,6 +720,8 @@ pub(in crate::content::host) fn has_phase_use_activation(
         | HostBehavior::U05SwdOldLongfan => {
             super::step::swd_u05_7b::has_phase_use_activation(behavior, name)
         }
+        HostBehavior::Q4BossPlaySkill => super::step::q4_boss_skills::has_phase_use_q4_boss(name),
+        HostBehavior::Q4FoolSkill => super::step::q4_fool_skills::has_phase_use_q4_fool(name),
         _ => false,
     }
 }

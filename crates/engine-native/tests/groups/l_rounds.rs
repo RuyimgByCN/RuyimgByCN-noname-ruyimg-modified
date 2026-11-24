@@ -180,3 +180,6 @@ mod l29_longxue_fixes;
 
 #[path = "../l19_doomsday_fixes.rs"]
 mod l19_doomsday_fixes;
+
+#[path = "../q4_remaining_fixes.rs"]
+mod q4_remaining_fixes;

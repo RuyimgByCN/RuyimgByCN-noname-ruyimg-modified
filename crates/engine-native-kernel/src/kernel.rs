@@ -237,7 +237,10 @@ pub use damage_flow::DamageFlow;
 pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
 pub use damage_skill::NativeDamageSkill;
 pub(crate) mod events;
-pub use events::{peek_tao_extra_carriers, record_dddanzhi_card, take_tao_extra_carriers};
+pub use events::{
+    begin_phase_loop_turn_for, cleanup_interrupted_turn_for_phase_loop, peek_tao_extra_carriers,
+    record_dddanzhi_card, take_tao_extra_carriers,
+};
 pub(crate) use events::maybe_abort_ywuhun;
 use events::*;
 mod equipment;

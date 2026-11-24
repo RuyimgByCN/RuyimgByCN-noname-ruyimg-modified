@@ -971,6 +971,9 @@ pub(crate) fn dying_response_skills(
     if other_dying_save_banned(core, catalog, responder, dying) {
         return Vec::new();
     }
+    if catalog.wansha_blocks_rescue(core, responder, dying) {
+        return Vec::new();
+    }
     let need_ctx = if responder == dying { 5 } else { 4 };
     crate::kernel::host_response_skills(core, catalog, responder, need_ctx)
 }

@@ -101,6 +101,11 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                         ctx.catalog,
                         self.player,
                         *c,
+                    ) || crate::rvm_bridge::modifiers::d34_q4_boss_mods::is_minsi2_red_card(
+                        ctx.core,
+                        ctx.catalog,
+                        self.player,
+                        *c,
                     ) {
                         return false;
                     }

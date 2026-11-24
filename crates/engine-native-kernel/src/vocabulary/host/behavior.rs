@@ -1933,4 +1933,8 @@ pub enum HostBehavior {
     SwdMoyu,
     /// U05 杀海拾遗 swd：U05-7d 伴生子技/目录锚（tag 1386）。
     SwdU05_7dSub,
+    /// Batch Q4 U02/L03 boss/jiange 技能家族宿主分发（tag 1387；由 `def_key` 精确派发）。
+    Q4BossPlaySkill,
+    /// Batch Q4 L26 `Fool_skill` 点数总和约束技能家族（tag 1388：`ziyuan`/`minsi`/`xinfu_fangtong`）。
+    Q4FoolSkill,
 }

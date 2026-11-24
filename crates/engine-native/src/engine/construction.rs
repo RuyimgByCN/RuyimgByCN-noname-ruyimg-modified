@@ -509,7 +509,8 @@ detached_cards: Vec::new(),
         .map_err(|e| format!("{e:?}"))
     }
 
-    fn new_with_extensions_mode(
+    /// Construct an engine for an explicit `GameMode` with installed `ExtensionPack`s.
+    pub fn new_with_extensions_mode(
         seed: u64,
         seats: usize,
         packs: &[&crate::content::extension::ExtensionPack],

@@ -97,7 +97,7 @@ pub fn apply_damage_begin3(
     {
         cur += 1;
     }
-    cur
+    super::d34_q4_boss_mods::apply_damage_begin3(state, nature, target, cur)
 }
 
 /// 陆凯 `th_bushi`（`extension.js:4208, 4347-4352`）：初始/首槽花色（未重新分配前默认为黑桃）

@@ -1,5 +1,13 @@
 # G0 · U03 cardpile
 
+## 2026-11-24 Batch Q4-remaining（29 张卡牌＋`cardpile_arenaReady` 全量等价→30/0/0）合入更新
+
+基线 HEAD `8fa7589963bbbe724dc89e656ffcdf6b1afdd8ea`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#114 **`APPROVE`**）及主线 `cardpile_arena_ready_pack` / `q4_remaining/cardpile.rs` 与全量门禁复测，本源全部 **`30`** 项（`29` 张卡堆卡牌 + `cardpile_arenaReady`）升为 `已复核等价`，达 **`30 / 0 / 0`**（100% 单项等价；整包八项仍 `0/37`）。详见 [Batch Q4-remaining 证据摘要](../../operations/evidence/2026-11-24-q4-remaining/README.md) 与 [inventory_status.json](inventory_status.json)。
+
+| 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
+| --- | ---: | ---: | ---: |
+| 2026-11-24 Batch Q4-remaining U03 | 30 | 0 | 0 |
+
 > 核验日期：2026-11-11 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/cardpile`  
 > 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 

@@ -704,6 +704,8 @@ impl HostBehavior {
             1384 => HostBehavior::SwdSusheng2,
             1385 => HostBehavior::SwdMoyu,
             1386 => HostBehavior::SwdU05_7dSub,
+            1387 => HostBehavior::Q4BossPlaySkill,
+            1388 => HostBehavior::Q4FoolSkill,
             _ => return None,
         })
     }

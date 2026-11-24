@@ -7,6 +7,7 @@ pub(crate) mod turn;
 mod turn_handoff;
 pub(crate) use turn_handoff::maybe_abort_ywuhun;
 pub(super) use turn::{commit_turn_begin, commit_turn_end_window, commit_turn_ended};
+pub use turn::{begin_phase_loop_turn_for, cleanup_interrupted_turn_for_phase_loop};
 mod turn_reset;
 mod aux_history;
 pub use aux_history::record_dddanzhi_card;
@@ -511,6 +512,17 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 .unwrap_or(0)
                 != 0;
             if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current {
+                if ctx
+                    .catalog
+                    .skill_by_name("jintao")
+                    .is_some_and(|def| ctx.core.has_skill(u.player, def))
+                {
+                    *ctx.core
+                        .vm_aux
+                        .flags
+                        .entry((u.player, "q4_play_sha_count".to_string()))
+                        .or_insert(0) += 1;
+                }
                 if ctx.core.turn.sha_used_play_phase {
                     if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
                         && !vm_va_free

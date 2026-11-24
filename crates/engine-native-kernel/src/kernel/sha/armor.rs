@@ -36,22 +36,34 @@ impl ShaResolveMachine {
     /// Runs the once-per-Sha Bagua Shield judge when `can_bagua` holds and returns `Some(Flow::Done)`
     /// if the judge succeeds.
     pub(super) fn try_bagua_dodge(&mut self, ctx: &mut Ctx<'_>, can_bagua: bool) -> Option<Flow> {
+        let has_equipped_armor = ctx
+            .core
+            .player(self.target)
+            .equips
+            .iter()
+            .any(|c| ctx.catalog.card_slot_of(ctx.core, *c) == Some(crate::catalog::EquipSlot::Armor));
+        let has_bazhen = !has_equipped_armor
+            && ["bazhen", "八阵"]
+                .into_iter()
+                .filter_map(|n| ctx.catalog.skill_by_name(n))
+                .any(|def| ctx.core.has_skill(self.target, def));
         let has_armor = can_bagua
             && !crate::kernel::mbcmfangzhu_baiban(ctx.core, self.target)
             && ctx.core.player(self.target).alive
-            && (ctx
-                .core
-                .player(self.target)
-                .equips
-                .iter()
-                .any(|c| {
-                    !ctx.core.is_gw_dieyi_masked(ctx.catalog, self.target, *c)
-                        && crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(
-                            ctx.core,
-                            ctx.catalog,
-                            *c,
-                        )
-                })
+            && (has_bazhen
+                || ctx
+                    .core
+                    .player(self.target)
+                    .equips
+                    .iter()
+                    .any(|c| {
+                        !ctx.core.is_gw_dieyi_masked(ctx.catalog, self.target, *c)
+                            && crate::rvm_bridge::modifiers::d34_l28_mods::is_bagua_armor(
+                                ctx.core,
+                                ctx.catalog,
+                                *c,
+                            )
+                    })
                 || crate::rvm_bridge::modifiers::eval_virtual_bagua_if_armor_slot_empty(
                     ctx.core,
                     ctx.catalog,

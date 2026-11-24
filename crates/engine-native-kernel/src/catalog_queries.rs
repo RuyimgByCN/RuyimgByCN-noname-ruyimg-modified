@@ -96,7 +96,7 @@ impl Catalog {
         }
     }
 
-    /// L20 标记补充 (`fz_new_tieji` / `sbtieji`) 及 U05-ow `qinru` 侵入封印:
+    /// L20 / U05-ow / Q4 (`fz_new_tieji` / `sbtieji` / `ow_qinru_fengyin` / `retieji` / `rewansha`):
     /// whether `p`'s non-locked skills are sealed.
     pub fn is_tieji_sealed(
         &self,
@@ -132,6 +132,13 @@ impl Catalog {
             || core
                 .vm_aux
                 .flags
+                .get(&(p, "q4_retieji_target_sealed".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || core
+                .vm_aux
+                .flags
                 .get(&(p, "hs_jinzhou_sealed".to_string()))
                 .copied()
                 .unwrap_or(0)
@@ -140,6 +147,13 @@ impl Catalog {
                 .vm_aux
                 .flags
                 .get(&(p, "hs_fengyin_xuetu".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "q4_rewansha_sealed".to_string()))
                 .copied()
                 .unwrap_or(0)
                 > 0
@@ -519,6 +533,8 @@ impl Catalog {
                 | "hongyan"
                 | "wushen"
                 | "wansha"
+                | "rewansha"
+                | "完杀"
                 | "benghuai"
                 | "kuangcai"
                 | "txhj_kapaikeshi"

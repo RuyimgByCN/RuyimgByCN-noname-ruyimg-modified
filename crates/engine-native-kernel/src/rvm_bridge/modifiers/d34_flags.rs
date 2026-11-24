@@ -120,6 +120,7 @@ pub fn is_card_ignored_hand_limit(
     }
     d34_u05_mods::is_card_ignored_hand_limit(state, catalog, player, card)
         || d34_l11_mods::is_card_ignored_hand_limit(state, catalog, player, card, kind)
+        || super::d34_q4_boss_mods::is_minsi2_red_card(state, catalog, player, card)
 }
 
 pub fn apply_hand_limit(
@@ -339,7 +340,8 @@ pub fn apply_distance_total(
     }
     cur = super::d34_u05_b1_mods::apply_fengyang_distance(state, b, cur);
     let cur = d34_u05_mods::apply_distance_total(state, catalog, a, b, cur);
-    d34_l11_mods::apply_distance_total(state, catalog, a, b, cur)
+    let cur = d34_l11_mods::apply_distance_total(state, catalog, a, b, cur);
+    super::d34_q4_boss_mods::apply_distance_total(state, catalog, a, b, cur)
 }
 
 pub fn apply_sha_use_limit(
@@ -425,6 +427,7 @@ pub fn apply_sha_use_limit(
         }
     }
     cur = super::d34_l28_mods::apply_shengong_sha_limit(state, catalog, player, cur);
+    let cur = super::d34_q4_boss_mods::apply_sha_use_limit(state, catalog, player, cur);
     let (cur, unlimited) =
         d34_u05_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
@@ -462,7 +465,8 @@ pub fn apply_sha_extra_targets(
         }
     }
     let extra = d34_u05_mods::apply_sha_extra_targets(state, catalog, player, kind, extra);
-    d34_l11_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
+    let extra = d34_l11_mods::apply_sha_extra_targets(state, catalog, player, kind, extra);
+    super::d34_q4_boss_mods::apply_sha_extra_targets(state, catalog, player, kind, extra)
 }
 
 pub fn apply_card_distance_unlimited(
@@ -522,9 +526,10 @@ pub fn apply_card_distance_unlimited_to(
         }
     }
     let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, catalog, player, kind, unlimited);
-    d34_l11_mods::apply_card_distance_unlimited_to(
+    let unlimited = d34_l11_mods::apply_card_distance_unlimited_to(
         state, catalog, player, target, card, kind, unlimited,
-    )
+    );
+    super::d34_q4_boss_mods::apply_minsi2_distance_unlimited(state, catalog, player, card, unlimited)
 }
 
 pub fn apply_card_target_canceled(
@@ -673,7 +678,8 @@ pub fn apply_card_target_canceled_opt(
         canceled = true;
     }
     let canceled = d34_u05_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled);
-    d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, card, kind, canceled)
+    let canceled = d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, card, kind, canceled);
+    super::d34_q4_boss_mods::apply_card_target_canceled(state, actor, target, canceled)
 }
 
 #[inline]
@@ -812,6 +818,9 @@ pub fn apply_dying_peach_target_canceled(
         canceled = true;
     }
     if actor != dying_target && kind == CardKind::Tao {
+        if catalog.wansha_blocks_rescue(state, actor, dying_target) {
+            canceled = true;
+        }
         for p in state.alive_players() {
             if p != actor
                 && (flag_val(state, p, "l19_wansha_forbid_ally_tao") > 0
@@ -963,7 +972,8 @@ pub fn apply_damage_amount(
         cur -= 1;
     }
     let cur = d34_u05_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur);
-    d34_l11_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur)
+    let cur = d34_l11_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur);
+    super::d34_q4_boss_mods::apply_damage_amount(state, catalog, target, nature, cur)
 }
 
 pub fn is_target_unequip2(state: &GameStateCore, target: PlayerId) -> bool {
