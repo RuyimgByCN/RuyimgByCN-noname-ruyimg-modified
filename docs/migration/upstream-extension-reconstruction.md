@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-24 Batch P3-C1b（L11 跨包 NPC Part B 94 技与 20 武将等价→598/936，全局 4,081/343/0）合入
+
+- **范围与结果**：在 `48ac34db771adc7c4d744485f8160506b321fde5`（Batch `P3-B` CI Run `45350449191` Attempt 1 `10/10 success`）上合入 `swarm/p3-l11-npc-b`（`e8244d6ed..f63f4c8523715c154e11b467d557e1b7e2d97e44`，`verifier-u05-b` `#246 APPROVE`），将 `HostBehavior::L11CrossNpcB` 重编号至 **`1390`**（保留 `L11OwnNpc` `1389`，`ALL=703`），接入 `l11_npc_b/*` `14` 模块、`d34_l11_mods_npc_b.rs`、`d34_armor_bypass.rs`、`taixu_pack_attach_b.rs`、`extension_choices_l11_npc_b.rs` 及 Round 2 `9` 项修复（协同保留 `decision34_pack9.rs` 双豁免、`d34_l11_mods.rs` `wushen` 与 `play_sha.rs` 统一步骤）；将 `#246` 批准之 **`20`** 名 `L11:generals:*` 升为 `已复核等价`（`L11` **`598 / 338 / 0`**，保留 `167` 名剩余未全清阻塞武将、`171` 模式节点及 `5` 项冻结边界），全局 **`4,081 / 343 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch P3-C1b 证据摘要](../operations/evidence/2026-11-24-p3-c1b/README.md) 与 [L11-太虚幻境.md](g0/L11-太虚幻境.md)。
+
 ## 2026-11-24 Batch P3-B（L26 7/0/0、U02 17/0/0、L11 Tier-1 +24→578/936，全局 4,061/363/0）合入
 
 - **范围与结果**：在 `f08a704c3ef69a3ae56cbf5aff2d7711a2aca626`（Batch `P3-A` CI Run `45340220955` Attempt 1 `10/10 success`）上合入 `swarm/p3-l26-u02-l11-tier1`（`b5a83dd6d..0c03410f8d7daabe8bfe58b04aedf88a00a8905b`，`verifier-l11` `#238 APPROVE`），接入 `HostBehavior::L11OwnNpc`（`1389`，`ALL=702`）、`step/l11_own_npc/*`、`L26 Fool_liegong` 后端+前端闭环、`U02 boss_play_arenaReady`、`gx_taijifuchen`/`qilin_skill`、`9` 项 VM/宿主根因与 Round 2 `4` 项修复（并协同 `filtering/swd.rs` 与 `play_sha.rs` `xinliegong_range_free`）；将获批 **`26`** 项升为 `已复核等价`（`L26` **`7 / 0 / 0`**、`U02` **`17 / 0 / 0`**、`L11` **`578 / 358 / 0`**，保留 `40` 名依赖 `x164` 或未覆盖 VM/宿主技能武将、`171` 模式节点及冻结项），全局 **`4,061 / 363 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch P3-B 证据摘要](../operations/evidence/2026-11-24-p3-b-tier1/README.md) 与各来源 G0 文档。

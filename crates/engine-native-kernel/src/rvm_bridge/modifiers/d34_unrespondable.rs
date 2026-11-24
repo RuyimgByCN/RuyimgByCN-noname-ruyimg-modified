@@ -100,5 +100,15 @@ pub fn apply_card_unrespondable_with_nature(
     }
     let unrespondable =
         d34_u05_mods::apply_card_unrespondable(state, source, target, kind, unrespondable);
-    d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable)
+    let unrespondable =
+        d34_l11_mods::apply_card_unrespondable(state, catalog, source, kind, unrespondable);
+    crate::rvm_bridge::modifiers::d34_l11_mods_npc_b::apply_card_unrespondable_npc_b(
+        state,
+        catalog,
+        source,
+        target,
+        card,
+        kind,
+        unrespondable,
+    )
 }

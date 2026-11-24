@@ -811,6 +811,9 @@ pub(super) fn active_ask_batches(
             }
             _ => None,
         },
+        HostBehavior::L11CrossNpcB => super::step::l11_npc_b::ask_l11_npc_b(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         _ => super::step::u05_7c_asks::ask_u05_7c(
             behavior, stage, owner, target, targets, card, cards, core, catalog,
         ),

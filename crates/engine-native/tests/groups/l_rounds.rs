@@ -73,6 +73,15 @@ mod l11_taixu_b6b_round3;
 #[path = "../l11_taixu_b6b_round4.rs"]
 mod l11_taixu_b6b_round4;
 
+#[path = "../l11_npc_b_active.rs"]
+mod l11_npc_b_active;
+
+#[path = "../l11_npc_b_triggers.rs"]
+mod l11_npc_b_triggers;
+
+#[path = "../l11_npc_b_save_ai.rs"]
+mod l11_npc_b_save_ai;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

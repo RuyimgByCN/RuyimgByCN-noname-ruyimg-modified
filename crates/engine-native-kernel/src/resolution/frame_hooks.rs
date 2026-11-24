@@ -167,6 +167,11 @@ fn on_frame_popped_inner(
         core.vm_aux
             .flags
             .remove(&(*player, format!("l11_move_equip_evt:{card}")));
+        let twzhian_eq = core
+            .vm_aux
+            .flags
+            .remove(&(*player, format!("twzhian_equip_use:{}", popped.id)))
+            .is_some();
         if let Some(fusi_owner) = core
             .vm_aux
             .flags
@@ -201,6 +206,22 @@ fn on_frame_popped_inner(
             core.vm_aux
                 .flags
                 .remove(&(*player, format!("dddfusi_used_owner:{}", popped.id)));
+        } else if twzhian_eq && run_after_hooks {
+            let synth = crate::event::CardUseData {
+                card: Some(*card),
+                player: *player,
+                targets: vec![*player],
+                nature: crate::event::DamageNature::Normal,
+                use_as: None,
+                cancelled: false,
+            };
+            let mut ctx = Ctx {
+                core,
+                res,
+                catalog,
+                out,
+            };
+            (catalog.hooks.on_card_use_after)(&mut ctx, popped.id, &synth);
         }
     }
     if let EventData::OrdinaryJudge { owner, invocation } = &popped.data {
@@ -518,9 +539,20 @@ fn on_card_use_popped(
         .flags
         .remove(&(u.player, format!("dddfusi_used_owner:{popped_id}")));
     let dodge_prefix = format!("l11_sha_dodge_ok:{popped_id}:");
-    core.vm_aux
-        .flags
-        .retain(|(_, k), _| !k.starts_with(&dodge_prefix));
+    let sbl_mask_key = format!("l11b_sbliegong_block_mask:{popped_id}");
+    let sbl_dmg_key = format!("l11b_sbliegong_dmg:{popped_id}");
+    let xyu_shan_key = format!("l11b_twxiangyu_extra_shan:{popped_id}");
+    let hj_buff_key = format!("l11b_twhengjiang_buffed:{popped_id}");
+    let hj_resp_key = format!("l11b_twhengjiang_resp_mask:{popped_id}");
+    core.vm_aux.flags.retain(|(_, k), _| {
+        !k.starts_with(&dodge_prefix)
+            && *k != sbl_mask_key
+            && *k != sbl_dmg_key
+            && *k != xyu_shan_key
+            && *k != hj_buff_key
+            && *k != hj_resp_key
+            && *k != "l11b_sbliegong_cur_block_mask"
+    });
     {
         let mut ctx = Ctx {
             core,

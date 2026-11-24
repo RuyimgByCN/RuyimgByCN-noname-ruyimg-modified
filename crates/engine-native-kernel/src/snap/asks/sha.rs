@@ -320,7 +320,13 @@ pub(super) fn active_sha_ask(
             .flags
             .get(&(target, "l10_scschihe_block_suits".to_string()))
             .copied()
-            .unwrap_or(0);
+            .unwrap_or(0)
+            | core
+                .vm_aux
+                .flags
+                .get(&(target, "l11b_sbliegong_cur_block_mask".to_string()))
+                .copied()
+                .unwrap_or(0);
         if chihe_block_mask != 0 {
             options.retain(|o| match o {
                 ChoiceOption::Card(c) => {

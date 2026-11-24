@@ -96,5 +96,15 @@ pub(super) fn play_equip(
             .flags
             .insert((player, format!("u05_play_equip_frame:{frame}")), 1);
     }
+    if catalog
+        .skill_by_name("twzhian")
+        .is_some_and(|def| state.core.alive_players().any(|p| p != player && state.core.has_skill(p, def)))
+    {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player, format!("twzhian_equip_use:{frame}")), 1);
+    }
     Ok(())
 }

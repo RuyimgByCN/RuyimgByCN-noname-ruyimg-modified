@@ -19,8 +19,32 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
     };
     record_vm_history(ctx, frame_id, &data);
     match &data {
-        EventData::CardUsed(u) if !u.cancelled => record_turn_use_resp(ctx, u.player),
-        EventData::CardResponded { player, .. } => record_turn_use_resp(ctx, *player),
+        EventData::CardUsed(u) if !u.cancelled => {
+            record_turn_use_resp(ctx, u.player);
+            if matches!(u.use_as, Some(CardKind::Nullify | CardKind::Shan)) {
+                let skip = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(u.player, format!("twhengjiang_skip_nullify:{frame_id}")))
+                    .is_some();
+                if !skip {
+                    note_twhengjiang_response(ctx, u.player, Some(frame_id));
+                }
+            }
+        }
+        EventData::CardResponded { player, .. } => {
+            record_turn_use_resp(ctx, *player);
+            let skip = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(*player, format!("twhengjiang_skip_nullify:{frame_id}")))
+                .is_some();
+            if !skip {
+                note_twhengjiang_response(ctx, *player, Some(frame_id));
+            }
+        }
         EventData::CardsLost { player, cards, .. } => clear_shilie_shown_on_leave(ctx, *player, cards),
         EventData::CardsMoved { from, cards, .. } => clear_shilie_shown_on_leave(ctx, *from, cards),
         _ => {}
@@ -177,6 +201,7 @@ pub(super) fn emit_card_responded_as(
 
 pub(super) fn record_virtual_respond(ctx: &mut Ctx<'_>, player: PlayerId, kind: CardKind) {
     record_turn_use_resp(ctx, player);
+    note_twhengjiang_response(ctx, player, None);
     record_dddanzhi_card(ctx.core, ctx.catalog, None);
     ctx.log(LogEvent::VirtualCardPlayed {
         kind,
@@ -184,6 +209,44 @@ pub(super) fn record_virtual_respond(ctx: &mut Ctx<'_>, player: PlayerId, kind: 
         targets: Vec::new(),
         presentation: None,
     });
+}
+
+/// Records distinct other responders onto an enclosing `twhengjiang`-buffed `CardUsed` frame.
+pub(super) fn note_twhengjiang_response(
+    ctx: &mut Ctx<'_>,
+    responder: PlayerId,
+    skip_frame: Option<EventId>,
+) {
+    let enclosing = ctx.res.stack.iter().rev().find_map(|f| {
+        if Some(f.id) == skip_frame {
+            return None;
+        }
+        match &f.data {
+            EventData::CardUsed(u) => Some((f.id, u.player)),
+            _ => None,
+        }
+    });
+    let Some((parent_fid, parent_user)) = enclosing else {
+        return;
+    };
+    if parent_user == responder {
+        return;
+    }
+    let buffed = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(parent_user, format!("l11b_twhengjiang_buffed:{parent_fid}")))
+        .copied()
+        .unwrap_or(0);
+    if buffed > 0 {
+        let key = (parent_user, format!("l11b_twhengjiang_resp_mask:{parent_fid}"));
+        let cur = ctx.core.vm_aux.flags.get(&key).copied().unwrap_or(0);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert(key, cur | (1u32 << responder));
+    }
 }
 
 pub(super) fn record_turn_use_resp(ctx: &mut Ctx<'_>, actor: PlayerId) {

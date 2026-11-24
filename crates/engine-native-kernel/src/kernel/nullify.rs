@@ -213,6 +213,23 @@ impl NullifyWindowMachine {
             .flags
             .remove(&(self.source, format!("nullify_stateplayer:{}", self.card)));
     }
+
+    fn note_nullify_for_twhengjiang(
+        &self,
+        ctx: &mut Ctx<'_>,
+        responder: PlayerId,
+        resp_fid: crate::ids::EventId,
+    ) {
+        let first_key = (self.source, format!("nullify_has_first:{}", self.card));
+        if ctx.core.vm_aux.flags.contains_key(&first_key) {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((responder, format!("twhengjiang_skip_nullify:{resp_fid}")), 1);
+        } else {
+            ctx.core.vm_aux.flags.insert(first_key, 1);
+        }
+    }
 }
 
 impl crate::catalog::SkillMachine for NullifyWindowMachine {
@@ -282,6 +299,8 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         self.queue.remove(0);
                         discard_response_card(ctx, resp, c, CardKind::Nullify);
                         let base_depth = ctx.res.stack.len();
+                        let resp_fid = ctx.res.next_event_id;
+                        self.note_nullify_for_twhengjiang(ctx, resp, resp_fid);
                         ctx.emit(EventData::CardResponded {
                             card: c,
                             player: resp,
@@ -329,6 +348,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         self.nullified = !self.nullified;
                         self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
                         let new_fid = ctx.res.next_event_id;
+                        self.note_nullify_for_twhengjiang(ctx, responder, new_fid);
                         ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                             card: card_ovr,
                             player: responder,
@@ -387,6 +407,10 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 // 铁索机器）结算结束弃置——旧实现在此无条件弃牌，叠加效果
                 // 机器的弃置使非抵消路径同一牌进弃牌堆两次。
                 self.clear_stateplayer(ctx.core);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("nullify_has_first:{}", self.card)));
                 ctx.core
                     .vm_aux
                     .flags
@@ -504,6 +528,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                             self.nullified = !self.nullified;
                             self.queue = ctx.core.seat_order_from(ctx.core.next_alive(responder));
                             let new_fid = ctx.res.next_event_id;
+                            self.note_nullify_for_twhengjiang(ctx, responder, new_fid);
                             ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                                 card: card_ovr,
                                 player: responder,
@@ -537,6 +562,8 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                         .and_then(|v| v.checked_sub(1));
                     // 出无懈：弃牌、反转抵消状态、更新 stateplayer、自其下家重新询问
                     discard_response_card(ctx, responder, c, CardKind::Nullify);
+                    let resp_fid = ctx.res.next_event_id;
+                    self.note_nullify_for_twhengjiang(ctx, responder, resp_fid);
                     super::emit_card_responded_as(ctx, responder, c, CardKind::Nullify);
                     self.nullified = !self.nullified;
                     self.set_stateplayer(ctx.core, responder);

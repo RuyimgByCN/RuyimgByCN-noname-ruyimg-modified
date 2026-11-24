@@ -112,6 +112,7 @@ pub(crate) fn u01_respond_skill_options(
     let mut out = u01_fixes_1::u01_respond_skill_options(core, catalog, player, need, is_use);
     u01_fixes_2::u01_respond_skill_options_2(core, catalog, player, need, is_use, &mut out);
     u01_fixes_3::u01_respond_skill_options_3(core, catalog, player, need, is_use, &mut out);
+    l11_npc_b::respond_skill_options_l11_npc_b(core, catalog, player, need, is_use, &mut out);
     out
 }
 
@@ -133,6 +134,9 @@ pub(crate) fn u01_try_activate_respond_skill(
     u01_fixes_2::u01_try_activate_respond_skill_2(ctx, player, def, need, fid, is_use)
         .or_else(|| {
             u01_fixes_3::u01_try_activate_respond_skill_3(ctx, player, def, need, fid, is_use)
+        })
+        .or_else(|| {
+            l11_npc_b::try_activate_respond_skill_l11_npc_b(ctx, player, def, need, fid, is_use)
         })
 }
 pub(super) mod l28_batch_a;
@@ -264,6 +268,7 @@ mod swd_u05_7d_duijue_tanlin;
 mod swd_u05_7d_fixes;
 pub(super) mod swd_u05_7d_fixes_cards;
 mod swd_u05_7d_fixes_combat;
+pub(super) mod l11_npc_b;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1442,6 +1447,7 @@ impl HostMachine {
             | HostBehavior::SwdSusheng2
             | HostBehavior::SwdMoyu
             | HostBehavior::SwdU05_7dSub => swd_u05_7d::step_swd_u05_7d(self, ctx),
+            HostBehavior::L11CrossNpcB => l11_npc_b::handle_l11_npc_b(self, ctx),
         }
     }
 }

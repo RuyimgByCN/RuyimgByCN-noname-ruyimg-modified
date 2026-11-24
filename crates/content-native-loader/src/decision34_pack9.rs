@@ -509,6 +509,7 @@ pub fn attach_formal_package_upstream_rules(
             && package_id == "taixu"
             && vs.name != "xinjuejing"
             && (super::lookup_upstream_host_behavior(&vs.name).is_some()
+                || crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&vs.name.as_str())
                 || vs.name == "jueqing")
         {
             return false;
@@ -752,7 +753,9 @@ pub fn attach_formal_package_upstream_rules(
                 .chain(super::L11_TAIXU_B1_AUX_SUBSKILLS.iter())
                 .chain(super::L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.iter())
             {
-                if s != "xinfu_sidao" {
+                if s != "xinfu_sidao"
+                    && !crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s)
+                {
                     push_skill(s, L11_TAIXU_SKILL_ID);
                 }
             }
@@ -762,6 +765,9 @@ pub fn attach_formal_package_upstream_rules(
             // and the 9 upstream-undefined IDs (`L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS`)
             // remain inert without fabricating fake skills.
             for &s in &super::L11_TAIXU_CROSS_SKILLS {
+                if crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s) {
+                    continue;
+                }
                 if super::lookup_upstream_host_behavior(s).is_some() {
                     push_skill(s, L11_TAIXU_SKILL_ID);
                 } else if matches!(s, "dddfenji" | "dddjiexing" | "dddqiaoduan") {
@@ -782,83 +788,14 @@ pub fn attach_formal_package_upstream_rules(
                     push_skill(s, super::U05_SHAHAI_SKILL_ID);
                 }
             }
-            // Authentic passive `feiying` (distance from others +1, 0 `U05` PhaseBegin mutation):
-            if seen_skills.insert("feiying".to_string()) {
-                let code = vec![0x01u8];
-                let module = engine_native::rvm_bridge::BytecodeModule {
-                    logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
-                        "feiying#modifier",
-                        &code,
-                        0,
-                        0,
-                        0,
-                    ),
-                    name: "feiying#modifier".to_string(),
-                    code,
-                    local_count: 0,
-                    max_stack: 1,
-                    entry_pc: 0,
-                    caps_mask: 0,
-                };
-                extra_vm_skills.push(VmSkillDecl {
-                    declaration_hash: None,
-                    presentation_binding: None,
-                    name: "feiying".to_string(),
-                    module,
-                    trigger: engine_native::catalog::TriggerMeta {
-                        event: EventKind::SkillToggled,
-                        timing: engine_native::event::Timing::Normal,
-                        priority: 0,
-                        order_selectable: false,
-                        optional: false,
-                        extra_events: Vec::new(),
-                    },
-                    filter: VmFilterPolicy::Handlers(std::sync::Arc::new(
-                        engine_native::rvm_bridge::VmHandlerSet {
-                            skill_def_id: L11_TAIXU_SKILL_ID.wrapping_add(10_000),
-                            active: None,
-                            limits: Default::default(),
-                            triggers: Vec::new(),
-                            modifiers: vec![engine_native::rvm_bridge::modifiers::VmModifierRule {
-                                target: engine_native::rvm_bridge::modifiers::VmModifierTarget::DistanceFromOthers,
-                                mode: engine_native::rvm_bridge::modifiers::VmModifierMode::Add,
-                                selector: None,
-                                value: 1,
-                                value_source: None,
-                            }],
-                            view_as: Vec::new(),
-                        },
-                    )),
-                    r05_identity: None,
-                });
-            }
-            // Authentic Guan Yinping `xueji` (`sp.js:21742-21777`, distinct from L19 zombie stub)
-            super::push_host_skill_if_unseen(
-                "xueji",
-                engine_native::content::host::HostBehavior::L11GeneralBossC,
+            crate::taixu_pack_attach_b::attach_taixu_native_extras(
+                L11_TAIXU_SKILL_ID,
                 &mut extra_host_skills,
+                &mut extra_vm_skills,
+                &mut extra_cards,
                 &mut seen_skills,
+                &mut seen_cards,
             );
-            for &ep_sk in &[
-                "kuanggu",
-                "hongyan",
-                "txhj_tanshi",
-                "chanyuan",
-                "xingshang",
-                "hengzheng",
-                "xinfu_yisuan",
-                "xinfu_lveming",
-                "xinfu_tunjun",
-                "xinfu_tanbei",
-                "xinfu_sidao",
-            ] {
-                super::push_host_skill_if_unseen(
-                    ep_sk,
-                    engine_native::content::host::HostBehavior::L11GeneralBossC,
-                    &mut extra_host_skills,
-                    &mut seen_skills,
-                );
-            }
             for &(sym, faction, gender, max_hp, sk_list) in &super::L11_TAIXU_GENERALS {
                 push_general(sym, faction, gender, max_hp, sk_list, &seen_skills);
             }

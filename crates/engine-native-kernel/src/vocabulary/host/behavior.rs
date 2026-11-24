@@ -1939,4 +1939,6 @@ pub enum HostBehavior {
     Q4FoolSkill,
     /// Batch L11-6a 太虚自有 NPC 武将技能家族（tag 1389；`L11_TAIXU_OWN_NPC_SKILLS` 29 技宿主真触发与交互询问）。
     L11OwnNpc,
+    /// L11 太虚幻境跨包 NPC 技能 Part B（tag 1390：`satomi_luodao`..=`zongkui`）。
+    L11CrossNpcB,
 }

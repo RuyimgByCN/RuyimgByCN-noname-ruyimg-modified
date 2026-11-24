@@ -65,11 +65,13 @@ pub(crate) use step::{
 pub(crate) fn host_on_outer_settled(ctx: &mut Ctx<'_>) {
     on_outer_settled_taipingyaoshu(ctx);
     host_on_outer_settled_hearth(ctx);
+    step::l11_npc_b::on_outer_settled_l11_npc_b(ctx);
 }
 
 pub(crate) fn host_on_phase_end(ctx: &mut Ctx<'_>) {
     on_phase_end_l10_scs(ctx);
     host_on_phase_end_hearth(ctx);
+    step::l11_npc_b::on_phase_end_l11_npc_b(ctx);
 }
 
 pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
@@ -106,6 +108,7 @@ pub(crate) fn host_draw_begin_step_all(ctx: &mut Ctx<'_>, player: PlayerId, pend
     host_draw_begin_step(ctx, player, pending);
     host_draw_begin_xianjian(ctx, player, pending);
     step::swd_u05_7b::host_draw_begin_step_u05_7b(ctx, player, pending);
+    step::l11_npc_b::on_draw_begin_step_l11_npc_b(ctx, player, pending);
 }
 
 pub(crate) fn host_card_use_after_all(
@@ -117,6 +120,7 @@ pub(crate) fn host_card_use_after_all(
     host_card_use_after_xianjian(ctx, u);
     step::swd_u05_7a::host_card_use_after_swd(ctx, u);
     step::swd_u05_7b::host_card_use_after_u05_7b(ctx, u);
+    step::l11_npc_b::on_card_use_after_l11_npc_b(ctx, fid, u);
 }
 
 pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
@@ -127,11 +131,13 @@ pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
 pub(crate) fn host_on_phase_use_end_all(ctx: &mut Ctx<'_>, player: PlayerId) {
     host_on_phase_use_end(ctx, player);
     host_on_phase_use_end_xianjian(ctx, player);
+    step::l11_npc_b::on_phase_use_end_l11_npc_b(ctx, player);
 }
 
 pub(crate) fn host_on_round_start_all(ctx: &mut Ctx<'_>) {
     host_on_round_start(ctx);
     host_on_round_start_xianjian(ctx);
+    step::l11_npc_b::on_round_start_l11_npc_b(ctx);
 }
 
 pub(crate) fn host_on_hand_card_removed_all(ctx: &mut Ctx<'_>, player: PlayerId, card: CardId) {
@@ -143,6 +149,55 @@ pub(crate) fn host_on_phase_end_all(ctx: &mut Ctx<'_>) {
     host_on_phase_end(ctx);
     host_on_phase_end_xianjian(ctx);
     step::swd_u05_7b::on_phase_end_u05_7b(ctx);
+}
+
+pub(crate) fn host_on_turn_begin_all(ctx: &mut Ctx<'_>, player: PlayerId) {
+    host_on_turn_begin(ctx, player);
+    step::l11_npc_b::on_turn_begin_l11_npc_b(ctx, player);
+}
+
+pub(crate) fn host_on_turn_phase_after_all(ctx: &mut Ctx<'_>, player: PlayerId) {
+    host_on_turn_phase_after(ctx, player);
+    step::l11_npc_b::on_turn_phase_after_l11_npc_b(ctx, player);
+}
+
+pub(crate) fn host_on_player_died_all(
+    ctx: &mut Ctx<'_>,
+    dead: PlayerId,
+    killer: Option<PlayerId>,
+) {
+    host_on_player_died(ctx, dead, killer);
+    step::l11_npc_b::on_player_died_l11_npc_b(ctx, dead, killer);
+}
+
+pub(crate) fn host_on_phase_skipped_all(ctx: &mut Ctx<'_>, player: PlayerId) {
+    u01_phase_skipped_hook(ctx, player);
+    step::l11_npc_b::on_phase_skipped_l11_npc_b(ctx, player);
+}
+
+pub(crate) fn host_on_host_event_all(ctx: &mut Ctx<'_>, event: &EventData) {
+    on_l25_host_event(ctx, event);
+    step::l11_npc_b::on_host_event_l11_npc_b(ctx, event);
+}
+
+pub(crate) fn host_on_equip_revoked_all(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: CardId,
+) {
+    host_on_equip_revoked_hearth(core, catalog, player, card);
+    step::l11_npc_b::on_equip_revoked_l11_npc_b(core, catalog, player, card);
+}
+
+pub(crate) fn host_on_hp_changed_all(ctx: &mut Ctx<'_>, player: PlayerId, delta: i32) {
+    host_on_hp_changed_xianjian(ctx, player, delta);
+    step::l11_npc_b::on_hp_changed_l11_npc_b(ctx, player, delta);
+}
+
+pub(crate) fn host_on_damage_end_all(ctx: &mut Ctx<'_>, d: &crate::event::DamageData) {
+    host_on_damage_end_xianjian(ctx, d);
+    step::l11_npc_b::on_damage_end_l11_npc_b(ctx, d);
 }
 
 pub(crate) fn host_on_recover_before_all(ctx: &mut Ctx<'_>, player: PlayerId, amount: &mut u32) {
@@ -828,6 +883,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::L11OwnNpc => {
                 step::l11_own_npc::trigger_meta_l11_own_npc(&self.name, Some(kind))
             }
+            HostBehavior::L11CrossNpcB => step::l11_npc_b::trigger_meta_l11_npc_b(&self.name, kind),
             _ => None,
         }
     }
@@ -836,6 +892,7 @@ impl SkillBehavior for HostSkillBehavior {
         step::u01_fixes_2::runs_before_phase_begin_2(&self.name)
             || step::u01_fixes_3::runs_before_phase_begin_3(&self.name)
             || (self.behavior == HostBehavior::U05HearthBatchD && self.name == "wzhanyi")
+            || (self.behavior == HostBehavior::L11CrossNpcB && self.name == "shensu")
     }
     fn start_in_window(
         &self,
@@ -872,6 +929,34 @@ impl SkillBehavior for HostSkillBehavior {
                     crate::event::EventKind::DamageBegin3 => 3,
                     _ => 1,
                 });
+            }
+            HostBehavior::L11CrossNpcB => {
+                if let EventData::Damage(_) = event {
+                    let win = match kind {
+                        crate::event::EventKind::DamageBegin1 => {
+                            Some(crate::event::DamageWindowKind::Begin1)
+                        }
+                        crate::event::EventKind::DamageBegin2 => {
+                            Some(crate::event::DamageWindowKind::Begin2)
+                        }
+                        crate::event::EventKind::DamageBegin3 => {
+                            Some(crate::event::DamageWindowKind::Begin3)
+                        }
+                        crate::event::EventKind::DamageBegin4 => {
+                            Some(crate::event::DamageWindowKind::Begin4)
+                        }
+                        crate::event::EventKind::DamageSource => {
+                            Some(crate::event::DamageWindowKind::Source)
+                        }
+                        crate::event::EventKind::DamageEnd => {
+                            Some(crate::event::DamageWindowKind::End)
+                        }
+                        _ => None,
+                    };
+                    if let Some(w) = win {
+                        machine.cards = vec![0, w as crate::ids::CardId, 0];
+                    }
+                }
             }
             _ => {}
         }
@@ -919,6 +1004,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11OwnNpc
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
+                | HostBehavior::L11CrossNpcB
         )
     }
     /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记

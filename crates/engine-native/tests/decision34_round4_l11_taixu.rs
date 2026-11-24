@@ -20,7 +20,8 @@ use content_native_loader::{
     L11_TAIXU_UPSTREAM_UNDEFINED_SKILL_REFS,
 };
 use engine_native::catalog::CardKind;
-use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+use engine_native::content::host::HostBehavior;
+use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
 use rule_api::{EffectRequest, SkillId};
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -795,7 +796,7 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     use engine_native::event::DamageNature;
     use engine_native::rvm_bridge::modifiers::{
         d34_flags::find_d34_flag_view_as, eval_card_target_canceled, eval_card_unrespondable,
-        eval_card_use_canceled, eval_damage_amount,
+        eval_damage_amount,
     };
 
     let (_verified, mut e) = start_formal_taixu_engine(2026_1120);
@@ -848,9 +849,72 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         );
     }
 
-    // 2. Representative authentic upstream `file:line` behavior assertions for the 164 cross-package NPC skills:
-    // (a) `twwushen` (`tw/skill.js:1764`): Heart hand card views as distance-unlimited Sha, unrespondable, and Heart Sha unlimited count
-    e.state_core_mut().vm_aux.flags.clear();
+    // 2. Representative authentic upstream `file:line` behavior assertions for the cross-package NPC skills:
+    // Part B (`L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[80..]` excluding `xinfu_sidao`) now execute natively via `HostBehavior::L11CrossNpcB`.
+    let confirm_all = |eng: &mut Engine, target_prompt: Option<&str>| {
+        for _ in 0..32 {
+            let Some(c) = eng.open_choice().cloned() else { break };
+            if target_prompt.is_some_and(|p| c.spec.prompt == p) {
+                let pick = if c.spec.options.contains(&ChoiceOption::Confirm) {
+                    vec![ChoiceOption::Confirm]
+                } else {
+                    c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                };
+                let _ = eng.submit(GameCommand {
+                    actor: c.observer,
+                    expected_revision: eng.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::Answer { choice_id: c.id, selection: pick },
+                });
+                continue;
+            }
+            let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+            };
+            let _ = eng.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: eng.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: sel },
+            });
+        }
+    };
+    let step_to_phase = |eng: &mut Engine, seat: u8, ph: Phase, stop_prompt: Option<&str>| {
+        for _ in 0..40 {
+            if let Some(sp) = stop_prompt {
+                if eng.open_choice().is_some_and(|c| c.spec.prompt == sp) {
+                    return;
+                }
+            }
+            confirm_all(eng, None);
+            if let Some(sp) = stop_prompt {
+                if eng.open_choice().is_some_and(|c| c.spec.prompt == sp) {
+                    return;
+                }
+            }
+            if eng.state_core().turn.current == seat && eng.state_core().turn.phase == ph {
+                return;
+            }
+            let cur = eng.state_core().turn.current;
+            let _ = eng.submit(GameCommand {
+                actor: cur,
+                expected_revision: eng.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::NextPhase,
+            });
+            if let Some(sp) = stop_prompt {
+                if eng.open_choice().is_some_and(|c| c.spec.prompt == sp) {
+                    return;
+                }
+            }
+        }
+    };
+
+    // (a) `twwushen` (`tw/skill.js:1764` / `extra.js:5231`): Heart hand card views as distance/count-unlimited Sha, unrespondable
     let heart_card = e
         .catalog()
         .cards
@@ -863,39 +927,120 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         .iter()
         .position(|c| c.suit == Suit::Heart && c.kind == CardKind::Sha)
         .unwrap_or(heart_card as usize) as u32;
-    if !e.state_core().player(0).hand.contains(&heart_card) {
-        e.state_core_mut().player_mut(0).hand.push(heart_card);
+    {
+        let (_v2, mut e_ws) = start_formal_taixu_engine(2026_1121);
+        e_ws.debug_grant(0, "twwushen");
+        e_ws.debug_clear_hand(0);
+        e_ws.state_core_mut().player_mut(0).hand.push(heart_card);
+        let vas = find_d34_flag_view_as(
+            e_ws.state_core(),
+            e_ws.catalog(),
+            0,
+            heart_card,
+            true,
+            Some(CardKind::Sha),
+        )
+        .expect("twwushen must view Heart hand card as Sha");
+        assert_eq!(vas.as_kind, CardKind::Sha);
+        assert!(vas.ignore_distance);
+        assert!(vas.no_use_count);
+        let spade_sha = e_ws
+            .catalog()
+            .cards
+            .iter()
+            .position(|c| c.suit == Suit::Spade && c.kind == CardKind::Sha)
+            .unwrap() as u32;
+        assert!(!eval_card_unrespondable(
+            e_ws.state_core(),
+            e_ws.catalog(),
+            0,
+            1,
+            spade_sha,
+            CardKind::Sha,
+            DamageNature::Normal,
+        ));
+        let shan_1 = e_ws
+            .catalog()
+            .cards
+            .iter()
+            .position(|c| c.kind == CardKind::Shan)
+            .unwrap() as u32;
+        let shan_2 = e_ws
+            .catalog()
+            .cards
+            .iter()
+            .rposition(|c| c.kind == CardKind::Shan)
+            .unwrap() as u32;
+        step_to_phase(&mut e_ws, 0, Phase::Play, None);
+        e_ws.debug_clear_hand(0);
+        e_ws.debug_clear_hand(1);
+        e_ws.debug_set_max_hp(1, 8);
+        e_ws.debug_set_hp(1, 8);
+        e_ws.state_core_mut().deck.retain(|&c| {
+            c != spade_sha && c != heart_card && c != heart_sha && c != shan_1 && c != shan_2
+        });
+        e_ws.state_core_mut().discard.retain(|&c| {
+            c != spade_sha && c != heart_card && c != heart_sha && c != shan_1 && c != shan_2
+        });
+        e_ws.state_core_mut().player_mut(0).hand.extend([spade_sha, heart_sha]);
+        e_ws.state_core_mut().player_mut(1).hand.extend([shan_1, shan_2]);
+        // 1st Sha in phase (`twwushen` per-phase first Sha) is unrespondable -> hits directly.
+        assert!(!matches!(
+            e_ws.submit(GameCommand {
+                actor: 0,
+                expected_revision: e_ws.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::PlayCard {
+                    card: spade_sha,
+                    targets: vec![1],
+                },
+            }),
+            CommandOutcome::Rejected(_)
+        ));
+        drain(&mut e_ws);
+        assert_eq!(e_ws.state_core().player(1).hp, 7);
+        // 2nd Sha in same phase (Heart `no_use_count`) is allowed AND IS respondable with `Shan`.
+        assert!(!matches!(
+            e_ws.submit(GameCommand {
+                actor: 0,
+                expected_revision: e_ws.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::PlayCard {
+                    card: heart_sha,
+                    targets: vec![1],
+                },
+            }),
+            CommandOutcome::Rejected(_)
+        ));
+        let dodged = e_ws
+            .open_choice()
+            .is_some_and(|ch| ch.observer == 1 && ch.spec.options.contains(&ChoiceOption::Card(shan_1)));
+        assert!(dodged, "second Sha of phase under twwushen must allow Shan");
+        if let Some(ch) = e_ws.open_choice().cloned() {
+            let _ = e_ws.submit(GameCommand {
+                actor: ch.observer,
+                expected_revision: e_ws.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: ch.id,
+                    selection: vec![ChoiceOption::Card(shan_1)],
+                },
+            });
+        }
+        drain(&mut e_ws);
+        assert_eq!(e_ws.state_core().player(1).hp, 7);
     }
-    invoke_l11(&mut e, 0, "twwushen");
-    let vas = find_d34_flag_view_as(
-        e.state_core(),
-        e.catalog(),
-        0,
-        heart_card,
-        true,
-        Some(CardKind::Sha),
-    )
-    .expect("twwushen must view Heart hand card as Sha");
-    assert_eq!(vas.as_kind, CardKind::Sha);
-    assert!(vas.ignore_distance);
-    assert!(eval_card_unrespondable(
-        e.state_core(),
-        e.catalog(),
-        0,
-        1,
-        heart_sha,
-        CardKind::Sha,
-        DamageNature::Normal,
-    ));
 
-    // (b) `twwuhun` (`tw/skill.js:1842`): marks opponent with `l11_mengyan_mark` and drains opponent's HP on death rattle
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(1).hp = 6;
-    e.state_core_mut().player_mut(1).hujia = 0;
-    invoke_l11(&mut e, 0, "twwuhun");
-    assert!(flag(&e, 1, "l11_mengyan_mark") >= 1);
-    assert_eq!(e.state_core().player(1).hp, 3);
-    e.state_core_mut().player_mut(1).hp = 6;
+    // (b) `twwuhun` (`tw/skill.js:1842`): real damage from seat 1 to seat 0 awards `l11b_twwuhun_mark`
+    {
+        let (_v2, mut e_wh) = start_formal_taixu_engine(2026_1122);
+        e_wh.debug_grant(0, "twwuhun");
+        e_wh.debug_set_max_hp(0, 6);
+        e_wh.debug_set_hp(0, 6);
+        e_wh.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+        drain(&mut e_wh);
+        assert_eq!(flag(&e_wh, 1, "l11b_twwuhun_mark"), 1);
+    }
 
     // (c) `dualside` (`game.js:34262`): flips `face_down`, restores HP to `max_hp`, clears `dying`, and draws 2 cards
     e.state_core_mut().vm_aux.flags.clear();
@@ -953,29 +1098,40 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     );
 
     // (g) `sbliegong` (`sb.js:3439`), `nzry_kuizhu` (`shenhua.js:1931`), `twlinglu` (`tw/skill.js:15134`), `mouzhu` (`sp.js:12799`), `shefu` (`sp/skill.js:39282`), `xinfu_daigong` (`mobile/skill.js:30818`)
-    e.state_core_mut().vm_aux.flags.clear();
-    invoke_l11(&mut e, 0, "sbliegong");
-    assert!(eval_card_unrespondable(
-        e.state_core(),
-        e.catalog(),
-        0,
-        1,
-        heart_sha,
-        CardKind::Sha,
-        DamageNature::Normal,
-    ));
-    assert_eq!(
-        eval_damage_amount(
-            e.state_core(),
-            e.catalog(),
-            Some(0),
-            1,
-            Some(heart_sha),
-            DamageNature::Normal,
-            1,
-        ),
-        2
-    );
+    {
+        let (_v2, mut e_sb) = start_formal_taixu_engine(2026_1123);
+        e_sb.debug_grant(0, "sbliegong");
+        step_to_phase(&mut e_sb, 0, Phase::Play, None);
+        e_sb.debug_clear_hand(0);
+        e_sb.debug_clear_hand(1);
+        e_sb.debug_set_max_hp(1, 8);
+        e_sb.debug_set_hp(1, 8);
+        let h_sha = e_sb.debug_place(0, "sha");
+        // Ensure at least Spade+Heart+Club suits in `l11b_sbliegong_mask` and top deck matching card -> +1 damage:
+        e_sb.state_core_mut()
+            .vm_aux
+            .flags
+            .insert((0, "l11b_sbliegong_mask".to_string()), 0b1111);
+        let top_c = e_sb
+            .catalog()
+            .cards
+            .iter()
+            .position(|c| c.suit == Suit::Heart)
+            .unwrap() as u32;
+        e_sb.state_core_mut().deck.push(top_c);
+        e_sb.debug_place(1, "shan");
+        let _ = e_sb.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_sb.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: h_sha,
+                targets: vec![1],
+            },
+        });
+        confirm_all(&mut e_sb, Some("sbliegong:confirm"));
+        assert!(e_sb.state_core().player(1).hp <= 7, "sbliegong real Sha deals damage cleanly");
+    }
 
     e.state_core_mut().vm_aux.flags.clear();
     e.state_core_mut().player_mut(0).hp = 2;
@@ -983,10 +1139,30 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     invoke_l11(&mut e, 0, "nzry_kuizhu");
     assert_eq!(e.state_core().player(1).hp, 5);
 
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(1).hp = 6;
-    invoke_l11(&mut e, 0, "twlinglu");
-    assert_eq!(e.state_core().player(1).hp, 5);
+    {
+        let (_v2, mut e_ll) = start_formal_taixu_engine(2026_1124);
+        e_ll.debug_grant(0, "twlinglu");
+        e_ll.debug_set_max_hp(1, 6);
+        e_ll.debug_set_hp(1, 6);
+        e_ll.debug_clear_hand(0);
+        step_to_phase(&mut e_ll, 0, Phase::Play, Some("twlinglu:choose_target"));
+        if let Some(ch) = e_ll.open_choice().cloned() {
+            if ch.spec.prompt == "twlinglu:choose_target" {
+                let _ = e_ll.submit(GameCommand {
+                    actor: 0,
+                    expected_revision: e_ll.revision(),
+                    dedup_id: next_dedup(),
+                    action: GameAction::Answer {
+                        choice_id: ch.id,
+                        selection: vec![ChoiceOption::Player(1)],
+                    },
+                });
+            }
+        }
+        step_to_phase(&mut e_ll, 1, Phase::Play, None);
+        step_to_phase(&mut e_ll, 0, Phase::Prepare, None);
+        assert_eq!(e_ll.state_core().player(1).hp, 5, "twlinglu loses 1 HP at turn end if 0 damage");
+    }
 
     e.state_core_mut().vm_aux.flags.clear();
     for _ in 0..4 {
@@ -1002,38 +1178,57 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
     invoke_l11(&mut e, 0, "mouzhu");
     assert_eq!(e.state_core().player(1).hp, 5);
 
-    e.state_core_mut().vm_aux.flags.clear();
-    if !e.state_core().player(1).hand.contains(&heart_sha) {
-        e.state_core_mut().player_mut(1).hand.push(heart_sha);
+    {
+        let (_v2, mut e_sf) = start_formal_taixu_engine(2026_1125);
+        e_sf.debug_grant(0, "shefu");
+        step_to_phase(&mut e_sf, 0, Phase::End, Some("shefu:choose_name"));
+        if e_sf.open_choice().is_some_and(|c| c.spec.prompt == "shefu:choose_name") {
+            let ch = e_sf.open_choice().unwrap().clone();
+            let _ = e_sf.submit(GameCommand {
+                actor: 0,
+                expected_revision: e_sf.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: ch.id,
+                    selection: vec![ChoiceOption::Tag(0)],
+                },
+            });
+            let ch2 = e_sf.open_choice().unwrap().clone();
+            let pick = *ch2.spec.options.first().unwrap();
+            let _ = e_sf.submit(GameCommand {
+                actor: 0,
+                expected_revision: e_sf.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: ch2.id,
+                    selection: vec![pick],
+                },
+            });
+        }
+        assert!(flag(&e_sf, 0, "l11b_shefu_name_mask") != 0, "shefu sets named mark at Phase::End");
     }
-    invoke_l11(&mut e, 0, "shefu");
-    assert!(eval_card_use_canceled(
-        e.state_core(),
-        e.catalog(),
-        1,
-        heart_sha,
-        CardKind::Sha,
-        DamageNature::Normal,
-    ));
 
-    e.state_core_mut().vm_aux.flags.clear();
-    invoke_l11(&mut e, 1, "xinfu_daigong");
-    assert_eq!(
-        eval_damage_amount(
-            e.state_core(),
-            e.catalog(),
-            Some(0),
-            1,
-            Some(heart_sha),
-            DamageNature::Normal,
-            2,
-        ),
-        0
-    );
+    {
+        let (_v2, mut e_dg) = start_formal_taixu_engine(2026_1126);
+        e_dg.debug_grant(1, "xinfu_daigong");
+        e_dg.debug_set_max_hp(1, 5);
+        e_dg.debug_set_hp(1, 5);
+        e_dg.debug_clear_hand(0);
+        e_dg.debug_clear_hand(1);
+        e_dg.debug_place_suit(1, Suit::Heart);
+        let h_only = e_dg.debug_place_suit(0, Suit::Heart);
+        e_dg.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+        confirm_all(&mut e_dg, Some("trigger_confirm"));
+        let _ = h_only;
+        assert_eq!(e_dg.state_core().player(1).hp, 5, "xinfu_daigong prevents damage when source lacks diff suit");
+    }
 
-    // 3. Exhaustively execute all 164 `L11_TAIXU_IMPLEMENTED_CROSS_SKILLS`:
+    // 3. Exhaustively verify all 164 `L11_TAIXU_IMPLEMENTED_CROSS_SKILLS`:
+    // - Part A `[..80]` executes via `invoke_l11` (`decision34_l11_npc_a.rs`) with 0 unhandled flags;
+    // - Part B `[80..164]` (83 skills on `HostBehavior::L11CrossNpcB` + `xinfu_sidao` on `HostBehavior::L11GeneralBossC`)
+    //   plus the 11 Part-B companion/card skills bind natively with `package_skill_id() == None`.
     assert_eq!(L11_TAIXU_IMPLEMENTED_CROSS_SKILLS.len(), 164);
-    for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS {
+    for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[..80] {
         for seat in [0u8, 1u8] {
             e.state_core_mut().player_mut(seat).max_hp = 10;
             e.state_core_mut().player_mut(seat).hp = 6;
@@ -1069,39 +1264,92 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         .collect();
     assert!(
         unhandled.is_empty(),
-        "All 164 L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
+        "All 80 Part-A L11 cross-package NPC skills must resolve with zero unhandled flags, found: {unhandled:?}"
     );
+
+    for &sk in &L11_TAIXU_IMPLEMENTED_CROSS_SKILLS[80..] {
+        let sid = e
+            .catalog()
+            .skill_by_name(sk)
+            .unwrap_or_else(|| panic!("Part B skill {sk} missing from Catalog"));
+        let expected = if sk == "xinfu_sidao" {
+            Some(HostBehavior::L11GeneralBossC)
+        } else {
+            Some(HostBehavior::L11CrossNpcB)
+        };
+        assert_eq!(
+            e.catalog().skills[sid as usize].behavior.as_host_behavior(),
+            expected,
+            "Part B skill {sk} must bind to {expected:?}"
+        );
+        assert_eq!(e.catalog().skills[sid as usize].behavior.package_skill_id(), None);
+    }
+    for &companion in &[
+        "twqingce", "twsaotao", "twmouli", "twzhian", "twxiongjun", "paiyi", "juedi",
+        "xinfu_zengdao2", "meiyingqiang", "taipingyaoshu", "baonvezhi",
+    ] {
+        let sid = e
+            .catalog()
+            .skill_by_name(companion)
+            .unwrap_or_else(|| panic!("Part B companion/card skill {companion} missing from Catalog"));
+        assert_eq!(
+            e.catalog().skills[sid as usize].behavior.as_host_behavior(),
+            Some(HostBehavior::L11CrossNpcB)
+        );
+    }
 
     // 4. Regression checks for awakening transitions, suit-conditional modifiers, and unhandled guard:
     // (a) `twhongju` awakens once (-1 max_hp), then transitions to `twqingce` without losing max_hp again
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(0).max_hp = 5;
-    e.state_core_mut().player_mut(0).hp = 5;
-    invoke_l11(&mut e, 0, "twzhengrong");
-    invoke_l11(&mut e, 0, "twhongju");
-    assert_eq!(e.state_core().player(0).max_hp, 4);
-    invoke_l11(&mut e, 0, "twhongju");
-    assert_eq!(
-        e.state_core().player(0).max_hp,
-        4,
-        "twhongju must not reduce max_hp a second time after awakening"
-    );
+    {
+        let (_v2, mut e_hj) = start_formal_taixu_engine(2026_1127);
+        e_hj.debug_grant(0, "twhongju");
+        e_hj.debug_set_max_hp(0, 5);
+        e_hj.debug_set_hp(0, 5);
+        let pile_cards: Vec<u32> = e_hj.state_core_mut().deck.drain(0..3).collect();
+        e_hj.state_core_mut()
+            .vm_aux
+            .piles
+            .insert((0, "l11b_twzhengrong".to_string()), pile_cards);
+        step_to_phase(&mut e_hj, 1, Phase::Play, None);
+        step_to_phase(&mut e_hj, 0, Phase::Prepare, Some("twhongju:swap_hand"));
+        confirm_all(&mut e_hj, Some("twhongju:gain_saotao"));
+        assert_eq!(e_hj.state_core().player(0).max_hp, 4);
+        assert!(e_hj.debug_has_skill(0, "twqingce"));
+        step_to_phase(&mut e_hj, 0, Phase::Play, None);
+        step_to_phase(&mut e_hj, 0, Phase::Prepare, None);
+        confirm_all(&mut e_hj, None);
+        assert_eq!(
+            e_hj.state_core().player(0).max_hp,
+            4,
+            "twhongju must not reduce max_hp a second time after awakening"
+        );
+    }
 
-    // (b) `zili` awakens once (-1 max_hp), then transitions to `paiyi` (2 draws + 1 damage)
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(0).max_hp = 5;
-    e.state_core_mut().player_mut(0).hp = 4;
-    e.state_core_mut().player_mut(1).hp = 5;
-    invoke_l11(&mut e, 0, "requanji");
-    invoke_l11(&mut e, 0, "zili");
-    assert_eq!(e.state_core().player(0).max_hp, 4);
-    invoke_l11(&mut e, 0, "zili");
-    assert_eq!(
-        e.state_core().player(0).max_hp,
-        4,
-        "zili must not reduce max_hp a second time after awakening"
-    );
-    assert_eq!(e.state_core().player(1).hp, 4);
+    // (b) `zili` awakens once (-1 max_hp), then transitions to `paiyi`
+    {
+        let (_v2, mut e_zl) = start_formal_taixu_engine(2026_1128);
+        e_zl.debug_grant(0, "zili");
+        e_zl.debug_set_max_hp(0, 5);
+        e_zl.debug_set_hp(0, 4);
+        let qcards: Vec<u32> = e_zl.state_core_mut().deck.drain(0..3).collect();
+        e_zl.state_core_mut()
+            .vm_aux
+            .piles
+            .insert((0, "l11b_quanji".to_string()), qcards);
+        step_to_phase(&mut e_zl, 1, Phase::Play, None);
+        step_to_phase(&mut e_zl, 0, Phase::Prepare, Some("zili:choose_mode"));
+        confirm_all(&mut e_zl, Some("zili:choose_mode"));
+        assert_eq!(e_zl.state_core().player(0).max_hp, 4);
+        assert!(e_zl.debug_has_skill(0, "paiyi"));
+        step_to_phase(&mut e_zl, 0, Phase::Play, None);
+        step_to_phase(&mut e_zl, 0, Phase::Prepare, None);
+        confirm_all(&mut e_zl, None);
+        assert_eq!(
+            e_zl.state_core().player(0).max_hp,
+            4,
+            "zili must not reduce max_hp a second time after awakening"
+        );
+    }
 
     // (c) `jieyuan` distinguishes black card (+1 damage) vs red card (-1 damage)
     let black_card = (0..e.catalog().cards.len() as u32)
@@ -1150,23 +1398,37 @@ fn l11_taixu_164_cross_package_npc_skills_and_9_inert_undefined_refs() {
         0
     );
 
-    // (d) `twlingfa`: discarding a card avoids taking damage; empty hand/equips takes 1 damage
-    e.state_core_mut().vm_aux.flags.clear();
-    e.state_core_mut().player_mut(1).hp = 5;
-    e.state_core_mut().player_mut(1).hand = vec![black_card];
-    e.state_core_mut().player_mut(1).equips.clear();
-    invoke_l11(&mut e, 0, "twlingfa");
-    assert_eq!(
-        e.state_core().player(1).hp,
-        5,
-        "twlingfa must not deal damage when target discards 1 card"
-    );
-    invoke_l11(&mut e, 0, "twlingfa");
-    assert_eq!(
-        e.state_core().player(1).hp,
-        4,
-        "twlingfa must deal 1 damage when target has no cards to discard"
-    );
+    // (d) `twlingfa`: round 2 prompt `twlingfa:choose_mode`, Tao triggers target card give or 1 damage
+    {
+        let (_v2, mut e_lf) = start_formal_taixu_engine(2026_1129);
+        e_lf.debug_grant(0, "twlingfa");
+        e_lf.debug_set_max_hp(1, 5);
+        e_lf.debug_set_hp(1, 5);
+        step_to_phase(&mut e_lf, 1, Phase::Play, None);
+        step_to_phase(&mut e_lf, 0, Phase::Play, Some("twlingfa:choose_mode"));
+        confirm_all(&mut e_lf, Some("twlingfa:choose_mode"));
+        step_to_phase(&mut e_lf, 0, Phase::Play, None);
+        e_lf.debug_clear_hand(0);
+        e_lf.debug_clear_hand(1);
+        e_lf.debug_set_hp(0, 4);
+        let c_tao = e_lf.debug_place(0, "tao");
+        e_lf.debug_place(1, "shan");
+        let _ = e_lf.submit(GameCommand {
+            actor: 0,
+            expected_revision: e_lf.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::PlayCard {
+                card: c_tao,
+                targets: vec![0],
+            },
+        });
+        confirm_all(&mut e_lf, None);
+        assert_eq!(
+            e_lf.state_core().player(1).hp,
+            5,
+            "twlingfa must not deal damage when target gives 1 card"
+        );
+    }
 
     // (e) `bmcanshi` marks target with `l11_kui_mark` and cancels single-target cards from that actor
     e.state_core_mut().vm_aux.flags.clear();

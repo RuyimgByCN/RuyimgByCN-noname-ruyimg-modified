@@ -250,7 +250,8 @@ pub fn has_rewritten_baiyin_on_lose(
 fn is_non_bagua_armor_name(name: &str) -> bool {
     matches!(
         name,
-        "th_taipingyaoshu"
+        "taipingyaoshu"
+            | "th_taipingyaoshu"
             | "linglongshimandai"
             | "hongmianbaihuapao"
             | "qimenbagua"

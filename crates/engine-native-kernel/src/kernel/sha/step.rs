@@ -50,6 +50,26 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        if let Some(fid) = self.current_sha_frame_id(ctx) {
+            let sbl_mask = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.target, format!("l11b_sbliegong_block_mask:{fid}")))
+                .copied()
+                .unwrap_or(0);
+            if sbl_mask != 0 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.target, "l11b_sbliegong_cur_block_mask".to_string()), sbl_mask);
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.target, "l11b_sbliegong_cur_block_mask".to_string()));
+            }
+        }
         if self.has_sha_trigger_park(ctx) {
             return Flow::Yield;
         }
@@ -346,6 +366,14 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                     if ctx.core.player(holder).hand.contains(&shan) {
                         ctx.discard_from_hand(holder, shan);
+                        if ctx.catalog.vm_card_history {
+                            if let Some(fid) = self.current_sha_frame_id(ctx) {
+                                ctx.core
+                                    .vm_aux
+                                    .flags
+                                    .insert((self.target, format!("l11_sha_dodge_ok:{fid}:{shan}")), 1);
+                            }
+                        }
                         super::respond::note_longdan_sha_source(ctx, holder, self.source);
                         crate::kernel::emit_card_responded_as(ctx, holder, shan, CardKind::Shan);
                         self.dodges_used += 1;

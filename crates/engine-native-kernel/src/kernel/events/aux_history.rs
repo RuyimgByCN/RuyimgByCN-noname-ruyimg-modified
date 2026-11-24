@@ -13,6 +13,9 @@ fn track_l11_loss_dedup(catalog: &crate::catalog::Catalog) -> bool {
     catalog.skill_by_name("olshanjia").is_some()
         || catalog.skill_by_name("boss_moyany").is_some()
         || catalog.skill_by_name("boss_danshu").is_some()
+        || catalog.skill_by_name("twyuhua").is_some()
+        || catalog.skill_by_name("twxiangyu").is_some()
+        || catalog.skill_by_name("meiyingqiang").is_some()
 }
 
 fn loss_handled_by_cards_lost(

@@ -75,6 +75,11 @@ pub fn is_card_ignored_in_discard_phase(
     {
         return true;
     }
+    if crate::rvm_bridge::modifiers::d34_l11_mods_npc_b::is_card_ignored_in_discard_phase_npc_b(
+        state, catalog, player, card,
+    ) {
+        return true;
+    }
     let is_black = matches!(
         catalog.effective_card_suit(state, player, card),
         Suit::Spade | Suit::Club
@@ -414,14 +419,12 @@ pub(super) fn apply_sha_use_limit(
     mut unlimited: bool,
 ) -> (i32, bool) {
     // extension.js:3441 (`xinmingjian2`), `diy.js:3461` (`kyou_zhidian`), `shenhua.js:2142` (`nzry_chenglve`),
-    // `tw/skill.js:1764` (`twwushen`), `sp/skill.js:49243` (`xinfu_limu`)
+    // `sp/skill.js:49243` (`xinfu_limu`)
     if flag_val(state, player, "l11_mod:xinmingjian2") > 0
         || flag_val(state, player, "l11_mod:kyou_zhidian_unlimited") > 0
         || flag_val(state, player, "l11_mod:nzry_chenglve") > 0
-        || flag_val(state, player, "l11_mod:twwushen") > 0
         || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "xinmingjian2")
-        || has_ext_skill(state, catalog, player, "twwushen")
     {
         unlimited = true;
     }
@@ -514,18 +517,16 @@ pub(super) fn apply_card_distance_unlimited_to(
     mut unlimited: bool,
 ) -> bool {
     // extension.js:4854 (`txshouyi`) + `diy.js:3461` (`kyou_zhidian`) + `shenhua.js:2142` (`nzry_chenglve`)
-    // + `shenhua/skill.js:7595` (`shensu`) + `tw/skill.js:16072` (`twqirang`) + `tw/skill.js:1764` (`twwushen`)
+    // + `shenhua/skill.js:7595` (`shensu`) + `tw/skill.js:16072` (`twqirang`)
     // + `sp/skill.js:49243` (`xinfu_limu`)
     if flag_val(state, player, "l11_mod:txshouyi") > 0
         || flag_val(state, player, "l11_mod:kyou_zhidian_unlimited") > 0
         || flag_val(state, player, "l11_mod:nzry_chenglve") > 0
         || flag_val(state, player, "l11_mod:shensu_no_dist") > 0
         || flag_val(state, player, "l11_mod:twqirang") > 0
-        || flag_val(state, player, "l11_mod:twwushen") > 0
         || flag_val(state, player, "l11_mod:xinfu_limu") > 0
         || has_ext_skill(state, catalog, player, "txshouyi")
         || has_ext_skill(state, catalog, player, "kyou_zhidian")
-        || has_ext_skill(state, catalog, player, "twwushen")
     {
         unlimited = true;
     }
@@ -1071,9 +1072,7 @@ pub(super) fn apply_card_unrespondable(
     if kind.is_sha_like()
         && (flag_val(state, source, "l11_mod:kyou_zhidian_unresp") > 0
             || flag_val(state, source, "l11_mod:sbliegong_unresp") > 0
-            || flag_val(state, source, "l11_mod:twwushen") > 0
             || flag_val(state, source, "l11_mod:twxiangyu_unresp") > 0
-            || has_ext_skill(state, catalog, source, "twwushen")
             || has_ext_skill(state, catalog, source, "twxiangyu"))
     {
         unrespondable = true;

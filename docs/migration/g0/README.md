@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-24 Batch P3-C1b（L11 跨包 NPC Part B +20→598/936，全局 4,081/343/0）更新
+
+- **核验与升级**：基线 `48ac34db771adc7c4d744485f8160506b321fde5`（Batch `P3-B` CI Run `45350449191` Attempt 1 `10/10 success`）；合入 `swarm/p3-l11-npc-b`（`e8244d6ed..f63f4c8523715c154e11b467d557e1b7e2d97e44`，`verifier-u05-b` `#246 APPROVE`），将 `HostBehavior::L11CrossNpcB` 重编号至 **`1390`**（保留 `L11OwnNpc` `1389`，`ALL=703`）闭环 `94` 项 `L11_NPC_B_SKILLS` 与 Round 2 `9` 项修复，将 `#246` 批准之 **`20`** 名无其余阻塞 `L11:generals:*` 升为 `已复核等价`（`L11` **`598 / 338 / 0`**；保留 `167` 名阻塞武将、`171` 模式节点及 `5` 项冻结项）。全局现 **`4,081 / 343 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[Batch P3-C1b 证据摘要](../../operations/evidence/2026-11-24-p3-c1b/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-24 Batch P3-B（L26 7/0/0、U02 17/0/0、L11 Tier-1 +24→578/936，全局 4,061/363/0）更新
 
 - **核验与升级**：基线 `f08a704c3ef69a3ae56cbf5aff2d7711a2aca626`（Batch `P3-A` CI Run `45340220955` Attempt 1 `10/10 success`）；合入 `swarm/p3-l26-u02-l11-tier1`（`b5a83dd6d..0c03410f8d7daabe8bfe58b04aedf88a00a8905b`，`verifier-l11` `#238 APPROVE`），将 `#238` 批准之 **`26`** 项（`L26:configs:Fool_liegong`、`U02:modes:boss_play_arenaReady`、`L11:skills:{gx_taijifuchen, qilin_skill}` 与 `22` 名无阻塞 `L11` 武将）升为 `已复核等价`（`L26` **`7 / 0 / 0`**、`U02` **`17 / 0 / 0`**、`L11` **`578 / 358 / 0`**，`U05` 保持 `1,618 / 3 / 0`；保留 `40` 名受 `x164` / 共享缺陷阻塞之 `L11` 武将、`171` 模式节点及冻结项）。全局现 **`4,061 / 363 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[L26-笨蛋插件.md](L26-笨蛋插件.md)、[U02-boss.md](U02-boss.md)、[Batch P3-B 证据摘要](../../operations/evidence/2026-11-24-p3-b-tier1/README.md) 与 [inventory_status.json](inventory_status.json)。

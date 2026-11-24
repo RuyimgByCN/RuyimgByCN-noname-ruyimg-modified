@@ -755,6 +755,7 @@ impl HostBehavior {
             HostBehavior::Q4BossPlaySkill => "host:q4_boss_play_skill",
             HostBehavior::Q4FoolSkill => "host:q4_fool_skill",
             HostBehavior::L11OwnNpc => "host:l11_own_npc",
+            HostBehavior::L11CrossNpcB => "host:l11_cross_npc_b",
         }
     }
 }

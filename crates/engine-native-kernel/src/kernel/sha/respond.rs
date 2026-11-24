@@ -48,7 +48,14 @@ impl ShaResolveMachine {
             .flags
             .get(&(self.target, "l10_scschihe_block_suits".to_string()))
             .copied()
-            .unwrap_or(0);
+            .unwrap_or(0)
+            | ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.target, "l11b_sbliegong_cur_block_mask".to_string()))
+                .copied()
+                .unwrap_or(0);
         if chihe_block_mask != 0 {
             shans.retain(|o| match o {
                 ChoiceOption::Card(c) => {

@@ -313,6 +313,7 @@ pub(crate) fn on_skill_removed_all(
     cards.extend(super::l11_own_npc::on_skill_removed_l11_own_npc(
         core, owner, skill_name,
     ));
+    super::l11_npc_b::on_skill_removed_l11_npc_b(core, catalog, owner, skill_name);
     cards
 }
 

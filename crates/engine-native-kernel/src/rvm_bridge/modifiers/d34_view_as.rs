@@ -16,6 +16,7 @@ enum D34ViewAsActivation {
     SkillOrFlag(&'static str, &'static str),
     JiminNoEquip,
     FzRewushengShouyue,
+    ShizhiHpOne,
 }
 
 struct D34ViewAsRule {
@@ -581,18 +582,22 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
-            // `twwushen` (`shenhua.js:1164`): Heart hand card -> distance-unlimited Sha
+            // `twwushen` (`tw/skill.js:1764`, `extra.js:5231`): Heart hand card -> distance/count-unlimited Sha
             D34ViewAsRule {
                 activation: D34ViewAsActivation::SkillOrFlag("twwushen", "l11_mod:twwushen"),
-                spec: make_spec(
-                    1_926_900_060,
-                    "twwushen",
-                    CardKind::Sha,
-                    VmViewAsWindow::Any,
-                    VmViewAsZone::Hand,
-                    VmViewAsFilter::Heart,
-                    true,
-                ),
+                spec: {
+                    let mut spec = make_spec(
+                        1_926_900_060,
+                        "twwushen",
+                        CardKind::Sha,
+                        VmViewAsWindow::Any,
+                        VmViewAsZone::Hand,
+                        VmViewAsFilter::Heart,
+                        true,
+                    );
+                    spec.no_use_count = true;
+                    spec
+                },
             },
             // `rejinjiu` (`yijiang.js:5855`): Jiu hand card -> Sha
             D34ViewAsRule {
@@ -607,9 +612,9 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     false,
                 ),
             },
-            // `shizhi` (`sp.js:12650`): Shan hand card -> Sha when HP==1
+            // `shizhi` (`yijiang.js:8000`): Shan hand card -> Sha when HP==1
             D34ViewAsRule {
-                activation: D34ViewAsActivation::SkillOrFlag("shizhi", "l11_mod:shizhi"),
+                activation: D34ViewAsActivation::ShizhiHpOne,
                 spec: make_spec(
                     1_926_900_062,
                     "shizhi",
@@ -645,7 +650,7 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     true,
                 ),
             },
-            // `xinjiewei` (`refresh.js:3547`): Equip/hand card -> Nullify
+            // `xinjiewei` (`shenhua.js:2660`): Equip card -> Nullify
             D34ViewAsRule {
                 activation: D34ViewAsActivation::SkillOrFlag("xinjiewei", "l11_viewas:xinjiewei"),
                 spec: make_spec(
@@ -653,7 +658,7 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                     "xinjiewei",
                     CardKind::Nullify,
                     VmViewAsWindow::Any,
-                    VmViewAsZone::HandEquip,
+                    VmViewAsZone::Equip,
                     VmViewAsFilter::Any,
                     false,
                 ),
@@ -826,6 +831,20 @@ fn d34_view_as_table() -> &'static Vec<D34ViewAsRule> {
                 false,
             ),
         });
+        for (idx, kind) in [CardKind::Sha, CardKind::Jiu, CardKind::Tao].into_iter().enumerate() {
+            v.push(D34ViewAsRule {
+                activation: D34ViewAsActivation::Flag("l11b_zhanyi_basic"),
+                spec: make_spec(
+                    1_926_900_311 + idx as u32,
+                    "zhanyi_basic",
+                    kind,
+                    VmViewAsWindow::Any,
+                    VmViewAsZone::Hand,
+                    VmViewAsFilter::Basic,
+                    false,
+                ),
+            });
+        }
         v
     })
 }
@@ -870,6 +889,11 @@ pub fn find_d34_flag_view_as(
                             && (has_ext_skill(core, catalog, p, "shouyue")
                                 || flag_val(core, p, "shouyue_active") > 0)
                     })
+            }
+            D34ViewAsActivation::ShizhiHpOne => {
+                core.player(player).hp == 1
+                    && (has_ext_skill(core, catalog, player, "shizhi")
+                        || flag_val(core, player, "l11_mod:shizhi") > 0)
             }
         };
         if active && entry.spec.matches_card(core, catalog, player, card, in_play, target_kind) {

@@ -707,6 +707,7 @@ impl HostBehavior {
             1387 => HostBehavior::Q4BossPlaySkill,
             1388 => HostBehavior::Q4FoolSkill,
             1389 => HostBehavior::L11OwnNpc,
+            1390 => HostBehavior::L11CrossNpcB,
             _ => return None,
         })
     }

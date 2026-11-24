@@ -1,5 +1,14 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-24 Batch P3-C1b（`L11` 跨包 NPC Part B `94` 技宿主闭环与 `20` 武将等价；`L11` 保留 `167` 阻塞武将 / `171` 模式节点及冻结边界）
+
+- **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入与跨批次协同**：
+  - 词汇表在 [behavior.rs](../../crates/engine-native-kernel/src/vocabulary/host/behavior.rs)（`1,944` 行 `<= 2,000`）保持 `L11OwnNpc`（`1389`）不变并将 `HostBehavior::L11CrossNpcB` 重编号至 **`1390`**（`HostBehavior::ALL = 703`），经 [taixu_pack_attach_b.rs](../../crates/content-native-loader/src/taixu_pack_attach_b.rs) 将 `94` 项 `L11_NPC_B_SKILLS` 迁至原生宿主与 [l11_npc_b/mod.rs](../../crates/engine-native-content/src/content/host/step/l11_npc_b/mod.rs) 等 `14` 模块，保留 [decision34_pack9.rs](../../crates/content-native-loader/src/decision34_pack9.rs) 中 `xinjuejing` 与 `L11_NPC_B_SKILLS` 双豁免。
+  - 修复并校验 Round 2 全部 `9` 项规则语义：[d34_l11_mods.rs](../../crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods.rs) 维持 `wushen` 原样、解除 `twwushen` 无条件全局覆盖并由 [d34_l11_mods_npc_b.rs](../../crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_l11_mods_npc_b.rs) 与 [d34_view_as.rs](../../crates/engine-native-kernel/src/rvm_bridge/modifiers/d34_view_as.rs) 限制为红桃手牌与首杀强命；补齐 `twjiefan` `p != t` 与 `Dying` 恢复、`zhanyi` 阶段清理与 `HostStage::DrawSettle` 存活摸牌、`twhengjiang` `note_twhengjiang_response` 排重反无懈、`xinkuangfu` 虚拟不计次无距杀、`twzhian` 桌面所有者校验与出牌装、及 `twsaotao`/`twwuhun`/`weifeng` 清理。
+  - 在 [play_sha.rs](../../crates/engine-native/src/engine/play_sha.rs) 协同保留 `twwushen_heart_free`、`apply_sha_nature_npc_b` 与 `P3-A`/`P3-B` `sha_target_in_range`/`sha_unlimited_ext`（保持 `nc08_upstream_paoxiao` 240 字符守卫）。
+- **保留为 `简化近似` 的边界**：[inventory_status.json](../migration/g0/inventory_status.json) 将 `#246` 批准之 `20` 名 `L11:generals:*` 升为 `已复核等价`（`L11` `598/338/0`，全局 `4,081/343/0`）；严格保留 `txhj_xurong`/`txhj_xurongy`/`txhj_huzhen` 等其余 `167` 名未全清阻塞武将、`171` 项 `L11:modes:*` 及 `5` 项冻结边界（`shixu`/`hs_nozdormu`/`old_longfan` 与 `L28`/`U01` 边界）为 `简化近似`。
+
 ## 2026-11-24 Batch P3-B（`L26`、`U02` 与 `L11` Tier-1 `26` 项等价闭环；`L11` 保留 `40` 武将 / `171` 模式节点及冻结边界）
 
 - **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

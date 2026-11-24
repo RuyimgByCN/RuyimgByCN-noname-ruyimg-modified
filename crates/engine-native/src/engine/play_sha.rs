@@ -209,6 +209,14 @@ pub(super) fn play_sha(
         CardKind::LeiSha => crate::event::DamageNature::Thunder,
         _ => crate::event::DamageNature::Normal,
     };
+    let sha_nature = crate::rvm_bridge::modifiers::d34_l11_mods_npc_b::apply_sha_nature_npc_b(
+        core,
+        catalog,
+        player_id,
+        Some(card),
+        kind,
+        sha_nature,
+    );
     let (vm_sha_limit, vm_sha_unlimited) =
         crate::rvm_bridge::modifiers::eval_sha_use_limit(
             core,
@@ -348,9 +356,16 @@ pub(super) fn play_sha(
         eff_suit,
         crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
     );
-    let vm_va_no_count = vm_va_sha
-        .as_ref()
-        .is_some_and(|s| s.no_use_count || (s.black_no_use_count && is_black));
+    let twwushen_heart_free = eff_suit == crate::catalog::Suit::Heart
+        && catalog.skill_by_name("twwushen").is_some_and(|d| {
+            core.has_skill(player_id, d)
+                && !catalog.is_tieji_sealed(core, player_id)
+                && !catalog.is_xj_fengyin_sealed(core, player_id)
+        });
+    let vm_va_no_count = twwushen_heart_free
+        || vm_va_sha
+            .as_ref()
+            .is_some_and(|s| s.no_use_count || (s.black_no_use_count && is_black));
     let tanbei_free = !targets.is_empty()
         && targets
             .iter()
@@ -720,13 +735,7 @@ pub(super) fn play_sha(
             return Err(RejectReason::IllegalTargets);
         }
     }
-    let nature = if kind == CardKind::FireSha {
-        crate::event::DamageNature::Fire
-    } else if kind == CardKind::LeiSha {
-        crate::event::DamageNature::Thunder
-    } else {
-        crate::event::DamageNature::Normal
-    };
+    let nature = sha_nature;
     let player = core.turn.current;
     if mark_yuanbaorou {
         for k in [crate::content::host::GJ_FOOD_YUANBAOROU_KEY, "yuanbaorou"] {

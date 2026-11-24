@@ -17,6 +17,16 @@ impl HostSkillBehavior {
         owner: PlayerId,
         event: &EventData,
     ) -> bool {
+        if self.behavior == HostBehavior::L11CrossNpcB {
+            return super::step::l11_npc_b::filter_l11_npc_b_with_frames(
+                self,
+                ctx,
+                frames,
+                Some(frame),
+                owner,
+                event,
+            );
+        }
         if self.behavior == HostBehavior::ShaDamageForceDiscard {
             return match event {
                 EventData::Damage(d) => {
@@ -1161,6 +1171,9 @@ impl HostSkillBehavior {
             HostBehavior::L11OwnNpc => {
                 super::step::l11_own_npc::filter_l11_own_npc(self, ctx, &[], None, owner, event)
             }
+            HostBehavior::L11CrossNpcB => super::step::l11_npc_b::filter_l11_npc_b_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
             _ => false,
         }
     }

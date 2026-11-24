@@ -671,6 +671,13 @@ impl ShaResolveMachine {
         (if self.source_has_wushuang(ctx) { 2u8 } else { 1u8 })
             .saturating_add(u8::from(self.source_has_luoyi(ctx)))
             .saturating_add(extra)
+            .saturating_add(
+                crate::rvm_bridge::modifiers::d34_l11_mods_npc_b::sha_extra_shan_for_fid(
+                    ctx.core,
+                    self.target,
+                    self.current_sha_frame_id(ctx),
+                ),
+            )
             .saturating_add(ctx.core.turn.liaoyuan_count)
     }
 

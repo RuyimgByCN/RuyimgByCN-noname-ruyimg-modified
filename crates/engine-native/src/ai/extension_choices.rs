@@ -24,6 +24,8 @@ mod extension_choices_l11_b3;
 mod extension_choices_l11_b4;
 #[path = "extension_choices_l11_b5.rs"]
 mod extension_choices_l11_b5;
+#[path = "extension_choices_l11_npc_b.rs"]
+mod extension_choices_l11_npc_b;
 #[path = "extension_choices_u05_1.rs"]
 mod extension_choices_u05_1;
 #[path = "extension_choices_u05_2.rs"]

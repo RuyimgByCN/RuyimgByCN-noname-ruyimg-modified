@@ -20,6 +20,9 @@ pub(super) mod d34_l11_mods;
 mod d34_u01_mods;
 #[path = "d34_unrespondable.rs"]
 mod d34_unrespondable;
+#[path = "d34_armor_bypass.rs"]
+mod d34_armor_bypass;
+pub use d34_armor_bypass::{apply_ignore_armor, apply_ignore_armor_with_card, is_target_unequip2};
 pub use d34_l11_mods::{
     apply_draw_count, has_yaya_protected, is_card_ignored_in_discard_phase,
     tanbei_unlimited_target, txlianbi_blocks_unlink, txminguangkai_blocks_link,
@@ -120,6 +123,7 @@ pub fn is_card_ignored_hand_limit(
     }
     d34_u05_mods::is_card_ignored_hand_limit(state, catalog, player, card)
         || d34_l11_mods::is_card_ignored_hand_limit(state, catalog, player, card, kind)
+        || super::d34_l11_mods_npc_b::is_card_ignored_hand_limit_npc_b(state, catalog, player, card)
         || super::d34_q4_boss_mods::is_minsi2_red_card(state, catalog, player, card)
 }
 
@@ -236,7 +240,8 @@ pub fn apply_hand_limit(
     limit += flag_val(state, player, "u05_mod:tanlin3") as i32;
     let limit = super::d34_l28_mods::apply_shengong_hand_limit(state, catalog, player, limit);
     let limit = d34_u05_mods::apply_hand_limit(state, catalog, player, limit);
-    d34_l11_mods::apply_hand_limit(state, catalog, player, limit)
+    let limit = d34_l11_mods::apply_hand_limit(state, catalog, player, limit);
+    super::d34_l11_mods_npc_b::apply_hand_limit_npc_b(state, catalog, player, limit)
 }
 
 pub fn apply_attack_range(
@@ -277,7 +282,8 @@ pub fn apply_attack_range(
     }
     let cur = super::d34_l28_mods::apply_shengong_attack_range(state, catalog, player, cur);
     let cur = d34_u05_mods::apply_attack_range(state, catalog, player, cur);
-    d34_l11_mods::apply_attack_range(state, catalog, player, cur)
+    let cur = d34_l11_mods::apply_attack_range(state, catalog, player, cur);
+    super::d34_l11_mods_npc_b::apply_attack_range_npc_b(state, player, cur)
 }
 
 pub fn apply_distance_total(
@@ -430,7 +436,13 @@ pub fn apply_sha_use_limit(
     let cur = super::d34_q4_boss_mods::apply_sha_use_limit(state, catalog, player, cur);
     let (cur, unlimited) =
         d34_u05_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
-    d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited)
+    let (cur, unlimited) = d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
+    let sha_kind = card
+        .and_then(|c| ((c as usize) < catalog.cards.len()).then(|| catalog.card_kind(c)))
+        .unwrap_or(CardKind::Sha);
+    super::d34_l11_mods_npc_b::apply_sha_use_limit_npc_b(
+        state, catalog, player, card, sha_kind, cur, unlimited,
+    )
 }
 
 pub fn apply_sha_extra_targets(
@@ -528,6 +540,9 @@ pub fn apply_card_distance_unlimited_to(
     let unlimited = d34_u05_mods::apply_card_distance_unlimited(state, catalog, player, kind, unlimited);
     let unlimited = d34_l11_mods::apply_card_distance_unlimited_to(
         state, catalog, player, target, card, kind, unlimited,
+    );
+    let unlimited = super::d34_l11_mods_npc_b::apply_card_distance_unlimited_npc_b(
+        state, catalog, player, card, kind, unlimited,
     );
     super::d34_q4_boss_mods::apply_minsi2_distance_unlimited(state, catalog, player, card, unlimited)
 }
@@ -679,6 +694,8 @@ pub fn apply_card_target_canceled_opt(
     }
     let canceled = d34_u05_mods::apply_card_target_canceled(state, catalog, actor, target, kind, canceled);
     let canceled = d34_l11_mods::apply_card_target_canceled(state, catalog, actor, target, card, kind, canceled);
+    let canceled =
+        super::d34_l11_mods_npc_b::apply_card_target_canceled_npc_b(state, actor, target, canceled);
     super::d34_q4_boss_mods::apply_card_target_canceled(state, actor, target, canceled)
 }
 
@@ -690,6 +707,9 @@ pub fn is_ducai3_forbidden(
     card: CardId,
 ) -> bool {
     if d34_u01_mods::is_dddlianer_forbidden(state, catalog, actor, card) {
+        return true;
+    }
+    if super::d34_l11_mods_npc_b::is_card_forbidden_npc_b(state, catalog, actor, card) {
         return true;
     }
     if (card as usize) < catalog.cards.len()
@@ -929,7 +949,11 @@ pub fn apply_damage_amount(
     ) {
         return 0;
     }
-    if d34_l11_mods::tpys_damage_prevented(state, catalog, source, target, card, nature) {
+    if d34_l11_mods::tpys_damage_prevented(state, catalog, source, target, card, nature)
+        || super::d34_l11_mods_npc_b::tpys_damage_prevented_npc_b(
+            state, catalog, source, target, card, nature,
+        )
+    {
         return 0;
     }
     if flag_val(state, target, "u05_cross_mod:xinwuyan") > 0 {
@@ -974,60 +998,4 @@ pub fn apply_damage_amount(
     let cur = d34_u05_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur);
     let cur = d34_l11_mods::apply_damage_amount(state, catalog, source, target, card, nature, cur);
     super::d34_q4_boss_mods::apply_damage_amount(state, catalog, target, nature, cur)
-}
-
-pub fn is_target_unequip2(state: &GameStateCore, target: PlayerId) -> bool {
-    flag_val(state, target, "l11_xingtian_armor_null") > 0
-        || flag_val(state, target, "l11_noda_axe2_turn") > 0
-        || flag_val(state, target, "l25_yijue_locked") > 0
-        || flag_val(state, target, "l25_pojia_broken") > 0
-        || flag_val(state, target, "l25_hubu_unequip2") > 0
-        || flag_val(state, target, "chixueqingfeng2_count") > 0
-}
-
-pub fn apply_ignore_armor(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    source: PlayerId,
-    target: PlayerId,
-    ignore: bool,
-) -> bool {
-    apply_ignore_armor_with_card(state, catalog, source, target, None, ignore)
-}
-
-pub fn apply_ignore_armor_with_card(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    source: PlayerId,
-    target: PlayerId,
-    card: Option<CardId>,
-    mut ignore: bool,
-) -> bool {
-    if is_target_unequip2(state, target)
-        || has_ext_skill(state, catalog, source, "ssr_pojia")
-        || has_ext_skill(state, catalog, source, "ssr_hubu")
-        || flag_val(state, source, "l25_pojia_ignore_armor") > 0
-        || (has_ext_skill(state, catalog, source, "fz_gzpaoxiao")
-            && (has_ext_skill(state, catalog, source, "shouyue")
-                || flag_val(state, source, "shouyue_active") > 0))
-        || flag_val(state, source, "l27_twxiafeng_spent") > 0
-        || flag_val(state, source, "u05_swd_jianji_unequip") > 0
-    {
-        ignore = true;
-    }
-    if state.turn.current == source
-        && state.turn.phase == crate::event::Phase::Play
-        && !state.is_friend_of(catalog, source, target)
-        && (has_weapon(state, catalog, source)
-            || d34_l11_mods::has_equipped_named(state, catalog, source, "txhj_feilong"))
-        && (flag_val(state, source, "l11_weapon_pozhenzhifeng") > 0
-            || has_ext_skill(state, catalog, source, "txhj_pozhenzhifeng")
-            || has_ext_skill(state, catalog, source, "buff_txhj_pozhenzhifeng")
-            || has_ext_skill(state, catalog, source, "_buff_txhj_pozhenzhifeng"))
-    {
-        ignore = true;
-    }
-    let ignore = d34_u05_mods::apply_ignore_armor(state, source, ignore);
-    let ignore = d34_l11_mods::apply_ignore_armor(state, catalog, source, target, card, ignore);
-    super::d34_l28_mods::apply_ignore_armor(state, catalog, target, ignore)
 }
