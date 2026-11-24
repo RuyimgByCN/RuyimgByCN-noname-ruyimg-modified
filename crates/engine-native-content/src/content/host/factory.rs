@@ -163,6 +163,9 @@ impl HostSkillBehavior {
             HostBehavior::L11Weapons => {
                 return super::step::l11_weapons::machine_l11_weapons(self, owner, event);
             }
+            HostBehavior::L11ModesEquips => {
+                return super::step::l11_modes_equips::machine_l11_modes_equips(self, owner, event);
+            }
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 return super::step::l11_boss_c::machine_l11_boss_c(self, owner, event);
             }

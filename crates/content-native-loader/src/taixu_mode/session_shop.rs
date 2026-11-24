@@ -108,6 +108,9 @@ impl TaixuModeSession {
         let mut cards_pool: Vec<&'static str> = Vec::new();
         let mut equip_pool: Vec<&'static str> = Vec::new();
         for c in &L11_TAIXU_CARD_RANK {
+            if !self.is_card_available_in_pool(c.card_id) {
+                continue;
+            }
             let match_rank = match level {
                 1 => c.rank < 3,
                 2 => c.rank < 4,
@@ -124,10 +127,8 @@ impl TaixuModeSession {
         }
         let mut skill_pool: Vec<&'static str> = Vec::new();
         for s in &L11_TAIXU_SKILL_RANK {
-            if let Some(ref flt) = self.available_skills_filter {
-                if !flt.iter().any(|x| x == s.skill_id) {
-                    continue;
-                }
+            if !self.is_skill_available_in_pool(s.skill_id) {
+                continue;
             }
             if self.use_skills.iter().any(|x| x == s.skill_id) {
                 continue;

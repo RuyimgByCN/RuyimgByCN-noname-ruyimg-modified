@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 
-use engine_native::catalog::{CardDef, CardKind, Faction};
+use engine_native::catalog::{CardDef, CardKind, Faction, Suit};
 use engine_native::content::extension::{ExtensionGeneral, VmSkillDecl};
 use engine_native::content::host::{HostBehavior, HostSkillDecl};
 use engine_native::content::names;
@@ -100,6 +100,37 @@ pub(crate) fn attach_taixu_pack(
 
     crate::taixu_vm_fix_b::attach_l11_vm_fix_b_cards(extra_cards, seen_cards);
 
+    // P3-D: L11 DLC / extension_card off-deck equips and shared L28 cards.
+    for (cname, kind, range, suit, rank, sk_opt) in [
+        ("txhj_zhenhunqin", CardKind::Weapon, 4u32, Suit::Diamond, 1u8, Some("txhj_zhenhunqin")),
+        ("txhj_xieshenmianju", CardKind::Armor, 0u32, Suit::Spade, 2u8, Some("txhj_xieshenmianju")),
+        ("txhj_shengguangbaiyi", CardKind::Armor, 0u32, Suit::Heart, 2u8, Some("txhj_shengguangbaiyi")),
+        ("yajiaoqiang", CardKind::Weapon, 3u32, Suit::Diamond, 5u8, Some("yajiaoqiang_skill")),
+        ("nvzhuang", CardKind::Armor, 0u32, Suit::Heart, 9u8, Some("nvzhuang")),
+        ("yitianjian", CardKind::Weapon, 2u32, Suit::Club, 5u8, Some("yitianjian")),
+        ("baiyin", CardKind::Armor, 0u32, Suit::Club, 1u8, None),
+        ("tengjia", CardKind::Armor, 0u32, Suit::Spade, 2u8, None),
+        ("lanyinjia", CardKind::Armor, 0u32, Suit::Spade, 2u8, None),
+    ] {
+        if seen_cards.insert(cname.to_string()) {
+            let interned = names::intern(cname.to_string());
+            let mut card_def = if kind == CardKind::Weapon {
+                CardDef::weapon(interned, range).with_suit_rank(suit, rank)
+            } else {
+                CardDef::basic(interned, kind).with_suit_rank(suit, rank)
+            };
+            if let Some(sk) = sk_opt {
+                card_def.equip_skills = vec![names::intern(sk.to_string())];
+            }
+            extra_cards.push(card_def.with_off_deck());
+        }
+    }
+    for card in crate::l28_thunder_cards() {
+        if seen_cards.insert(card.name.to_string()) {
+            extra_cards.push(card);
+        }
+    }
+
     // P3-E1: strip-safe native VM Fix A bindings + `xiangle` (avoid U01 stub).
     crate::push_host_skill_if_unseen(
         "xiangle",
@@ -117,6 +148,42 @@ pub(crate) fn attach_taixu_pack(
     }
     crate::taixu_vm_fix_b::attach_l11_vm_fix_b_skills(extra_host_skills, seen_skills);
     crate::taixu_vm_fix_c::attach_taixu_vm_fix_c(extra_host_skills, seen_skills);
+
+    // P3-D: DLC & extension_card equip skill bindings (`L11ModesEquips` + `L11Weapons`).
+    for &s in &[
+        "txhj_zhenhunqin",
+        "txhj_xieshenmianju",
+        "txhj_shengguangbaiyi",
+        "yajiaoqiang_skill",
+        "nvzhuang",
+        "guilongzhanyuedao",
+        "wuxinghelingshan_skill",
+        "wushuangfangtianji_skill",
+        "chixueqingfeng",
+        "bintieshuangji_skill",
+        "wutiesuolian_skill",
+        "linglongshimandai_skill",
+        "hongmianbaihuapao_skill",
+        "qimenbagua",
+        "huxinjing",
+        "heiguangkai_skill",
+        "shufazijinguan_skill",
+        "xuwangzhimian",
+        "tianjitu_skill",
+        "taigongyinfu_skill",
+        "taigongyinfu_link",
+        "sanlve_skill",
+        "zhaogujing_skill",
+    ] {
+        push_taixu_skill(
+            s,
+            L11_TAIXU_SKILL_ID,
+            seen_skills,
+            extra_host_skills,
+            extra_vm_skills,
+            idx,
+        );
+    }
 
     // P3-C1a: Part A 80 跨包 NPC 技 + 3 派生技 (`olhuoji`, `olkanpo`, `rexuanfeng`)
     // 统一绑定到原生行为组 `HostBehavior::L11CrossNpcA`；同时保证 `bazhen` / `reyingzi` 派生基础技可查。

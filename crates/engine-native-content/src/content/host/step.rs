@@ -194,6 +194,7 @@ pub(super) mod l11_system_hooks;
 pub(super) mod l11_system_asks;
 pub(super) mod l11_weapons;
 pub(super) mod l11_weapons_asks;
+pub(super) mod l11_modes_equips;
 pub(super) mod l11_boss_c;
 pub(super) mod l11_npc_a;
 pub(super) mod l11_boss_c2;
@@ -1364,6 +1365,7 @@ impl HostMachine {
             | HostBehavior::L01AiRuleHooks => l01_rules::step_l01_rule(self, ctx),
             HostBehavior::L11SystemHooks => l11_system_hooks::handle_l11_system_hooks(self, ctx),
             HostBehavior::L11Weapons => l11_weapons::handle_l11_weapons(self, ctx),
+            HostBehavior::L11ModesEquips => l11_modes_equips::handle_l11_modes_equips(self, ctx),
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 l11_boss_c::handle_l11_boss_c(self, ctx)
             }

@@ -819,7 +819,7 @@ fn l11_b6b_r3_equip_slots_card_fallbacks_and_mode_fixes() {
     let score_without_bag = s_mode.compute_score(true).value_score;
     assert_eq!(score_with_bag, score_without_bag);
 
-    // Stripped incompatible fallbacks (`nvzhuang`, `taoyuan`, `shuiyanqijunx`, `yushijufen`) do NOT substitute:
+    // `nvzhuang` equips authentically (NOT substituting into `armor`), while invalid card names (`taoyuan`, `shuiyanqijunx`, `yushijufen`) do NOT inject substitute cards:
     let mut s_clean = s_mode.clone();
     s_clean.equip2 = None;
     s_clean.adjust = 2;
@@ -844,14 +844,21 @@ fn l11_b6b_r3_equip_slots_card_fallbacks_and_mode_fixes() {
         Some("_txhj_skill_addEffectStyle:mulligan"),
         "Seat 0 Turn 1 must boot cleanly at TurnBegin -> Phase::Prepare and fire mulligan"
     );
-    assert!(
-        e_mull.debug_equips(0).is_empty(),
-        "nvzhuang must NOT substitute into armor"
+    let eq0: Vec<&str> = e_mull
+        .debug_equips(0)
+        .into_iter()
+        .map(|cid| e_mull.catalog().cards[cid as usize].name)
+        .collect();
+    assert_eq!(
+        eq0,
+        vec!["nvzhuang"],
+        "nvzhuang must equip its authentic CardDef rather than substituting into armor"
     );
+    assert!(e_mull.debug_has_skill(0, "nvzhuang"));
     assert_eq!(
         total_cards(&e_mull),
-        clean_count,
-        "stripped invalid card names must not inject fake substitute cards"
+        clean_count + 1,
+        "stripped invalid card names must not inject fake substitute cards (+1 is only authentic off-deck nvzhuang)"
     );
 
     // `answer_gain_or_trade` runs `run_change_event` BEFORE `consume_slot`:

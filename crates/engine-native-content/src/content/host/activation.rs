@@ -351,6 +351,9 @@ impl HostSkillBehavior {
             HostBehavior::L11Weapons => {
                 super::step::l11_weapons::activate_l11_weapons(self, ctx, owner)
             }
+            HostBehavior::L11ModesEquips => {
+                super::step::l11_modes_equips::activate_l11_modes_equips(self, ctx, owner)
+            }
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 super::step::l11_boss_c::activate_l11_boss_c(self, ctx, owner)
             }

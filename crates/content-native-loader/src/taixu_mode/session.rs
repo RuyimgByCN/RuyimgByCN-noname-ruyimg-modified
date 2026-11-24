@@ -4,13 +4,15 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::catalog::{taixu_max_exp_for_level, L11_TAIXU_CARD_RANK, L11_TAIXU_EFFECT_PACK};
-use super::exams_a::{TaixuExamQuestionSpec, L11_TAIXU_EXAMS_1_2};
+use super::catalog::{taixu_max_exp_for_level, L11_TAIXU_EFFECT_PACK};
+use super::exams_a::L11_TAIXU_EXAMS_1_2;
 use super::exams_b::L11_TAIXU_EXAMS_3_4;
-use super::seasons::{
-    get_dlc_event_by_idx, TaixuBattleTarget, TaixuDlcEventSpec, TaixuSeasonSpec,
-    L11_TAIXU_CHAPTER_EVENT_REFS_A, L11_TAIXU_CHAPTER_EVENT_REFS_B, L11_TAIXU_SEASONS,
+use super::seasons::get_dlc_event_by_idx;
+use super::session_catalog::{
+    find_season, iter_chapter_refs, slot_from_dlc, slot_from_exam, slot_from_universal,
+    target_to_str,
 };
+pub use super::session_catalog::{find_exam_by_id, find_universal_event};
 use super::session_types::*;
 use super::universal::{
     TaixuBtnResult, TaixuUniversalEventSpec, L11_TAIXU_CHANGE_PACK, L11_TAIXU_GAIN_PACK,
@@ -78,6 +80,8 @@ pub struct TaixuModeSession {
     pub failed: bool,
     pub final_score: Option<TaixuRunScore>,
     pub available_skills_filter: Option<Vec<String>>,
+    #[serde(default)]
+    pub available_cards_filter: Option<Vec<String>>,
 }
 
 impl TaixuModeSession {
@@ -150,6 +154,7 @@ impl TaixuModeSession {
             failed: false,
             final_score: None,
             available_skills_filter: None,
+            available_cards_filter: None,
         };
         if let Some(eff_spec) = L11_TAIXU_EFFECT_PACK.iter().find(|e| e.id == s.effect_id) {
             for &sk in eff_spec.global_skills {
@@ -165,31 +170,7 @@ impl TaixuModeSession {
         }
         match s.effect_id.as_str() {
             "huanjingcaoge" => {
-                let equips: Vec<&'static str> = L11_TAIXU_CARD_RANK
-                    .iter()
-                    .filter(|c| {
-                        c.category.is_equip()
-                            && c.rank <= s.rank
-                            && super::session_battle::is_taixu_equip_resolvable(c.card_id)
-                    })
-                    .map(|c| c.card_id)
-                    .collect();
-                if !equips.is_empty() {
-                    let pick = s.rng.gen_range(equips.len());
-                    let card_id = equips[pick];
-                    let slot = L11_TAIXU_CARD_RANK
-                        .iter()
-                        .find(|c| c.card_id == card_id)
-                        .and_then(|c| c.category.equip_slot_name());
-                    match slot {
-                        Some("equip1") if s.equip1.is_none() => s.equip1 = Some(card_id.to_string()),
-                        Some("equip2") if s.equip2.is_none() => s.equip2 = Some(card_id.to_string()),
-                        Some("equip3") if s.equip3.is_none() => s.equip3 = Some(card_id.to_string()),
-                        Some("equip4") if s.equip4.is_none() => s.equip4 = Some(card_id.to_string()),
-                        _ => s.equips.push(card_id.to_string()),
-                    }
-                    s.sync_equip_buffs(None);
-                }
+                s.apply_huanjingcaoge_equip();
             }
             "lingqiyiman" => {
                 s.max_hp += 2;
@@ -817,105 +798,5 @@ impl TaixuModeSession {
 impl TaixuSlotNode {
     fn seat_mismatch(&self, other_seat: u16) -> bool {
         self.slot_seat != other_seat
-    }
-}
-
-fn target_to_str(t: TaixuBattleTarget) -> &'static str {
-    match t {
-        TaixuBattleTarget::All => "all",
-        TaixuBattleTarget::Kill => "kill",
-        TaixuBattleTarget::Repair => "repair",
-        TaixuBattleTarget::Subsist => "subsist",
-    }
-}
-
-pub(super) fn find_season(id: &str) -> Option<&'static TaixuSeasonSpec> {
-    L11_TAIXU_SEASONS
-        .iter()
-        .find(|s| s.id.eq_ignore_ascii_case(id))
-}
-
-pub fn find_exam_by_id(id: &str) -> Option<&'static TaixuExamQuestionSpec> {
-    L11_TAIXU_EXAMS_1_2
-        .iter()
-        .chain(L11_TAIXU_EXAMS_3_4.iter())
-        .find(|q| q.id == id)
-}
-
-pub fn find_universal_event(id: &str) -> Option<&'static TaixuUniversalEventSpec> {
-    L11_TAIXU_GAIN_PACK
-        .iter()
-        .chain(L11_TAIXU_CHANGE_PACK.iter())
-        .find(|e| e.id == id)
-}
-
-pub(super) fn iter_chapter_refs<'a>(
-    season: &'a str,
-    chapter: &'a str,
-) -> impl Iterator<Item = &'static super::seasons::TaixuChapterEventRef> + 'a {
-    L11_TAIXU_CHAPTER_EVENT_REFS_A
-        .iter()
-        .chain(L11_TAIXU_CHAPTER_EVENT_REFS_B.iter())
-        .filter(move |r| r.season == season && r.chapter == chapter)
-}
-
-fn slot_from_dlc(
-    seat: u16,
-    season: &str,
-    chapter: &str,
-    def_idx: usize,
-    def: &'static TaixuDlcEventSpec,
-) -> TaixuSlotNode {
-    TaixuSlotNode {
-        slot_seat: seat,
-        season: season.to_string(),
-        chapter: chapter.to_string(),
-        id: def.id.to_string(),
-        kind: def.kind.to_string(),
-        level: def.level,
-        change: def.change,
-        dlc_def_idx: Some(def_idx),
-        exam_tier: None,
-        override_buttons: None,
-    }
-}
-
-fn slot_from_exam(
-    seat: u16,
-    season: &str,
-    chapter: &str,
-    q: &'static TaixuExamQuestionSpec,
-) -> TaixuSlotNode {
-    TaixuSlotNode {
-        slot_seat: seat,
-        season: season.to_string(),
-        chapter: chapter.to_string(),
-        id: q.id.to_string(),
-        kind: q.tier.to_string(),
-        level: 1,
-        change: true,
-        dlc_def_idx: None,
-        exam_tier: Some(q.tier.to_string()),
-        override_buttons: None,
-    }
-}
-
-fn slot_from_universal(
-    seat: u16,
-    season: &str,
-    chapter: &str,
-    u: &'static TaixuUniversalEventSpec,
-) -> TaixuSlotNode {
-    TaixuSlotNode {
-        slot_seat: seat,
-        season: season.to_string(),
-        chapter: chapter.to_string(),
-        id: u.id.to_string(),
-        kind: u.kind.to_string(),
-        level: u.level,
-        change: u.change,
-        dlc_def_idx: None,
-        exam_tier: None,
-        override_buttons: None,
     }
 }

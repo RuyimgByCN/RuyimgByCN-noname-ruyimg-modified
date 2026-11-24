@@ -134,6 +134,12 @@ pub(super) fn plan_l11_b5_choice_action(
                 None
             }
         }
+        "yajiaoqiang_skill:confirm" => answer(vec![ChoiceOption::Confirm]),
+        "txhj_zhenhunqin:confirm" => answer(vec![if has_enemy {
+            ChoiceOption::Confirm
+        } else {
+            ChoiceOption::Pass
+        }]),
         "cixiong_skill:confirm"
         | "txhj_mouduan:confirm"
         | "olshanjia:confirm"

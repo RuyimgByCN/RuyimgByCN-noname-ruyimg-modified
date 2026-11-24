@@ -510,6 +510,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11Weapons => super::step::l11_weapons_asks::ask_l11_weapons(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11ModesEquips => super::step::l11_modes_equips::ask_l11_modes_equips(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
             super::step::l11_boss_c_asks::ask_l11_boss_c(
                 stage, owner, target, targets, card, cards, core, catalog,

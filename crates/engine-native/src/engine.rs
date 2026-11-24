@@ -480,7 +480,9 @@ use apply_command::*;
 mod boss_campaign;
 mod general_select;
 mod taixu_battle;
-pub use taixu_battle::{TaixuBattleNpc, TaixuBattleSetup};
+pub use taixu_battle::{
+    taixu_card_fallback_candidates, taixu_skill_alias, TaixuBattleNpc, TaixuBattleSetup,
+};
 mod hash;
 pub mod legal_actions;
 use hash::*;

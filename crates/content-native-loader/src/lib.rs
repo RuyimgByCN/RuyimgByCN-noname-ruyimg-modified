@@ -179,11 +179,11 @@ pub mod locked_content;
 pub mod presentation_binding;
 pub mod up37_closure;
 pub use locked_content::{
-    deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
-    restore_locked_engine, restore_locked_engine_with_original_presentation,
-    restore_locked_engine_with_shahai_config, start_locked_engine,
-    start_locked_engine_with_original_presentation, start_locked_engine_with_shahai_config,
-    start_locked_taixu_battle,
+    bind_locked_taixu_catalog, deferred_cards_for_locked_content, prepare_locked_content,
+    prepare_locked_content_with_bridge, restore_locked_engine,
+    restore_locked_engine_with_original_presentation, restore_locked_engine_with_shahai_config,
+    start_locked_engine, start_locked_engine_with_original_presentation,
+    start_locked_engine_with_shahai_config, start_locked_taixu_battle, start_locked_taixu_season,
     validate_and_freeze_raw_package, validate_frozen_package, verify_locked_content,
     verify_locked_content_with_bridge, ContentLock, FrozenPackage, LockedContentEnvelope,
     LockedPackage, LockedStartMode, VerifiedLockedContent,

@@ -238,6 +238,13 @@ pub(super) fn apply_hand_limit(
     if max_cards_active {
         limit += flag_val(state, player, "l11_txhj_max_hs") as i32;
     }
+    // `extension_card.js:2208-2214` (`txhj_shengguangbaiyi2`: maxHandcard +2)
+    if !super::is_target_unequip2(state, player)
+        && (has_equipped_named(state, catalog, player, "txhj_shengguangbaiyi")
+            || has_ext_skill(state, catalog, player, "txhj_shengguangbaiyi"))
+    {
+        limit += 2;
+    }
     // `extension_skill.js:4373` (`txhj_zhuwei_eff`: maxHandcard +X this turn)
     limit += flag_val(state, player, "skill_turn:l11_zhuwei_eff") as i32;
     d34_l25_mods::apply_hand_limit(state, catalog, player, limit)

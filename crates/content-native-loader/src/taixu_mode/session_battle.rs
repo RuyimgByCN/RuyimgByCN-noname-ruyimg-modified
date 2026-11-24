@@ -31,6 +31,9 @@ pub(super) fn is_taixu_equip_resolvable(card_id: &str) -> bool {
             | "txhj_guofengyupao"
             | "txhj_feilong"
             | "txhj_feilongduofeng"
+            | "txhj_xieshenmianju"
+            | "txhj_shengguangbaiyi"
+            | "txhj_zhenhunqin"
             | "txhj_dinglanyemingzhu"
             | "txhj_chiyanzhenhunqin"
             | "txhj_lingbaoxianhu"
@@ -52,6 +55,9 @@ pub(super) fn is_taixu_equip_resolvable(card_id: &str) -> bool {
             | "fangtian"
             | "renwang"
             | "bagua"
+            | "baiyin"
+            | "tengjia"
+            | "lanyinjia"
             | "zixin"
             | "dawan"
             | "chitu"
@@ -60,8 +66,29 @@ pub(super) fn is_taixu_equip_resolvable(card_id: &str) -> bool {
             | "jueying"
             | "zhuahuang"
             | "hualiu"
+            | "yajiaoqiang"
+            | "nvzhuang"
+            | "yitianjian"
+            | "wushuangfangtianji"
+            | "guilongzhanyuedao"
+            | "wuxinghelingshan"
+            | "chixueqingfeng"
+            | "bintieshuangji"
+            | "wutiesuolian"
+            | "linglongshimandai"
+            | "hongmianbaihuapao"
+            | "qimenbagua"
+            | "huxinjing"
+            | "heiguangkai"
+            | "shufazijinguan"
+            | "tianjitu"
+            | "taigongyinfu"
+            | "sanlve"
             | "rewrite_bagua"
             | "rewrite_renwang"
+            | "rewrite_baiyin"
+            | "rewrite_tengjia"
+            | "rewrite_lanyinjia"
             | "rewrite_zhuge"
     )
 }
@@ -144,7 +171,13 @@ impl TaixuModeSession {
 
         let mut high_equips: Vec<&'static str> = L11_TAIXU_CARD_RANK
             .iter()
-            .filter(|c| c.rank >= 3 && c.category.is_equip() && !c.unique && is_taixu_equip_resolvable(c.card_id))
+            .filter(|c| {
+                c.rank >= 3
+                    && c.category.is_equip()
+                    && !c.unique
+                    && is_taixu_equip_resolvable(c.card_id)
+                    && self.is_card_available_in_pool(c.card_id)
+            })
             .map(|c| c.card_id)
             .collect();
         if high_equips.is_empty() {
@@ -483,13 +516,19 @@ impl TaixuModeSession {
             TaixuEffectKind::RandomCard | TaixuEffectKind::Basic | TaixuEffectKind::Trick => {
                 let pool: Vec<&'static str> = L11_TAIXU_CARD_RANK
                     .iter()
-                    .filter(|c| match kind {
-                        TaixuEffectKind::Basic => c.category == super::catalog::TaixuCardCategory::Basic,
-                        TaixuEffectKind::Trick => matches!(
-                            c.category,
-                            super::catalog::TaixuCardCategory::Trick | super::catalog::TaixuCardCategory::Delay
-                        ),
-                        _ => !c.category.is_equip(),
+                    .filter(|c| {
+                        self.is_card_available_in_pool(c.card_id)
+                            && match kind {
+                                TaixuEffectKind::Basic => {
+                                    c.category == super::catalog::TaixuCardCategory::Basic
+                                }
+                                TaixuEffectKind::Trick => matches!(
+                                    c.category,
+                                    super::catalog::TaixuCardCategory::Trick
+                                        | super::catalog::TaixuCardCategory::Delay
+                                ),
+                                _ => !c.category.is_equip(),
+                            }
                     })
                     .map(|c| c.card_id)
                     .collect();
@@ -525,12 +564,24 @@ impl TaixuModeSession {
             | TaixuEffectKind::RandomUnique => {
                 let pool: Vec<&'static str> = L11_TAIXU_CARD_RANK
                     .iter()
-                    .filter(|c| match kind {
-                        TaixuEffectKind::Equip1 => !c.unique && c.category == super::catalog::TaixuCardCategory::Equip1,
-                        TaixuEffectKind::Equip2 => !c.unique && c.category == super::catalog::TaixuCardCategory::Equip2,
-                        TaixuEffectKind::Equip5 => !c.unique && c.category == super::catalog::TaixuCardCategory::Equip5,
-                        TaixuEffectKind::RandomUnique => c.unique && c.category.is_equip(),
-                        _ => !c.unique && c.category.is_equip(),
+                    .filter(|c| {
+                        self.is_card_available_in_pool(c.card_id)
+                            && match kind {
+                                TaixuEffectKind::Equip1 => {
+                                    !c.unique
+                                        && c.category == super::catalog::TaixuCardCategory::Equip1
+                                }
+                                TaixuEffectKind::Equip2 => {
+                                    !c.unique
+                                        && c.category == super::catalog::TaixuCardCategory::Equip2
+                                }
+                                TaixuEffectKind::Equip5 => {
+                                    !c.unique
+                                        && c.category == super::catalog::TaixuCardCategory::Equip5
+                                }
+                                TaixuEffectKind::RandomUnique => c.unique && c.category.is_equip(),
+                                _ => !c.unique && c.category.is_equip(),
+                            }
                     })
                     .map(|c| c.card_id)
                     .collect();
@@ -619,10 +670,7 @@ impl TaixuModeSession {
                     .filter(|s| {
                         (mask == 0 || (s.type_mask & mask) != 0)
                             && !self.use_skills.iter().any(|u| u == s.skill_id)
-                            && self
-                                .available_skills_filter
-                                .as_ref()
-                                .is_none_or(|f| f.iter().any(|x| x == s.skill_id))
+                            && self.is_skill_available_in_pool(s.skill_id)
                     })
                     .map(|s| s.skill_id)
                     .collect();

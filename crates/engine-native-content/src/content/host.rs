@@ -873,6 +873,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11BuffHelpersB
                 | HostBehavior::L11SystemHooks
                 | HostBehavior::L11Weapons
+                | HostBehavior::L11ModesEquips
                 | HostBehavior::L11GeneralBossC
                 | HostBehavior::L11BossLingfeng
                 | HostBehavior::L11OwnNpc

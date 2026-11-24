@@ -85,6 +85,9 @@ mod l11_npc_b_save_ai;
 #[path = "../l11_vm_fix_b.rs"]
 mod l11_vm_fix_b;
 
+#[path = "../l11_taixu_p3d_modes.rs"]
+mod l11_taixu_p3d_modes;
+
 #[path = "../l12_rzsh_eight.rs"]
 mod l12_rzsh_eight;
 

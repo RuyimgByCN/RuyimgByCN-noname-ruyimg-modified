@@ -194,6 +194,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11ModesEquips {
+            return super::step::l11_modes_equips::filter_l11_modes_equips_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if matches!(
             self.behavior,
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng
@@ -1117,6 +1122,11 @@ impl HostSkillBehavior {
             HostBehavior::L11Weapons => super::step::l11_weapons::filter_l11_weapons_with_frames(
                 self, ctx, &[], None, owner, event,
             ),
+            HostBehavior::L11ModesEquips => {
+                super::step::l11_modes_equips::filter_l11_modes_equips_with_frames(
+                    self, ctx, &[], None, owner, event,
+                )
+            }
             HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
                 super::step::l11_boss_c::filter_l11_boss_c_with_frames(
                     self, ctx, &[], None, owner, event,

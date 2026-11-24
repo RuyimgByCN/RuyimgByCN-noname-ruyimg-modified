@@ -260,6 +260,7 @@ pub(super) fn host_card_use_after_impl(
     crate::content::host::step::l11_common_b4::on_card_use_after_l11_b4(ctx, u);
     crate::content::host::step::u01_fixes_3::u01_card_use_after_hook_3(ctx, u);
     crate::content::host::step::l11_effect_pack::on_card_use_after_effect_pack(ctx, u);
+    crate::content::host::step::l11_modes_equips::on_card_use_after_l11_modes(ctx, u);
     crate::content::host::step::u05_b2_gujian::on_card_use_after_gujian(ctx, u);
     if u.cancelled {
         return;

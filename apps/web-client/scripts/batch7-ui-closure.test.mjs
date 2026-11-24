@@ -23,6 +23,8 @@ import {
   L18_EXPLAIN_MAP,
   L21_CONFIG_SPECS,
   L26_CONFIG_SPECS,
+  TAIXU_SERVANT_ACTION_SPECS,
+  TAIXU_SERVANT_SPECS,
   U05_CONFIG_SPECS,
   applyL01JsonImportInState,
   applyL01WeightMapJson,
@@ -35,6 +37,7 @@ import {
   computeFoolEquipMirrorCards,
   computeFoolThrowRotation,
   computeL21DoubleHp,
+  computeTaixuShopPrice,
   createInitialBatch7UiSuiteState,
   createInitialExtensionSurfacesState,
   createInitialL01AiOptimizeState,
@@ -45,6 +48,11 @@ import {
   createInitialL21State,
   createInitialL23State,
   createInitialL26State,
+  getTaixuServantActionSpec,
+  getTaixuServantIdleActions,
+  getTaixuServantInteractiveActions,
+  ingestBattleEnvelopeIntoSurfaces,
+  resolveTaixuServantBattleClip,
   deserializeExtensionSurfacesSnapshot,
   dispatchBanCharFHook,
   dispatchCoinArenaReady,
@@ -364,4 +372,173 @@ test("Decision 34 serialize/deserialize roundtrip preserves uiSuites.batch7 + da
   const restored = deserializeExtensionSurfacesSnapshot(serializeExtensionSurfacesSnapshot(snap));
   assert.equal(restored.uiSuites?.batch7?.l01.config.viewAtt, true);
   assert.equal(restored.uiSuites?.batch7?.l23.emojiPickerSeat, 1);
+});
+
+test("P3-D L11 Taixu store +200 escalation, juguzhidao dec=1, and 21-servant Spine action parity", async () => {
+  // 1. All 21 servant specs carry upstream extension_servant.js:1329-1505 action definitions
+  assert.equal(TAIXU_SERVANT_SPECS.length, 21);
+  assert.equal(Object.keys(TAIXU_SERVANT_ACTION_SPECS).length, 21);
+  assert.deepEqual(getTaixuServantActionSpec("datong"), {
+    daiji: 2, gongji: 2, jingzhi: true, jinnang: 1, shouji: 1, zuodian: false,
+  });
+  assert.deepEqual(getTaixuServantActionSpec("xueren"), {
+    daiji: 2, gongji: 2, jingzhi: true, jinnang: 1, shouji: 1, zuodian: false,
+  });
+  assert.deepEqual(getTaixuServantActionSpec("manman"), {
+    daiji: 3, gongji: 2, jingzhi: true, jinnang: 1, shouji: 2, zuodian: false,
+  });
+  assert.deepEqual(getTaixuServantActionSpec("jiuwei"), {
+    daiji: 4, gongji: 2, jingzhi: true, jinnang: 1, shouji: 2, zuodian: true,
+  });
+
+  // 2. Idle & getAction() clip generation
+  assert.deepEqual(getTaixuServantIdleActions("jiuwei"), [
+    "daiji1", "daiji2", "daiji3", "daiji4", "jingzhi", "zuodian",
+  ]);
+  assert.deepEqual(getTaixuServantIdleActions("datong"), ["daiji1", "daiji2", "jingzhi"]);
+  assert.deepEqual(getTaixuServantInteractiveActions("datong"), ["daiji2", "jinnang1", "shouji1"]);
+  assert.deepEqual(getTaixuServantInteractiveActions("jiuwei"), [
+    "daiji2", "daiji3", "daiji4", "jinnang1", "shouji1", "shouji2",
+  ]);
+
+  // 3. _slDamage / _slUseCard / _slHurt clip resolution & live EngineEnvelope ingestion
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slDamage", amount: 1, isLeft: false }), "gongji1");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slDamage", amount: 2, isLeft: true }), "gongji2");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slDamage", amount: 0, isLeft: true }), null);
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slUseCard", cardType: "trick", cardName: "wuzhong" }), "jinnang1");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slUseCard", cardType: "basic", cardName: "tao" }), "jinnang1");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slUseCard", cardType: "basic", cardName: "jiu" }), "jinnang1");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slUseCard", cardType: "basic", cardName: "sha" }), null);
+  assert.equal(resolveTaixuServantBattleClip("datong", { kind: "_slHurt", variant: 2 }), "shouji1");
+  assert.equal(resolveTaixuServantBattleClip("jiuwei", { kind: "_slHurt", variant: 2 }), "shouji2");
+
+  const init = createInitialExtensionSurfacesState();
+  const afterTrick = ingestBattleEnvelopeIntoSurfaces(init, {
+    revision: 10,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      seats: [
+        { player: 0, alive: true, hp: 4, max_hp: 4, hand_count: 3 },
+        { player: 1, alive: true, hp: 4, max_hp: 4, hand_count: 3 },
+      ],
+    },
+    events: [{ type: "CardPlayed", player: 0, cardType: "trick", cardName: "wuzhong" }],
+  });
+  assert.equal(afterTrick.uiSuites?.taixuUi?.lastServantClip, "jinnang1");
+
+  const afterHurt = ingestBattleEnvelopeIntoSurfaces(afterTrick, {
+    revision: 11,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 1,
+      seats: [
+        { player: 0, alive: true, hp: 3, max_hp: 4, hand_count: 3 },
+        { player: 1, alive: true, hp: 4, max_hp: 4, hand_count: 2 },
+      ],
+    },
+    events: [{ type: "DamageDealt", source: 1, target: 0, amount: 1 }],
+  });
+  assert.equal(afterHurt.uiSuites?.taixuUi?.lastServantClip, "shouji1");
+
+  // 4. TaixuCampaignModal.vue executes real purchaseTaixuMerchantItem escalation + juguzhidao dec=1 via props.taixu.gold sync
+  assert.equal(computeTaixuShopPrice(80, 0, false), 80);
+  assert.equal(computeTaixuShopPrice(80, 1, false), 280);
+  assert.equal(computeTaixuShopPrice(80, 1, true), 80);
+  assert.equal(computeTaixuShopPrice(80, 2, true), 280);
+  const modalVuePath = join(dirname(fileURLToPath(import.meta.url)), "../src/components/battle/modals/TaixuCampaignModal.vue");
+  const modalSrc = readFileSync(modalVuePath, "utf8");
+  assert.ok(modalSrc.includes("computeTaixuShopPrice"), "TaixuCampaignModal must invoke computeTaixuShopPrice");
+  assert.ok(!modalSrc.includes("baseCost / 2"), "TaixuCampaignModal must NOT charge flat baseCost / 2");
+
+  const { parse, compileScript } = await import("vue/compiler-sfc");
+  const tsMod = (await import("typescript")).default;
+  const sfc = parse(modalSrc, { filename: modalVuePath });
+  const compiled = compileScript(sfc.descriptor, { id: "taixu-modal-test", inlineTemplate: false });
+  const jsCode = tsMod.transpileModule(compiled.content, {
+    compilerOptions: { module: tsMod.ModuleKind.ESNext, target: tsMod.ScriptTarget.ES2022 },
+  }).outputText;
+  const { reactive } = await import("vue");
+  const runtimeMod = await import(new URL("../src/engine/extensionSurfaceRuntime.ts", import.meta.url).href);
+  const resolvedModUrl = new URL("../src/engine/extensionSurfaceRuntime.ts", import.meta.url).href;
+  const rewriteImport = (spec, varName) =>
+    spec.replace(/\bas\b/g, ":");
+  const stripped = jsCode
+    .replace(/import\s*\{([^}]*)\}\s*from\s*["']vue["'];?/g, (_, syms) => `const {${rewriteImport(syms, "vue")}} = vue;`)
+    .replace(/import\s*\{([^}]*)\}\s*from\s*["']\.\.\/\.\.\/\.\.\/engine\/extensionSurfaceRuntime["'];?/g, (_, syms) => `const {${rewriteImport(syms, "rt")}} = rt;`)
+    .replace(/import\s+type\s+[^;]+;?/g, "")
+    .replace(/export\s+default\s+/g, "const __comp = ");
+  const execFn = new Function(
+    "vue",
+    "rt",
+    `${stripped}\nreturn __comp;`,
+  );
+  const compDef = execFn({ computed: (await import("vue")).computed, ref: (await import("vue")).ref, defineComponent: (x) => x }, runtimeMod);
+  assert.ok(resolvedModUrl.length > 0 && compDef && typeof compDef.setup === "function");
+
+  const modalInit = runtimeMod.createInitialExtensionSurfacesState();
+  const modalState = reactive({
+    taixu: structuredClone(modalInit.taixu),
+    taixuUi: structuredClone(modalInit.uiSuites.taixuUi),
+  });
+  const bindings = compDef.setup(modalState, {
+    expose() {},
+    emit(ev, payload) {
+      if (ev === "update") {
+        modalState.taixu = payload.taixu;
+        modalState.taixuUi = payload.taixuUi;
+      }
+    },
+  });
+
+  // Initial: gold=100, coinBalance=200; advance x2 => gold=340, coinBalance synced to 340
+  bindings.advanceCampaignStep();
+  bindings.advanceCampaignStep();
+  assert.equal(modalState.taixu.gold, 340);
+  assert.equal(modalState.taixuUi.coinBalance, 340);
+
+  // Purchase #1 (aozhan, base 80): pays 80 -> gold=260, coinBalance=260, shopPurchaseCount=1
+  bindings.buyUpstreamBlessing("buff_txhj_aozhan", 80);
+  assert.equal(modalState.taixu.gold, 260);
+  assert.equal(modalState.taixuUi.coinBalance, 260);
+  assert.equal(modalState.taixuUi.shopPurchaseCount, 1);
+
+  // Purchase #2 (yanhuo, base 60): price 60 + 200 = 260 > legacy stale 120 -> MUST succeed & increment shopPurchaseCount to 2!
+  bindings.buyUpstreamBlessing("buff_txhj_yanhuo", 60);
+  assert.deepEqual(modalState.taixu.blessings.slice(-2), ["buff_txhj_aozhan", "buff_txhj_yanhuo"]);
+  assert.equal(modalState.taixu.gold, 0);
+  assert.equal(modalState.taixuUi.coinBalance, 0);
+  assert.equal(modalState.taixuUi.shopPurchaseCount, 2);
+
+  // Purchase #3 (xiongziyingfa, base 90) costs 90 + 2*200 = 490: advance x3 (+360 gold -> 360) MUST be blocked!
+  bindings.advanceCampaignStep();
+  bindings.advanceCampaignStep();
+  bindings.advanceCampaignStep();
+  assert.equal(modalState.taixu.gold, 360);
+  bindings.buyUpstreamBlessing("buff_txhj_xiongziyingfa", 90);
+  assert.ok(!modalState.taixu.blessings.includes("buff_txhj_xiongziyingfa"), "360 gold must NOT buy 490-coin 3rd blessing");
+  assert.equal(modalState.taixuUi.shopPurchaseCount, 2);
+
+  // Advance x2 more (+240 -> gold=600) => Purchase #3 succeeds at 490 -> gold=110, shopPurchaseCount=3!
+  bindings.advanceCampaignStep();
+  bindings.advanceCampaignStep();
+  bindings.buyUpstreamBlessing("buff_txhj_xiongziyingfa", 90);
+  assert.ok(modalState.taixu.blessings.includes("buff_txhj_xiongziyingfa"));
+  assert.equal(modalState.taixu.gold, 110);
+  assert.equal(modalState.taixuUi.coinBalance, 110);
+  assert.equal(modalState.taixuUi.shopPurchaseCount, 3);
+
+  // Buying buff_txhj_juguzhidao enables dec=1 discount immediately in synced taixuUi!
+  for (let i = 0; i < 5; i += 1) bindings.advanceCampaignStep(); // +600 -> 710 gold
+  const juguPrice = computeTaixuShopPrice(70, 3, false); // 70 + 3*200 = 670
+  bindings.buyUpstreamBlessing("buff_txhj_juguzhidao", 70);
+  assert.equal(modalState.taixu.gold, 710 - juguPrice);
+  assert.equal(modalState.taixuUi.coinBalance, 710 - juguPrice);
+  assert.equal(modalState.taixuUi.shopPurchaseCount, 4);
+  assert.equal(modalState.taixuUi.hasJuguzhidaoBuff, true);
+  assert.equal(computeTaixuShopPrice(100, modalState.taixuUi.shopPurchaseCount, modalState.taixuUi.hasJuguzhidaoBuff), 700);
 });

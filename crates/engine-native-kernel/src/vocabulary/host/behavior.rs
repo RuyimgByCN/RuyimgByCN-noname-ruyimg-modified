@@ -1949,4 +1949,6 @@ pub enum HostBehavior {
     L11VmFixB,
     /// Batch L11 VM Fix C（`P3-E3`：`taixu-upstream-liuli` 42 技及伴生子技宿主真实现；tag 1394）。
     L11VmFixC,
+    /// L11 太虚幻境 DLC/extension_card 装备技（tag 1395：`yajiaoqiang_skill`/`nvzhuang`/`txhj_zhenhunqin`/`txhj_xieshenmianju`/`txhj_shengguangbaiyi`）。
+    L11ModesEquips,
 }

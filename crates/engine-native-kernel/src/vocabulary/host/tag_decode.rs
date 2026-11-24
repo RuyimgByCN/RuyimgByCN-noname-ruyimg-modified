@@ -712,6 +712,7 @@ impl HostBehavior {
             1392 => HostBehavior::L11VmFixA,
             1393 => HostBehavior::L11VmFixB,
             1394 => HostBehavior::L11VmFixC,
+            1395 => HostBehavior::L11ModesEquips,
             _ => return None,
         })
     }

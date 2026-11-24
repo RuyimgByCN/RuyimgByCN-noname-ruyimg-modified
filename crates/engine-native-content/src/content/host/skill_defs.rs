@@ -65,6 +65,7 @@ pub fn host_skill_trigger_meta(
         }
         HostBehavior::L11SystemHooks => step::l11_system_hooks::trigger_meta_l11_system_hooks(name),
         HostBehavior::L11Weapons => step::l11_weapons::trigger_meta_l11_weapons(name),
+        HostBehavior::L11ModesEquips => step::l11_modes_equips::trigger_meta_l11_modes_equips(name),
         HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
             step::l11_boss_c::trigger_meta_l11_boss_c(name)
         }
@@ -238,6 +239,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11BuffHelpersB => step::l11_buff_helpers_b::limits_l11_buff_helpers_b(name),
         HostBehavior::L11SystemHooks => step::l11_system_hooks::limits_l11_system_hooks(name),
         HostBehavior::L11Weapons => step::l11_weapons::limits_l11_weapons(name),
+        HostBehavior::L11ModesEquips => step::l11_modes_equips::limits_l11_modes_equips(name),
         HostBehavior::L11GeneralBossC | HostBehavior::L11BossLingfeng => {
             step::l11_boss_c::limits_l11_boss_c(name)
         }

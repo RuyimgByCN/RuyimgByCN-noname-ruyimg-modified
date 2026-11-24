@@ -33,7 +33,11 @@ import {
   updateSkinSwitchConfigInState,
 } from "./surfaces/skinSwitchSurface";
 import { normalizeSkinSwitchConfig, type SkinSwitchUiConfig } from "./surfaces/skinSwitchConfigSchema";
-import { createInitialTaixuUiRuntimeState } from "./surfaces/taixuSurface";
+import {
+  createInitialTaixuUiRuntimeState,
+  resolvePublicEventCardHint,
+  syncTaixuServantClipsFromEnvelope,
+} from "./surfaces/taixuSurface";
 import {
   createInitialZuanUiRuntimeState,
   dispatchZuanUiHook,
@@ -968,7 +972,7 @@ export function ingestBattleEnvelopeIntoSurfaces(
   let skinSwitch = state.uiSuites?.skinSwitch ?? createInitialSkinSwitchRuntimeState();
   let shoushaUi = state.uiSuites?.shoushaUi ?? createInitialShoushaUiRuntimeState();
   let decadeUi = state.uiSuites?.decadeUi ?? createInitialDecadeUiRuntimeState();
-  const taixuUi = state.uiSuites?.taixuUi ?? createInitialTaixuUiRuntimeState();
+  let taixuUi = state.uiSuites?.taixuUi ?? createInitialTaixuUiRuntimeState();
   let zuanUi = state.uiSuites?.zuanUi ?? createInitialZuanUiRuntimeState();
   let l20Ui = state.uiSuites?.l20Ui ?? createInitialL20RuntimeState();
   let batch6Patch = state.uiSuites?.batch6Patch ?? createInitialBatch6PatchUiState();
@@ -1033,6 +1037,9 @@ export function ingestBattleEnvelopeIntoSurfaces(
     }
   }
 
+  const prevKnownDiscardIds = new Set(taixuUi.seenKnownDiscardIds ?? []);
+  taixuUi = syncTaixuServantClipsFromEnvelope(taixuUi, env, decadeUi.prevHpBySeat);
+
   const curPlayer = env.view?.current_player ?? 0;
   const curGen = seatGeneralName(curPlayer);
   const woundedSeat =
@@ -1042,8 +1049,16 @@ export function ingestBattleEnvelopeIntoSurfaces(
   const woundedGen = seatGeneralName(woundedSeat);
 
   const events = env.events ?? [];
+  const totalCardEvents = events.filter((rawEv) => {
+    const pubCode = (rawEv as { PublicEvent?: { code?: number } })?.PublicEvent?.code;
+    const evType = (rawEv as { type?: string })?.type;
+    return pubCode === 3 || evType === "CardPlayed";
+  }).length;
+  let cardEventOrdinal = 0;
+
   events.forEach((rawEv, idx) => {
     const seq = env.revision * 100 + idx + 1;
+    const rawObj = rawEv as Record<string, unknown>;
     const pubCode = (rawEv as { PublicEvent?: { code?: number } })?.PublicEvent?.code;
     const evType = (rawEv as { type?: string })?.type;
     if (pubCode === 4 || evType === "DamageDealt") {
@@ -1077,13 +1092,24 @@ export function ingestBattleEnvelopeIntoSurfaces(
       const dyingBody = (rawEv as { EnteredDying?: { player?: number }; target?: number; player?: number });
       const dyingSeat = dyingBody.EnteredDying?.player ?? dyingBody.player ?? dyingBody.target ?? woundedSeat;
       zuanUi = dispatchZuanUiHook(zuanUi, "_saveskill", { seat: dyingSeat });
-    } else if (pubCode === 2 || evType === "CardPlayed") {
+    } else if (pubCode === 2 || pubCode === 3 || evType === "CardPlayed") {
+      const hint = resolvePublicEventCardHint(
+        rawObj,
+        env,
+        curPlayer,
+        prevKnownDiscardIds,
+        cardEventOrdinal,
+        totalCardEvents,
+      );
+      if (pubCode === 3 || evType === "CardPlayed") {
+        cardEventOrdinal += 1;
+      }
       skinSwitch = dispatchSkinSwitchHook(skinSwitch, {
         hook: "_playAudioToQueue",
         seat: curPlayer,
         generalId: curGen,
         skinId: "primary_1",
-        cardName: "sha",
+        cardName: hint.cardName || "sha",
         timestampMs: env.revision * 10 + idx,
       });
       shoushaUi = dispatchShoushaUiHook(shoushaUi, "_chupaiA", { seat: curPlayer });

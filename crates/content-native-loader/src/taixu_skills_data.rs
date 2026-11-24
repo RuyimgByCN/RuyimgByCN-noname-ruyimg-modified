@@ -757,6 +757,11 @@ pub fn lookup_l11_b5_host_behavior(
         | "sanjian_skill"
         | "yitianjian"
         | "pyzhuren_diamond" => Some(HostBehavior::L11Weapons),
+        "txhj_zhenhunqin"
+        | "txhj_xieshenmianju"
+        | "txhj_shengguangbaiyi"
+        | "yajiaoqiang_skill"
+        | "nvzhuang" => Some(HostBehavior::L11ModesEquips),
         "txhj_mouduan"
         | "olshanjia"
         | "boss_xuanlei"

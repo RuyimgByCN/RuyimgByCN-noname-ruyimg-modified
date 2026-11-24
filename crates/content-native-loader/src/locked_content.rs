@@ -268,6 +268,45 @@ pub fn start_locked_taixu_battle(
     Ok(engine)
 }
 
+/// Bind `session` skillRank / cardRank availability against [`VerifiedLockedContent`] (`R05 v5`).
+pub fn bind_locked_taixu_catalog(
+    session: &mut crate::taixu_mode::TaixuModeSession,
+    verified: &VerifiedLockedContent,
+) -> Result<(), String> {
+    let (packs, _) = bridge_verified_packs(verified)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    session
+        .bind_available_catalog(&refs)
+        .map_err(|e| format!("{e}"))
+}
+
+/// Start a [`crate::taixu_mode::TaixuModeSession`] season filtered against [`VerifiedLockedContent`] (`R05 v5`).
+#[allow(clippy::too_many_arguments)]
+pub fn start_locked_taixu_season(
+    seed: u64,
+    season_id: &str,
+    rank: u8,
+    player_general: &str,
+    effect_id: &str,
+    servant_id: Option<&str>,
+    servant_grade: u8,
+    verified: &VerifiedLockedContent,
+) -> Result<crate::taixu_mode::TaixuModeSession, String> {
+    let (packs, _) = bridge_verified_packs(verified)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    crate::taixu_mode::TaixuModeSession::start_season_with_catalog(
+        seed,
+        season_id,
+        rank,
+        player_general,
+        effect_id,
+        servant_id,
+        servant_grade,
+        &refs,
+    )
+    .map_err(|e| format!("{e}"))
+}
+
 /// Start a locked engine honoring `ShahaiMainConfig` (`main/config.js` `wuxing`/`rand`/`gwent`/`mtg`/`yunchou`/`zhenfa`).
 pub fn start_locked_engine_with_shahai_config(
     seed: u64,

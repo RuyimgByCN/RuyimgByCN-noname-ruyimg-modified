@@ -262,6 +262,9 @@ fn is_non_bagua_armor_name(name: &str) -> bool {
             | "tengjia"
             | "baiyin"
             | "gw_dieyi_equip2"
+            | "txhj_xieshenmianju"
+            | "txhj_shengguangbaiyi"
+            | "nvzhuang"
     )
 }
 

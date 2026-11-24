@@ -406,6 +406,73 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+pub(super) fn push_pack_general(
+    sym: &str,
+    faction: Faction,
+    gender: Gender,
+    max_hp: u32,
+    sk_list: &[&str],
+    seen: &BTreeSet<String>,
+    seen_generals: &mut BTreeSet<String>,
+    extra_generals: &mut Vec<ExtensionGeneral>,
+) {
+    if seen_generals.insert(sym.to_string()) {
+        let mut interned: Vec<&'static str> = Vec::with_capacity(sk_list.len() + 2);
+        for &s in sk_list {
+            let mapped = if seen.contains(s) || super::lookup_upstream_host_behavior(s).is_some() {
+                Some(names::intern(s.to_string()))
+            } else if let Some(zh) = super::lookup_standard_catalog_skill_zh(s) {
+                Some(zh)
+            } else {
+                None
+            };
+            if let Some(mapped) = mapped {
+                if !interned.contains(&mapped) {
+                    interned.push(mapped);
+                }
+            }
+            if s == "zhucheng" && !interned.contains(&"zhucheng2") && seen.contains("zhucheng2") {
+                interned.push("zhucheng2");
+            }
+            if s == "fuchou" && !interned.contains(&"fuchou2") && seen.contains("fuchou2") {
+                interned.push("fuchou2");
+            }
+        }
+        extra_generals.push(ExtensionGeneral {
+            name: names::intern(sym.to_string()),
+            faction,
+            skills: names::intern_list(interned),
+            max_hp,
+            gender,
+            presentation_binding: None,
+        });
+    }
+}
+
+pub(super) fn push_pack_skill(
+    name: &str,
+    dispatch_id: u32,
+    seen_skills: &mut BTreeSet<String>,
+    extra_host_skills: &mut Vec<engine_native::content::host::HostSkillDecl>,
+    extra_vm_skills: &mut Vec<VmSkillDecl>,
+    idx: &mut usize,
+) {
+    if seen_skills.contains(name) {
+        return;
+    }
+    if let Some(behavior) = super::lookup_upstream_host_behavior(name) {
+        super::push_host_skill_if_unseen(name, behavior, extra_host_skills, seen_skills);
+        return;
+    }
+    if seen_skills.insert(name.to_string()) {
+        if let Some(decl) = make_vm_skill_decl(name, dispatch_id, *idx) {
+            extra_vm_skills.push(decl);
+            *idx += 1;
+        }
+    }
+}
+
 /// Wire authentic upstream generals, cards, HostSkillDecls, and VM skills into a formal `packages/extensions/*`
 /// `ExtensionPack` loaded on the production `locked_content` path (`Web/WASM`, `Worker`, `Server`, `Desktop`).
 pub fn attach_formal_package_upstream_rules(
@@ -505,37 +572,16 @@ pub fn attach_formal_package_upstream_rules(
 
     let mut push_general =
         |sym: &str, faction: Faction, gender: Gender, max_hp: u32, sk_list: &[&str], seen: &BTreeSet<String>| {
-            if seen_generals.insert(sym.to_string()) {
-                let mut interned: Vec<&'static str> = Vec::with_capacity(sk_list.len() + 2);
-                for &s in sk_list {
-                    let mapped = if seen.contains(s) || super::lookup_upstream_host_behavior(s).is_some() {
-                        Some(names::intern(s.to_string()))
-                    } else if let Some(zh) = super::lookup_standard_catalog_skill_zh(s) {
-                        Some(zh)
-                    } else {
-                        None
-                    };
-                    if let Some(mapped) = mapped {
-                        if !interned.contains(&mapped) {
-                            interned.push(mapped);
-                        }
-                    }
-                    if s == "zhucheng" && !interned.contains(&"zhucheng2") && seen.contains("zhucheng2") {
-                        interned.push("zhucheng2");
-                    }
-                    if s == "fuchou" && !interned.contains(&"fuchou2") && seen.contains("fuchou2") {
-                        interned.push("fuchou2");
-                    }
-                }
-                extra_generals.push(ExtensionGeneral {
-                    name: names::intern(sym.to_string()),
-                    faction,
-                    skills: names::intern_list(interned),
-                    max_hp,
-                    gender,
-                    presentation_binding: None,
-                });
-            }
+            push_pack_general(
+                sym,
+                faction,
+                gender,
+                max_hp,
+                sk_list,
+                seen,
+                &mut seen_generals,
+                &mut extra_generals,
+            );
         };
 
     let mut push_card = |cname: &str, kind: CardKind, suit: Suit, rank: u8| {
@@ -555,19 +601,14 @@ pub fn attach_formal_package_upstream_rules(
 
     let mut idx = pack.vm_skills.len();
     let mut push_skill = |name: &str, dispatch_id: u32| {
-        if seen_skills.contains(name) {
-            return;
-        }
-        if let Some(behavior) = super::lookup_upstream_host_behavior(name) {
-            super::push_host_skill_if_unseen(name, behavior, &mut extra_host_skills, &mut seen_skills);
-            return;
-        }
-        if seen_skills.insert(name.to_string()) {
-            if let Some(decl) = make_vm_skill_decl(name, dispatch_id, idx) {
-                extra_vm_skills.push(decl);
-                idx += 1;
-            }
-        }
+        push_pack_skill(
+            name,
+            dispatch_id,
+            &mut seen_skills,
+            &mut extra_host_skills,
+            &mut extra_vm_skills,
+            &mut idx,
+        );
     };
 
     match (namespace, package_id) {

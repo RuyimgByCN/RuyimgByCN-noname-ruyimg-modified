@@ -4,7 +4,10 @@ import {
   L11_SURFACE_IDS,
   TAIXU_DLC_SEASONS,
   TAIXU_SERVANT_SPECS,
+  computeTaixuShopPrice,
   createInitialTaixuUiRuntimeState,
+  getTaixuServantActionSpec,
+  getTaixuServantIdleActions,
   purchaseTaixuMerchantItem,
   selectTaixuServantSurface,
   switchTaixuViewport,
@@ -38,32 +41,57 @@ function advanceCampaignStep() {
   const nextNodes = props.taixu.nodes.map((n, idx) =>
     idx <= nextIdx ? { ...n, cleared: true } : n,
   );
+  const nextGold = props.taixu.gold + 120;
   emit("update", {
     taixu: {
       ...props.taixu,
       seasonId: activeSeason.value,
       currentNodeIndex: nextIdx,
-      gold: props.taixu.gold + 120,
+      gold: nextGold,
       nodes: nextNodes,
     },
-    taixuUi: uiState.value,
+    taixuUi: {
+      ...uiState.value,
+      coinBalance: nextGold,
+    },
   });
 }
 
 function buyUpstreamBlessing(buffId: string, baseCost: number) {
   if (props.taixu.blessings.includes(buffId)) return;
   const hasJugu = props.taixu.blessings.includes("buff_txhj_juguzhidao");
-  const finalCost = hasJugu ? Math.floor(baseCost / 2) : baseCost;
+  const finalCost = computeTaixuShopPrice(baseCost, uiState.value.shopPurchaseCount, hasJugu);
   if (props.taixu.gold < finalCost) return;
+  const nextGold = props.taixu.gold - finalCost;
+  const nextBlessings = [...props.taixu.blessings, buffId];
+  const nextHasJugu = nextBlessings.includes("buff_txhj_juguzhidao");
+  let nextUi = purchaseTaixuMerchantItem(
+    { ...uiState.value, coinBalance: props.taixu.gold, hasJuguzhidaoBuff: hasJugu },
+    baseCost,
+  );
+  if (nextHasJugu !== hasJugu) {
+    nextUi = {
+      ...nextUi,
+      hasJuguzhidaoBuff: nextHasJugu,
+      currentShopPrice: computeTaixuShopPrice(baseCost, nextUi.shopPurchaseCount, nextHasJugu),
+    };
+  }
   emit("update", {
     taixu: {
       ...props.taixu,
-      gold: props.taixu.gold - finalCost,
-      blessings: [...props.taixu.blessings, buffId],
+      gold: nextGold,
+      blessings: nextBlessings,
     },
-    taixuUi: purchaseTaixuMerchantItem({ ...uiState.value, hasJuguzhidaoBuff: hasJugu }, baseCost),
+    taixuUi: nextUi,
   });
 }
+
+const selectedServantIdleActions = computed(() =>
+  getTaixuServantIdleActions(uiState.value.selectedServantId),
+);
+const selectedServantActionSpec = computed(() =>
+  getTaixuServantActionSpec(uiState.value.selectedServantId),
+);
 
 function bindServant(servantId: string) {
   const spec = TAIXU_SERVANT_SPECS.find((s) => s.id === servantId);
@@ -176,7 +204,11 @@ function selectSurfaceStylesheet(stylesheet: (typeof L11_SURFACE_IDS)[number]) {
               @click="buyUpstreamBlessing(b.id, b.cost)"
             >
               <span>{{ b.label }} (<code>{{ b.id }}</code>)</span>
-              <span>{{ taixu.blessings.includes(b.id) ? "已习得" : `${b.cost}币` }}</span>
+              <span>{{
+                taixu.blessings.includes(b.id)
+                  ? "已习得"
+                  : `${computeTaixuShopPrice(b.cost, uiState.shopPurchaseCount, taixu.blessings.includes("buff_txhj_juguzhidao"))}币`
+              }}</span>
             </button>
           </div>
           <p class="tiny muted" data-testid="taixu-modal-owned-blessings">
@@ -198,6 +230,9 @@ function selectSurfaceStylesheet(stylesheet: (typeof L11_SURFACE_IDS)[number]) {
               {{ sv.label }} ({{ sv.id }})
             </button>
           </div>
+          <p class="tiny muted" data-testid="taixu-modal-servant-actions">
+            动画轨道：{{ selectedServantIdleActions.join(", ") }} · 攻击{{ selectedServantActionSpec.gongji }} · 锦囊{{ selectedServantActionSpec.jinnang }} · 受击{{ selectedServantActionSpec.shouji }} · 当前：{{ uiState.lastServantClip ?? "daiji1" }}
+          </p>
         </section>
       </div>
     </div>

@@ -319,19 +319,22 @@ test("L11 太虚幻境: implements all 4 upstream stylesheets, 8 DLC seasons, 21
   assert.equal(state.selectedServantId, "jiuwei");
   assert.equal(state.servantFrameClass, "frame3");
 
-  // Without buff_txhj_juguzhidao: 50 -> 75 -> 100
+  // Without buff_txhj_juguzhidao (extension_framework.js:7008-7032): +200 per purchase count (50 -> 250 -> 450)
   assert.equal(computeTaixuShopPrice(50, 0, false), 50);
-  assert.equal(computeTaixuShopPrice(50, 1, false), 75);
+  assert.equal(computeTaixuShopPrice(50, 1, false), 250);
+  assert.equal(computeTaixuShopPrice(50, 2, false), 450);
   state = purchaseTaixuMerchantItem(state, 50);
   assert.equal(state.coinBalance, 150);
-  assert.equal(state.currentShopPrice, 75);
+  assert.equal(state.currentShopPrice, 250);
 
-  // With buff_txhj_juguzhidao (extension_buff.js:763): frozen at base price 50 even after purchases
-  state = { ...state, hasJuguzhidaoBuff: true };
-  assert.equal(computeTaixuShopPrice(50, 3, true), 50);
-  state = purchaseTaixuMerchantItem(state, 50);
-  assert.equal(state.coinBalance, 100);
-  assert.equal(state.currentShopPrice, 50);
+  // With buff_txhj_juguzhidao (extension_buff.js:763 & extension_framework.js:7016): dec=1 free discount on first purchase, then +200 per extra count
+  state = { ...state, hasJuguzhidaoBuff: true, coinBalance: 400 };
+  assert.equal(computeTaixuShopPrice(50, 0, true), 50);
+  assert.equal(computeTaixuShopPrice(50, 1, true), 50);
+  assert.equal(computeTaixuShopPrice(50, 3, true), 450);
+  state = purchaseTaixuMerchantItem(state, 50); // count 1 -> 2, dec=1 => pays base + (1-1)*200 = 50, next count=2 => 50 + (2-1)*200 = 250
+  assert.equal(state.coinBalance, 350);
+  assert.equal(state.currentShopPrice, 250);
 });
 
 test("Battle EngineEnvelope stream wires live CardPlayed / DamageDealt / PlayerDied events into uiSuites and eliminates fabricated labels", async () => {
@@ -365,10 +368,236 @@ test("Battle EngineEnvelope stream wires live CardPlayed / DamageDealt / PlayerD
     ],
   });
 
-  // L08 hand count badge synced from view.seats, L24 audio/action triggered on CardPlayed, L09 skin reacts to DamageDealt
+  // L08 hand count badge synced from view.seats, L24 audio/action triggered on CardPlayed, L09 skin reacts to DamageDealt, L11 servant clip advances on DamageDealt
   assert.equal(afterCombat.uiSuites?.decadeUi?.handCountBadgeBySeat[0], 4);
   assert.ok((afterCombat.uiSuites?.skinSwitch?.audioPlayQueue.length ?? 0) >= 1);
   assert.equal(afterCombat.uiSuites?.qhly?.replaceSkinByGeneral.liubei, "hp_wounded");
+  assert.equal(afterCombat.uiSuites?.taixuUi?.lastServantClip, "gongji1");
+
+  // 2. Real WASM presentation.occurrences + Network PublicEvent servant clip routing
+  // 2a. WASM presentation card_used(actor:1 wuzhong/tao/jiu) -> "jinnang1"; damage_dealt(target:1 while curPlayer=0) -> "shouji1" (NOT "gongji1"!)
+  let wasmState = createInitialExtensionSurfacesState();
+  wasmState = ingestBattleEnvelopeIntoSurfaces(wasmState, {
+    result: null,
+    events: [{ PublicEvent: { code: 2, label: "摸牌" } }],
+    presentation: { revision: 1, status: "complete", unavailable: [], occurrences: [] },
+    choice: null,
+    hash_hex: "b".repeat(64),
+    revision: 1,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Draw",
+      state_hash: "b",
+      known_cards: [],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(wasmState.uiSuites?.taixuUi?.lastServantClip, "daiji1", "Draw PublicEvent code:2 without card_used must remain daiji1");
+
+  wasmState = ingestBattleEnvelopeIntoSurfaces(wasmState, {
+    result: null,
+    events: [{ PublicEvent: { code: 3, label: "使用或响应牌" } }],
+    presentation: {
+      revision: 2,
+      status: "complete",
+      unavailable: [],
+      occurrences: [
+        {
+          ordinal: 0,
+          event: {
+            kind: "card_used",
+            actor: 1,
+            targets: null,
+            effective: { kind: "wuzhong", key: "wuzhong", nature: "normal" },
+            voice: null,
+          },
+        },
+      ],
+    },
+    choice: null,
+    hash_hex: "c".repeat(64),
+    revision: 2,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "c",
+      known_cards: [],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 4, max_hp: 4, hand_count: 5, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(wasmState.uiSuites?.taixuUi?.lastServantClip, "jinnang1", "WASM presentation card_used(wuzhong) triggers jinnang1");
+
+  // WASM presentation damage_dealt targeting observer=0 on own turn (curPlayer=0) -> "shouji1", NOT "gongji1"
+  wasmState = ingestBattleEnvelopeIntoSurfaces(wasmState, {
+    result: null,
+    events: [{ PublicEvent: { code: 4, label: "伤害结算" } }],
+    presentation: {
+      revision: 3,
+      status: "complete",
+      unavailable: [],
+      occurrences: [
+        {
+          ordinal: 0,
+          event: {
+            kind: "damage_dealt",
+            source: 2,
+            target: 1,
+            amount: 1,
+            nature: "normal",
+          },
+        },
+      ],
+    },
+    choice: null,
+    hash_hex: "d".repeat(64),
+    revision: 3,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "d",
+      known_cards: [],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 3, max_hp: 4, hand_count: 5, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(wasmState.uiSuites?.taixuUi?.lastServantClip, "shouji1", "WASM presentation damage_dealt on observer during own turn triggers shouji1");
+
+  // 2b. Network/bare PublicEvent without presentation:
+  // PublicEvent code:3 with TrickWuzhong in known_cards -> "jinnang1"; subsequent Sha in DiscardPile does NOT re-trigger old TrickWuzhong!
+  let netState = createInitialExtensionSurfacesState();
+  netState = ingestBattleEnvelopeIntoSurfaces(netState, {
+    result: null,
+    events: [{ PublicEvent: { code: 3, label: "使用或响应牌" } }],
+    choice: null,
+    hash_hex: "e".repeat(64),
+    revision: 1,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "e",
+      known_cards: [{ id: 88, def: 91, suit: "Heart", rank: 7, owner: null, zone: "DiscardPile", kind: "TrickWuzhong" }],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(netState.uiSuites?.taixuUi?.lastServantClip, "jinnang1", "Network PublicEvent code:3 with TrickWuzhong in DiscardPile triggers jinnang1");
+  assert.equal(netState.uiSuites?.skinSwitch?.audioPlayQueue?.[0]?.card, "wuzhong", "L24 skinSwitch sees new discard wuzhong before seenKnownDiscardIds updates");
+
+  // Subsequent Sha after already-seen TrickWuzhong must NOT falsely trigger jinnang1
+  netState = {
+    ...netState,
+    uiSuites: {
+      ...netState.uiSuites,
+      taixuUi: { ...netState.uiSuites.taixuUi, lastServantClip: "gongji1" },
+    },
+  };
+  netState = ingestBattleEnvelopeIntoSurfaces(netState, {
+    result: null,
+    events: [{ PublicEvent: { code: 3, label: "使用或响应牌" } }],
+    choice: null,
+    hash_hex: "e2".repeat(32),
+    revision: 2,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "e2",
+      known_cards: [
+        { id: 88, def: 91, suit: "Heart", rank: 7, owner: null, zone: "DiscardPile", kind: "TrickWuzhong" },
+        { id: 89, def: 0, suit: "Spade", rank: 7, owner: null, zone: "DiscardPile", kind: "Sha" },
+      ],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 4, max_hp: 4, hand_count: 3, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(netState.uiSuites?.taixuUi?.lastServantClip, "gongji1", "Subsequent Sha must NOT re-trigger seen TrickWuzhong");
+  assert.equal(netState.uiSuites?.skinSwitch?.audioPlayQueue?.[1]?.card, "sha", "L24 skinSwitch sees subsequent Sha discard");
+
+  // Observer hurt on curPlayer === observer via bare PublicEvent code:4 (no presentation) -> "shouji1", NOT "gongji1"!
+  netState = ingestBattleEnvelopeIntoSurfaces(netState, {
+    result: null,
+    events: [{ PublicEvent: { code: 4, label: "伤害结算" } }],
+    choice: null,
+    hash_hex: "f".repeat(64),
+    revision: 2,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "f",
+      known_cards: [{ id: 88, def: 91, suit: "Heart", rank: 7, owner: null, zone: "DiscardPile", kind: "TrickWuzhong" }],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 3, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(netState.uiSuites?.taixuUi?.lastServantClip, "shouji1", "Bare PublicEvent code:4 when observer HP dropped on curPlayer=0 triggers shouji1");
+
+  // Stateless bare PublicEvent code:4 when ONLY observer (curPlayer=0) is wounded (no prevHp) -> "shouji1"
+  const statelessSelfHurt = ingestBattleEnvelopeIntoSurfaces(createInitialExtensionSurfacesState(), {
+    result: null,
+    events: [{ PublicEvent: { code: 4, label: "伤害结算" } }],
+    choice: null,
+    hash_hex: "1".repeat(64),
+    revision: 4,
+    finished: false,
+    view: {
+      observer: 0,
+      round: 1,
+      current_player: 0,
+      phase: "Play",
+      state_hash: "1",
+      known_cards: [],
+      seats: [
+        { player: 0, seat: 0, character_def: 0, alive: true, hp: 3, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+        { player: 1, seat: 1, character_def: 1, alive: true, hp: 4, max_hp: 4, hand_count: 4, skills: [], turned_over: false, identity: null },
+      ],
+      outcome: null,
+    },
+    legal_actions: [],
+  });
+  assert.equal(statelessSelfHurt.uiSuites?.taixuUi?.lastServantClip, "shouji1", "Stateless bare PublicEvent code:4 with only observer wounded triggers shouji1");
 });
 
 

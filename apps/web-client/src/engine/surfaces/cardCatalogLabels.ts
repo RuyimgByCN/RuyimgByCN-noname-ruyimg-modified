@@ -1,3 +1,5 @@
+import { CARD_KINDS } from "../presentationMetadata";
+
 export type TabletopCardCategory = "basic" | "trick" | "equip";
 
 export interface CardKindCatalogEntry {
@@ -196,10 +198,55 @@ const CARD_KIND_BY_DEF: ReadonlyArray<TupleEntry> = [
   ["破阵诀", "trick"], // 174: Pozhenjue
 ];
 
-export function lookupCardKindByDef(def: number | null | undefined): CardKindCatalogEntry | null {
+export interface CardKeyCatalogEntry extends CardKindCatalogEntry {
+  readonly key: string;
+}
+
+export function lookupCardKindByDef(def: number | null | undefined): CardKeyCatalogEntry | null {
   if (def == null || !Number.isInteger(def) || def < 0 || def >= CARD_KIND_BY_DEF.length) {
     return null;
   }
   const [label, category, tag] = CARD_KIND_BY_DEF[def]!;
-  return { label, category, categoryTag: tag ?? DEFAULT_TAG[category] };
+  const key = (CARD_KINDS[def] ?? label).toLowerCase();
+  return { key, label, category, categoryTag: tag ?? DEFAULT_TAG[category] };
+}
+
+const CARD_ENTRY_BY_KEY: ReadonlyMap<string, CardKeyCatalogEntry> = new Map(
+  CARD_KINDS.map((rawKey, idx) => {
+    const key = rawKey.toLowerCase();
+    const [label, category, tag] = CARD_KIND_BY_DEF[idx] ?? [rawKey, "basic", undefined];
+    return [key, { key, label, category, categoryTag: tag ?? DEFAULT_TAG[category] }] as const;
+  }),
+);
+
+const CARD_VIEW_KIND_ALIASES: Readonly<Record<string, string>> = {
+  shafire: "huosha",
+  shathunder: "leisha",
+  horseoff: "horse_minus",
+  horsedef: "horse_plus",
+  trickle: "lebu",
+};
+
+/** Resolves lowercase presentation keys or PascalCase `CardView.kind` tags to catalog category. */
+export function lookupCardKindByKey(rawKey: string | null | undefined): CardKeyCatalogEntry | null {
+  if (typeof rawKey !== "string") return null;
+  const trimmed = rawKey.trim();
+  if (!trimmed) return null;
+  const lower = trimmed.toLowerCase();
+  const direct = CARD_ENTRY_BY_KEY.get(lower);
+  if (direct) return direct;
+  const alias = CARD_VIEW_KIND_ALIASES[lower];
+  if (alias) return CARD_ENTRY_BY_KEY.get(alias) ?? null;
+  if (trimmed.startsWith("Trick")) {
+    const stripped = trimmed.slice(5).toLowerCase();
+    return (
+      CARD_ENTRY_BY_KEY.get(stripped) ?? {
+        key: stripped,
+        label: trimmed,
+        category: "trick",
+        categoryTag: DEFAULT_TAG.trick,
+      }
+    );
+  }
+  return null;
 }

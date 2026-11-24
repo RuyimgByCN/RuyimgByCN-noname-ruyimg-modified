@@ -61,7 +61,7 @@ fn find_general_def(catalog: &crate::catalog::Catalog, name: &str) -> Option<u16
     })
 }
 
-fn resolve_standard_skill_alias(name: &str) -> Option<&'static str> {
+pub fn taixu_skill_alias(name: &str) -> Option<&'static str> {
     use crate::vocabulary::names::*;
     match name {
         "mashu" => Some(MA_SHU),
@@ -117,7 +117,7 @@ fn grant_named_skill_on_core(
 ) {
     let def = catalog
         .skill_by_name(name)
-        .or_else(|| resolve_standard_skill_alias(name).and_then(|al| catalog.skill_by_name(al)));
+        .or_else(|| taixu_skill_alias(name).and_then(|al| catalog.skill_by_name(al)));
     if let Some(def) = def {
         core.skills.insert(
             (seat, def),
@@ -162,7 +162,7 @@ fn take_named_card_exact(
     None
 }
 
-fn taixu_card_fallback_candidates(name: &str) -> &'static [&'static str] {
+pub fn taixu_card_fallback_candidates(name: &str) -> &'static [&'static str] {
     match name {
         "wanjian" => &["archery"],
         "nanman" => &["savage"],

@@ -20,6 +20,7 @@ pub mod season_events_b;
 pub mod seasons;
 pub mod session;
 pub mod session_battle;
+pub mod session_catalog;
 pub mod session_shop;
 pub mod session_types;
 pub mod skill_rank;
