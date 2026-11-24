@@ -33,9 +33,7 @@ impl HostMachine {
             HostBehavior::SwdLingyue => Flow::Done,
             // 暗莲映：frequent 锁定式——直摸 2
             HostBehavior::SwdAnlianying => {
-                if ctx.core.player(self.owner).alive {
-                    ctx.start_draw(self.owner, 2);
-                }
+                run_swd_anlianying(ctx, self.owner);
                 Flow::Done
             }
             // 疾风：锁定 marker（engine max_targets 链+state computed_distance
@@ -74,39 +72,9 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 破茧·齐面：牌堆→弃堆寻首张装备牌装备之（Equipped 帧+授技走
-            // 正式 PlayCard 装备提交路径）
+            // 破茧·齐面：牌堆→弃堆寻首张装备牌装备之（table 暂存 → Equipped 帧，不扰动手牌区）
             HostBehavior::SwdPojian => {
-                let found = ctx
-                    .core
-                    .deck
-                    .iter()
-                    .copied()
-                    .find(|c| ctx.catalog.card_kind(*c).is_equip())
-                    .or_else(|| {
-                        ctx.core
-                            .discard
-                            .iter()
-                            .copied()
-                            .find(|c| ctx.catalog.card_kind(*c).is_equip())
-                    });
-                let Some(id) = found else {
-                    return Flow::Done;
-                };
-                let in_deck = ctx.core.deck.contains(&id);
-                if in_deck {
-                    ctx.core.deck.retain(|x| *x != id);
-                } else {
-                    ctx.core.discard.retain(|x| *x != id);
-                }
-                // 走正式装备提交：实体暂入手牌 → Equipped 帧 → commit_equip
-                // （take_hand_card + 同栏替换 + grant_equip_skills 全托管）
-                ctx.core.player_mut(self.owner).hand.push(id);
-                ctx.emit(EventData::Equipped {
-                    player: self.owner,
-                    card: id,
-                    replaced: None,
-                });
+                run_swd_pojian(ctx, self.owner);
                 Flow::Done
             }
             // 破晓·张烈面：锁定 marker（viewAs 链+距离链+目标上限链三查询）
@@ -200,11 +168,110 @@ impl HostMachine {
             HostBehavior::SwdShoulie => Flow::Done,
             // 妖童：锁定 marker（engine viewAs 链查询），无效果步
             HostBehavior::SwdYaotong => Flow::Done,
-            // 极谋·姬良面：回合外受伤后摸 1（上游 jqimou draw 同口径；
-            // 使用牌续段=主动选择面登记差异不收）
-            HostBehavior::SwdJqimou => {
-                ctx.start_draw(self.owner, 1);
-                Flow::Done
+            // 极谋·姬良面：回合外受伤后摸 1，结算后可选使用一张手牌（character/swd.js:7072）
+            HostBehavior::SwdJqimou => match self.stage {
+                HostStage::Act => {
+                    if !ctx.core.player(self.owner).alive {
+                        return Flow::Done;
+                    }
+                    self.stage = HostStage::DrawSettle;
+                    ctx.start_draw(self.owner, 1);
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    let Some(spec) = ask_swd_jqimou(
+                        HostStage::SelectCard,
+                        self.owner,
+                        None,
+                        ctx.core,
+                        ctx.catalog,
+                    ) else {
+                        return Flow::Done;
+                    };
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec,
+                    }
+                }
+                HostStage::SelectCard => {
+                    let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&c) {
+                        return Flow::Done;
+                    }
+                    let Some((kind, auto_ready, legal)) =
+                        super::swd_card_effects::swd_playable_card_targets(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            c,
+                            true,
+                        )
+                    else {
+                        return Flow::Done;
+                    };
+                    if auto_ready {
+                        let use_as = (!kind.is_equip()).then_some(kind);
+                        ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                            c,
+                            self.owner,
+                            legal,
+                            use_as,
+                        )));
+                        return Flow::Done;
+                    }
+                    self.card = Some(c);
+                    let Some(spec) = ask_swd_jqimou(
+                        HostStage::TargetChoice,
+                        self.owner,
+                        Some(c),
+                        ctx.core,
+                        ctx.catalog,
+                    ) else {
+                        return Flow::Done;
+                    };
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec,
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let Some(c) = self.card.take() else {
+                        return Flow::Done;
+                    };
+                    let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() else {
+                        return Flow::Done;
+                    };
+                    if !ctx.core.player(self.owner).hand.contains(&c) {
+                        return Flow::Done;
+                    }
+                    let Some((kind, _, legal)) =
+                        super::swd_card_effects::swd_playable_card_targets(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            c,
+                            true,
+                        )
+                    else {
+                        return Flow::Done;
+                    };
+                    if !legal.contains(&t) {
+                        return Flow::Done;
+                    }
+                    let use_as = (!kind.is_equip()).then_some(kind);
+                    ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
+                        c,
+                        self.owner,
+                        vec![t],
+                        use_as,
+                    )));
+                    Flow::Done
+                }
+                _ => Flow::Done,
             }
             // 幻形·移除面：移除幻形授予的技能实例（在位旗标=内部状态技能
             // 实例；按其他玩家将技能全表尝试移除——登记差异：不追踪具体
@@ -737,5 +804,133 @@ impl HostMachine {
             HostBehavior::SwdJiguanyaoState => Flow::Done,
             _ => unreachable!("behavior routed to the wrong step module"),
         }
+    }
+}
+
+pub(in crate::content::host::step) fn run_swd_anlianying(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if ctx.core.player(owner).alive {
+        ctx.start_draw(owner, 2);
+    }
+}
+
+pub(in crate::content::host::step) fn run_swd_pojian(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if !ctx.core.player(owner).alive {
+        return;
+    }
+    let found = ctx
+        .core
+        .deck
+        .iter()
+        .copied()
+        .find(|c| ctx.catalog.card_kind(*c).is_equip())
+        .or_else(|| {
+            ctx.core
+                .discard
+                .iter()
+                .copied()
+                .find(|c| ctx.catalog.card_kind(*c).is_equip())
+        });
+    let Some(id) = found else {
+        return;
+    };
+    if ctx.core.deck.contains(&id) {
+        ctx.core.deck.retain(|x| *x != id);
+    } else {
+        ctx.core.discard.retain(|x| *x != id);
+    }
+    ctx.core.table.push(id);
+    ctx.emit(EventData::Equipped {
+        player: owner,
+        card: id,
+        replaced: None,
+    });
+}
+
+pub(in crate::content::host::step) fn host_on_hand_card_removed_swd(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+) {
+    if !ctx.core.player(player).alive
+        || !ctx.core.player(player).hand.is_empty()
+        || ctx.catalog.is_tieji_sealed(ctx.core, player)
+    {
+        return;
+    }
+    let (do_anlianying, do_pojian) = {
+        let has_beh = |beh: HostBehavior| -> bool {
+            ctx.core.skills.iter().any(|(&(p, d), i)| {
+                p == player
+                    && i.enabled
+                    && ctx.catalog.skills.get(d as usize).is_some_and(|s| {
+                        s.behavior.as_host_behavior() == Some(beh)
+                            && !ctx.catalog.is_rechanyuan_sealed_name(ctx.core, player, s.name)
+                    })
+            })
+        };
+        (
+            has_beh(HostBehavior::SwdAnlianying),
+            has_beh(HostBehavior::SwdPojian),
+        )
+    };
+    if do_anlianying {
+        run_swd_anlianying(ctx, player);
+    }
+    if do_pojian {
+        run_swd_pojian(ctx, player);
+    }
+}
+
+pub(in crate::content::host) fn ask_swd_jqimou(
+    stage: HostStage,
+    owner: PlayerId,
+    card: Option<CardId>,
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+) -> Option<ChoiceSpec> {
+    if !core.player(owner).alive {
+        return None;
+    }
+    match stage {
+        HostStage::SelectCard => {
+            let options: Vec<ChoiceOption> = core
+                .player(owner)
+                .hand
+                .iter()
+                .copied()
+                .filter(|&c| {
+                    super::swd_card_effects::swd_playable_card_targets(core, catalog, owner, c, true)
+                        .is_some()
+                })
+                .map(ChoiceOption::Card)
+                .collect();
+            (!options.is_empty()).then_some(ChoiceSpec {
+                kind: ChoiceKind::SelectCards,
+                prompt: "swd_jqimou_use",
+                options,
+                min: 0,
+                max: 1,
+                allow_cancel: true,
+            })
+        }
+        HostStage::TargetChoice => {
+            let c = card?;
+            if !core.player(owner).hand.contains(&c) {
+                return None;
+            }
+            let (_, auto_ready, legal) =
+                super::swd_card_effects::swd_playable_card_targets(core, catalog, owner, c, true)?;
+            if auto_ready || legal.is_empty() {
+                return None;
+            }
+            Some(ChoiceSpec {
+                kind: ChoiceKind::SelectPlayers,
+                prompt: "swd_jqimou_target",
+                options: legal.into_iter().map(ChoiceOption::Player).collect(),
+                min: 1,
+                max: 1,
+                allow_cancel: true,
+            })
+        }
+        _ => None,
     }
 }

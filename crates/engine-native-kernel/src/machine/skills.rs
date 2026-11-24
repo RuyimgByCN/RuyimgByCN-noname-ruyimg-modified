@@ -80,6 +80,10 @@ impl Ctx<'_> {
             .vm_aux
             .flags
             .remove(&(owner, format!("xj_fengyin_disabled:{def}")));
+        self.core
+            .vm_aux
+            .flags
+            .remove(&(owner, format!("swd_yijue_fengyin_disabled:{def}")));
         if old.is_some() {
             let name = self.catalog.skill_name(def);
             self.finish_removed_skill(owner, name);

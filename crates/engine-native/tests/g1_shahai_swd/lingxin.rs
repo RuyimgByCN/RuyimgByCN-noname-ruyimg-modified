@@ -132,11 +132,8 @@ fn swd_generals_b69_lingxin_yueren() {
         },
     );
     settle_optional_confirm(&mut e);
-    // 出杀 1 + 红判摸 1 → 手牌净不变
-    assert_eq!(
-        e.debug_hand(0).len(),
-        h0b,
-        "渔人：红判→摸 1（收回近似登记）"
-    );
+    // 出杀 1 + 非黑判收回此杀 → 手牌净不变且收回原牌 sha3
+    assert_eq!(e.debug_hand(0).len(), h0b, "渔人：红判→收回原杀（手牌净不变）");
+    assert!(e.debug_hand(0).contains(&sha3), "渔人：红判收回原杀实体 sha3");
     assert_eq!(e.debug_hp(1), 3, "渔人：红判杀照常结算");
 }

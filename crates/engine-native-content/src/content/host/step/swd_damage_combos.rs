@@ -278,22 +278,65 @@ impl HostMachine {
                     let pr = ctx.catalog.cards[p_card as usize].rank;
                     let tr = ctx.catalog.cards[t_card as usize].rank;
                     if pr > tr {
-                        // 赢：封印（本回合基本/锦囊用牌失效——fengyin_active
-                        // 同族三面查询；登记差异：原生封印在目标出牌校验
-                        // 已含 h 位置）+受 1 伤
+                        // 赢：封印（非锁定技）+ yijue2（本回合不能使用或打出手牌）
                         ctx.core.player_mut(t).fengyin_active = true;
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((t, "swd_yijue2_hand_locked".to_string()), 1);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((t, "swd_yijue_fengyin_sealed".to_string()), 1);
+                        let to_disable: Vec<u16> = ctx
+                            .core
+                            .skills
+                            .iter()
+                            .filter_map(|(&(p, def), inst)| {
+                                (p == t && inst.enabled && ctx.catalog.is_xj_fengyin_blocked(def))
+                                    .then_some(def)
+                            })
+                            .collect();
+                        for def in to_disable {
+                            if let Some(inst) = ctx.core.skills.get_mut(&(t, def)) {
+                                inst.enabled = false;
+                            }
+                            ctx.core.vm_aux.flags.insert(
+                                (t, format!("swd_yijue_fengyin_disabled:{def}")),
+                                1,
+                            );
+                        }
+                        Flow::Done
                     } else {
-                        // 输：目标已受伤回 1
+                        // 输：目标已受伤则可选令其回 1（携带目标座位供 AI 公开判友）
                         let pl = ctx.core.player(t);
-                        if pl.hp < pl.max_hp as i32 {
-                            ctx.recover(t, 1, None);
+                        if pl.alive && pl.hp < pl.max_hp as i32 {
+                            self.stage = HostStage::SelectNature;
+                            return Flow::WaitChoice {
+                                observer: self.owner,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::SelectPlayers,
+                                    prompt: "swd_yijue_recover_confirm",
+                                    options: vec![ChoiceOption::Player(t)],
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: true,
+                                },
+                            };
+                        }
+                        Flow::Done
+                    }
+                }
+                HostStage::SelectNature => {
+                    if let Some(t) = self.target {
+                        if matches!(
+                            ctx.answer().first(),
+                            Some(ChoiceOption::Player(p)) if *p == t
+                        ) {
+                            let pl = ctx.core.player(t);
+                            if pl.alive && pl.hp < pl.max_hp as i32 {
+                                ctx.recover(t, 1, None);
+                            }
                         }
                     }
                     Flow::Done

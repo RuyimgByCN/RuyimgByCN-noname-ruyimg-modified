@@ -277,44 +277,29 @@ impl HostMachine {
                     };
                     if ctx.core.player(self.owner).hand.contains(&discarded) {
                         ctx.discard_from_hand(self.owner, discarded);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![discarded],
-                        });
                     }
-                    let mut victims: Vec<PlayerId> = (0..ctx.core.players.len())
-                        .filter(|&i| {
-                            i as PlayerId != self.owner
-                                && ctx.core.player(i as PlayerId).alive
-                                && (!ctx.core.player(i as PlayerId).hand.is_empty()
-                                    || !ctx.core.player(i as PlayerId).equips.is_empty())
+                    let mut victims: Vec<PlayerId> = ctx
+                        .core
+                        .alive_players()
+                        .filter(|&p| {
+                            p != self.owner
+                                && super::swd_u05_7d_fixes::is_host_enemy(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    self.owner,
+                                    p,
+                                )
+                                && (!ctx.core.player(p).hand.is_empty()
+                                    || !ctx.core.player(p).equips.is_empty())
                         })
-                        .map(|i| i as PlayerId)
                         .collect();
-                    victims.truncate(2);
+                    if victims.len() > 2 {
+                        ctx.core.rng.shuffle(&mut victims);
+                        victims.truncate(2);
+                    }
+                    victims.sort_by_key(|&p| ctx.core.seat_steps_from(self.owner, p));
                     for v in victims {
-                        let Some(c) = ctx
-                            .core
-                            .player(v)
-                            .hand
-                            .iter()
-                            .chain(ctx.core.player(v).equips.iter())
-                            .copied()
-                            .next()
-                        else {
-                            continue;
-                        };
-                        if ctx.core.player(v).hand.contains(&c) {
-                            ctx.discard_from_hand(v, c);
-                        } else {
-                            ctx.core.player_mut(v).equips.retain(|x| *x != c);
-                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, v, c);
-                            ctx.to_discard(c);
-                        }
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: v,
-                            cards: vec![c],
-                        });
+                        let _ = super::swd_u05_7d_fixes::discard_random_he_card(ctx, v);
                     }
                     Flow::Done
                 }

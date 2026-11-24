@@ -317,11 +317,114 @@ pub(super) fn plan_hearth_6b_choice_action(
         | "hs_yanshu_confirm"
         | "hs_oldyanshu_confirm"
         | "hs_shengyan_confirm"
-        | "hs_wlianji_confirm" => answer(id, vec![ChoiceOption::Confirm]),
+        | "hs_wlianji_confirm"
+        | "hs_xinliegong_confirm" => answer(id, vec![ChoiceOption::Confirm]),
+        "hs_rejieming_target" => {
+            let best = options
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Player(p) => {
+                        let p = *p;
+                        let att = public_attitude(&input.view, seat, p);
+                        if att <= 0 {
+                            return None;
+                        }
+                        let pl = &input.view.players[p as usize];
+                        let need = (pl.max_hp as i32) - (pl.hand_count as i32);
+                        let score = if need > 2 { att * 20 } else { att * 10 } + need;
+                        Some((p, score))
+                    }
+                    _ => None,
+                })
+                .max_by_key(|&(_, s)| s)
+                .map(|(p, _)| ChoiceOption::Player(p));
+            best.map(|o| answer(id, vec![o]))
+                .unwrap_or_else(|| answer(id, Vec::new()))
+        }
         "hs_xianzhi_choice" => {
             let _ = kind;
             answer(id, vec![ChoiceOption::Pass])
         }
         _ => None,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::choice::{ChoiceKind, ChoiceSpec};
+    use crate::state::Role;
+    use crate::view::{HandView, PlayerCellView, PlayerView};
+
+    #[test]
+    fn rejieming_decline_uses_empty_cancel_matching_select_players_accepts() {
+        let spec = ChoiceSpec {
+            kind: ChoiceKind::SelectPlayers,
+            prompt: "hs_rejieming_target",
+            options: vec![ChoiceOption::Player(1)],
+            min: 1,
+            max: 1,
+            allow_cancel: true,
+        };
+        let cell = |seat: u8, role: Option<Role>, hand_count: usize| PlayerCellView {
+            seat,
+            alive: true,
+            hp: 4,
+            max_hp: 4,
+            hand: HandView::Hidden,
+            hand_count,
+            equips: vec![],
+            judge: vec![],
+            generals: [None, None],
+            revealed_generals: [false, false],
+            turned_over: false,
+            linked: false,
+            skills: vec![],
+            r05_effects: vec![],
+            role,
+            team: None,
+        };
+        let input = PolicyInput {
+            view: PlayerView {
+                seat: 0,
+                players: vec![cell(0, Some(Role::Lord), 0), cell(1, Some(Role::Rebel), 2)],
+                cards: vec![],
+                deck_count: 10,
+                discard: vec![],
+                table: vec![],
+                turn: 1,
+                phase: crate::event::Phase::Play,
+                round: 1,
+                outcome: None,
+                ruleset_version: 333,
+            },
+            choice: None,
+            revision: 0,
+            quota_remaining: None,
+            own_hand_kinds: vec![],
+        };
+        let e = crate::Engine::new(1, 2);
+        let action = plan_hearth_6b_choice_action(
+            e.catalog(),
+            &input,
+            77,
+            ChoiceKind::SelectPlayers,
+            "hs_rejieming_target",
+            &spec.options,
+            1,
+            1,
+            true,
+        )
+        .expect("rejieming plan action");
+        match action {
+            GameAction::Answer {
+                choice_id: 77,
+                selection,
+            } => {
+                assert!(selection.is_empty(), "must cancel with vec![], got {selection:?}");
+                assert!(spec.accepts(&selection), "ChoiceSpec must accept cancel selection");
+            }
+            other => panic!("unexpected action: {other:?}"),
+        }
     }
 }

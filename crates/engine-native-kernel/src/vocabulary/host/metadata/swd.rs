@@ -1025,13 +1025,13 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 兰芷：使用梅花牌后（上游含 check 可放弃→原生恒发动近似）
+            // 兰芷：使用梅花牌后（character/swd.js:8276，可放弃 optional: true）
             HostBehavior::SwdLanzhi => Some(TriggerMeta {
                 event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
-                optional: false,
+                optional: true,
                 extra_events: Vec::new(),
             }),
             // 热血（A2 审计 H42 + Round 2）：上游 trigger {global:'phaseBegin'}＝

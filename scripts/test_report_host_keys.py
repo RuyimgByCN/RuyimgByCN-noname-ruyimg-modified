@@ -36,7 +36,7 @@ class HostKeyTests(unittest.TestCase):
 
     def test_u05_total(self):
         total = sum(self.per_package.get(name, 0) for name in self.mod.EXPECTED_U05)
-        self.assertEqual(total, 314)
+        self.assertEqual(total, 315)
 
     def test_xianjian_package_is_counted(self):
         # `shaai-xianjian`（75 键）曾被漏掉；`shahai-xianjian` 确实是 0

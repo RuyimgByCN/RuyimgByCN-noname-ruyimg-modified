@@ -128,6 +128,9 @@ pub(crate) const HEARTH_B6B_SKILL_MAP: &[(&str, HostBehavior)] = &[
     ("tuteng7", HostBehavior::U05Hearth2BatchF),
     ("tuteng8", HostBehavior::U05Hearth2BatchF),
     ("hongxi", HostBehavior::U05Hearth2BatchF),
+    ("rejieming", HostBehavior::U05Hearth2BatchF),
+    ("xinliegong", HostBehavior::U05Hearth2BatchF),
+    ("xinwuyan", HostBehavior::U05Hearth2BatchF),
 ];
 
 pub(crate) fn lookup_shahai_hearth_b6b_host_behavior(clean: &str) -> Option<HostBehavior> {
@@ -141,6 +144,8 @@ pub(crate) fn apply_shahai_hearth_b6b_fixups(
     seen_cards: &mut BTreeSet<String>,
     seen_skills: &mut BTreeSet<String>,
 ) {
+    pack.vm_skills
+        .retain(|v| lookup_shahai_hearth_b6b_host_behavior(v.name.as_str()).is_none());
     for &(sk, beh) in HEARTH_B6B_SKILL_MAP {
         if let Some(hs) = pack.host_skills.iter_mut().find(|h| h.name == sk) {
             hs.behavior = beh;

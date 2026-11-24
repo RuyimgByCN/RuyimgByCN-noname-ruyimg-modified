@@ -28,6 +28,8 @@ mod part6_batch_e_f;
 mod part7_round2_fixes;
 #[path = "u05_b6b_hearth/part8_round3_fixes.rs"]
 mod part8_round3_fixes;
+#[path = "u05_b6b_hearth/part9_p3a_batch1.rs"]
+mod part9_p3a_batch1;
 
 use common::fresh_proto;
 use content_native_loader::U05_HEARTH_ALL_SKILLS;

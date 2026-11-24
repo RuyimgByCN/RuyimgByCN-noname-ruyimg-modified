@@ -165,7 +165,7 @@ pub(in crate::kernel) fn resolve_huoshan_judge(
                 p,
                 1,
                 crate::event::DamageNature::Fire,
-                None,
+                Some(trick),
             )));
         }
         ctx.emit(EventData::Damage(damage_data_with(
@@ -173,7 +173,7 @@ pub(in crate::kernel) fn resolve_huoshan_judge(
             owner,
             2,
             crate::event::DamageNature::Fire,
-            None,
+            Some(trick),
         )));
     } else {
         pass_delayed_to_next_or_discard(ctx, owner, trick);

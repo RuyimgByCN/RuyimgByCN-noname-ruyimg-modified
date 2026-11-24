@@ -354,10 +354,9 @@ fn zf_qixingzhen_siege_discard_and_virtual_sha() {
         });
     }
     // 阶段二：视为对围攻者用杀——1/3 各响应闪（免伤）
-    for (obs, shan) in [(1u8, shan1q), (3u8, shan3q)] {
+    for (obs, shan) in [(3u8, shan3q), (1u8, shan1q)] {
         let c = e.open_choice().cloned().expect("七星用杀响应询问");
-        eprintln!("DBG ask obs={} prompt={} opts={:?}", c.observer, c.spec.prompt, c.spec.options);
-        assert_eq!(c.spec.prompt, "swd_qixingzhen_shan");
+        assert_eq!(c.spec.prompt, "respond_shan");
         assert_eq!(c.observer, obs);
         let (cid, _) = (c.id, c.observer);
         drop(c);

@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-24 Batch P3-A（U05 杀海拾遗非冻结 31 项收口→1,618/1,621，全局 4,035/389/0）合入
+
+- **范围与结果**：在 `e8244d6ed8f14ad499a5bdf82949bafb67b354b7`（Batch `Q4-remaining` CI Run `45303299654` Attempt 1 `10/10 success`）上合入 `swarm/p3-u05-closure`（`e8b71bfc4..7d574912ecf29d8ef158b34388c7827271fd0c72`，`verifier-u05-b` `#231 APPROVE`），完成 `catalog_queries_seals.rs` 拆分、`shahai_config.rs` 四子包真裁剪、`qixingzhen`/`stone_chenshui`/`diy_caiwenji`、6 名 `hearth` 武将（含 `xinwuyan` 与封印门控）及 SWD 10 技 + 8 将闭合（含 `yijue` AI 与 `yueren` 封印门控）；将获批 **`31`** 项全部升为 `已复核等价`（严格维持 `shixu`、`hs_nozdormu` 墙钟边界及 `old_longfan` Decision 40 实时 DOM 虎口机边界共 `3` 项为 `简化近似`），**`U05` `1,618 / 3 / 0`**、全局 **`4,035 / 389 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch P3-A 证据摘要](../operations/evidence/2026-11-24-p3-a-u05-closure/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。
+
 ## 2026-11-24 Batch Q4-remaining（L03/L04/L15/L17/L21/L26/U02/U03/U04 +97→全局 4,004/420/0，Q4 收口）合入
 
 - **范围与结果**：在 `8fa7589963bbbe724dc89e656ffcdf6b1afdd8ea`（Batch `U05-7d` CI Run `45288232922` Attempt 1 `10/10 success`）上三路合入 `swarm/conv-q4-remaining`（`586b51cdc..0e06ca047480eefdf6b8c86bb307f3702395079e`，`verifier-l11` `#114 APPROVE`），完成 `catalog_queries_q4.rs` / `state/core_ops_teams.rs` / `q4_engine_bridge::append_q4_formal_rules` 拆分、`retieji` 真 `OrdinaryJudge` 与 `L03`/`U02` 双口径派发、`boss_baonu`/`boss_baonuwash` 退栈重启及 `L03/L04/L15/L17/L21/L26/U02/U03/U04` 全家引擎桥接协同；在避免回退 `Batch UI-7` 已闭合之 `7` 项的前提下将剩余 **`97`** 项升为 `已复核等价`（`L03` `8/0/0`、`L04` `21/0/0`、`L15` `14/0/0`、`L17` `11/0/0`、`L21` `9/0/0`、`L26` `6/1/0`、`U02` `16/1/0`、`U03` `30/0/0`、`U04` `7/0/0`；严格保留 `L26:configs:Fool_liegong` 与 `U02:modes:boss_play_arenaReady` 为 `简化近似`），全局 **`4,004 / 420 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch Q4-remaining 证据摘要](../operations/evidence/2026-11-24-q4-remaining/README.md) 与各来源 G0 文档。

@@ -1244,8 +1244,13 @@ fn swd_cards_equip5_b39_sifeizhenmian_yiluan() {
     );
     settle_optional_confirm(&mut e);
     assert_eq!(hand_len_w(&e, 1), 1, "四非①：目标首张手牌被用（2→1）");
-    // 座位序首个其他存活者 = p0：黑杀指向 p0（无闪直中 4→3）
-    assert_eq!(e.debug_hp(0), 3, "四非①：p0（座位序首）被杀指向");
+    // 随机合法目标 ∈ {p0, p2}（攻击范围 1 内；p3 距 2 不可指）：被杀直中减 1 血
+    assert!(
+        e.debug_hp(0) == 3 || e.debug_hp(2) == 7,
+        "四非①：黑杀命中随机合法目标 p0({}) 或 p2({})",
+        e.debug_hp(0),
+        e.debug_hp(2),
+    );
 
     // 反例：判定红桃时不用牌（预控红桃顶）——再发动（限一次未消耗？
     // usable:1 每回合一次，此处换目标验证结果分支而非限次）

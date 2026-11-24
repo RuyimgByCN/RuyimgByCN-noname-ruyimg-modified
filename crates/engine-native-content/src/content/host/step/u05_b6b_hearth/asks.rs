@@ -72,6 +72,8 @@ pub(crate) const PROMPT_HS_TUTENG_REPLACE: &str = "hs_tuteng_replace";
 pub(crate) const PROMPT_HS_TUTENG7_TARGET: &str = "hs_tuteng7_target";
 pub(crate) const PROMPT_HS_SHIXU_DISCARD: &str = "hs_shixu_discard";
 pub(crate) const PROMPT_HS_ENZE_DISCARD: &str = "hs_enze_discard";
+pub(crate) const PROMPT_HS_REJIEMING_TARGET: &str = "hs_rejieming_target";
+pub(crate) const PROMPT_HS_XINLIEGONG_CONFIRM: &str = "hs_xinliegong_confirm";
 
 pub(super) const ASK_B6B_XIENENG_PICK: u32 = 201;
 pub(super) const ASK_B6B_FBEIFA_TARGET: u32 = 202;
@@ -132,6 +134,8 @@ pub(super) const ASK_B6B_TUTENG7_TARGET: u32 = 255;
 pub(super) const ASK_B6B_SHIXU_DISCARD: u32 = 256;
 pub(super) const ASK_B6B_ENZE_DISCARD: u32 = 257;
 pub(super) const ASK_B6B_YUANZHENG_CARD: u32 = 258;
+pub(super) const ASK_B6B_REJIEMING_TARGET: u32 = 259;
+pub(super) const ASK_B6B_XINLIEGONG_CONFIRM: u32 = 260;
 
 fn ask_key(behavior: HostBehavior, stage: HostStage) -> String {
     format!("hs_b6b_ask:{}:{}", behavior.tag(), stage.tag())
@@ -319,7 +323,8 @@ pub(super) fn build_b6b_expected_ask(
         | ASK_B6B_OLDYANSHU_CONFIRM
         | ASK_B6B_SHENGYAN_CONFIRM
         | ASK_B6B_XIANZHI_CHOICE
-        | ASK_B6B_WLIANJI_CONFIRM => {
+        | ASK_B6B_WLIANJI_CONFIRM
+        | ASK_B6B_XINLIEGONG_CONFIRM => {
             let prompt = match ask_id {
                 ASK_B6B_SHIFA_DRAW_CONFIRM => PROMPT_HS_SHIFA_DRAW_CONFIRM,
                 ASK_B6B_OLDSHIFA_DRAW_CONFIRM => PROMPT_HS_OLDSHIFA_DRAW_CONFIRM,
@@ -333,6 +338,7 @@ pub(super) fn build_b6b_expected_ask(
                 ASK_B6B_OLDYANSHU_CONFIRM => PROMPT_HS_OLDYANSHU_CONFIRM,
                 ASK_B6B_SHENGYAN_CONFIRM => PROMPT_HS_SHENGYAN_CONFIRM,
                 ASK_B6B_XIANZHI_CHOICE => PROMPT_HS_XIANZHI_CHOICE,
+                ASK_B6B_XINLIEGONG_CONFIRM => PROMPT_HS_XINLIEGONG_CONFIRM,
                 _ => PROMPT_HS_WLIANJI_CONFIRM,
             };
             build_ask(
@@ -699,6 +705,15 @@ pub(super) fn build_b6b_expected_ask(
                 .map(ChoiceOption::Player)
                 .collect();
             build_ask(owner, PROMPT_HS_TUTENG7_TARGET, ChoiceKind::SelectPlayers, opts, 1, 1, true)
+        }
+        ASK_B6B_REJIEMING_TARGET => {
+            let opts: Vec<ChoiceOption> = core
+                .seat_order_from(owner)
+                .into_iter()
+                .filter(|&p| core.player(p).alive)
+                .map(ChoiceOption::Player)
+                .collect();
+            build_ask(owner, PROMPT_HS_REJIEMING_TARGET, ChoiceKind::SelectPlayers, opts, 1, 1, true)
         }
         ASK_B6B_SHIXU_DISCARD => {
             let actor = target.unwrap_or(owner);

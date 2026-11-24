@@ -40,6 +40,44 @@ pub(super) fn he_cards(core: &crate::state::GameStateCore, p: PlayerId) -> Vec<C
     v
 }
 
+pub(super) fn is_host_enemy(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    owner: PlayerId,
+    other: PlayerId,
+) -> bool {
+    if !is_enemy_of(core, owner, other) {
+        return false;
+    }
+    !matches!(core.source_is_enemy_of(catalog, owner, other), Some(false))
+        || matches!(core.mode, crate::state::GameMode::Identity { .. })
+}
+
+pub(super) fn discard_random_he_card(ctx: &mut Ctx<'_>, target: PlayerId) -> Option<CardId> {
+    let total = ctx.core.player(target).hand.len() + ctx.core.player(target).equips.len();
+    if total == 0 {
+        return None;
+    }
+    let j = ctx.core.rng.gen_range(total as u32) as usize;
+    let hand_len = ctx.core.player(target).hand.len();
+    if j < hand_len {
+        let c = ctx.core.player(target).hand[j];
+        // `discard_from_hand` already moves to discard, runs `on_hand_card_removed`, and logs `CardDiscarded`.
+        ctx.discard_from_hand(target, c);
+        Some(c)
+    } else {
+        let idx = j - hand_len;
+        let c = ctx.core.player_mut(target).equips.remove(idx);
+        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, target, c);
+        ctx.to_discard(c);
+        ctx.log(LogEvent::CardDiscarded {
+            player: target,
+            cards: vec![c],
+        });
+        Some(c)
+    }
+}
+
 fn lqingcheng_flush_to_hand(ctx: &mut Ctx<'_>, m: &mut HostMachine) {
     let gained = std::mem::take(&mut m.cards);
     let mut moved = Vec::new();

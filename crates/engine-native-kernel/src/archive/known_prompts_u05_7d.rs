@@ -15,4 +15,6 @@ pub(super) const KNOWN_PROMPTS_U05_7D: &[&str] = &[
     "lqingcheng_continue",
     "toudan_neighbor_discard",
     "rexue_sha",
+    "swd_yijue_recover_confirm",
+    "swd_yueren_confirm",
 ];

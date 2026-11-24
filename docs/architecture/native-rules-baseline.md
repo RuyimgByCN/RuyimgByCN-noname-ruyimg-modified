@@ -1,5 +1,15 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-24 Batch P3-A（`U05` 31 项非冻结等价闭环、`old_longfan` Decision 40 实时 DOM 虎口机边界与 `shixu`/`hs_nozdormu` 墙钟保留）
+
+- **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **主线合入语义与模块拆分**：
+  - 按门禁行数边界拆出 [catalog_queries_seals.rs](../../crates/engine-native-kernel/src/catalog_queries_seals.rs)（于 [catalog.rs](../../crates/engine-native-kernel/src/catalog.rs) 声明），收敛封印查询；[shahai_config.rs](../../crates/content-native-loader/src/shahai_config.rs) 与 [locked_content.rs](../../crates/content-native-loader/src/locked_content.rs) 落实 `U05:configs:{gwent,mtg,yunchou,zhenfa}` 真实子包裁剪过滤；[character.json](../../packages/extensions/shahai-yunchou-upstream-noname/assets/character.json) 将 `diy_caiwenji` 悲歌分离至 `ycn_beige`（`host:u05_yunchou_char`）同时保留经典 `beige`（`shahai-yunchou-upstream-noname` `host:` 键 `16 -> 17`、`U05` 合计 `314 -> 315`，同步校准 `report_host_keys.py`）。
+  - 闭环 `SWD` 10 项遗留技能与 8 名武将：`yiluan`/`xingdian` 基于确定性 RNG 与公共态度选目标、`longfan`/`touzhi` 修复敌对态度与阵亡免收武器、`pojian`/`anlianying` 接入完整 `loseEnd` 失牌、`jqimou` 补全后续 `chooseToUse`、`lanzhi` `optional: true` + 公共态度 AI、`xuanyuan_ai` 公共信息评分、以及 [resume.rs](../../crates/engine-native-kernel/src/kernel/sha/resume.rs#L903-L908) `resolve_yueren`（红判回收【杀】、`yueren2` 每回合上限与 `tieji`/`rechanyuan`/`xj_fengyin` 封印门控）；同步补全 `swd_jiangwu`（[swd_damage_combos.rs](../../crates/engine-native-content/src/content/host/step/swd_damage_combos.rs) + [extension_choices_swd.rs](../../crates/engine-native/src/ai/extension_choices_swd.rs) `swd_yijue_recover_confirm` / `yijue_target`）、`qixingzhen` 真围攻/联攻结算（[swd_zhenfa_cards.rs](../../crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs)）、`stone_chenshui` 与 `hs_{alleria,jaina,kcthun,tgolem,wuther,xsylvanas}`（含 [group_f.rs](../../crates/engine-native-content/src/content/host/step/u05_b6b_hearth/group_f.rs) `xinwuyan` `exact_base_name` 归一化与非锦囊过滤）。
+- **明确维持 `简化近似` 的 `U05` 3 项冻结 / Decision 40 边界（`U05` 最终 `1,618 / 3 / 0`）**：
+  1. **`U05:skills:old_longfan`（Decision 40 实时 UI 小游戏边界）**：上游 `card/swd/skill.js:2403` 通过 `200ms setInterval` 驱动 4 位数字 DOM 虎口机滚轮实时点击停止，属非确定性实时客户端 UI 小游戏，按 Decision 40 决定保留为 `简化近似`（不引入实时墙钟轮询至原生确定性内核）。
+  2. **`U05:skills:shixu` 与 `U05:generals:hs_nozdormu`（墙钟确定性边界）**：`shixu`（`character/hearth/skill.js:4877`）及其所附武将 `hs_nozdormu`（`character/hearth/character.js:215`）沿用既定确定性状态旗标代理规则（见下文 Batch U05-6b 记录），维持 `简化近似`。
+
 ## 2026-11-24 Batch Q4-remaining（Q4 9 源 97 项语义对齐、`boss_lvbu1..3` 四势力归群边界与 2 项保留边界）
 
 - **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。

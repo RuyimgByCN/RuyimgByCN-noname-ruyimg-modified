@@ -466,11 +466,12 @@ pub const U05_SWD_CHAR_SKILLS: [&str; 230] = [
 ];
 
 /// `U05` `yunchou` skills (`19` items).
-pub const U05_YUNCHOU_ALL_SKILLS: [&str; 19] = [
+/// `U05` `yunchou` skills (`20` items; includes `beige` for `YunchouBeige` alongside `diy_caiwenji`'s `ycn_beige`).
+pub const U05_YUNCHOU_ALL_SKILLS: [&str; 20] = [
     "suolianjia", "g_chenhuodajie", "xicai", "diyjianxiong", "diykuanggu", "xiongzi",
     "yaliang", "diy_jiaoxia", "yiesheng", "guihan", "luweiyan", "luweiyan2",
     "jieyan", "honglian", "diyguhuo", "diychanyuan", "zonghuo", "shaoying",
-    "xinfu_qiaosi",
+    "xinfu_qiaosi", "beige",
 ];
 
 /// `U05` `wuxing_play` skills (`2` items).

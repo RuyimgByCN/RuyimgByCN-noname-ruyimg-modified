@@ -251,3 +251,5 @@ mod part4_yunchou_chars;
 mod part5_round2_fixes;
 #[path = "u05_b1_fixes/part6_round3_fixes.rs"]
 mod part6_round3_fixes;
+#[path = "u05_b1_fixes/part7_p3a_batch1.rs"]
+mod part7_p3a_batch1;

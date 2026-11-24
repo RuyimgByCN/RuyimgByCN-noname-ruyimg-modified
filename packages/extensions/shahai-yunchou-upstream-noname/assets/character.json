@@ -8,6 +8,13 @@
     "description": "G1 运筹武将面批9（于吉整将：蝉缘 max_hp 减面转正）",
     "card_prefix": "ycn_"
   },
+  "skills": [
+    {
+      "name": "beige",
+      "title": "悲歌",
+      "mapping": "host:beige"
+    }
+  ],
   "generals": [
     {
       "id": "ycn_diy_caocao",
@@ -150,9 +157,9 @@
       "gender": "female",
       "skills": [
         {
-          "name": "beige",
+          "name": "ycn_beige",
           "title": "悲歌",
-          "mapping": "host:beige"
+          "mapping": "host:u05_yunchou_char"
         },
         {
           "name": "ycnguihan",

@@ -70,6 +70,12 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
                     .flags
                     .remove(&(from, format!("xj_du_private_move:{c}")))
                     .is_none()
+                    && ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .remove(&(from, format!("cards_moved_skip_hand_removed:{c}")))
+                        .is_none()
                     && (from != to || !ctx.core.player(from).hand.contains(&c))
                 {
                     (ctx.catalog.hooks.on_hand_card_removed)(ctx, from, c);

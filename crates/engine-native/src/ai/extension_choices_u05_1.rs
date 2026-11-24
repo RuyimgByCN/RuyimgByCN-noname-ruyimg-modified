@@ -89,6 +89,7 @@ pub(super) fn plan_u05_b1_choice_action(
         | "u05_qiaosi_discard"
         | "u05_xinfu_jingxie_card"
         | "u05_beige_club_discard"
+        | "u05_ycn_beige_discard"
         | "beige_discard"
         | "u05_shezhan_own_pick"
         | "u05_shezhan_target_pick"

@@ -24,13 +24,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PACKAGES = ROOT / "packages" / "extensions"
 
-#: 2026-10-19 第 776 轮实测（U05 家族的 8 个子包）；口径变化须同步更新规则基准。
-#: U05 由 **9 个包**组成（第 776 轮更正：此前只算了 8 个，漏了 `shaai-xianjian` 与 `shahai-zhenfa`）。
+#: 2026-10-19 第 776 轮实测（U05 家族的 9 个子包）；2026-11-24 Batch P3-A `diy_caiwenji` `ycn_beige` 接入 `host:u05_yunchou_char` 后 `shahai-yunchou` `16 -> 17`（U05 `314 -> 315`）。口径变化须同步更新规则基准。
 EXPECTED_U05 = {
     "shahai-swd-upstream-noname": 187,
     "shaai-xianjian-upstream-noname": 75,
     "shaai-ow-upstream-noname": 36,
-    "shahai-yunchou-upstream-noname": 16,
+    "shahai-yunchou-upstream-noname": 17,
     "shahai-gujian-upstream-noname": 0,
     "shahai-hearth-upstream-noname": 0,
     "shahai-gwent-upstream-noname": 0,

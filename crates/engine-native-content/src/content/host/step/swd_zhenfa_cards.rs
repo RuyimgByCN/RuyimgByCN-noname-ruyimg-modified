@@ -31,24 +31,12 @@ pub(in crate::content::host) fn ask_swd_zhenfa_card(
                 .player(t)
                 .hand
                 .iter()
+                .chain(core.player(t).equips.iter())
                 .copied()
                 .map(ChoiceOption::Card)
                 .collect();
             (!options.is_empty()).then(|| {
                 ask(owner, "swd_qixingzhen_discard", ChoiceKind::SelectCards, options, 1, 1, false)
-            })
-        }
-        HostBehavior::SwdQixingzhenCard if stage == HostStage::TargetChoice => {
-            let options: Vec<ChoiceOption> = core
-                .player(t)
-                .hand
-                .iter()
-                .copied()
-                .filter(|c| catalog.card_kind(*c) == CardKind::Shan)
-                .map(ChoiceOption::Card)
-                .collect();
-            (!options.is_empty()).then(|| {
-                ask(t, "swd_qixingzhen_shan", ChoiceKind::SelectCards, options, 0, 1, true)
             })
         }
         HostBehavior::SwdNiaoxiangzhenCard if stage == HostStage::TargetChoice => {
@@ -153,6 +141,7 @@ impl HostMachine {
                             .player(t)
                             .hand
                             .iter()
+                            .chain(ctx.core.player(t).equips.iter())
                             .copied()
                             .map(ChoiceOption::Card)
                             .collect();
@@ -173,48 +162,59 @@ impl HostMachine {
                         };
                     }
                     if self.cards.is_empty() {
-                        if let Some(c) = self.card {
+                        if let Some(c) = self.card.take() {
                             ctx.to_discard(c);
                             ctx.core.table.retain(|x| *x != c);
-                            self.card = None;
                         }
                         return Flow::Done;
                     }
-                    let t = self.cards.remove(0) as u8;
-                    self.target = Some(t);
-                    let options: Vec<ChoiceOption> = ctx
+                    if let Some(c) = self.card.take() {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    // 七星阵阶段二（card/zhenfa/card.js:187-194）：弃牌后视为对所有
+                    // 围攻者使用一张无实体虚拟【杀】，且 `false` 不计入出牌阶段出杀次数。
+                    let besiegers = std::mem::take(&mut self.cards);
+                    let sha_targets: Vec<PlayerId> = ctx
                         .core
-                        .player(t)
-                        .hand
-                        .iter()
-                        .copied()
-                        .filter(|c| ctx.catalog.card_kind(*c) == CardKind::Shan)
-                        .map(ChoiceOption::Card)
+                        .seat_order_from(self.owner)
+                        .into_iter()
+                        .filter(|&p| {
+                            p != self.owner
+                                && besiegers.contains(&u32::from(p))
+                                && ctx.core.player(p).alive
+                                && ctx.core.in_attack_range(ctx.catalog, self.owner, p)
+                                && !super::u01_fixes_1::is_target_kongcheng(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    p,
+                                )
+                                && !crate::rvm_bridge::modifiers::eval_card_target_canceled_opt(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    self.owner,
+                                    p,
+                                    None,
+                                    CardKind::Sha,
+                                    crate::event::DamageNature::Normal,
+                                )
+                        })
                         .collect();
-                    if options.is_empty() {
-                        // 无闪：直接结算 1 点伤害（机关凤同款收口）
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
-                        self.stage = HostStage::Act;
-                        return Flow::Yield;
+                    if !sha_targets.is_empty() {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((self.owner, "vm_va_sha_no_count".to_string()), 1);
+                        ctx.emit(EventData::CardUsed(crate::event::CardUseData {
+                            card: None,
+                            player: self.owner,
+                            targets: sha_targets,
+                            nature: crate::event::DamageNature::Normal,
+                            use_as: Some(CardKind::Sha),
+                            cancelled: false,
+                        }));
                     }
-                    self.stage = HostStage::TargetChoice;
-                    Flow::WaitChoice {
-                        observer: t,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "swd_qixingzhen_shan",
-                            options,
-                            min: 0,
-                            max: 1,
-                            allow_cancel: true,
-                        },
-                    }
+                    Flow::Done
                 }
                 HostStage::SelectCard => {
                     if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
@@ -227,33 +227,11 @@ impl HostMachine {
                             ctx.core.player_mut(t).equips.remove(pos);
                             crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
                             ctx.to_discard(c);
-                        }
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: t,
-                            cards: vec![c],
-                        });
-                    }
-                    self.stage = HostStage::Act;
-                    Flow::Yield
-                }
-                HostStage::TargetChoice => {
-                    let t = self.target.unwrap_or(self.owner);
-                    if matches!(ctx.answer().first(), Some(ChoiceOption::Card(_))) {
-                        if let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() {
-                            ctx.discard_from_hand(t, c);
                             ctx.log(LogEvent::CardDiscarded {
                                 player: t,
                                 cards: vec![c],
                             });
                         }
-                    } else {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            1,
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
                     }
                     self.stage = HostStage::Act;
                     Flow::Yield

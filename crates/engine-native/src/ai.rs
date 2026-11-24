@@ -454,6 +454,34 @@ fn enumerate_candidates_variant(sim: &Engine, seat: u8, variant: u8) -> Vec<Game
 ///
 /// 手牌项天然抑制「白打一张牌」：出牌使手牌 -1（-3），无收益的牌因此
 /// 劣于 `NextPhase`；摸牌/顺牵等净增手牌的牌为正收益。
+fn xuanyuan_ai_penalty(
+    view: &crate::view::PlayerView,
+    catalog: &crate::catalog::Catalog,
+    seat: u8,
+    action: &GameAction,
+) -> i64 {
+    let GameAction::PlayCard { card, .. } = action else {
+        return 0;
+    };
+    if catalog.card_kind(*card) != CardKind::Xuanyuanjian {
+        return 0;
+    }
+    let actor_has_xuanyuan = view
+        .players
+        .get(seat as usize)
+        .is_some_and(|p| p.skills.iter().any(|s| *s == "xuanyuan"));
+    if actor_has_xuanyuan {
+        return 0;
+    }
+    let hostile_xuanyuan = view.players.iter().any(|p| {
+        p.alive
+            && p.seat != seat
+            && p.skills.iter().any(|s| *s == "xuanyuan")
+            && extension_choices::public_attitude(view, seat, p.seat) <= 0
+    });
+    if hostile_xuanyuan { -500 } else { 0 }
+}
+
 fn policy_score(
     base: &crate::view::PlayerView,
     after: &crate::view::PlayerView,
@@ -808,6 +836,7 @@ impl Engine {
                     }
                 }
             }
+            score += xuanyuan_ai_penalty(&baseline_view, sim.catalog(), seat, &action);
             if best.as_ref().map(|(s, _)| score > *s).unwrap_or(true) {
                 best = Some((score, action.clone()));
             }

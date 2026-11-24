@@ -844,7 +844,21 @@ pub(super) fn push_play_card_frame(
     if use_as == Some(CardKind::Liuxinghuoyu)
         && kind != catalog.resolved_card_kind(&state.core, card)
     {
-        if let Some(hdef) = catalog.skill_by_name("huopu") {
+        let huopu_ids: Vec<_> = state
+            .core
+            .skills
+            .keys()
+            .filter_map(|&(p, d)| {
+                (p == player
+                    && catalog
+                        .skills
+                        .get(d as usize)
+                        .and_then(|s| s.behavior.as_host_behavior())
+                        == Some(crate::content::host::HostBehavior::SwdHuopu))
+                .then_some(d)
+            })
+            .collect();
+        for hdef in huopu_ids {
             if let Some(inst) = state.core.skills.get_mut(&(player, hdef)) {
                 inst.once_used = true;
             }

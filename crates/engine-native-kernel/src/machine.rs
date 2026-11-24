@@ -926,6 +926,10 @@ impl<'a> Ctx<'a> {
             });
         }
         for &card in &delivered {
+            self.core
+                .vm_aux
+                .flags
+                .insert((from, format!("cards_moved_skip_hand_removed:{card}")), 1);
             self.emit(EventData::CardsMoved {
                 cards: vec![card],
                 from,

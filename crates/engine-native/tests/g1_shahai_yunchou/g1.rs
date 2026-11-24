@@ -1090,23 +1090,14 @@ fn g1_yunchou_generals_batch18_beige_judge_branches() {
         .expect("蔡文姬");
     assert_eq!(
         cai.skills.to_vec(),
-        vec!["beige", "ycnguihan"],
-        "蔡文姬 mapped 面：悲歌+归汉"
+        vec!["ycn_beige", "ycnguihan"],
+        "蔡文姬 mapped 面：ycn_beige+归汉"
     );
 
-    let pack = ExtensionPack {
-        def: engine_native::content::extension::ExtensionDef {
-            name: "shahai-yunchou-generals-b18",
-            version: 1,
-            description: "运筹武将面批 18",
-        },
-        generals: bridged.generals.clone(),
-        cards: Vec::new(),
-        host_skills: bridged.host_skills.clone(),
-        vm_skills: Vec::new(),
-        init_hook: engine_native::content::extension::InitHook::None,
-        enabled: true,
-    };
+    let mut pack = content_native_loader::bridge_pack(&json)
+        .expect("桥接 pack 段")
+        .pack;
+    pack.generals = bridged.generals.clone();
     let mut e = Engine::new_with_extensions(66015, 4, &[&pack]).expect("建局");
     assert!(
         e.catalog().skill_by_name("beige").is_some(),

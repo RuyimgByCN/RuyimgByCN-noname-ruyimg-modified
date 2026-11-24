@@ -563,13 +563,9 @@ impl HostSkillBehavior {
                     let k = ctx.catalog.card_kind(*c);
                     !k.is_basic_kind() && k.equip_slot().is_none()
                 })),
-            // 暗莲映：弃牌结算后自己手牌为空（含自己弃牌——上游 loseEnd
-            // 手牌丢失面≈弃置面登记差异）→ frequent 摸 2
-            HostBehavior::SwdAnlianying => matches!(event,
-                EventData::CardsDiscarded { player, cards }
-                if *player == owner
-                    && !cards.is_empty()
-                    && ctx.state.player(owner).hand.is_empty()),
+            // 暗莲映 / 破茧：全路径失牌清手统一经 `host_on_hand_card_removed` 实时触发，
+            // `CardsDiscarded` 不再二次触发（防重复发牌/装备，且已空手弃置装备不误触发）。
+            HostBehavior::SwdAnlianying => false,
             // 乐跃：任意角色回复结算后（候选面在机器步分流）
             HostBehavior::SwdYinyue => matches!(event,
                 EventData::Recover { player, .. }
@@ -612,17 +608,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdXiaomoyu => matches!(event,
                 EventData::Damage(d)
                 if d.source == Some(owner) && !d.prevented && d.amount > 0),
-            // 破茧·齐面：自己弃牌后手牌为空（上游 loseEnd≈弃置面登记差异）
-            HostBehavior::SwdPojian => matches!(event,
-            EventData::CardsDiscarded { player, cards }
-            if *player == owner
-                && !cards.is_empty()
-                && ctx.state.player(owner).hand.is_empty()
-                && {
-                    // 牌堆/弃堆有装备牌才可发（否则无效果）
-                    ctx.state.deck.iter().any(|c| ctx.catalog.card_kind(*c).is_equip())
-                        || ctx.state.discard.iter().any(|c| ctx.catalog.card_kind(*c).is_equip())
-                }),
+            HostBehavior::SwdPojian => false,
             // 运筹·姬亮面：出牌主动技（ActivateSkill 通道），无触发面
             HostBehavior::SwdYunchou => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
@@ -847,12 +833,17 @@ impl HostSkillBehavior {
                     ctx.catalog.card_slot_of(ctx.state, *c)
                         == Some(crate::catalog::EquipSlot::Armor)
                 })),
-            // 兰芷：自己使用的牌花色为梅花（未取消）
+            // 兰芷：自己使用的牌花色为梅花（未取消）且场上存在体力≤自己且已受伤的角色
             HostBehavior::SwdLanzhi => matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
                     && !u.cancelled
-                    && u.suit(ctx.catalog)==Some(crate::catalog::Suit::Club)),
+                    && u.suit(ctx.catalog) == Some(crate::catalog::Suit::Club)
+                    && ctx.state.alive_players().any(|current| {
+                        ctx.state.player(current).hp <= ctx.state.player(owner).hp
+                            && (ctx.state.player(current).hp as i64)
+                                < i64::from(ctx.state.player(current).max_hp)
+                    })),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)

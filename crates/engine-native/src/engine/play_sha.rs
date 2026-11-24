@@ -600,9 +600,25 @@ pub(super) fn play_sha(
         .map(|d| core.has_skill(player_id, d))
         .unwrap_or(false)
         && crate::content::host::sbzhaxiang_active(core, player_id);
+    // 新烈弓（hs_alleria · character/shenhua/skill.js:3766）：
+    // 【杀】攻击范围判断中，目标距离 ≤ 此【杀】点数时视为在攻击范围内。
+    let xinliegong_range_free = catalog
+        .cards
+        .get(card as usize)
+        .is_some_and(|cd| cd.rank > 0)
+        && !catalog.is_rechanyuan_sealed_name(core, player_id, "xinliegong")
+        && !catalog.is_tieji_sealed(core, player_id)
+        && catalog.skill_by_name("xinliegong").is_some_and(|def| {
+            core.has_skill(player_id, def)
+                && catalog.skills[def as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchF)
+        });
+    let xinliegong_rank = u32::from(catalog.cards.get(card as usize).map_or(0, |cd| cd.rank));
     let feiren_range_free_for = |tgt: PlayerId| {
         sha_range_free
             || sbzhaxiang_free
+            || (xinliegong_range_free
+                && core.computed_distance(catalog, player_id, tgt) <= xinliegong_rank)
             || crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
                 core,
                 catalog,

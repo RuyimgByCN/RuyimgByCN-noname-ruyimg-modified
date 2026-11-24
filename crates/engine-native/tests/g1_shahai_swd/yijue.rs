@@ -125,8 +125,16 @@ fn swd_generals_b86_yijue_dangping() {
     );
     settle_optional_confirm(&mut e);
     pass_nullify(&mut e);
-    assert_eq!(e.debug_hp(1), 3, "义绝赢：p1 受 1 伤（4→3）");
+    assert_eq!(e.debug_hp(1), 4, "义绝赢：不造伤（4→4）");
     assert!(e.state_core().players[1].fengyin_active, "义绝赢：p1 封印");
+    assert!(
+        e.catalog().is_xj_fengyin_sealed(e.state_core(), 1),
+        "义绝赢：p1 非锁定技封印"
+    );
+    assert!(
+        e.catalog().blocks_hand_cards(e.state_core(), 1),
+        "义绝赢：p1 yijue2 封锁手牌"
+    );
 
     // ② 荡平：造伤害后可弃牌 → 邻近另一角色受 1 伤（对座距离超）
 

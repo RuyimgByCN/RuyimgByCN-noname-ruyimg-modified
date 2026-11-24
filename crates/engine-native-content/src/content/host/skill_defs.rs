@@ -354,7 +354,6 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         | HostBehavior::SwdHuangyu
         | HostBehavior::SwdTianhuo
         | HostBehavior::SwdYunchou
-        | HostBehavior::SwdLuanji
         | HostBehavior::SwdZhanxing
         | HostBehavior::SwdZhenjiu
         | HostBehavior::SwdLmazui
@@ -377,6 +376,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
             once_per_turn: true,
             ..Default::default()
         },
+        HostBehavior::SwdLuanji => crate::catalog::SkillLimits::default(),
         HostBehavior::MtgLinzhongjiantaStrike
         | HostBehavior::MtgYoulinDiscard
         | HostBehavior::ChangeCardNature

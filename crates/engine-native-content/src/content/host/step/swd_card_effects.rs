@@ -2,6 +2,266 @@
 
 use super::super::*;
 
+pub(super) fn swd_playable_card_targets(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    user: crate::ids::PlayerId,
+    c: crate::ids::CardId,
+    allow_multitarget: bool,
+) -> Option<(CardKind, bool, Vec<crate::ids::PlayerId>)> {
+    let kind = catalog.resolved_card_kind(core, c);
+    let is_multi = matches!(
+        kind,
+        CardKind::SavageAttack
+            | CardKind::ArcheryAttack
+            | CardKind::Wugu
+            | CardKind::Taoyuan
+            | CardKind::Chiyuxi
+            | CardKind::Jingleishan
+            | CardKind::Jiedao
+            | CardKind::Chain
+            | CardKind::Tianfuzhen
+            | CardKind::Niaoxiangzhen
+            | CardKind::Dizaizhen
+            | CardKind::Changshezhen
+            | CardKind::Pozhenjue
+    );
+    if matches!(kind, CardKind::Shan | CardKind::Nullify | CardKind::Shenmiguo | CardKind::Jiedao)
+        || (is_multi && !allow_multitarget)
+    {
+        return None;
+    }
+    let nature = if kind == CardKind::FireSha {
+        crate::event::DamageNature::Fire
+    } else if kind == CardKind::LeiSha {
+        crate::event::DamageNature::Thunder
+    } else {
+        crate::event::DamageNature::Normal
+    };
+    if crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(core, catalog, user, c)
+        || crate::rvm_bridge::modifiers::eval_card_use_canceled(
+            core, catalog, user, c, kind, nature,
+        )
+        || catalog.blocks_card_use_and_save(core, user)
+    {
+        return None;
+    }
+    let can_target = |t: crate::ids::PlayerId| -> bool {
+        if !core.player(t).alive
+            || crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                core, catalog, user, t, c, kind, nature,
+            )
+        {
+            return false;
+        }
+        if t != user
+            && matches!(
+                catalog.effective_card_suit(core, user, c),
+                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+            )
+            && [crate::vocabulary::host::GJ_FOOD_MOLICHA_KEY, "molicha"]
+                .into_iter()
+                .any(|k| catalog.skill_by_name(k).is_some_and(|d| core.has_skill(t, d)))
+        {
+            return false;
+        }
+        if matches!(kind, CardKind::Sha | CardKind::FireSha | CardKind::LeiSha | CardKind::Duel)
+            && super::u01_fixes_1::is_target_kongcheng(core, catalog, t)
+        {
+            return false;
+        }
+        true
+    };
+    if kind.is_equip() {
+        if let Some(slot) = kind.equip_slot() {
+            if !catalog.is_equip_slot_enabled(core, user, slot) {
+                return None;
+            }
+        }
+        if kind == CardKind::Xuanyuanjian
+            && core.player(user).hp <= 2
+            && !catalog
+                .skill_by_name("xuanyuan")
+                .is_some_and(|d| core.has_skill(user, d))
+        {
+            return None;
+        }
+        return can_target(user).then(|| (kind, true, vec![user]));
+    }
+    match kind {
+        CardKind::Tao => (core.player(user).hp < core.player(user).max_hp as i32
+            && can_target(user))
+        .then(|| (kind, true, vec![user])),
+        CardKind::Jiu => {
+            (!(user == core.turn.current && core.turn.jiu_used) && can_target(user))
+                .then(|| (kind, true, vec![user]))
+        }
+        CardKind::Wuzhong => can_target(user).then(|| (kind, true, vec![user])),
+        CardKind::Qixingzhen => None,
+        CardKind::SavageAttack | CardKind::ArcheryAttack => {
+            let tgts: Vec<_> = core
+                .seat_order_from(user)
+                .into_iter()
+                .filter(|&p| p != user && can_target(p))
+                .collect();
+            (!tgts.is_empty()).then_some((kind, true, tgts))
+        }
+        CardKind::Wugu => {
+            let tgts: Vec<_> = core
+                .seat_order_from(user)
+                .into_iter()
+                .filter(|&p| can_target(p))
+                .collect();
+            (!tgts.is_empty()).then_some((kind, true, tgts))
+        }
+        CardKind::Taoyuan => {
+            let tgts: Vec<_> = core
+                .seat_order_from(user)
+                .into_iter()
+                .filter(|&p| can_target(p))
+                .collect();
+            (!tgts.is_empty()).then_some((kind, true, tgts))
+        }
+        CardKind::Chiyuxi
+        | CardKind::Jingleishan
+        | CardKind::Tianfuzhen
+        | CardKind::Niaoxiangzhen
+        | CardKind::Dizaizhen
+        | CardKind::Changshezhen
+        | CardKind::Pozhenjue => None,
+        CardKind::ShanDian | CardKind::HongShui => {
+            let has_same = core
+                .player(user)
+                .judge
+                .iter()
+                .any(|jc| catalog.resolved_card_kind(core, *jc) == kind);
+            (!has_same && !catalog.blocks_delayed_trick(core, user) && can_target(user))
+                .then(|| (kind, true, vec![user]))
+        }
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != user
+                        && core.in_attack_range(catalog, user, p)
+                        && can_target(p)
+                        && !(kind == CardKind::Sha
+                            && catalog
+                                .skill_by_name(crate::vocabulary::names::BOSS_REMEN)
+                                .is_some_and(|d| {
+                                    core.has_skill(p, d)
+                                        && !core.player(p).equips.iter().any(|eq| {
+                                            catalog.card_slot_of(core, *eq)
+                                                == Some(crate::catalog::EquipSlot::Armor)
+                                        })
+                                }))
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        CardKind::Dismantle => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != user
+                        && (!core.player(p).hand.is_empty()
+                            || !core.player(p).equips.is_empty()
+                            || !core.player(p).judge.is_empty())
+                        && can_target(p)
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        CardKind::Snatch => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != user
+                        && core.computed_distance(catalog, user, p) <= 1
+                        && (!core.player(p).hand.is_empty()
+                            || !core.player(p).equips.is_empty()
+                            || !core.player(p).judge.is_empty())
+                        && can_target(p)
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        CardKind::Le => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != user
+                        && !core
+                            .player(p)
+                            .judge
+                            .iter()
+                            .any(|jc| catalog.resolved_card_kind(core, *jc) == CardKind::Le)
+                        && can_target(p)
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        CardKind::Bing | CardKind::Guiyoujie => {
+            let dist_ok =
+                |p| kind != CardKind::Bing || core.computed_distance(catalog, user, p) <= 1;
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != user
+                        && dist_ok(p)
+                        && !core
+                            .player(p)
+                            .judge
+                            .iter()
+                            .any(|jc| catalog.resolved_card_kind(core, *jc) == kind)
+                        && can_target(p)
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        CardKind::Caoyao => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| {
+                    core.player(p).hp < core.player(p).max_hp as i32 && can_target(p)
+                })
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+        _ => {
+            let legal: Vec<_> = core
+                .alive_players()
+                .filter(|&p| p != user && can_target(p))
+                .collect();
+            (!legal.is_empty()).then_some((kind, false, legal))
+        }
+    }
+}
+
+fn yiluan_pick_card_and_targets(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    user: crate::ids::PlayerId,
+) -> Option<(crate::ids::CardId, CardKind, Vec<crate::ids::PlayerId>)> {
+    let mut hand: Vec<crate::ids::CardId> = core.player(user).hand.clone();
+    if hand.is_empty() {
+        return None;
+    }
+    core.rng.shuffle(&mut hand);
+    for c in hand {
+        if let Some((kind, auto_ready, legal)) =
+            swd_playable_card_targets(core, catalog, user, c, false)
+        {
+            if auto_ready {
+                return Some((c, kind, legal));
+            }
+            let idx = core.rng.gen_range(legal.len() as u32) as usize;
+            return Some((c, kind, vec![legal[idx]]));
+        }
+    }
+    None
+}
+
 impl HostMachine {
     pub(super) fn step_swd_card_effects(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.behavior {
@@ -111,29 +371,18 @@ impl HostMachine {
                     ) {
                         return Flow::Done;
                     }
-                    let Some(c) = ctx.core.player(t).hand.first().copied() else {
+                    let Some((c, kind, targets)) =
+                        yiluan_pick_card_and_targets(ctx.core, ctx.catalog, t)
+                    else {
                         return Flow::Done;
                     };
                     self.cards = vec![c];
-                    let kind = ctx.catalog.cards[c as usize].kind;
-                    let targets: Vec<PlayerId> = (0..ctx.core.players.len())
-                        .filter(|&i| {
-                            let p = i as PlayerId;
-                            p != t && ctx.core.player(p).alive
-                        })
-                        .map(|i| i as PlayerId)
-                        .take(1)
-                        .collect();
-                    if targets.is_empty() {
-                        return Flow::Done;
-                    }
-                    // 真实牌自动使用（v177 同口径）：机器侧不预取，卡留在
-                    // 目标手牌由 CardUsed 提交段自取
+                    let use_as = (!kind.is_equip()).then_some(kind);
                     ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
                         c,
                         t,
                         targets,
-                        Some(kind),
+                        use_as,
                     )));
                     Flow::Done
                 }

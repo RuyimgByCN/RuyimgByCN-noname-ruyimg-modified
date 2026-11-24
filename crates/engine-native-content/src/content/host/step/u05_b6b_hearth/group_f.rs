@@ -1,21 +1,62 @@
 //! Batch U05-6b (`shahai-hearth` Part 2) Group F: 16 技能 (`tuteng_s` .. `hongxi`)。
 
 use super::asks::{
-    ASK_B6B_TUTENG7_TARGET, ASK_B6B_TUTENG_PICK, ASK_B6B_TUTENG_REPLACE, clear_b6b_ask, wait_b6b,
+    ASK_B6B_REJIEMING_TARGET, ASK_B6B_TUTENG7_TARGET, ASK_B6B_TUTENG_PICK,
+    ASK_B6B_TUTENG_REPLACE, ASK_B6B_XINLIEGONG_CONFIRM, clear_b6b_ask, wait_b6b,
 };
 use super::{
     b6b_flag, clear_b6b_flag, hs_b6b_cnt, hs_b6b_inc, pop_stashed_card, set_b6b_flag,
     stash_card, tuteng_owned, tuteng_pool,
 };
 use super::super::u05_hearth::{
-    alive_others, grant_skill, is_delayed_trick_hearth, meta, remove_skill, rng_pick,
+    alive_others, flag, grant_skill, is_delayed_trick_hearth, meta, remove_skill, rng_pick,
+    set_flag,
 };
 use super::super::{HostMachine, HostSkillBehavior, HostStage};
-use crate::catalog::{QueryCtx, SkillLimits, TriggerMeta};
+use crate::catalog::{CardKind, QueryCtx, SkillLimits, TriggerMeta};
 use crate::choice::ChoiceOption;
 use crate::event::{EventData, EventKind, Phase, Timing};
 use crate::ids::PlayerId;
 use crate::machine::{Ctx, Flow};
+
+fn is_u05_non_trick_card_name(raw: &str) -> bool {
+    let b = super::super::u05_hearth::exact_base_name(raw);
+    if b == "gw_dieyi_judge" {
+        return false;
+    }
+    let zf_b = b.strip_prefix("zf_").unwrap_or(b);
+    b.starts_with("gw_")
+        || b.starts_with("gwmaoxian_")
+        || b == "gwjinli_jiu"
+        || b.starts_with("hsfashu_")
+        || b.starts_with("hstianqi_")
+        || b.starts_with("hsjixie_")
+        || b.starts_with("hsqizhou_")
+        || b.starts_with("hsqingyu_")
+        || b.starts_with("hsdusu_")
+        || b.starts_with("hsbaowu_")
+        || b.starts_with("hsshenqi_")
+        || b.starts_with("hsmengjing_")
+        || b.starts_with("hszuzhou_")
+        || b.starts_with("tuteng")
+        || matches!(b, "hsyaoshui" | "hsnitai_card" | "shihuawuqi" | "du")
+        || b.starts_with("mtg_")
+        || b.starts_with("g_mtg_")
+        || matches!(
+            zf_b,
+            "pozhenjue"
+                | "changshezhen"
+                | "tianfuzhen"
+                | "dizaizhen"
+                | "fengyangzhen"
+                | "yunchuizhen"
+                | "qixingzhen"
+                | "shepanzhen"
+                | "longfeizhen"
+                | "huyizhen"
+                | "niaoxiangzhen"
+        )
+}
 
 pub(super) fn trigger_meta_f(name: &str) -> Option<TriggerMeta> {
     match name {
@@ -39,6 +80,9 @@ pub(super) fn trigger_meta_f(name: &str) -> Option<TriggerMeta> {
             Some(meta(EventKind::DamageBefore, Timing::Normal, 0, false, Vec::new()))
         }
         "hongxi" => Some(meta(EventKind::Death, Timing::Normal, 0, false, Vec::new())),
+        "rejieming" => Some(meta(EventKind::DamageEnd, Timing::Normal, 0, false, Vec::new())),
+        "xinliegong" => Some(meta(EventKind::CardUsed, Timing::Normal, 0, false, Vec::new())),
+        "xinwuyan" => Some(meta(EventKind::DamageBefore, Timing::Normal, 0, false, Vec::new())),
         // `tuteng` 为主动技；`tuteng_h` / `tuteng8` 为被动属性修订。
         _ => None,
     }
@@ -142,6 +186,48 @@ pub(super) fn filter_f(
             event,
             EventData::Death { .. }
                 if st.player(owner).alive && st.player(owner).hp < st.player(owner).max_hp as i32
+        ),
+        "rejieming" => matches!(
+            event,
+            EventData::Damage(d)
+                if d.target == owner && d.amount > 0 && st.player(owner).alive
+        ),
+        "xinwuyan" => matches!(
+            event,
+            EventData::Damage(d)
+                if !d.prevented
+                    && d.amount > 0
+                    && (d.source == Some(owner) || d.target == owner)
+                    && match d.card {
+                        Some(c) => match st.declared_kinds.get(&c).copied() {
+                            Some(k) => k.is_trick_kind(),
+                            None => {
+                                !ctx.catalog
+                                    .cards
+                                    .get(c as usize)
+                                    .is_some_and(|cd| is_u05_non_trick_card_name(cd.name))
+                                    && ctx.catalog.card_kind(c).is_trick_kind()
+                            }
+                        },
+                        None => match flag(st, d.target, "l28_vdmg_kind") {
+                            2 => Some(CardKind::SavageAttack),
+                            3 => Some(CardKind::ArcheryAttack),
+                            _ => None,
+                        }
+                        .is_some_and(|k| k.is_trick_kind()),
+                    }
+        ),
+        "xinliegong" => matches!(
+            event,
+            EventData::CardUsed(u)
+                if !u.cancelled
+                    && u.player == owner
+                    && u.effective_kind_in(st, ctx.catalog).is_sha_like()
+                    && u.targets.iter().any(|&t| {
+                        st.player(t).alive
+                            && (st.player(t).hand.len() <= st.player(owner).hand.len()
+                                || st.player(t).hp >= st.player(owner).hp)
+                    })
         ),
         _ => false,
     }
@@ -481,6 +567,135 @@ pub(super) fn step_f(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
             }
             Flow::Done
         }
+        "rejieming" => match m.stage {
+            HostStage::Act => {
+                let amt = match ctx.res.stack.last().map(|f| &f.data) {
+                    Some(EventData::Damage(d)) => d.amount.max(1) as u32,
+                    Some(EventData::DamageWindow { root, .. }) => match ctx.res.frame(*root).map(|f| &f.data) {
+                        Some(EventData::Damage(d)) => d.amount.max(1) as u32,
+                        _ => 1,
+                    },
+                    _ => 1,
+                };
+                m.card = Some(amt);
+                wait_b6b(m, ctx, HostStage::TargetChoice, ASK_B6B_REJIEMING_TARGET)
+            }
+            HostStage::TargetChoice => {
+                clear_b6b_ask(m, ctx, HostStage::TargetChoice);
+                if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+                    if ctx.core.player(t).alive {
+                        m.target = Some(t);
+                        m.stage = HostStage::DrawSettle;
+                        ctx.start_draw(t, 2);
+                        return Flow::Yield;
+                    }
+                }
+                let rem = m.card.unwrap_or(1).saturating_sub(1);
+                if rem > 0 && ctx.core.player(m.owner).alive {
+                    m.card = Some(rem);
+                    wait_b6b(m, ctx, HostStage::TargetChoice, ASK_B6B_REJIEMING_TARGET)
+                } else {
+                    Flow::Done
+                }
+            }
+            HostStage::DrawSettle => {
+                if let Some(t) = m.target.take() {
+                    if ctx.core.player(t).alive
+                        && ctx.core.player(t).hand.len() < ctx.core.player(t).max_hp as usize
+                        && ctx.core.player(m.owner).alive
+                    {
+                        m.stage = HostStage::DrawSettle;
+                        ctx.start_draw(m.owner, 1);
+                        return Flow::Yield;
+                    }
+                }
+                let rem = m.card.unwrap_or(1).saturating_sub(1);
+                if rem > 0 && ctx.core.player(m.owner).alive {
+                    m.card = Some(rem);
+                    wait_b6b(m, ctx, HostStage::TargetChoice, ASK_B6B_REJIEMING_TARGET)
+                } else {
+                    Flow::Done
+                }
+            }
+            _ => Flow::Done,
+        },
+        "xinwuyan" => {
+            let dmg = ctx.current_damage_mut();
+            dmg.prevented = true;
+            dmg.amount = 0;
+            Flow::Done
+        }
+        "xinliegong" => match m.stage {
+            HostStage::Act => {
+                let Some(u) = super::super::l11_common::current_use_card_mut(ctx).cloned() else {
+                    return Flow::Done;
+                };
+                let cid = u.card.unwrap_or(0);
+                let my_h = ctx.core.player(m.owner).hand.len();
+                let my_hp = ctx.core.player(m.owner).hp;
+                let eligible: Vec<PlayerId> = u
+                    .targets
+                    .into_iter()
+                    .filter(|&t| {
+                        ctx.core.player(t).alive
+                            && (ctx.core.player(t).hand.len() <= my_h
+                                || ctx.core.player(t).hp >= my_hp)
+                    })
+                    .collect();
+                if eligible.is_empty() {
+                    return Flow::Done;
+                }
+                m.card = Some(cid);
+                m.targets = eligible;
+                let t = m.targets.remove(0);
+                m.target = Some(t);
+                wait_b6b(m, ctx, HostStage::SelectNature, ASK_B6B_XINLIEGONG_CONFIRM)
+            }
+            HostStage::SelectNature => {
+                clear_b6b_ask(m, ctx, HostStage::SelectNature);
+                if matches!(ctx.answer().first(), Some(ChoiceOption::Confirm)) {
+                    if let Some(t) = m.target {
+                        if ctx.core.player(t).alive {
+                            let cid = m.card.unwrap_or(0);
+                            if ctx.core.player(t).hand.len()
+                                <= ctx.core.player(m.owner).hand.len()
+                            {
+                                set_flag(
+                                    ctx.core,
+                                    m.owner,
+                                    &format!("sha_unrespondable:{cid}:{t}"),
+                                    1,
+                                );
+                            }
+                            if ctx.core.player(t).hp >= ctx.core.player(m.owner).hp {
+                                let key = format!("sha_target_damage_bonus:{cid}:{t}");
+                                let prev = flag(ctx.core, m.owner, &key);
+                                set_flag(ctx.core, m.owner, &key, prev + 1);
+                            }
+                        }
+                    }
+                }
+                let my_h = ctx.core.player(m.owner).hand.len();
+                let my_hp = ctx.core.player(m.owner).hp;
+                while let Some(next_t) = m.targets.first().copied() {
+                    m.targets.remove(0);
+                    if ctx.core.player(next_t).alive
+                        && (ctx.core.player(next_t).hand.len() <= my_h
+                            || ctx.core.player(next_t).hp >= my_hp)
+                    {
+                        m.target = Some(next_t);
+                        return wait_b6b(
+                            m,
+                            ctx,
+                            HostStage::SelectNature,
+                            ASK_B6B_XINLIEGONG_CONFIRM,
+                        );
+                    }
+                }
+                Flow::Done
+            }
+            _ => Flow::Done,
+        },
         _ => Flow::Done,
     }
 }

@@ -239,6 +239,55 @@ pub(super) fn plan_swd_choice_action(
                     .collect(),
             )
         }
+        "swd_jqimou_use" => {
+            use crate::catalog::CardKind;
+            let injured = input
+                .view
+                .players
+                .get(seat as usize)
+                .is_some_and(|p| p.hp < p.max_hp as i32);
+            let any_enemy = input.view.players.iter().enumerate().any(|(i, p)| {
+                p.alive && i as u8 != seat && public_attitude(&input.view, seat, i as u8) <= 0
+            });
+            let best = options
+                .iter()
+                .filter_map(|o| match *o {
+                    ChoiceOption::Card(c) => {
+                        let k = input
+                            .own_hand_kinds
+                            .iter()
+                            .find(|(hc, _)| *hc == c)
+                            .map(|(_, k)| *k)
+                            .unwrap_or_else(|| catalog.card_kind(c));
+                        let score = match k {
+                            CardKind::Tao if injured => 100,
+                            CardKind::Wuzhong => 90,
+                            _ if k.is_equip() => 80,
+                            CardKind::Dismantle
+                            | CardKind::Snatch
+                            | CardKind::Duel
+                            | CardKind::Le
+                            | CardKind::Bing
+                            | CardKind::SavageAttack
+                            | CardKind::ArcheryAttack
+                            | CardKind::Sha
+                            | CardKind::FireSha
+                            | CardKind::LeiSha
+                                if any_enemy =>
+                            {
+                                60
+                            }
+                            _ if any_enemy && !k.is_basic_kind() => 40,
+                            _ => 0,
+                        };
+                        (score > 0).then_some((score, c))
+                    }
+                    _ => None,
+                })
+                .max_by_key(|(s, _)| *s)
+                .map(|(_, c)| vec![ChoiceOption::Card(c)]);
+            answer(best.unwrap_or_default())
+        }
         "zhanxing_target"
         | "huanxing_target"
         | "mingfu_target"
@@ -250,6 +299,7 @@ pub(super) fn plan_swd_choice_action(
         | "duishi_target"
         | "yuchen_target"
         | "swd_jiefen_target"
+        | "swd_jqimou_target"
         | "nlianji_target0"
         | "nlianji_target1"
         | "xuanying_use_target"
@@ -292,6 +342,62 @@ pub(super) fn plan_swd_choice_action(
         | "fengze_pick"
         | "huanxia_pick"
         | "yaotong_pick" => answer(pick_cards_low_own(min.max(1))),
+        "yijue_target" => {
+            let best_enemy = options
+                .iter()
+                .filter_map(|o| match *o {
+                    ChoiceOption::Player(t) if public_attitude(&input.view, seat, t) < 0 => Some(t),
+                    _ => None,
+                })
+                .max_by_key(|&t| {
+                    let att = public_attitude(&input.view, seat, t);
+                    let hp = input.view.players.get(t as usize).map(|p| p.hp).unwrap_or(0);
+                    (-att, -hp)
+                });
+            let best_heal_ally = options
+                .iter()
+                .filter_map(|o| match *o {
+                    ChoiceOption::Player(t) if public_attitude(&input.view, seat, t) > 0 => {
+                        let p = input.view.players.get(t as usize)?;
+                        (p.alive
+                            && p.hp < p.max_hp as i32
+                            && p.hand_count > p.hp.max(0) as usize + 1)
+                            .then_some((p.max_hp as i32 - p.hp, t))
+                    }
+                    _ => None,
+                })
+                .max_by_key(|&(missing, _)| missing)
+                .map(|(_, t)| t);
+            if let Some(t) = best_enemy.or(best_heal_ally) {
+                answer(vec![ChoiceOption::Player(t)])
+            } else if allow_cancel {
+                answer(Vec::new())
+            } else {
+                answer(options.iter().take(1).copied().collect())
+            }
+        }
+        "swd_yueren_confirm" => answer(vec![ChoiceOption::Confirm]),
+        "swd_yijue_recover_confirm" => {
+            let heal_target = options.iter().find_map(|o| match *o {
+                ChoiceOption::Player(t)
+                    if input.view.players.get(t as usize).is_some_and(|p| {
+                        p.alive
+                            && p.hp < p.max_hp as i32
+                            && public_attitude(&input.view, seat, t) > 0
+                    }) =>
+                {
+                    Some(ChoiceOption::Player(t))
+                }
+                _ => None,
+            });
+            if let Some(opt) = heal_target {
+                answer(vec![opt])
+            } else if allow_cancel {
+                answer(Vec::new())
+            } else {
+                answer(options.iter().take(1).copied().collect())
+            }
+        }
         _ => None,
     }
 }

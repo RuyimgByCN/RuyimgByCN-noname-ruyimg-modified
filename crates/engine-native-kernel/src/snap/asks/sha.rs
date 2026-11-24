@@ -226,6 +226,24 @@ pub(super) fn active_sha_ask(
             true,
         ));
     }
+    if core
+        .vm_aux
+        .flags
+        .get(&(source, "sha_yueren_asking_open".to_string()))
+        .copied()
+        .unwrap_or(0)
+        > 0
+    {
+        return Some(ask(
+            source,
+            "swd_yueren_confirm",
+            ChoiceKind::Confirm,
+            vec![ChoiceOption::Confirm],
+            1,
+            1,
+            true,
+        ));
+    }
     if asked {
         let tieji_blocks = tieji_red == Some(true)
             || core.vm_aux.flags.get(&(target, "mbcmfangzhu_ban".to_string())).copied().unwrap_or(0) > 0;

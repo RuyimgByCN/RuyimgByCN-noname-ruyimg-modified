@@ -13,3 +13,5 @@ mod part3_fixes_and_combos;
 mod part4_round2_parity;
 #[path = "u05_b7d_swd_skills/part5_round3_fixes.rs"]
 mod part5_round3_fixes;
+#[path = "u05_b7d_swd_skills/part6_p3a_batch2.rs"]
+mod part6_p3a_batch2;

@@ -307,55 +307,6 @@ pub(crate) fn active_ask_host(
                 false,
             ))
         }
-        // 御夫录（swd 第十二批 v96）：武器选择（挂起时 stage 已前移到
-        // SelectCard）→ 目标选择（stage=TargetChoice）
-        HostBehavior::SwdYufuluEquipSkill => match stage {
-            HostStage::SelectCard => {
-                let mut options: Vec<ChoiceOption> = core
-                    .player(owner)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| {
-                        catalog.card_slot_of(core, *c) == Some(crate::catalog::EquipSlot::Weapon)
-                    })
-                    .map(ChoiceOption::Card)
-                    .collect();
-                options.extend(
-                    core.player(owner)
-                        .equips
-                        .iter()
-                        .copied()
-                        .filter(|c| {
-                            catalog.card_slot_of(core, *c)
-                                == Some(crate::catalog::EquipSlot::Weapon)
-                        })
-                        .map(ChoiceOption::Card),
-                );
-                if options.is_empty() {
-                    return None;
-                }
-                Some(ask(
-                    owner,
-                    crate::content::host::SWD_YUFULU_WEAPON,
-                    ChoiceKind::SelectCards,
-                    options,
-                    1,
-                    1,
-                    false,
-                ))
-            }
-            HostStage::TargetChoice => Some(ask(
-                owner,
-                crate::content::host::SWD_YUFULU_TARGET,
-                ChoiceKind::SelectPlayers,
-                other_player_options(core, owner),
-                1,
-                1,
-                false,
-            )),
-            _ => None,
-        },
         // 蝶舞（U05 xianjian 龙葵，规则 v153）：杀牌（挂起时 stage 已前
         // 移到 TargetChoice）→目标（挂起时 stage 已前移到 Act）
         HostBehavior::XianjianDiewu => match stage {

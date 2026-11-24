@@ -30,6 +30,15 @@ pub(in crate::content::host) fn trigger_meta_u05_yunchou_char(name: &str) -> Opt
             optional: false,
             extra_events: Vec::new(),
         }),
+        // Classic `beige` (`character/shenhua/skill.js:4814`): cancelable discard cost before judge, no `beige_gains`.
+        "ycn_beige" => Some(TriggerMeta {
+            event: EventKind::Damage,
+            timing: Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        }),
         _ => None,
     }
 }
@@ -75,6 +84,18 @@ pub(in crate::content::host) fn filter_u05_yunchou_char(
             }
             _ => false,
         },
+        "ycn_beige" => matches!(
+            event,
+            EventData::Damage(d)
+                if !d.prevented
+                    && d.amount > 0
+                    && d.source.is_some()
+                    && d.card
+                        .is_some_and(|c| ctx.catalog.resolved_card_kind(ctx.state, c).is_sha_like())
+                    && ctx.state.player(d.target).alive
+                    && (!ctx.state.player(owner).hand.is_empty()
+                        || !ctx.state.player(owner).equips.is_empty())
+        ),
         _ => false,
     }
 }
@@ -202,7 +223,9 @@ pub(in crate::content::host) fn ask_u05_yunchou_char(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     let key = if behavior == HostBehavior::U05YunchouCharBatch {
-        if card.is_none() {
+        if card.is_none() && targets.len() >= 2 {
+            "ycn_beige"
+        } else if card.is_none() {
             "xinfu_jingxie"
         } else {
             "ycnxinfu_qiaosi"
@@ -317,7 +340,9 @@ pub(in crate::content::host) fn ask_u05_yunchou_char(
                 )
             })
         }
-        (HostBehavior::YunchouBeige, _, HostStage::CardsAsk) => {
+        (HostBehavior::YunchouBeige | HostBehavior::U05YunchouCharBatch, key, HostStage::CardsAsk)
+            if behavior == HostBehavior::YunchouBeige || key == "ycn_beige" =>
+        {
             let src = (targets.len() >= 2).then(|| targets[0])?;
             let he = hand_and_equips(core, src);
             let n = he.len().min(2);
@@ -330,6 +355,20 @@ pub(in crate::content::host) fn ask_u05_yunchou_char(
                     n,
                     n,
                     false,
+                )
+            })
+        }
+        (HostBehavior::U05YunchouCharBatch, "ycn_beige", HostStage::SelectCard) => {
+            let he = hand_and_equips(core, owner);
+            (!he.is_empty()).then(|| {
+                ask(
+                    owner,
+                    "u05_ycn_beige_discard",
+                    ChoiceKind::SelectCards,
+                    he.into_iter().map(ChoiceOption::Card).collect(),
+                    0,
+                    1,
+                    true,
                 )
             })
         }
@@ -527,6 +566,97 @@ fn step_diyguhuo(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     }
 }
 
+fn apply_ycn_beige_suit(m: &mut HostMachine, ctx: &mut Ctx<'_>, suit: Suit) -> Flow {
+    let [src, victim] = [m.targets[0], m.targets[1]];
+    match suit {
+        Suit::Heart => {
+            let pl = ctx.core.player(victim);
+            if pl.alive && pl.hp < pl.max_hp as i32 {
+                ctx.recover(victim, 1, None);
+            }
+            Flow::Done
+        }
+        Suit::Diamond => {
+            if ctx.core.player(victim).alive {
+                ctx.start_draw(victim, 2);
+            }
+            Flow::Done
+        }
+        Suit::Spade => {
+            if ctx.core.player(src).alive {
+                ctx.emit(EventData::TurnOverBefore {
+                    player: src,
+                    cancelled: false,
+                });
+            }
+            Flow::Done
+        }
+        Suit::Club => {
+            if ctx.core.player(src).alive && !hand_and_equips(ctx.core, src).is_empty() {
+                return wait_ask_yc_char(m, ctx, HostStage::CardsAsk);
+            }
+            Flow::Done
+        }
+    }
+}
+
+/// Classic `beige` (`shenhua/skill.js:4814`): cancelable discard cost before judge, NO `beige_gains`.
+fn step_ycn_beige(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
+    let owner = m.owner;
+    match m.stage {
+        HostStage::Act => {
+            if m.targets.len() < 2 || hand_and_equips(ctx.core, owner).is_empty() {
+                return Flow::Done;
+            }
+            wait_ask_yc_char(m, ctx, HostStage::SelectCard)
+        }
+        HostStage::SelectCard => {
+            let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
+                return Flow::Done;
+            };
+            if !hand_and_equips(ctx.core, owner).contains(&c) {
+                return Flow::Done;
+            }
+            discard_cards(ctx, owner, &[c]);
+            let judged = ctx.draw_judge_card_with_elo(
+                owner,
+                engine_native_kernel::kernel::EloJudgePref::Beige,
+            );
+            let victim = m.targets[1];
+            let (suit, _) = ctx.inline_judge_suit_rank(victim, judged);
+            m.cards = vec![judged];
+            if ctx.settle_inline_judge_card(victim, suit, judged) {
+                m.stage = HostStage::SelectNature;
+                return Flow::Yield;
+            }
+            apply_ycn_beige_suit(m, ctx, suit)
+        }
+        HostStage::SelectNature => {
+            let Some(&judged) = m.cards.first() else {
+                return Flow::Done;
+            };
+            let victim = m.targets[1];
+            let (suit, _) = ctx.inline_judge_suit_rank(victim, judged);
+            apply_ycn_beige_suit(m, ctx, suit)
+        }
+        HostStage::CardsAsk => {
+            let cards: Vec<CardId> = ctx
+                .answer()
+                .iter()
+                .filter_map(|o| match o {
+                    ChoiceOption::Card(c) => Some(*c),
+                    _ => None,
+                })
+                .collect();
+            if let Some(&src) = m.targets.first() {
+                discard_cards(ctx, src, &cards);
+            }
+            Flow::Done
+        }
+        _ => Flow::Done,
+    }
+}
+
 fn step_beige(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     let owner = m.owner;
     match m.stage {
@@ -689,6 +819,7 @@ pub(in crate::content::host) fn handle_u05_yunchou_char(
         }
         (HostBehavior::U05YunchouCharBatch, "xinfu_jingxie") => step_xinfu_jingxie(m, ctx),
         (HostBehavior::U05YunchouCharBatch, "ycnxinfu_qiaosi" | "xinfu_qiaosi") => step_qiaosi(m, ctx),
+        (HostBehavior::U05YunchouCharBatch, "ycn_beige") => step_ycn_beige(m, ctx),
         (HostBehavior::YunchouXicai, _) => {
             if let Ok(d) = ctx.current_damage() {
                 if let Some(c) = d.card {

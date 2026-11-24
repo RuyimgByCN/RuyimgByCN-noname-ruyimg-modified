@@ -814,7 +814,7 @@ impl HostSkillBehavior {
                 _ => Vec::new(),
             },
             // 悲歌：targets=[来源, 受伤者]（无来源时仅 [受伤者]）
-            HostBehavior::YunchouBeige => match event {
+            HostBehavior::YunchouBeige | HostBehavior::U05YunchouCharBatch => match event {
                 EventData::Damage(d) => match d.source {
                     Some(s) => vec![s, d.target],
                     None => vec![d.target],

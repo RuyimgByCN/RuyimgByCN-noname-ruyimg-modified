@@ -77,6 +77,56 @@ impl ShaResolveMachine {
             {
                 return Some(self.sha_hit_pre_damage(ctx));
             }
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_yueren_asking:{fid}")))
+                .is_some()
+            {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, "sha_yueren_asking_open".to_string()));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((self.source, format!("sha_yueren_done:{fid}")), 1);
+                if matches!(ctx.answer().first(), Some(ChoiceOption::Confirm)) {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((self.source, "skill_turn:swd_yueren2".to_string()), 1);
+                    let judged = ctx.draw_judge_card_with_elo(
+                        self.source,
+                        crate::kernel::EloJudgePref::Yueren,
+                    );
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
+                    if ctx.settle_inline_judge_card(self.source, suit, judged) {
+                        ctx.core.vm_aux.flags.insert(
+                            (self.source, format!("sha_yueren_judge:{fid}")),
+                            u32::from(judged) + 1,
+                        );
+                        self.asked = false;
+                        return Some(Flow::Yield);
+                    }
+                    self.apply_yueren_suit(ctx, suit);
+                }
+                self.asked = false;
+                return Some(Flow::Yield);
+            }
+            if let Some(v) = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_yueren_judge:{fid}")))
+            {
+                let judged = (v - 1) as crate::ids::CardId;
+                let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
+                self.apply_yueren_suit(ctx, suit);
+                self.asked = false;
+                return Some(Flow::Yield);
+            }
         }
         // 复仇（玩点论杀批 14，规则 v279）：成为杀目标时交出 1 张牌（"he"）取消
         // 该杀（上游 target shaBefore direct chooseCard("he") 同面；所选牌归来
@@ -740,6 +790,8 @@ impl ShaResolveMachine {
                 "sha_tianxian_done",
                 "sha_longxiang_done",
                 "sha_yueren_done",
+                "sha_yueren_asking",
+                "sha_yueren_judge",
                 "u05_sha_hit_resume",
             ] {
                 ctx.core
@@ -747,6 +799,10 @@ impl ShaResolveMachine {
                     .flags
                     .remove(&(self.source, format!("{key}:{fid}")));
             }
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(self.source, "sha_yueren_asking_open".to_string()));
             ctx.core.vm_aux.flags.remove(&(
                 self.source,
                 format!("u05_sadeng_tried:{fid}:{}", self.target),
@@ -838,24 +894,44 @@ impl ShaResolveMachine {
     pub(super) fn resolve_yueren(&mut self, ctx: &mut Ctx<'_>) -> Option<Flow> {
         let fid = self.current_sha_frame_id(ctx).unwrap_or(0);
         let done_key = (self.source, format!("sha_yueren_done:{fid}"));
-        if ctx.core.vm_aux.flags.contains_key(&done_key) {
+        let turn_key = (self.source, "skill_turn:swd_yueren2".to_string());
+        if ctx.core.vm_aux.flags.contains_key(&done_key)
+            || ctx.core.vm_aux.flags.contains_key(&turn_key)
+        {
             return None;
         }
-        let has_yueren = ctx
-            .catalog
-            .skill_by_name("yueren")
-            .is_some_and(|d| ctx.core.has_skill(self.source, d));
+        let has_yueren = ctx.catalog.skill_by_name("yueren").is_some_and(|d| {
+            ctx.core.has_skill(self.source, d)
+                && !ctx.catalog.is_tieji_sealed(ctx.core, self.source)
+                && !ctx.catalog.is_rechanyuan_sealed_name(ctx.core, self.source, "yueren")
+                && !ctx.catalog.is_xj_fengyin_sealed(ctx.core, self.source)
+        });
         if !has_yueren
             || !ctx.core.player(self.target).alive
             || (ctx.core.deck.is_empty() && ctx.core.discard.is_empty())
         {
             return None;
         }
-        ctx.core.vm_aux.flags.insert(done_key, 1);
-        let judged = ctx.draw_judge_card_with_elo(self.source, crate::kernel::EloJudgePref::Yueren);
-        let (suit, _) = ctx.inline_judge_suit_rank(self.source, judged);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((self.source, format!("sha_yueren_asking:{fid}")), 1);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((self.source, "sha_yueren_asking_open".to_string()), 1);
+        Some(Flow::WaitChoice {
+            observer: self.source,
+            spec: crate::choice::ChoiceSpec::confirm("swd_yueren_confirm"),
+        })
+    }
+
+    fn apply_yueren_suit(&self, ctx: &mut Ctx<'_>, suit: crate::catalog::Suit) {
         let black = matches!(suit, crate::catalog::Suit::Spade | crate::catalog::Suit::Club);
         if black {
+            if !ctx.core.player(self.target).alive {
+                return;
+            }
             let mut pool: Vec<crate::ids::CardId> =
                 ctx.core.player(self.target).hand.iter().copied().collect();
             pool.extend(ctx.core.player(self.target).equips.iter().copied());
@@ -877,12 +953,23 @@ impl ShaResolveMachine {
                 });
             }
         } else if ctx.core.player(self.source).alive {
-            ctx.start_draw(self.source, 1);
+            if let Some(sha_c) = self.card {
+                if !ctx.core.player(self.source).hand.contains(&sha_c) {
+                    let mut taken = false;
+                    if let Some(pos) = ctx.core.table.iter().position(|&c| c == sha_c) {
+                        ctx.core.table.remove(pos);
+                        taken = true;
+                    } else if let Some(pos) = ctx.core.discard.iter().position(|&c| c == sha_c) {
+                        ctx.core.discard.remove(pos);
+                        taken = true;
+                    }
+                    if taken {
+                        ctx.core.declared_kinds.remove(&sha_c);
+                        ctx.core.declared_slots.remove(&sha_c);
+                        ctx.core.player_mut(self.source).hand.push(sha_c);
+                    }
+                }
+            }
         }
-        if ctx.settle_inline_judge_card(self.source, suit, judged) {
-            self.asked = false;
-            return Some(Flow::Yield);
-        }
-        None
     }
 }

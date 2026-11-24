@@ -890,6 +890,10 @@ impl SnatchMachine {
                 .flags
                 .insert((target, format!("l11_hand_snatch_card:{c}")), 1);
         }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((target, format!("cards_moved_skip_hand_removed:{c}")), 1);
         ctx.emit(EventData::CardsMoved {
             cards: vec![c],
             from: target,

@@ -28,11 +28,25 @@ pub(super) fn host_equip_view_as_kind(
             .and_then(|d| core.skills.get(&(actor, d)))
             .is_some_and(|i| i.enabled && (!check_unused || !i.once_used))
     };
+    let has_active_behavior = |beh: crate::content::host::HostBehavior, check_unused: bool| -> bool {
+        core.skills.iter().any(|(&(p, d), i)| {
+            p == actor
+                && i.enabled
+                && (!check_unused || !i.once_used)
+                && catalog
+                    .skills
+                    .get(d as usize)
+                    .and_then(|s| s.behavior.as_host_behavior())
+                    == Some(beh)
+        })
+    };
     let suit = catalog.effective_card_suit(core, actor, card);
     if has_active("wanjun", false) && catalog.card_kind(card).is_equip() {
         return Some(CardKind::SavageAttack);
     }
-    if has_active("huopu", true) && matches!(suit, crate::catalog::Suit::Heart) {
+    if has_active_behavior(crate::content::host::HostBehavior::SwdHuopu, true)
+        && matches!(suit, crate::catalog::Suit::Heart)
+    {
         return Some(CardKind::Liuxinghuoyu);
     }
     if has_active("poxiao", false) && catalog.card_kind(card).is_equip() {
@@ -384,11 +398,21 @@ pub(super) fn play_kind(
         {
             kind = CardKind::SavageAttack;
         }
-        // 火扑（夜鸦熙，swd 武将面批㉖）：红桃牌当流星火雨使用（usable: 1，position: "he"）
-        else if catalog
-            .skill_by_name("huopu")
-            .and_then(|d| core.skills.get(&(actor, d)))
-            .is_some_and(|i| i.enabled && !i.once_used)
+        // 火扑（夜鸦熙，swd 武将面批㉖ / 跨包 `shahai-hearth__ref_huopu`）：红桃牌当流星火雨使用（usable: 1，position: "he"）；
+        // 仅当目标与牌本身天然不可用时回落转化，避免劫持手牌中的【杀】或自标【无中】/装备。
+        else if !targets.is_empty()
+            && kind != CardKind::Liuxinghuoyu
+            && huanxia_yaotong_play_fallback(core, catalog, actor, kind, targets)
+            && core.skills.iter().any(|(&(p, d), i)| {
+                p == actor
+                    && i.enabled
+                    && !i.once_used
+                    && catalog
+                        .skills
+                        .get(d as usize)
+                        .and_then(|s| s.behavior.as_host_behavior())
+                        == Some(crate::content::host::HostBehavior::SwdHuopu)
+            })
             && matches!(
                 catalog.effective_card_suit(core, actor, card),
                 crate::catalog::Suit::Heart

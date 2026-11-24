@@ -31,7 +31,8 @@ pub(crate) fn lookup_shahai_b1_host_behavior(clean: &str) -> Option<HostBehavior
         | "diyjianxiong"
         | "xinfu_jingxie"
         | "ycnxinfu_qiaosi"
-        | "xinfu_qiaosi" => Some(HostBehavior::U05YunchouCharBatch),
+        | "xinfu_qiaosi"
+        | "ycn_beige" => Some(HostBehavior::U05YunchouCharBatch),
         "diy_jiaoxia" => Some(HostBehavior::YunchouJiaoxia),
         _ => None,
     }
@@ -97,7 +98,7 @@ pub(crate) fn apply_shahai_b1_pack_fixups(
                     c.link_on_equip = true;
                 }
             }
-            let targets = ["ycndiyjianxiong", "xinfu_jingxie", "ycnxinfu_qiaosi"];
+            let targets = ["ycndiyjianxiong", "xinfu_jingxie", "ycnxinfu_qiaosi", "ycn_beige"];
             pack.vm_skills.retain(|v| !targets.contains(&v.name.as_str()));
             for &sk in &targets {
                 if let Some(hs) = pack.host_skills.iter_mut().find(|h| h.name == sk) {

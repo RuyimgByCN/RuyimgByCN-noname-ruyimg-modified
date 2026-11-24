@@ -131,10 +131,25 @@ fn bridge_single_frozen(
 fn bridge_verified_packs(
     verified: &VerifiedLockedContent,
 ) -> Result<(Vec<ExtensionPack>, Vec<String>), String> {
+    bridge_verified_packs_filtered(verified, None)
+}
+
+fn bridge_verified_packs_filtered(
+    verified: &VerifiedLockedContent,
+    shahai_cfg: Option<&crate::ShahaiMainConfig>,
+) -> Result<(Vec<ExtensionPack>, Vec<String>), String> {
     let pairs: Vec<(&FrozenPackage, &ContentPackage)> = verified
         .copies()
         .iter()
         .zip(verified.packages().iter())
+        .filter(|(_, parsed)| {
+            shahai_cfg.is_none_or(|cfg| {
+                crate::shahai_config::is_shahai_subpackage_enabled(
+                    &parsed.manifest.package_id,
+                    cfg,
+                )
+            })
+        })
         .collect();
     let mut packs = Vec::with_capacity(pairs.len());
     let mut deferred_all = Vec::new();
@@ -253,7 +268,7 @@ pub fn start_locked_taixu_battle(
     Ok(engine)
 }
 
-/// Start a locked engine honoring `ShahaiMainConfig` (`main/config.js` `wuxing`/`rand`).
+/// Start a locked engine honoring `ShahaiMainConfig` (`main/config.js` `wuxing`/`rand`/`gwent`/`mtg`/`yunchou`/`zhenfa`).
 pub fn start_locked_engine_with_shahai_config(
     seed: u64,
     seats: usize,
@@ -264,7 +279,7 @@ pub fn start_locked_engine_with_shahai_config(
     let verified_orig = Some(verify_original_presentation(
         &embedded_original_presentation_input(),
     )?);
-    let (packs, _) = bridge_verified_packs(verified)?;
+    let (packs, _) = bridge_verified_packs_filtered(verified, Some(cfg))?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
     let is_identity = matches!(mode, LockedStartMode::Identity);
     let mut engine = Engine::new_with_extensions_and_shahai_config(
@@ -278,6 +293,24 @@ pub fn start_locked_engine_with_shahai_config(
     if let Some(orig) = &verified_orig {
         engine.try_with_catalog_mutation(|cat| attach_original_presentation_bindings(cat, orig))?;
     }
+    Ok(engine)
+}
+
+/// Restore a locked engine honoring `ShahaiMainConfig` subpackage filtering.
+pub fn restore_locked_engine_with_shahai_config(
+    snapshot: &StateSnapshot,
+    verified: &VerifiedLockedContent,
+    cfg: &crate::ShahaiMainConfig,
+) -> Result<Engine, SnapshotError> {
+    let verified_orig = verify_original_presentation(&embedded_original_presentation_input())
+        .map_err(|_| SnapshotError::UnknownMachine)?;
+    let (packs, _) =
+        bridge_verified_packs_filtered(verified, Some(cfg)).map_err(|_| SnapshotError::UnknownMachine)?;
+    let refs: Vec<&ExtensionPack> = packs.iter().collect();
+    let mut engine = Engine::restore_with_extensions(snapshot, &refs)?;
+    engine
+        .try_with_catalog_mutation(|cat| attach_original_presentation_bindings(cat, &verified_orig))
+        .map_err(|_| SnapshotError::UnknownMachine)?;
     Ok(engine)
 }
 

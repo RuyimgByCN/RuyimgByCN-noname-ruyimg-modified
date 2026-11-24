@@ -179,7 +179,7 @@ impl JudgePhaseMachine {
                         owner,
                         3,
                         crate::event::DamageNature::Thunder,
-                        None,
+                        Some(trick),
                     )));
                     return (trick_kind, suit);
                 }

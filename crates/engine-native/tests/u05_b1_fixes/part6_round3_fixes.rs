@@ -458,7 +458,7 @@ fn u05_b1_r3_fix04_zhenfa_targets_and_qixingzhen_observer() {
     assert_eq!(picks, vec![0, 2, 0, 2], "huyizhen asks flanking actors [0, 2] for BOTH victims 1 & 3");
     assert_eq!((e.debug_hp(1), e.debug_hp(3)), (2, 2), "both sieged victims 1 & 3 took 2 Sha damage");
 
-    // 3. `qixingzhen`: observer == caster (`2`), hand-only (equips excluded and survive!)
+    // 3. `qixingzhen`: observer == caster (`2`), `discardPlayerCard(current, true)` defaults to `"he"` (hand + equips)
     advance_to_phase(&mut e, 2, Phase::Play);
     for p in 0..4 {
         e.debug_clear_hand(p);
@@ -485,11 +485,23 @@ fn u05_b1_r3_fix04_zhenfa_targets_and_qixingzhen_observer() {
     let c_qx = e.open_choice().expect("qixingzhen discard choice").clone();
     assert_eq!((c_qx.observer, c_qx.spec.prompt), (2, "swd_qixingzhen_discard"), "observer MUST be caster 2");
     assert!(c_qx.spec.options.contains(&ChoiceOption::Card(p1_h)));
-    assert!(!c_qx.spec.options.contains(&ChoiceOption::Card(p1_eq)), "qixingzhen discards hand only (`h`), NOT equips");
+    assert!(
+        c_qx.spec.options.contains(&ChoiceOption::Card(p1_eq)),
+        "qixingzhen discardPlayerCard(current, true) includes equips (`he`)"
+    );
     let planner = BoundedPlanner::new(16);
     assert!(matches!(e.plan_action(2, &planner).action, GameAction::Answer { .. }), "AI handles swd_qixingzhen_discard");
+    let _ = submit(
+        &mut e,
+        2,
+        GameAction::Answer {
+            choice_id: c_qx.id,
+            selection: vec![ChoiceOption::Card(p1_eq)],
+        },
+    );
     drain(&mut e);
-    assert_eq!(e.debug_equips(1), vec![p1_eq], "equip survived qixingzhen");
+    assert!(e.debug_equips(1).is_empty(), "equip chosen via he was discarded by qixingzhen");
+    assert_eq!(e.debug_hand(1), vec![p1_h], "unchosen hand card remained");
 }
 
 #[test]

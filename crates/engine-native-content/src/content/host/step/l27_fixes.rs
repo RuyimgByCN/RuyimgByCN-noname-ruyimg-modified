@@ -238,6 +238,7 @@ pub(crate) fn host_on_hand_card_removed(ctx: &mut Ctx<'_>, player: PlayerId, car
         ctx.emit(EventData::LoseHp { player, amount: 1 });
     }
     super::u05_hearth::host_on_hand_card_removed_hearth(ctx, player, card);
+    super::swd_status::host_on_hand_card_removed_swd(ctx, player);
     if ctx.catalog.skill_by_name("xingchong").is_none() {
         return;
     }

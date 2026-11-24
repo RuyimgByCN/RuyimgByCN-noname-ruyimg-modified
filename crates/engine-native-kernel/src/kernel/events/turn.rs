@@ -598,14 +598,53 @@ fn clear_turn_after_window_flags(ctx: &mut Ctx<'_>, player: PlayerId) {
             .vm_aux
             .flags
             .contains_key(&(player, format!("mbcmfangzhu_disabled:{def}")))
+            && !ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(player, format!("swd_yijue_fengyin_disabled:{def}")))
         {
             if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
                 inst.enabled = true;
             }
         }
     }
+    let yijue_disabled: Vec<(PlayerId, u16)> = ctx
+        .core
+        .vm_aux
+        .flags
+        .keys()
+        .filter_map(|(seat, k)| {
+            k.strip_prefix("swd_yijue_fengyin_disabled:")
+                .and_then(|d| d.parse::<u16>().ok())
+                .map(|def| (*seat, def))
+        })
+        .collect();
+    for (seat, def) in yijue_disabled {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(seat, format!("swd_yijue_fengyin_disabled:{def}")));
+        if !ctx
+            .core
+            .vm_aux
+            .flags
+            .contains_key(&(seat, format!("mbcmfangzhu_disabled:{def}")))
+            && !ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(seat, format!("xj_fengyin_disabled:{def}")))
+        {
+            if let Some(inst) = ctx.core.skills.get_mut(&(seat, def)) {
+                inst.enabled = true;
+            }
+        }
+    }
     for seat in 0..ctx.core.players.len() as PlayerId {
         for flag in [
+            "swd_yijue2_hand_locked",
+            "swd_yijue_fengyin_sealed",
             "fz_new_tieji_target_sealed",
             "sbtieji_target_sealed",
             "q4_retieji_target_sealed",
@@ -747,6 +786,11 @@ fn clear_turn_ended_temp_state(ctx: &mut Ctx<'_>, player: PlayerId) {
             .vm_aux
             .flags
             .contains_key(&(player, format!("xj_fengyin_disabled:{def}")))
+            && !ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(player, format!("swd_yijue_fengyin_disabled:{def}")))
         {
             if let Some(inst) = ctx.core.skills.get_mut(&(player, def)) {
                 inst.enabled = true;

@@ -330,7 +330,8 @@ impl HostMachine {
                         let v = cands[ctx.core.rng.gen_range(cands.len() as u32) as usize];
                         let n = ctx.core.player(v).hand.len();
                         let i = ctx.core.rng.gen_range(n as u32) as usize;
-                        let c = ctx.core.player_mut(v).hand.remove(i);
+                        let c = ctx.core.player(v).hand[i];
+                        ctx.take_hand_card(v, c);
                         ctx.core.player_mut(self.owner).hand.push(c);
                         ctx.log(LogEvent::CardsGiven {
                             from: v,
@@ -440,13 +441,10 @@ impl HostMachine {
                     let Some(t) = target.filter(|p| ctx.core.player(*p).alive) else {
                         return Flow::Done;
                     };
-                    // 此刻才移动武器（手牌→直接取出；装备区→取出并撤销
-                    // 装备技），保持存档核算各询问挂起态区域完整
+                    // 此刻才移动武器（手牌→经 `take_hand_card` 触发失牌钩子；装备区→取出并撤销
+                    // 装备技），暂存处理区并在 `Damage(1)` 结算后交还或弃置（card/swd.js:4711）。
                     if ctx.core.player(self.owner).hand.contains(&weapon) {
-                        ctx.core
-                            .player_mut(self.owner)
-                            .hand
-                            .retain(|x| *x != weapon);
+                        ctx.take_hand_card(self.owner, weapon);
                     } else if ctx.core.player(self.owner).equips.contains(&weapon) {
                         ctx.core
                             .player_mut(self.owner)
@@ -461,6 +459,10 @@ impl HostMachine {
                     } else {
                         return Flow::Done;
                     }
+                    ctx.core.table.push(weapon);
+                    self.card = Some(weapon);
+                    self.target = Some(t);
+                    self.stage = HostStage::DrawSettle;
                     // 上游 content：damage 后 gain
                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                         Some(self.owner),
@@ -469,22 +471,31 @@ impl HostMachine {
                         crate::event::DamageNature::Normal,
                         None,
                     )));
-                    ctx.core.player_mut(t).hand.push(weapon);
-                    ctx.log(LogEvent::CardsGiven {
-                        from: self.owner,
-                        to: t,
-                        cards: vec![weapon],
-                    });
+                    Flow::Yield
+                }
+                HostStage::DrawSettle => {
+                    let Some(weapon) = self.card.take() else {
+                        return Flow::Done;
+                    };
+                    let t = self.target.unwrap_or(self.owner);
+                    ctx.core.table.retain(|x| *x != weapon);
+                    if ctx.core.player(t).alive {
+                        ctx.core.player_mut(t).hand.push(weapon);
+                        ctx.log(LogEvent::CardsGiven {
+                            from: self.owner,
+                            to: t,
+                            cards: vec![weapon],
+                        });
+                    } else {
+                        ctx.to_discard(weapon);
+                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
             },
             HostBehavior::SwdLangeguaiyiEquipSkill => match self.stage {
-                // 蓝格怪衣「龙帆」（swd 第十五批，规则 v99）：判定按花色
-                // 分支——红桃回 1 体力（ctx.recover 满血饱和为既有路径，
-                // 上游 recover 同钳制）、方片摸 1、梅花随机敌人随机弃
-                // 一张、黑桃无事。上游 judge 的 suit 提示函数为 AI 排序
-                // （不迁移）；判定牌入弃堆（Shentou 同款）。
+                // 蓝格怪衣「龙帆」（swd 第十五批，规则 v99）：先结算内联判定 Yield（让
+                // 改判/后置窗完成），再按最终花色分支执行效果。
                 HostStage::Act => {
                     let judged = ctx.draw_judge_card_with_elo(
                         self.owner,
@@ -495,64 +506,56 @@ impl HostMachine {
                         player: self.owner,
                         card: judged,
                     });
-                    let _ = ctx.settle_inline_judge_card(self.owner, suit, judged);
-                    use crate::catalog::Suit;
-                    match suit {
-                        Suit::Heart => {
-                            ctx.recover(self.owner, 1, None);
-                        }
-                        Suit::Diamond => {
-                            ctx.start_draw(self.owner, 1);
-                        }
-                        Suit::Club => {
-                            // 候选=其他存活且（手牌∪装备区）非空（上游
-                            // he filter 同口径）；随机取一。上游
-                            // randomDiscard() 默认区不可从归档核验（现有
-                            // 调用点均显式 "h"）——登记差异：手牌优先、
-                            // 无手牌退随机装备（离装撤销装备技）。
-                            let mut cands: Vec<crate::ids::PlayerId> = ctx
-                                .core
-                                .alive_players()
-                                .filter(|p| {
-                                    *p != self.owner
-                                        && (!ctx.core.player(*p).hand.is_empty()
-                                            || !ctx.core.player(*p).equips.is_empty())
-                                })
-                                .collect();
-                            if !cands.is_empty() {
-                                let i = ctx.core.rng.gen_range(cands.len() as u32) as usize;
-                                let t = cands.swap_remove(i);
-                                if !ctx.core.player(t).hand.is_empty() {
-                                    let n = ctx.core.player(t).hand.len();
-                                    let j = ctx.core.rng.gen_range(n as u32) as usize;
-                                    let c = ctx.core.player_mut(t).hand.remove(j);
-                                    ctx.to_discard(c);
-                                    ctx.log(LogEvent::CardDiscarded {
-                                        player: t,
-                                        cards: vec![c],
-                                    });
-                                } else {
-                                    let n = ctx.core.player(t).equips.len();
-                                    let j = ctx.core.rng.gen_range(n as u32) as usize;
-                                    let c = ctx.core.player_mut(t).equips.remove(j);
-                                    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
-                                    ctx.to_discard(c);
-                                    ctx.log(LogEvent::CardDiscarded {
-                                        player: t,
-                                        cards: vec![c],
-                                    });
-                                }
-                            }
-                        }
-                        Suit::Spade => {}
+                    self.cards = vec![judged];
+                    if ctx.settle_inline_judge_card(self.owner, suit, judged) {
+                        self.stage = HostStage::SelectNature;
+                        return Flow::Yield;
                     }
-                    Flow::Done
+                    apply_longfan_suit(ctx, self.owner, suit)
+                }
+                HostStage::SelectNature => {
+                    let Some(&judged) = self.cards.first() else {
+                        return Flow::Done;
+                    };
+                    let (suit, _) = ctx.inline_judge_suit_rank(self.owner, judged);
+                    apply_longfan_suit(ctx, self.owner, suit)
                 }
                 _ => Flow::Done,
             },
             _ => unreachable!("behavior routed to the wrong step module"),
         }
     }
+}
+
+fn apply_longfan_suit(ctx: &mut Ctx<'_>, owner: PlayerId, suit: crate::catalog::Suit) -> Flow {
+    use crate::catalog::Suit;
+    match suit {
+        Suit::Heart => {
+            ctx.recover(owner, 1, None);
+        }
+        Suit::Diamond => {
+            ctx.start_draw(owner, 1);
+        }
+        Suit::Club => {
+            let mut cands: Vec<crate::ids::PlayerId> = ctx
+                .core
+                .alive_players()
+                .filter(|p| {
+                    *p != owner
+                        && super::swd_u05_7d_fixes::is_host_enemy(ctx.core, ctx.catalog, owner, *p)
+                        && (!ctx.core.player(*p).hand.is_empty()
+                            || !ctx.core.player(*p).equips.is_empty())
+                })
+                .collect();
+            if !cands.is_empty() {
+                let i = ctx.core.rng.gen_range(cands.len() as u32) as usize;
+                let t = cands.swap_remove(i);
+                let _ = super::swd_u05_7d_fixes::discard_random_he_card(ctx, t);
+            }
+        }
+        Suit::Spade => {}
+    }
+    Flow::Done
 }
 
 fn damage_nature_code(n: crate::event::DamageNature) -> u32 {

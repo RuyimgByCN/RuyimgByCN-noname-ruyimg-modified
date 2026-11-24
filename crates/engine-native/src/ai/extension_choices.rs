@@ -231,6 +231,33 @@ pub(super) fn plan_extension_choice_action(
                     selection,
                 })
             }
+            Some("lanzhi") => {
+                let my_hp = input.view.players.get(seat as usize).map_or(0, |p| p.hp);
+                let net: i32 = input
+                    .view
+                    .players
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, p)| p.alive && p.hp <= my_hp && p.hp < p.max_hp as i32)
+                    .map(|(i, _)| {
+                        if i as u8 == seat {
+                            2
+                        } else {
+                            let att = public_attitude(&input.view, seat, i as u8);
+                            if att > 0 { 1 } else if att < 0 { -1 } else { 0 }
+                        }
+                    })
+                    .sum();
+                let selection = if net > 0 {
+                    vec![ChoiceOption::Confirm]
+                } else {
+                    vec![ChoiceOption::Pass]
+                };
+                Some(GameAction::Answer {
+                    choice_id: id,
+                    selection,
+                })
+            }
             Some("wzhanyi") => extension_choices_u05_hearth::plan_wzhanyi_trigger_confirm(input, id),
             _ => extension_choices_l11_b3::plan_l11_b3_choice_action(
                 catalog,

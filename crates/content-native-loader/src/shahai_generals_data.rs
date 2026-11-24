@@ -362,7 +362,7 @@ pub const U05_YUNCHOU_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 10] = [
     ("diy_luxun", Faction::Wu, Gender::Male, 3, &["shaoying", "zonghuo"]), // character/yunchou/character.js:27
     ("diy_yuji", Faction::Qun, Gender::Male, 3, &["diyguhuo", "diychanyuan"]), // character/yunchou/character.js:34
     ("diy_zhouyu", Faction::Wu, Gender::Male, 3, &["jieyan", "honglian"]), // character/yunchou/character.js:40
-    ("diy_caiwenji", Faction::Qun, Gender::Female, 3, &["beige", "guihan"]), // character/yunchou/character.js:47
+    ("diy_caiwenji", Faction::Qun, Gender::Female, 3, &["ycn_beige", "guihan"]), // character/yunchou/character.js:47
     ("diy_lukang", Faction::Wu, Gender::Male, 4, &["luweiyan", "qianxun"]), // character/yunchou/character.js:54
     ("diy_zhenji", Faction::Wei, Gender::Female, 3, &["diy_jiaoxia", "yiesheng"]), // character/yunchou/character.js:61
     ("old_majun", Faction::Wei, Gender::Male, 3, &["xinfu_jingxie", "xinfu_qiaosi"]), // character/yunchou/character.js:67

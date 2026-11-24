@@ -28,6 +28,14 @@ pub fn submit(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
 }
 
 pub fn load_formal_swd_only(seed: u64, seats: u8) -> (VerifiedLockedContent, Engine) {
+    load_formal_swd_only_mode(seed, seats, LockedStartMode::Prototype)
+}
+
+pub fn load_formal_swd_only_mode(
+    seed: u64,
+    seats: u8,
+    mode: LockedStartMode,
+) -> (VerifiedLockedContent, Engine) {
     let ext_root =
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
     let pkg_dir = ext_root.join("shahai-swd-upstream-noname");
@@ -48,7 +56,7 @@ pub fn load_formal_swd_only(seed: u64, seats: u8) -> (VerifiedLockedContent, Eng
     }
     let frozen = validate_and_freeze_raw_package(raw_json, assets).expect("freeze shahai-swd");
     let verified = prepare_locked_content_with_bridge(vec![frozen]).expect("prepare shahai-swd");
-    let engine = start_locked_engine(seed, usize::from(seats), LockedStartMode::Prototype, &verified)
+    let engine = start_locked_engine(seed, usize::from(seats), mode, &verified)
         .expect("start swd");
     (verified, engine)
 }

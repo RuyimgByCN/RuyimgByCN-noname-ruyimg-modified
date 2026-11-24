@@ -606,16 +606,17 @@ fn judge_owner_death_settles_zones_and_conservation() {
     assert_zone_conservation(&e);
 }
 
-/// 无牌伤害（闪电雷击）card = None。
+/// 延时锦囊闪电雷击携带实体牌 `card = Some(sd)`（对齐上游 `player.damage(3,'thunder','nosource')` 继承 `event.card`）；
+/// 纯无牌伤害则 `card = None`。
 #[test]
-fn lightning_damage_has_no_card() {
+fn lightning_damage_carries_trick_card_and_no_card_damage_has_none() {
     let mut e = Engine::new(241, 4);
     advance_to_play(&mut e, 0);
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
     e.debug_set_hp(1, 10); // 高体力避免死亡链路干扰
-    let _sd = e.debug_place_judge(1, "shandian");
+    let sd = e.debug_place_judge(1, "shandian");
     e.debug_set_deck_top_by(|def| def.suit.is_spade() && (2..=9).contains(&def.rank));
     loop {
         if log_has(&e, |l| matches!(l, LE::DamageDealt { target: 1, .. })) {
@@ -629,8 +630,20 @@ fn lightning_damage_has_no_card() {
     assert!(log_has(&e, |l| matches!(
         l,
         LE::DamageDealt {
+            source: None,
             target: 1,
             amount: 3,
+            card: Some(c),
+            ..
+        } if *c == sd
+    )));
+    let _ = e.debug_deal_damage(None, 2, 1, engine_native::event::DamageNature::Normal);
+    assert!(log_has(&e, |l| matches!(
+        l,
+        LE::DamageDealt {
+            source: None,
+            target: 2,
+            amount: 1,
             card: None,
             ..
         }

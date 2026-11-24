@@ -204,6 +204,28 @@ pub fn enabled_shahai_subpackages(cfg: &ShahaiMainConfig) -> Vec<&'static str> {
     pkgs
 }
 
+/// Returns whether a formal `sha*` package ID is enabled under `cfg`
+/// (`main/config.js:29,34,39,44`: `mtg`, `zhenfa`, `gwent`, `yunchou`).
+/// Non-U05 packages (such as `wuxing`) return `true` so callers like
+/// `part1_config_stone_wuxing_zhenfa` preserve pack coexistence while `cfg.wuxing` gates hooks.
+pub fn is_shahai_subpackage_enabled(package_id: &str, cfg: &ShahaiMainConfig) -> bool {
+    const ALL_SUBPACKAGES: [&str; 9] = [
+        "shahai-gujian",
+        "shahai-hearth",
+        "shahai-swd",
+        "shaai-ow",
+        "shaai-xianjian",
+        "shahai-gwent",
+        "shahai-mtg",
+        "shahai-yunchou",
+        "shahai-zhenfa",
+    ];
+    if !ALL_SUBPACKAGES.contains(&package_id) {
+        return true;
+    }
+    resolved_shahai_subpackages_upstream(cfg).contains(&package_id)
+}
+
 /// Upstream `main/precontent.js:28-75` dependency-aware subpackage resolution:
 /// - `gujian` requires `gwent`;
 /// - `swd`, `hearth`, `ow`, `xianjian` require `gwent && yunchou`;
