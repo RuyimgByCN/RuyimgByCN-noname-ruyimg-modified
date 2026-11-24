@@ -55,7 +55,16 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
         // 刺猬（U07 玩点论杀韩龙，规则 v111）：濒死即死标记在位——跳
         // 过救援询问直接死亡（上游 ciqiu_dying dyingBegin firstDo die
         // 同口径）
-        if ctx.core.turn.ciqiu_dying.contains(&self.dying) {
+        let shiyuan_dying = ctx
+            .catalog
+            .skill_by_name("txhj_shiyuan")
+            .is_some_and(|d| ctx.core.has_skill(self.dying, d))
+            && !ctx.catalog.is_chanyuan_sealed(ctx.core, self.dying)
+            && !ctx
+                .catalog
+                .skill_by_name("txhj_feilong_skill_blank")
+                .is_some_and(|b| ctx.core.has_skill(self.dying, b));
+        if shiyuan_dying || ctx.core.turn.ciqiu_dying.contains(&self.dying) {
             ctx.core.turn.ciqiu_dying.retain(|p| *p != self.dying);
             ctx.emit(EventData::Death {
                 player: self.dying,
@@ -340,7 +349,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             if ctx.core.player(self.dying).alive {
                                 let new_fid = ctx.res.next_event_id;
                                 if let Some(card) = card_ovr {
-                                    let eff_kind = if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Jiu
+                                    let eff_kind = if crate::kernel::combat_rules::effective_card_kind_for(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        responder,
+                                        card,
+                                    ) == crate::catalog::CardKind::Jiu
                                         && responder == self.dying
                                     {
                                         crate::catalog::CardKind::Jiu
@@ -534,7 +548,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                             if ctx.core.player(self.dying).alive {
                                 let new_fid = ctx.res.next_event_id;
                                 if let Some(card) = card_ovr {
-                                    let eff_kind = if ctx.catalog.card_kind(card) == crate::catalog::CardKind::Jiu
+                                    let eff_kind = if crate::kernel::combat_rules::effective_card_kind_for(
+                                        ctx.core,
+                                        ctx.catalog,
+                                        responder,
+                                        card,
+                                    ) == crate::catalog::CardKind::Jiu
                                         && responder == self.dying
                                     {
                                         crate::catalog::CardKind::Jiu
@@ -582,7 +601,12 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     .remove(&(responder, "xj_longxi_dying_guard".to_string()));
                 self.responders.remove(0);
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
-                    let raw_kind = ctx.catalog.resolved_card_kind(ctx.core, tao);
+                    let raw_kind = crate::kernel::combat_rules::effective_card_kind_for(
+                        ctx.core,
+                        ctx.catalog,
+                        responder,
+                        tao,
+                    );
                     let raw_cname = ctx.catalog.cards[tao as usize].name;
                     let in_hand = ctx.core.player(responder).hand.contains(&tao);
                     let eff_kind = if raw_cname == "gw_fuyuan" {

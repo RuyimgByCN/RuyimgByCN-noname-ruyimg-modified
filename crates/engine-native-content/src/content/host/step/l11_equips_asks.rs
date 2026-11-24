@@ -23,6 +23,46 @@ pub(super) const ASK_MINGZHU_DISCARD: u32 = 10;
 pub(super) const ASK_TAIJI_DISCARD: u32 = 11;
 pub(super) const ASK_GX_TAIJI_DISCARD: u32 = 12;
 
+pub(super) fn target_qilin_equips(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    target: PlayerId,
+) -> Vec<CardId> {
+    core.player(target)
+        .equips
+        .iter()
+        .copied()
+        .filter(|&c| {
+            matches!(
+                catalog.card_slot_of(core, c),
+                Some(EquipSlot::Treasure | EquipSlot::HorsePlus | EquipSlot::HorseMinus)
+            ) && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
+                core, catalog, owner, target, c,
+            )
+        })
+        .collect()
+}
+
+pub(super) fn is_qilin_sha_damage(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    owner: PlayerId,
+    d: &crate::event::DamageData,
+) -> bool {
+    match d.card {
+        Some(c) => {
+            catalog.card_kind(c).is_sha_like()
+                || state.declared_kinds.get(&c).is_some_and(|k| k.is_sha_like())
+        }
+        None => state
+            .vm_aux
+            .flags
+            .keys()
+            .any(|(p, k)| *p == owner && k.starts_with("sha_damage_frame:")),
+    }
+}
+
 pub(super) fn axe_discardable_cards(
     core: &GameStateCore,
     catalog: &Catalog,
@@ -176,22 +216,11 @@ pub(super) fn build_l11_equip_ask(
         ),
         ASK_QILIN_CONFIRM => confirm_ask(owner, "txhj_qilingong:discard_horse"),
         ASK_QILIN_SKILL_CONFIRM => {
-            let treasures: Vec<CardId> = core
-                .player(tgt)
-                .equips
-                .iter()
-                .copied()
-                .filter(|&c| {
-                    catalog.card_slot_of(core, c) == Some(EquipSlot::Treasure)
-                        && !crate::rvm_bridge::modifiers::eval_card_discard_protected(
-                            core, catalog, owner, tgt, c,
-                        )
-                })
-                .collect();
-            if treasures.is_empty() {
+            let equips = target_qilin_equips(core, catalog, owner, tgt);
+            if equips.is_empty() {
                 return None;
             }
-            card_ask(owner, "qilin_skill:discard_horse", treasures, 0, 1, true)
+            card_ask(owner, "qilin_skill:discard_horse", equips, 0, 1, true)
         }
         ASK_FANGTIAN_TARGETS => {
             let sha_cid = cards.first().copied();
@@ -237,19 +266,14 @@ pub(super) fn build_l11_equip_ask(
                 true,
             )
         }
-        ASK_GX_TAIJI_DISCARD => {
-            let mut opts = vec![ChoiceOption::Pass];
-            opts.extend(he_cards(core, tgt).into_iter().map(ChoiceOption::Card));
-            spec_ask(
-                tgt,
-                ChoiceKind::Confirm,
-                "gx_taijifuchen:target_discard",
-                opts,
-                1,
-                1,
-                true,
-            )
-        }
+        ASK_GX_TAIJI_DISCARD => card_ask(
+            tgt,
+            "gx_taijifuchen:target_discard",
+            he_cards(core, tgt),
+            1,
+            1,
+            true,
+        ),
         _ => None,
     }
 }
@@ -279,4 +303,135 @@ pub(in crate::content::host) fn ask_l11_equip_cards(
         spec.max,
         spec.allow_cancel,
     ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_qilin_sha_damage;
+    use crate::catalog::{CardDef, CardKind, Catalog};
+    use crate::event::{DamageData, DamageNature, DamageSettlement, Phase};
+    use crate::rng::RuleRng;
+    use crate::state::{GameMode, GameStateCore, PlayerState, TurnState, VmAux};
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn qilin_sha_damage_ignores_secondary_non_sha_card_even_during_sha_frame() {
+        let catalog = Catalog::build(
+            vec![
+                CardDef::basic("sha", CardKind::Sha),
+                CardDef::basic("dismantle", CardKind::Dismantle),
+            ],
+            Vec::new(),
+        );
+        let mut state = GameStateCore {
+            revision: 1,
+            ruleset_version: 333,
+            mode: GameMode::Prototype,
+            players: vec![PlayerState::new(4), PlayerState::new(4)],
+            seat_ring: vec![0, 1],
+            deck: Vec::new(),
+            discard: Vec::new(),
+            detached_cards: Vec::new(),
+            table: Vec::new(),
+            rng: RuleRng::from_seed(2026),
+            turn: TurnState {
+                current: 0,
+                phase: Phase::Play,
+                round: 1,
+                sha_used_play_phase: false,
+                mufeng_used_basic: false,
+                wangchen_discard_basic: false,
+                shenmiguo_used: false,
+                shuchui_armed: false,
+                shuchui_hit: false,
+                lianda_used: false,
+                land_used: false,
+                land_sha_used: false,
+                discard_phase_discarded: 0,
+                ciqiu_dying: Vec::new(),
+                kangyin2: None,
+                huanxia_track: Vec::new(),
+                cards_used_play_phase: 0,
+                cards_used_turn: 0,
+                liaoyuan_count: 0,
+                xuanyuanjian_marked: false,
+                kunlunjing_snapshot: Vec::new(),
+                kunlunjing_hp: 0,
+                extra_phases: Vec::new(),
+                extra_phase_lingwu: false,
+                bte_used_play_phase: 0,
+                phase_number: 1,
+                rende_given: 0,
+                jiu_used: false,
+                mujiaren_used: false,
+                jiu_active: false,
+                turn_opened: true,
+                skip_draw_phase: false,
+                skip_play_phase: false,
+                guxing_armed: false,
+                guxing_count: 0,
+                mengtai_draw_pending: false,
+                mengtai_use_pending: false,
+                zhufangshenshi_target: None,
+                yuedong_num: 0,
+                yuedong_eff: 0,
+                yuedong_recover: false,
+                liangou_hook: None,
+                liangou_bonus_used: false,
+                feitiao_target: None,
+                fanling_used: false,
+                diewu_draw_used: false,
+                lueying_used: false,
+                txianqu_used: false,
+                jtjubao_used: false,
+                zhuyue_targets: Vec::new(),
+                sheling_used: 0,
+                sheying_used: false,
+                zhangmu_used: false,
+                yingfeng_chain: false,
+                luanjian_card: None,
+                minwan_targets: Vec::new(),
+                yanyu_count: 0,
+                xjyufeng_used: 0,
+                qizuo_copy: None,
+                jidian_chain: false,
+            },
+            skills: BTreeMap::new(),
+            declared_kinds: BTreeMap::new(),
+            declared_slots: BTreeMap::new(),
+            card_natures: BTreeMap::new(),
+            current_land: None,
+            outcome: None,
+            vm_aux: VmAux::default(),
+        };
+        state
+            .vm_aux
+            .flags
+            .insert((0, "sha_damage_frame:42".to_string()), 1);
+
+        let virtual_sha = DamageData {
+            source: Some(0),
+            target: 1,
+            amount: 1,
+            settlement: DamageSettlement::default(),
+            nature: DamageNature::Normal,
+            prevented: false,
+            redirect_chain: Vec::new(),
+            card: None,
+            from_chain: false,
+        };
+        assert!(
+            is_qilin_sha_damage(&state, &catalog, 0, &virtual_sha),
+            "virtual Sha (card=None) during sha_damage_frame must match"
+        );
+
+        let secondary_non_sha = DamageData {
+            card: Some(1),
+            ..virtual_sha
+        };
+        assert!(
+            !is_qilin_sha_damage(&state, &catalog, 0, &secondary_non_sha),
+            "secondary non-Sha card damage during sha_damage_frame must NOT match Qilin"
+        );
+    }
 }

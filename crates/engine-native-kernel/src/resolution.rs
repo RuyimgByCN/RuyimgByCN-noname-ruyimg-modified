@@ -16,7 +16,7 @@ use crate::state::GameStateCore;
 mod dispatch;
 mod frame_hooks;
 mod optional_gate;
-mod pop_cleanup;
+pub(crate) mod pop_cleanup;
 mod trigger_order;
 use dispatch::{finish_slot, native_machine, notify_new_skills, start_queued_trigger};
 pub(crate) use frame_hooks::note_recover_source;

@@ -6,6 +6,7 @@ impl HostSkillBehavior {
         self.behavior == HostBehavior::MoshouImmunity
             || (self.behavior == HostBehavior::L28ThunderBatchA && self.name == "xinfu_pdgyingshi")
             || (self.behavior == HostBehavior::U05GujianCharBatchA && self.name == "gjqtwuxie")
+            || (self.behavior == HostBehavior::L11OwnNpc && self.name == "txhj_guimei")
     }
 
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
@@ -246,6 +247,9 @@ impl HostSkillBehavior {
             }
             HostBehavior::Q4FoolSkill => {
                 return super::step::q4_fool_skills::machine_q4_fool(self, owner, event);
+            }
+            HostBehavior::L11OwnNpc => {
+                return super::step::l11_own_npc::machine_l11_own_npc(self, owner, event);
             }
             _ => {}
         }

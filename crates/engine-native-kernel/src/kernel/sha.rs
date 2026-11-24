@@ -588,11 +588,21 @@ impl ShaResolveMachine {
                 self.card,
             )));
             let dmg_fid = ctx.top_frame_id();
-            if ctx
-                .catalog
-                .skill_by_name("gw_xianzumaijiu")
-                .is_some_and(|xzm| ctx.core.has_skill(self.source, xzm))
-            {
+            let needs_sha_dmg_marker = (self
+                .card
+                .is_none_or(|c| !ctx.catalog.card_kind(c).is_sha_like())
+                && (ctx.catalog.skill_by_name("qilin_skill").is_some()
+                    || ctx.catalog.skill_by_name("txhj_qilingong").is_some()
+                    || ctx.catalog.skill_by_name("lieren").is_some()
+                    || ctx.catalog.skill_by_name("jintao").is_some()
+                    || ctx.catalog.skill_by_name("xinjintao").is_some()
+                    || ctx.catalog.skill_by_name("txhj_zuijiu").is_some()
+                    || ctx.catalog.skill_by_name("txhj_baoji").is_some()))
+                || ctx
+                    .catalog
+                    .skill_by_name("gw_xianzumaijiu")
+                    .is_some_and(|xzm| ctx.core.has_skill(self.source, xzm));
+            if needs_sha_dmg_marker {
                 ctx.core
                     .vm_aux
                     .flags

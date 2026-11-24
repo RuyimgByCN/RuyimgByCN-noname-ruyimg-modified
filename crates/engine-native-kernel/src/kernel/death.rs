@@ -652,15 +652,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
     }
 }
 
-/// Shared substitute-pool revival helper for Versus substitutes and L21 martial KOF backups.
-fn revive_with_substitute_generals(
-    ctx: &mut Ctx<'_>,
-    seat: PlayerId,
-    g1: u16,
-    g2: Option<u16>,
-    martial_hp_and_rest: Option<(u32, usize)>,
-    default_draw: u32,
-) {
+fn clear_seat_for_revive(ctx: &mut Ctx<'_>, seat: PlayerId) {
     let removed: Vec<crate::ids::SkillDefId> = ctx
         .core
         .skills
@@ -683,11 +675,125 @@ fn revive_with_substitute_generals(
         p.alive = true;
         p.dying = false;
         p.death_cancelled = false;
-        p.general_slots = [Some(g1), g2];
-        p.revealed_generals = [true, g2.is_some()];
         leftover
     };
     flush_discard_with_hook(ctx, seat, &mut leftover);
+}
+
+/// 以指定血量与摸牌数复活目标（`txhj_juhun` 拘魂，保留原武将并恢复其初始技能）。
+pub fn revive_with_hp_draw(ctx: &mut Ctx<'_>, seat: PlayerId, target_hp: i32, draw_n: u32) {
+    let (g0, g1) = {
+        let p = ctx.core.player_mut(seat);
+        p.alive = true;
+        p.dying = false;
+        p.death_cancelled = false;
+        p.hp = target_hp.clamp(1, p.max_hp as i32);
+        (p.general_slots[0], p.general_slots[1])
+    };
+    let had_skills = ctx.core.skills.keys().any(|(o, _)| *o == seat);
+    if !had_skills {
+        if let Some(id0) = g0 {
+            let max_before = ctx.core.player(seat).max_hp;
+            let hp_before = ctx.core.player(seat).hp;
+            crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+            if g1.is_some() {
+                crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 1);
+            }
+            let _ = id0;
+            let p = ctx.core.player_mut(seat);
+            p.max_hp = max_before;
+            p.hp = hp_before;
+        }
+    }
+    if draw_n > 0 {
+        ctx.start_draw(seat, draw_n);
+    }
+}
+
+/// 将已阵亡目标转化并复活为【长怨尸兵】（`txhj_shiyuan` / `txhj_zhuhun`，上限/体力 3，摸 4 张牌）。
+pub fn revive_as_txhj_changyuanshibing(ctx: &mut Ctx<'_>, actor: PlayerId, seat: PlayerId) {
+    if actor != seat {
+        match &mut ctx.core.mode {
+            crate::state::GameMode::Versus { teams, .. } => {
+                for t in teams.iter_mut() {
+                    t.retain(|&p| p != seat);
+                }
+                if let Some(team) = teams.iter_mut().find(|t| t.contains(&actor)) {
+                    team.push(seat);
+                }
+            }
+            crate::state::GameMode::Boss { boss, fellows, .. } => {
+                if *boss == actor || fellows.contains(&actor) {
+                    if !fellows.contains(&seat) && *boss != seat {
+                        fellows.push(seat);
+                    }
+                } else {
+                    fellows.retain(|&p| p != seat);
+                }
+            }
+            crate::state::GameMode::Identity { roles } => {
+                if let Some(&ar) = roles.get(actor as usize) {
+                    if let Some(sr) = roles.get_mut(seat as usize) {
+                        *sr = if ar == crate::state::Role::Lord {
+                            crate::state::Role::Loyalist
+                        } else {
+                            ar
+                        };
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    clear_seat_for_revive(ctx, seat);
+    let changyuan_id = (0..ctx.catalog.general_count() as u16)
+        .find(|&id| ctx.catalog.general_meta(id).is_some_and(|m| m.0 == "txhj_changyuanshibing"));
+    {
+        let p = ctx.core.player_mut(seat);
+        p.general_slots = [changyuan_id, None];
+        p.revealed_generals = [changyuan_id.is_some(), false];
+        p.hujia = 0;
+    }
+    if changyuan_id.is_some() {
+        crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
+    } else if let Some(shiyuan_def) = ctx.catalog.skill_by_name("txhj_shiyuan") {
+        ctx.core.skills.insert(
+            (seat, shiyuan_def),
+            crate::state::SkillInstance {
+                owner: seat,
+                enabled: true,
+                once_used: false,
+                expires_end_of_turn: false,
+                rounds: 0,
+            },
+        );
+    }
+    {
+        let p = ctx.core.player_mut(seat);
+        p.max_hp = 3;
+        p.hp = 3;
+        p.alive = true;
+        p.dying = false;
+        p.death_cancelled = false;
+    }
+    ctx.start_draw(seat, 4);
+}
+
+/// Shared substitute-pool revival helper for Versus substitutes and L21 martial KOF backups.
+fn revive_with_substitute_generals(
+    ctx: &mut Ctx<'_>,
+    seat: PlayerId,
+    g1: u16,
+    g2: Option<u16>,
+    martial_hp_and_rest: Option<(u32, usize)>,
+    default_draw: u32,
+) {
+    clear_seat_for_revive(ctx, seat);
+    {
+        let p = ctx.core.player_mut(seat);
+        p.general_slots = [Some(g1), g2];
+        p.revealed_generals = [true, g2.is_some()];
+    }
     crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 0);
     if let Some(sub) = g2 {
         crate::state::apply_general_assembly(ctx.core, ctx.catalog, seat, 1);

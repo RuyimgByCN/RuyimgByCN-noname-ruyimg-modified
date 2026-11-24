@@ -844,18 +844,30 @@ impl HostSkillBehavior {
                             && (ctx.state.player(current).hp as i64)
                                 < i64::from(ctx.state.player(current).max_hp)
                     })),
-            // 烈刃：自己以杀造成真实伤害且受害者存活有牌
-            HostBehavior::SwdLieren => matches!(event,
+            // 烈刃：自己以杀造成真实伤害且受害者存活有牌（含虚拟杀与牌名覆盖杀）
+            HostBehavior::SwdLieren => match event {
                 EventData::Damage(d)
-                if d.source == Some(owner)
-                    && !d.prevented
-                    && d.amount > 0
-                    && d.card
-                        .map(|c| ctx.catalog.card_kind(c).is_sha_like())
-                        .unwrap_or(false)
-                    && ctx.state.player(d.target).alive
-                    && (!ctx.state.player(d.target).hand.is_empty()
-                        || !ctx.state.player(d.target).equips.is_empty())),
+                    if d.source == Some(owner)
+                        && !d.prevented
+                        && !d.from_chain
+                        && d.amount > 0
+                        && (d.card.is_some_and(|c| {
+                            crate::kernel::effective_card_kind_for(
+                                ctx.state,
+                                ctx.catalog,
+                                owner,
+                                c,
+                            )
+                            .is_sha_like()
+                        }) || (d.card.is_none()
+                            && ctx.state.vm_aux.flags.iter().any(|((p, k), v)| {
+                                *p == owner && *v > 0 && k.starts_with("sha_damage_frame:")
+                            })))
+                        && ctx.state.player(d.target).alive
+                        && (!ctx.state.player(d.target).hand.is_empty()
+                            || !ctx.state.player(d.target).equips.is_empty()) => true,
+                _ => false,
+            },
             // 仙匠·车芸面：自己使用牌且唯一目标为他人、目标装备区有
             // 自己未持有（按目录牌种）的牌
             HostBehavior::SwdCyxianjiang => {

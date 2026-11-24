@@ -510,9 +510,17 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                 }
                 CardKind::Duel
                 | CardKind::Dismantle
-                | CardKind::Snatch
-                | CardKind::Bing => {
+                | CardKind::Snatch => {
                     targets.len() != 1 || targets[0] == seat || !core.player(targets[0]).alive
+                }
+                CardKind::Bing => {
+                    targets.len() != 1
+                        || targets[0] == seat
+                        || !core.player(targets[0]).alive
+                        || crate::engine::play_card_targets::check_bing_range(
+                            core, catalog, seat, *card, targets[0],
+                        )
+                        .is_err()
                 }
                 CardKind::Jiedao => {
                     targets.len() != 2

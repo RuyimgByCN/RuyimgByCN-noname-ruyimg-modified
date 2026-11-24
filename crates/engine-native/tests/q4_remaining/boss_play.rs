@@ -550,3 +550,73 @@ fn u02_real_event_skonghun_xuanlei_fanshi_xiaorui_huchen_jiaoxie_bashi_danjing()
 
     assert_archive_roundtrip(&e, &[&pack]);
 }
+
+#[test]
+fn u02_arena_ready_mode_gating_storage_versus_ladder_and_jiange_filter() {
+    use content_native_loader::{
+        arena_ready_outcome, boss_play_arena_ready_with_storage, ArenaReadyInput, Entry, HpKind,
+        PlayStorage,
+    };
+
+    let noname_cfg = repo_asset("packages/extensions/boss-play-upstream-noname/assets/config.json");
+    let noname_pack = boss_play_extension_pack("noname", &[]);
+    let arena_in = ArenaReadyInput {
+        boss_mode_entries: vec![
+            Entry { name: "boss_lvbu1".into(), hp: HpKind::Number(8), tags: vec![], allowed: true },
+            Entry { name: "boss_hidden".into(), hp: HpKind::Number(4), tags: vec![], allowed: false },
+        ],
+        boss_mode_skills: vec!["boss_baonu".into(), "versus_ladder".into()],
+        boss_mode_translate: vec![("x".into(), "new_x".into()), ("b_key".into(), "B".into())],
+        versus_mode_jiange: vec![
+            Entry { name: "boss_liedixuande".into(), hp: HpKind::Number(5), tags: vec!["bossallowed".into()], allowed: true },
+            Entry { name: "boss_blocked".into(), hp: HpKind::Number(4), tags: vec![], allowed: false },
+        ],
+        versus_mode_skills: vec!["boss_lingfeng".into(), "versus_ladder".into()],
+        versus_mode_translate: vec![("v_key".into(), "V".into())],
+        existing_translate: vec![("x".into(), "keep_x".into())],
+    };
+
+    // tafang: early exit without mutating storage, skills, or translations
+    let tf = arena_ready_outcome("tafang", &PlayStorage::default(), &arena_in);
+    assert!(tf.skipped);
+    assert!(tf.loaded_skills.is_empty() && tf.storage_boss.is_empty() && tf.storage_versus.is_empty());
+
+    // identity: loads both boss (1+filtered) & versus (excludes versus_ladder), keeps existing translate ||=
+    let id_out = arena_ready_outcome("identity", &PlayStorage::default(), &arena_in);
+    assert!(!id_out.skipped && id_out.boss_loaded && id_out.versus_loaded);
+    assert_eq!(id_out.storage_boss.iter().map(|e| e.name.as_str()).collect::<Vec<_>>(), vec!["boss_lvbu1"]);
+    assert_eq!(id_out.storage_versus.iter().map(|e| e.name.as_str()).collect::<Vec<_>>(), vec!["boss_liedixuande"]);
+    assert!(id_out.loaded_skills.contains(&"boss_lingfeng".to_string()));
+    assert!(!id_out.finished_skills.contains(&"versus_ladder".to_string()));
+    assert!(id_out.translate.contains(&("x".to_string(), "keep_x".to_string())));
+
+    // versus: skips loading versus pack itself, loads boss mode skills, and filters U02 to 12 jiange generals
+    let vs_out = arena_ready_outcome("versus", &PlayStorage::default(), &arena_in);
+    assert!(vs_out.boss_loaded && !vs_out.versus_loaded);
+    let mut e_vs = Engine::new_with_extensions(1099, 4, &[&noname_pack]).unwrap();
+    let storage = PlayStorage {
+        versus: vec![Entry { name: "boss_kumuyuanrang".into(), hp: HpKind::Number(5), tags: vec![], allowed: false }],
+        ..Default::default()
+    };
+    let _ = boss_play_init_and_arena_ready(&noname_cfg, &mut e_vs, "versus", "jiange", "jiange", &storage, true).unwrap();
+    let allowed_names: Vec<&str> = e_vs
+        .filter_boss_generals()
+        .into_iter()
+        .filter_map(|d| e_vs.catalog().general_meta(d).map(|m| m.0))
+        .collect();
+    assert!(allowed_names.contains(&"boss_liedixuande"), "jiange general allowed in versus");
+    assert!(!allowed_names.contains(&"boss_kumuyuanrang"), "storage allowed=false excludes general in versus");
+    assert!(!allowed_names.contains(&"boss_lvbu1"), "boss_lvbu1 (mode_boss only) excluded from versus jiange pool");
+
+    // boss mode with storage override re-checked and roundtripped
+    let mut e_boss = Engine::new_with_extensions(1100, 4, &[&noname_pack]).unwrap();
+    boss_play_arena_ready_with_storage(&mut e_boss, "noname", "boss", &PlayStorage::default(), true);
+    let boss_allowed: Vec<&str> = e_boss
+        .filter_boss_generals()
+        .into_iter()
+        .filter_map(|d| e_boss.catalog().general_meta(d).map(|m| m.0))
+        .collect();
+    assert!(boss_allowed.contains(&"boss_lvbu1"));
+    assert_eq!(boss_allowed.len(), 15);
+    assert_archive_roundtrip(&e_boss, &[&noname_pack]);
+}

@@ -51,6 +51,7 @@ pub fn eval_hand_limit(
         });
     }
     limit = super::d34_flags::apply_hand_limit(state, catalog, player, limit);
+    limit = super::d34_l11_npc_mods::apply_hand_limit(state, catalog, player, limit);
     limit.max(0) as usize
 }
 
@@ -65,7 +66,7 @@ pub fn eval_ignored_hand_card_count(
         .hand
         .iter()
         .filter(|&&card| {
-            let kind = catalog.card_kind(card);
+            let kind = crate::kernel::effective_card_kind_for(state, catalog, player, card);
             let nature = match kind {
                 CardKind::FireSha => DamageNature::Fire,
                 CardKind::LeiSha => DamageNature::Thunder,
@@ -308,6 +309,8 @@ pub fn eval_sha_use_limit(
     }
     (cur, unlimited) =
         super::d34_flags::apply_sha_use_limit(state, catalog, player, card, cur, unlimited);
+    (cur, unlimited) =
+        super::d34_l11_npc_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     (cur.max(0) as u32, unlimited)
 }
 
@@ -361,13 +364,47 @@ pub fn eval_card_distance_unlimited_to(
 ) -> bool {
     let mut unlimited = false;
     for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::CardDistanceUnlimited
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, player, card, kind, nature))
-            && rule.effective_value(state, catalog, player, def) > 0
-        {
-            unlimited = true;
+        let sel_ok = rule
+            .selector
+            .map_or(true, |s| s.matches_card(state, catalog, player, card, kind, nature));
+        if !sel_ok {
+            return;
+        }
+        match rule.target {
+            VmModifierTarget::CardDistanceUnlimited => {
+                if rule.effective_value_for(state, catalog, player, target, def) > 0 {
+                    unlimited = true;
+                }
+            }
+            VmModifierTarget::CardDistanceUnlimitedTargetHandGteOwner => {
+                if target.is_some_and(|t| {
+                    state.player(t).hand.len() >= state.player(player).hand.len()
+                }) && rule.effective_value_for(state, catalog, player, target, def) > 0
+                {
+                    unlimited = true;
+                }
+            }
+            VmModifierTarget::CardDistanceUnlimitedSkillBoundTarget => {
+                if target.is_some()
+                    && target == bound_target_seat(state, player)
+                    && rule.effective_value_for(state, catalog, player, target, def) > 0
+                {
+                    unlimited = true;
+                }
+            }
+            VmModifierTarget::ShaDistanceUnlimitedRankLtMark => {
+                let rank = card_effective_rank(state, catalog, card);
+                let mark = skill_mark_value(state, catalog, player, def);
+                if kind.is_sha_like()
+                    && mark > 0
+                    && rank > 0
+                    && i32::from(rank) < mark
+                    && rule.effective_value_for(state, catalog, player, target, def) > 0
+                {
+                    unlimited = true;
+                }
+            }
+            _ => {}
         }
     });
     super::d34_flags::apply_card_distance_unlimited_to(
@@ -406,9 +443,10 @@ pub fn eval_card_target_canceled_opt(
             canceled = true;
         }
     });
-    super::d34_flags::apply_card_target_canceled_opt(
+    let c = super::d34_flags::apply_card_target_canceled_opt(
         state, catalog, actor, target, card, kind, canceled,
-    )
+    );
+    super::d34_l11_npc_mods::apply_card_target_canceled(state, catalog, target, kind, c)
 }
 
 /// 评估目标是否免疫某张牌的指向（`CardTargetCancel` / `CardTargetEnabled`）。
@@ -583,7 +621,14 @@ pub fn eval_damage_amount(
     };
     if let Some(src) = source {
         for_each_player_vm_modifier(state, catalog, src, |def, rule| {
-            if rule.target == VmModifierTarget::DamageAmount && matches_sel(src, rule.selector) {
+            let hit = match rule.target {
+                VmModifierTarget::DamageAmount => matches_sel(src, rule.selector),
+                VmModifierTarget::ShaDamage => {
+                    is_sha_damage_eval(state, catalog, src, card) && matches_sel(src, rule.selector)
+                }
+                _ => false,
+            };
+            if hit {
                 let val = rule.effective_value_for(state, catalog, src, Some(target), def);
                 cur = rule.apply_to(cur, val);
             }
@@ -637,7 +682,15 @@ pub fn eval_ignore_armor(
 ) -> bool {
     let mut ignore = false;
     for_each_player_vm_modifier(state, catalog, source, |def, rule| {
-        if rule.target == VmModifierTarget::IgnoreArmor {
+        if matches!(
+            rule.target,
+            VmModifierTarget::IgnoreArmor | VmModifierTarget::IgnoreArmorSkillBoundTarget
+        ) {
+            if rule.target == VmModifierTarget::IgnoreArmorSkillBoundTarget
+                && Some(target) != bound_target_seat(state, source)
+            {
+                return;
+            }
             let sel_ok = match (rule.selector, card) {
                 (None, _) => true,
                 (Some(s), Some(c)) => {

@@ -507,6 +507,7 @@ pub fn attach_formal_package_upstream_rules(
     pack.vm_skills.retain(|vs| {
         if namespace == "upstream-liuli"
             && package_id == "taixu"
+            && vs.name != "xinjuejing"
             && (super::lookup_upstream_host_behavior(&vs.name).is_some()
                 || vs.name == "jueqing")
         {

@@ -62,9 +62,10 @@ mod wuxing;
 pub mod zuan;
 pub use ai_tuning::*;
 pub use boss_playpack::{
-    apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
-    normalize_boss_hp, normalize_jiange_hp, parse_boss_play_config, parse_storage, BossPlayConfig,
-    Entry, HpKind, InitOutcome, PlayError, PlayStorage,
+    apply_boss_play_line, arena_ready_outcome, exclude_versus_ladder, filter_allowed, init_outcome,
+    merge_translate, normalize_boss_hp, normalize_jiange_hp, parse_boss_play_config, parse_storage,
+    ArenaReadyInput, ArenaReadyOutcome, BossPlayConfig, Entry, HpKind, InitOutcome, PlayError,
+    PlayStorage,
 };
 pub use coin::{
     apply_coin_commands, buy_item, change_coin, mark_phase_started, open_coin_session,
@@ -853,8 +854,8 @@ pub use pile_bridge::{bridge_pile, parse_pile_factors};
 pub use q4_engine_bridge::{
     apply_coin_to_engine, apply_douzhuan_request_to_engine, apply_douzhuan_to_engine,
     apply_fool_to_engine, apply_shousha_to_engine, boss_play_arena_ready,
-    boss_play_init_and_arena_ready, cardpile_arena_ready_pack, fool_extension_pack,
-    martial_engine_from_config, verify_pile_json_buckets,
+    boss_play_arena_ready_with_storage, boss_play_init_and_arena_ready, cardpile_arena_ready_pack,
+    fool_extension_pack, martial_engine_from_config, verify_pile_json_buckets,
 };
 pub mod decision34_closure;
 pub use decision34_closure::*;

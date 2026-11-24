@@ -115,6 +115,9 @@ pub(super) fn is_card_ignored_hand_limit(
     {
         return true;
     }
+    if kind.is_sha_like() && flag_val(state, player, "skill:3222374511") > 0 {
+        return true;
+    }
     false
 }
 
@@ -193,9 +196,16 @@ pub(super) fn apply_hand_limit(
     // L20 标记补充 (`_yinyang_mark_add`, `extension.js:1802`: +2 maxHandcard this turn)
     limit += flag_val(state, player, "yinyang_hand_bonus") as i32;
     // L25 祖安武将 Batch A (`xinjuejing` +2 hand limit; `g_nzry_jieying` `mark:ying` +1 hand limit)
-    if has_ext_skill(state, catalog, player, "xinjuejing")
-        || flag_val(state, player, "xinjuejing_active") > 0
-    {
+    // Skip when `xinjuejing` already carries a VM `HandLimit` modifier (`taixu` / `extra` VM skill) to avoid +4 double count.
+    let xinjuejing_host_only = has_ext_skill(state, catalog, player, "xinjuejing")
+        && catalog.skill_by_name("xinjuejing").is_some_and(|def| {
+            !catalog.skills[def as usize]
+                .behavior
+                .vm_modifiers()
+                .iter()
+                .any(|r| r.target == crate::rvm_bridge::VmModifierTarget::HandLimit)
+        });
+    if xinjuejing_host_only || flag_val(state, player, "xinjuejing_active") > 0 {
         limit += 2;
     }
     if flag_val(state, player, "mark:ying") > 0 {
@@ -668,12 +678,11 @@ pub(super) fn apply_card_target_canceled(
     if (kind.is_sha_like() || is_trick) && flag_val(state, target, "l11_mod:zhichi_ward") > 0 {
         canceled = true;
     }
-    // extension.js:658 (`txhj_guimei`: immune to delayed tricks)
+    // extension.js:658 (`txhj_guimei`: immune to delayed tricks; native NPC skill handled in `d34_l11_npc_mods`)
     if matches!(
         kind,
         CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
-    ) && (flag_val(state, target, "l11_mod:txhj_guimei") > 0
-        || has_ext_skill(state, catalog, target, "txhj_guimei"))
+    ) && flag_val(state, target, "l11_mod:txhj_guimei") > 0
     {
         canceled = true;
     }
@@ -934,7 +943,6 @@ pub(super) fn apply_damage_amount(
             || flag_val(state, src, "l11_mod:repojun_dmg_plus1") > 0
             || flag_val(state, src, "l11_mod:sbliegong_dmg") > 0
             || flag_val(state, src, "l11_mod:xinfu_zengdao_dao") > 0
-            || has_ext_skill(state, catalog, src, "txhj_shiyuan")
         {
             cur += 1;
         }
@@ -943,7 +951,6 @@ pub(super) fn apply_damage_amount(
         }
         if is_sha
             && (flag_val(state, src, "l11_mod:txfusha") > 0
-                || has_ext_skill(state, catalog, src, "txhj_zuijiu")
                 || flag_val(state, src, "l11_leijimu_thunder_sha") > 0)
         {
             cur += 1;

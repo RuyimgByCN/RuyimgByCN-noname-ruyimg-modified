@@ -1,11 +1,16 @@
 # G0 · U02 boss
 
+## 2026-11-24 Batch P3-B（`boss_play_arenaReady` 升级→17/0/0，U02 全量收口）合入更新
+
+基线 HEAD `f08a704c3ef69a3ae56cbf5aff2d7711a2aca626`（Batch `P3-A` 已发布，CI Run `45340220955` Attempt 1 `10/10 success`）；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#238 **`APPROVE`**）与主线 `boss_playpack::arena_ready_outcome` / `q4_engine_bridge::boss_play_arena_ready_with_storage` / `boss_play.rs` 实测，将最后 1 项 **`U02:modes:boss_play_arenaReady`** 升为 `已复核等价`；本源现 **`17 / 0 / 0`**（整包八项仍 `0/37`）。详见 [Batch P3-B 证据摘要](../../operations/evidence/2026-11-24-p3-b-tier1/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-24 Batch Q4-remaining（15 武将＋`boss_play_init` 等价→16/1/0；保留 `boss_play_arenaReady` 为近似）合入更新
 
 基线 HEAD `8fa7589963bbbe724dc89e656ffcdf6b1afdd8ea`；规则 `333`／NGSA `107`／schema `5`／ABI `759`／WS `8`。经 `verifier-l11` 独立复核（#114 **`APPROVE`**，含 Round 3/4 上游 Chrome CDP 与 `retieji`/`boss_baonu`/`boss_baonuwash` 校验）及主线全量门禁复测，本源 **`15`** 名 Boss 武将（其中 `boss_lvbu1..3` 按 4 势力归 `Faction::Qun` 登记边界）与 **`boss_play_init`** 共 **`16`** 项升为 `已复核等价`，严格保留 **`U02:modes:boss_play_arenaReady`** 为 `简化近似`；本源现 **`16 / 1 / 0`**（整包八项仍 `0/37`）。详见 [Batch Q4-remaining 证据摘要](../../operations/evidence/2026-11-24-q4-remaining/README.md) 与 [inventory_status.json](inventory_status.json)。
 
 | 日期来源快照 | 已复核等价 | 简化近似 | 缺失 |
 | --- | ---: | ---: | ---: |
+| 2026-11-24 Batch P3-B U02 | 17 | 0 | 0 |
 | 2026-11-24 Batch Q4-remaining U02 | 16 | 1 | 0 |
 
 > 核验日期：2026-11-11 · 来源仓：`noname` · 入口：`archive/upstream/noname/apps/core/extension/boss`  

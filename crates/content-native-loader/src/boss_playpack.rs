@@ -170,6 +170,89 @@ pub fn normalize_jiange_hp(hp: &HpKind) -> HpKind {
     }
 }
 
+/// 上游 `arenaReady` 输入包（非 `tafang` 时加载 `boss` / `versus` 模式包，排除 `versus_ladder`）。
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct ArenaReadyInput {
+    pub boss_mode_entries: Vec<Entry>,
+    pub boss_mode_skills: Vec<String>,
+    pub boss_mode_translate: Vec<(String, String)>,
+    pub versus_mode_jiange: Vec<Entry>,
+    pub versus_mode_skills: Vec<String>,
+    pub versus_mode_translate: Vec<(String, String)>,
+    pub existing_translate: Vec<(String, String)>,
+}
+
+/// 上游 `arenaReady` 输出状态。
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct ArenaReadyOutcome {
+    pub skipped: bool,
+    pub boss_loaded: bool,
+    pub versus_loaded: bool,
+    pub loaded_skills: Vec<String>,
+    pub finished_skills: Vec<String>,
+    pub storage_boss: Vec<Entry>,
+    pub storage_versus: Vec<Entry>,
+    pub storage_translate: Vec<(String, String)>,
+    pub translate: Vec<(String, String)>,
+}
+
+/// 还原 `apps/core/extension/boss/extension.js` `arenaReady()`：
+/// - `tafang` 早退；
+/// - `mode != "boss"` 载入 `boss` 模式包（`isBossAllowed` 入 `storage.boss`，技能全载，finish 排除 `versus_ladder`）；
+/// - `mode != "versus"` 载入 `versus` 模式包（`isBossAllowed` 入 `storage.versus`，技能加载与 finish 均排除 `versus_ladder`）。
+pub fn arena_ready_outcome(
+    mode: &str,
+    storage: &PlayStorage,
+    input: &ArenaReadyInput,
+) -> ArenaReadyOutcome {
+    if mode == "tafang" {
+        return ArenaReadyOutcome {
+            skipped: true,
+            ..Default::default()
+        };
+    }
+    let mut out = ArenaReadyOutcome {
+        storage_boss: storage.boss.clone(),
+        storage_versus: storage.versus.clone(),
+        storage_translate: storage.translate.clone(),
+        translate: input.existing_translate.clone(),
+        ..Default::default()
+    };
+    if mode != "boss" {
+        out.boss_loaded = true;
+        out.translate = merge_translate(&out.translate, &input.boss_mode_translate);
+        for (k, v) in &input.boss_mode_translate {
+            set_translate(&mut out.storage_translate, k, v);
+        }
+        for s in &input.boss_mode_skills {
+            if !out.loaded_skills.contains(s) {
+                out.loaded_skills.push(s.clone());
+            }
+            if s != "versus_ladder" && !out.finished_skills.contains(s) {
+                out.finished_skills.push(s.clone());
+            }
+        }
+        out.storage_boss = filter_allowed(&input.boss_mode_entries);
+    }
+    if mode != "versus" {
+        out.versus_loaded = true;
+        out.translate = merge_translate(&out.translate, &input.versus_mode_translate);
+        for (k, v) in &input.versus_mode_translate {
+            set_translate(&mut out.storage_translate, k, v);
+        }
+        for s in exclude_versus_ladder(&input.versus_mode_skills) {
+            if !out.loaded_skills.contains(&s) {
+                out.loaded_skills.push(s.clone());
+            }
+            if !out.finished_skills.contains(&s) {
+                out.finished_skills.push(s);
+            }
+        }
+        out.storage_versus = filter_allowed(&input.versus_mode_jiange);
+    }
+    out
+}
+
 /// `arenaReady` 的池过滤：仅保留 `isBossAllowed` / `bossallowed` 者。
 pub fn filter_allowed(pack: &[Entry]) -> Vec<Entry> {
     pack.iter().filter(|e| e.allowed).cloned().collect()

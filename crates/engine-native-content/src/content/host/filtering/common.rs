@@ -381,7 +381,17 @@ impl HostSkillBehavior {
                         return false;
                     }
                     let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
-                    kind.is_sha_like() || (!kind.is_basic_kind() && !kind.is_equip())
+                    kind.is_sha_like()
+                        || (!kind.is_basic_kind()
+                            && !kind.is_equip()
+                            && !matches!(
+                                kind,
+                                CardKind::Le
+                                    | CardKind::Bing
+                                    | CardKind::ShanDian
+                                    | CardKind::HongShui
+                                    | CardKind::Guiyoujie
+                            ))
                 }
                 _ => false,
             },

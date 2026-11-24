@@ -585,6 +585,12 @@ impl HostMachine {
                                 }
                             }
                             ctx.core.player_mut(self.owner).hand.push(c);
+                            ctx.note_cards_lost(from, &[c]);
+                            ctx.emit(EventData::CardsMoved {
+                                cards: vec![c],
+                                from,
+                                to: self.owner,
+                            });
                             ctx.log(LogEvent::CardsGiven {
                                 from,
                                 to: self.owner,

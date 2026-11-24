@@ -38,6 +38,154 @@ pub(super) fn has_unlimited_sha_public(
     paoxiao || has_zhuge || baolei_sentinel || fentian_red || poyue_red_free || sbzhaxiang_extra
 }
 
+/// Upstream `lib.filter.targetInRange(card, from, target)` for `Sha` (including skill/modifier
+/// unlimited range, distance-1 exemptions, `ow_feidan`, and weapon/horse attack range).
+pub(crate) fn sha_target_in_range(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    from: PlayerId,
+    target: PlayerId,
+    card: Option<CardId>,
+    kind: CardKind,
+    sha_nature: crate::event::DamageNature,
+    va_ignore_distance: Option<bool>,
+) -> bool {
+    let baolei_range_free = core.skills.keys().any(|(o, def)| {
+        *o == from
+            && core.player(*o).baolei_mode == 1
+            && catalog
+                .skills
+                .get(*def as usize)
+                .map(|sd| sd.name == "bshaowei")
+                .unwrap_or(false)
+    });
+    let fentian_red = card.is_some_and(|c| {
+        matches!(
+            catalog.resolved_card_suit(core, c),
+            crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+        )
+    }) && catalog
+        .skill_by_name(crate::content::standard::BOSS_FENTIAN)
+        .is_some_and(|def| core.has_skill(from, def));
+    let vm_va_ignore_dist = va_ignore_distance.unwrap_or_else(|| {
+        card.is_some_and(|c| {
+            (kind != catalog.resolved_card_kind(core, c) || !core.player(from).hand.contains(&c))
+                && catalog
+                    .find_player_vm_view_as(core, from, c, true, Some(CardKind::Sha))
+                    .is_some_and(|s| s.ignore_distance)
+        })
+    });
+    let sha_range_free = catalog
+        .skill_by_name(crate::content::host::WUDIAN_FEIREN_KEY)
+        .is_some_and(|def| core.has_skill(from, def))
+        || catalog
+            .skill_by_name(crate::content::host::WUDIAN_FEIDAN_KEY)
+            .is_some_and(|def| {
+                catalog.skills[def as usize].behavior.as_host_behavior()
+                    != Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+                    && core.has_skill(from, def)
+            })
+        || catalog
+            .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
+            .is_some_and(|def| core.has_skill(from, def))
+        || catalog
+            .skill_by_name(crate::content::standard::BOSS_KUANGXIAO)
+            .is_some_and(|def| core.has_skill(from, def))
+        || fentian_red
+        || catalog
+            .skill_by_name("jiying")
+            .is_some_and(|def| core.has_skill(from, def))
+        || (catalog
+            .skill_by_name("poyue")
+            .is_some_and(|def| core.has_skill(from, def))
+            && card.is_some_and(|c| {
+                matches!(
+                    catalog.resolved_card_suit(core, c),
+                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                )
+            }))
+        || {
+            let active = catalog
+                .skill_by_name(crate::content::standard::BOSS_SHENEN)
+                .is_some_and(|def| core.skills.keys().any(|(_, dd)| *dd == def));
+            active && core.is_boss_side(from)
+        }
+        || catalog
+            .skill_by_name(crate::content::standard::BOSS_SHOUYI)
+            .is_some_and(|def| core.has_skill(from, def))
+        || vm_va_ignore_dist;
+    let sbzhaxiang_free = catalog
+        .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
+        .is_some_and(|d| core.has_skill(from, d))
+        && crate::content::host::sbzhaxiang_active(core, from);
+    // 新烈弓（hs_alleria · character/shenhua/skill.js:3766）：
+    // 【杀】攻击范围判断中，目标距离 ≤ 此【杀】点数时视为在攻击范围内。
+    let dist = core.computed_distance(catalog, from, target);
+    let xinliegong_range_free = card.is_some_and(|c| {
+        let rank = catalog.cards.get(c as usize).map_or(0, |cd| cd.rank);
+        rank > 0
+            && dist <= u32::from(rank)
+            && !catalog.is_rechanyuan_sealed_name(core, from, "xinliegong")
+            && !catalog.is_tieji_sealed(core, from)
+            && catalog.skill_by_name("xinliegong").is_some_and(|def| {
+                core.has_skill(from, def)
+                    && catalog.skills[def as usize].behavior.as_host_behavior()
+                        == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchF)
+            })
+    });
+    let mod_dist_free = card.is_some_and(|c| {
+        crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+            core,
+            catalog,
+            from,
+            Some(target),
+            c,
+            kind,
+            sha_nature,
+        )
+    });
+    let zfs_free = core.turn.zhufangshenshi_target == Some(target)
+        || core
+            .vm_aux
+            .flags
+            .get(&(from, format!("zhufangshenshi_extra:{target}")))
+            .copied()
+            .unwrap_or(0)
+            > 0;
+    let zhuyue_free = core.turn.zhuyue_targets.contains(&target);
+    let sliufeng_free = catalog
+        .skill_by_name("sliufeng")
+        .is_some_and(|def| core.has_skill(from, def) && core.player(target).hp <= core.player(from).hp);
+    let tanbei_tgt_free =
+        crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, target);
+    let ow_feidan = catalog.skill_by_name("feidan").is_some_and(|def| {
+        catalog.skills[def as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
+            && core.has_skill(from, def)
+    });
+    if ow_feidan && dist <= 1 {
+        return false;
+    }
+    let shanxian_free = core
+        .vm_aux
+        .flags
+        .get(&(from, "ow_shanxian_target".to_string()))
+        .copied()
+        == Some(u32::from(target) + 1);
+    zfs_free
+        || baolei_range_free
+        || sha_range_free
+        || sbzhaxiang_free
+        || xinliegong_range_free
+        || mod_dist_free
+        || ow_feidan
+        || zhuyue_free
+        || sliufeng_free
+        || tanbei_tgt_free
+        || shanxian_free
+        || core.in_attack_range(catalog, from, target)
+}
+
 pub(super) fn play_sha(
     state: &mut GameState,
     catalog: &SharedCatalog,
@@ -218,7 +366,19 @@ pub(super) fn play_sha(
             == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
             && core.has_skill(player_id, d)
     });
-    let sha_unlimited_ext = vm_sha_unlimited || zhanlong2_unlimited || tanbei_free;
+    let sha_unlimited_ext = vm_sha_unlimited
+        || zhanlong2_unlimited
+        || tanbei_free
+        || crate::rvm_bridge::modifiers::eval_sha_unlimited_for_targets(
+            core, catalog, player_id, &targets,
+        )
+        || crate::rvm_bridge::modifiers::eval_sha_no_use_count(
+            core,
+            catalog,
+            player_id,
+            Some(card),
+            kind,
+        );
     if !paoxiao
         && !has_zhuge
         && !baolei_sentinel
@@ -522,160 +682,17 @@ pub(super) fn play_sha(
         return Err(RejectReason::IllegalTargets);
     }
     let from = core.turn.current;
-    // 贴房绅视（U05 swd，规则 v94）：本回合无视距离指定的
-    // 目标豁免距离校验（上游 targetInRange mod 同口径）
-    // 堡垒哨卫（U05 ow，规则 v125）：杀无视距离
-    let baolei_range_free = core.skills.keys().any(|(o, def)| {
-        *o == core.turn.current
-            && core.player(*o).baolei_mode == 1
-            && catalog
-                .skills
-                .get(*def as usize)
-                .map(|sd| sd.name == "bshaowei")
-                .unwrap_or(false)
-    });
-    // 飞刃（U05 ow 源氏，规则 v129）/飞弹（U05 ow 法老
-    // 之鹰，规则 v130）：锁定——你的杀无视距离（上游
-    // mod targetInRange 同口径）
-    let sha_range_free = catalog
-                        .skill_by_name(crate::content::host::WUDIAN_FEIREN_KEY)
-                        .map(|def| core.has_skill(core.turn.current, def))
-                        .unwrap_or(false)
-                        || catalog
-                            .skill_by_name(crate::content::host::WUDIAN_FEIDAN_KEY)
-                            .map(|def| {
-                                catalog.skills[def as usize].behavior.as_host_behavior()
-                                    != Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
-                                    && core.has_skill(core.turn.current, def)
-                            })
-                            .unwrap_or(false)
-                        // 天弦（U05 xianjian 柳梦璃，规则 v184）：锁定——
-                        // 杀无视距离（上游 mod targetInRange 同口径）
-                        || catalog
-                            .skill_by_name(crate::content::host::WUDIAN_XJ_TIANXIAN_KEY)
-                            .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false)
-                        // 狂笑（Boss 白虎，规则 v235）：锁定——【杀】无视
-                        // 距离（上游 mod targetInRange=true 同口径）
-                        || catalog
-                            .skill_by_name(crate::content::standard::BOSS_KUANGXIAO)
-                            .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false)
-                        // 焚天（Boss 朱雀，规则 v236）：红色牌无视距离
-                        || fentian_red
-                        // 疾影（赛特，swd 批㉑）：锁定 sha 无视距离
-                        || catalog
-                            .skill_by_name("jiying")
-                            .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false)
-                        // 破月（拓跋玉儿，swd 武将面批 28）：黑色杀无视
-                        // 距离（上游 mod targetInRange black 同口径）
-                        || (catalog
-                            .skill_by_name("poyue")
-                            .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false)
-                            && matches!(
-                                catalog.resolved_card_suit(core, card),
-                                crate::catalog::Suit::Spade
-                                    | crate::catalog::Suit::Club
-                            ))
-                        // 神恩（Boss 太昊/炎帝 光环，规则 v238）：boss 方
-                        // 用牌无视距离（光环激活=场上存在持有者）
-                        || ({
-                            let active = catalog
-                                .skill_by_name(crate::content::standard::BOSS_SHENEN)
-                                .map(|def| core.skills.keys().any(|(_, dd)| *dd == def))
-                                .unwrap_or(false);
-                            active && core.is_boss_side(core.turn.current)
-                        })
-                        // 守翼（年兽守翼形态，规则 v251）：所有牌无视距离
-                        || catalog
-                            .skill_by_name(crate::content::standard::BOSS_SHOUYI)
-                            .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false)
-                        || vm_va_sha.as_ref().is_some_and(|s| s.ignore_distance);
-    // 诈降（L27 批 4）：已用牌数 < 已损失体力 → 用牌无距离限制
-    let sbzhaxiang_free = catalog
-        .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
-        .map(|d| core.has_skill(player_id, d))
-        .unwrap_or(false)
-        && crate::content::host::sbzhaxiang_active(core, player_id);
-    // 新烈弓（hs_alleria · character/shenhua/skill.js:3766）：
-    // 【杀】攻击范围判断中，目标距离 ≤ 此【杀】点数时视为在攻击范围内。
-    let xinliegong_range_free = catalog
-        .cards
-        .get(card as usize)
-        .is_some_and(|cd| cd.rank > 0)
-        && !catalog.is_rechanyuan_sealed_name(core, player_id, "xinliegong")
-        && !catalog.is_tieji_sealed(core, player_id)
-        && catalog.skill_by_name("xinliegong").is_some_and(|def| {
-            core.has_skill(player_id, def)
-                && catalog.skills[def as usize].behavior.as_host_behavior()
-                    == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchF)
-        });
-    let xinliegong_rank = u32::from(catalog.cards.get(card as usize).map_or(0, |cd| cd.rank));
-    let feiren_range_free_for = |tgt: PlayerId| {
-        sha_range_free
-            || sbzhaxiang_free
-            || (xinliegong_range_free
-                && core.computed_distance(catalog, player_id, tgt) <= xinliegong_rank)
-            || crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
-                core,
-                catalog,
-                player_id,
-                Some(tgt),
-                card,
-                kind,
-                sha_nature,
-            )
-    };
-    let zfs_free = core.turn.zhufangshenshi_target == Some(target)
-        || core
-            .vm_aux
-            .flags
-            .get(&(player_id, format!("zhufangshenshi_extra:{target}")))
-            .copied()
-            .unwrap_or(0)
-            > 0;
-    // 逐月（U05 xianjian 云天河，规则 v161）：杀向逐月目标
-    // 无距离限制（上游 mod targetInRange 同口径）
-    let zhuyue_free = core.turn.zhuyue_targets.contains(&target);
-    // 疾风·司空宇面（swd 武将面批㊟）：锁定——体力值不大于
-    // 自己的角色视为在攻击范围（上游 mod targetInRange 同口径）
-    let sliufeng_free = catalog
-        .skill_by_name("sliufeng")
-        .map(|def| {
-            core.has_skill(core.turn.current, def)
-                && core.player(target).hp <= core.player(core.turn.current).hp
-        })
-        .unwrap_or(false);
-    let tanbei_tgt_free =
-        crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, target);
-    let ow_feidan = catalog.skill_by_name("feidan").is_some_and(|def| {
-        catalog.skills[def as usize].behavior.as_host_behavior()
-            == Some(crate::vocabulary::host::HostBehavior::U05OwBatchD)
-            && core.has_skill(from, def)
-    });
-    let shanxian_target_flag = core
-        .vm_aux
-        .flags
-        .get(&(from, "ow_shanxian_target".to_string()))
-        .copied();
-    let dist = core.computed_distance(catalog, from, target);
-    if ow_feidan && dist <= 1 {
-        return Err(RejectReason::IllegalTargets);
-    }
-    let shanxian_free = shanxian_target_flag == Some(u32::from(target) + 1);
-    if !zfs_free
-        && !baolei_range_free
-        && !feiren_range_free_for(target)
-        && !ow_feidan
-        && !zhuyue_free
-        && !sliufeng_free
-        && !tanbei_tgt_free
-        && !shanxian_free
-        && !core.in_attack_range(catalog, from, target)
-    {
+    let va_ignore_dist = vm_va_sha.as_ref().is_some_and(|s| s.ignore_distance);
+    if !sha_target_in_range(
+        core,
+        catalog,
+        from,
+        target,
+        Some(card),
+        kind,
+        sha_nature,
+        Some(va_ignore_dist),
+    ) {
         return Err(RejectReason::IllegalTargets);
     }
     // 方天多目标：其余目标逐个查距离/存活/空城。
@@ -690,17 +707,16 @@ pub(super) fn play_sha(
         if kc && core.player(*t).hand.is_empty() {
             return Err(RejectReason::IllegalTargets);
         }
-        let d2 = core.computed_distance(catalog, from, *t);
-        if ow_feidan && d2 <= 1 {
-            return Err(RejectReason::IllegalTargets);
-        }
-        let shanxian_free_t = shanxian_target_flag == Some(u32::from(*t) + 1);
-        if !feiren_range_free_for(*t)
-            && !ow_feidan
-            && !crate::rvm_bridge::modifiers::tanbei_unlimited_target(core, catalog, from, *t)
-            && !shanxian_free_t
-            && !core.in_attack_range(catalog, from, *t)
-        {
+        if !sha_target_in_range(
+            core,
+            catalog,
+            from,
+            *t,
+            Some(card),
+            kind,
+            sha_nature,
+            Some(va_ignore_dist),
+        ) {
             return Err(RejectReason::IllegalTargets);
         }
     }

@@ -358,6 +358,15 @@ progress.zxgxProgress::-webkit-progress-value {
   border-radius: 4px;
   font-size: 0.6rem;
 }
+.Fool_liegone_ol {
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid #c8a253;
+  color: #c8a253;
+  font-weight: 700;
+  padding: 0.04rem 0.28rem;
+  border-radius: 4px;
+  font-size: 0.6rem;
+}
 .Fool-skilltip {
   background: rgba(36, 29, 19, 0.92);
   border: 1px solid #523a24;

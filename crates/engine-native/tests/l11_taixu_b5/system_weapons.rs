@@ -759,3 +759,86 @@ fn test_l11_mahou_bihu_aliases_and_l28_l11_overlap_equips() {
         "qilin_skill discarded chosen tr2 first and tr1 on fuchendangmo 2nd ask"
     );
 }
+
+#[test]
+fn l11_gx_taijifuchen_and_qilin_skill_converted_virtual_sha_and_mounts_parity() {
+    use engine_native::ChoiceKind;
+
+    // 1. `gx_taijifuchen`: uses ChoiceKind::SelectCards (not Confirm with Pass) and fires on converted Sha (武圣)
+    let mut e_tj = start_versus(0xB5_9001, &[&[0], &[1]]);
+    grant_skill(&mut e_tj, 0, "gx_taijifuchen");
+    grant_skill(&mut e_tj, 0, "武圣");
+    e_tj.debug_set_turn(0, Phase::Play, 1);
+    let red_tao = place_kind_suit(&mut e_tj, 0, CardKind::Tao, Suit::Heart);
+    let tgt_heart = place_kind_suit(&mut e_tj, 1, CardKind::Tao, Suit::Heart);
+    let tgt_club = place_kind_suit(&mut e_tj, 1, CardKind::Jiu, Suit::Club);
+    let wusheng_res = play_card(&mut e_tj, 0, red_tao, vec![1]);
+    assert!(matches!(wusheng_res, CommandOutcome::Pending { .. }));
+    let t1 = expect_pending(&e_tj, "gx_taijifuchen:target_discard");
+    assert_eq!(t1.spec.kind, ChoiceKind::SelectCards);
+    assert!(!t1.spec.options.contains(&ChoiceOption::Pass));
+    let _ = answer(&mut e_tj, &t1, vec![ChoiceOption::Card(tgt_heart)]);
+    let t2 = expect_pending(&e_tj, "gx_taijifuchen:target_discard");
+    // Cancel 2nd discard -> Sha still becomes unrespondable!
+    let shan1 = place_kind(&mut e_tj, 1, CardKind::Shan);
+    let _ = answer(&mut e_tj, &t2, Vec::new());
+    drain(&mut e_tj);
+    assert!(e_tj.state_core().player(0).hand.contains(&tgt_heart));
+    assert_eq!(e_tj.state_core().player(1).hp, 5, "cancelling 2nd gx_taijifuchen discard still makes converted Sha unrespondable");
+    assert!(e_tj.state_core().player(1).hand.contains(&shan1));
+    let _ = tgt_club;
+
+    // 2. `qilin_skill` WITHOUT `_txhj_equip5`: converted Sha (`武圣`) & virtual Sha (`丈八蛇矛`) target standard HorsePlus/HorseMinus
+    let mut e_ql = start_versus(0xB5_9002, &[&[0], &[1]]);
+    grant_skill(&mut e_ql, 0, "qilin_skill");
+    e_ql.debug_set_turn(0, Phase::Play, 1);
+    let _wpn_ql = equip_std_kind(&mut e_ql, 0, CardKind::Fangtian);
+    let hp_std = equip_std_kind(&mut e_ql, 1, CardKind::HorsePlus);
+    let hm_std = equip_std_kind(&mut e_ql, 1, CardKind::HorseMinus);
+    grant_skill(&mut e_ql, 0, "武圣");
+    let ws_tao = place_kind_suit(&mut e_ql, 0, CardKind::Tao, Suit::Diamond);
+    let out_ql = play_card(&mut e_ql, 0, ws_tao, vec![1]);
+    assert!(matches!(out_ql, CommandOutcome::Pending { .. }), "ws sha rejected: {out_ql:?}");
+    let q1 = expect_pending(&e_ql, "qilin_skill:discard_horse");
+    assert!(
+        q1.spec.options.contains(&ChoiceOption::Card(hp_std))
+            && q1.spec.options.contains(&ChoiceOption::Card(hm_std)),
+        "qilin_skill must target standard HorsePlus/HorseMinus even without _txhj_equip5: {:?}",
+        q1.spec.options
+    );
+    let e_ql_saved = save_restore_and_compare_pending(&e_ql, &q1, vec![ChoiceOption::Card(hp_std)]);
+    assert!(!e_ql_saved.state_core().player(1).equips.contains(&hp_std));
+    assert!(e_ql_saved.state_core().player(1).equips.contains(&hm_std));
+
+    // 3. `qilin_skill` on virtual Sha (`Zhangba` 2-card Sha -> d.card == None)
+    let mut e_zb = start_versus(0xB5_9003, &[&[0], &[1]]);
+    grant_skill(&mut e_zb, 0, "qilin_skill");
+    e_zb.debug_set_turn(0, Phase::Play, 1);
+    let _zb = equip_std_kind(&mut e_zb, 0, CardKind::Zhangba);
+    let hm_zb = equip_std_kind(&mut e_zb, 1, CardKind::HorseMinus);
+    let c_a = place_kind(&mut e_zb, 0, CardKind::Tao);
+    let c_b = place_kind(&mut e_zb, 0, CardKind::Shan);
+    let _ = activate_skill(&mut e_zb, 0, "丈八蛇矛");
+    let mut q_zb_opt = None;
+    for _ in 0..6 {
+        let Some(c) = e_zb.open_choice().cloned() else { break };
+        if c.spec.prompt == "qilin_skill:discard_horse" {
+            q_zb_opt = Some(c);
+            break;
+        }
+        if c.spec.options.contains(&ChoiceOption::Card(c_a))
+            && c.spec.options.contains(&ChoiceOption::Card(c_b))
+        {
+            let _ = answer(&mut e_zb, &c, vec![ChoiceOption::Card(c_a), ChoiceOption::Card(c_b)]);
+        } else if c.spec.options.contains(&ChoiceOption::Player(1)) {
+            let _ = answer(&mut e_zb, &c, vec![ChoiceOption::Player(1)]);
+        } else {
+            let _ = answer(&mut e_zb, &c, Vec::new());
+        }
+    }
+    let q_zb = q_zb_opt.expect("qilin_skill:discard_horse");
+    assert!(q_zb.spec.options.contains(&ChoiceOption::Card(hm_zb)));
+    let _ = answer(&mut e_zb, &q_zb, vec![ChoiceOption::Card(hm_zb)]);
+    drain(&mut e_zb);
+    assert!(!e_zb.state_core().player(1).equips.contains(&hm_zb));
+}

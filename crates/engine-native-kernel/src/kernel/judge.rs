@@ -314,6 +314,16 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         replaced: payment.old,
                     });
                 }
+                if !payment.discard_old
+                    && ctx.core.player(payment.player).alive
+                    && ctx.catalog.skill_name(payment.provider) == "txhj_didun"
+                    && matches!(
+                        ctx.catalog.resolved_card_suit(ctx.core, payment.old),
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                {
+                    ctx.start_draw(payment.player, 1);
+                }
                 return Flow::Yield;
             }
             // 当前判定的进行态
@@ -701,6 +711,17 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                                 .vm_aux
                                 .flags
                                 .insert((self.owner, "last_judge_card".to_string()), judge_card);
+                            if let Some(mark_def) = ctx
+                                .core
+                                .vm_aux
+                                .flags
+                                .remove(&(self.owner, "pending_judge_set_skill_mark_def".to_string()))
+                            {
+                                ctx.core
+                                    .vm_aux
+                                    .marks
+                                    .insert((self.owner, mark_def), i32::from(rank));
+                            }
                         }
                         if !machine_holds {
                             ctx.to_discard(judge_card);

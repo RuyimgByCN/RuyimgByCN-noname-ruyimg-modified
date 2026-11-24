@@ -689,19 +689,26 @@ fn run_fallback_pindian(
     let win = prank > trank;
     ctx.discard_from_hand(p, pc);
     ctx.discard_from_hand(t, tc);
-    if win {
-        ctx.core
-            .vm_aux
-            .flags
-            .insert((p, "compare_win_turn".to_string()), 1);
-    }
+    commit_hand_compare_outcome(ctx, p, t, pc, win, win_skill_def, lose_skill_def);
+}
+
+/// Apply post-discard hand-compare (pindian) outcome skills and transient target/Sha flags.
+pub fn commit_hand_compare_outcome(
+    ctx: &mut Ctx<'_>,
+    owner: PlayerId,
+    target: PlayerId,
+    pc: CardId,
+    win: bool,
+    win_skill_def: rule_api::SkillDefId,
+    lose_skill_def: rule_api::SkillDefId,
+) {
     let grant = if win { win_skill_def } else { lose_skill_def };
     if grant.is_some() {
         if let Some(def) = resolve_skill_def(ctx.catalog, grant.raw()) {
             ctx.ensure_skill(
-                (p, def),
+                (owner, def),
                 SkillInstance {
-                    owner: p,
+                    owner,
                     enabled: true,
                     once_used: false,
                     expires_end_of_turn: false,
@@ -709,5 +716,31 @@ fn run_fallback_pindian(
                 },
             );
         }
+    }
+    if win {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "compare_win_turn".to_string()), 1);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "bound_target".to_string()), u32::from(target) + 1);
+    }
+    let was_sha =
+        crate::kernel::effective_card_kind_for(ctx.core, ctx.catalog, owner, pc).is_sha_like();
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((owner, "compare_card_was_sha".to_string()), u32::from(was_sha));
+    if was_sha && matches!(grant.raw(), 3751763590 | 4037147006) {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "skill:3222374511".to_string()), 1);
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((owner, "skill_turn:3222374511".to_string()), 1);
     }
 }

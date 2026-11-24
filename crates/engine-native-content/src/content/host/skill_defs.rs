@@ -36,6 +36,7 @@ pub fn host_skill_trigger_meta(
         HostBehavior::L10ScsCompanion => step::l10_scs::trigger_meta_l10_scs(name),
         HostBehavior::Q4BossPlaySkill => step::q4_boss_skills::trigger_meta_q4_boss(name),
         HostBehavior::Q4FoolSkill => step::q4_fool_skills::trigger_meta_q4_fool(name),
+        HostBehavior::L11OwnNpc => step::l11_own_npc::trigger_meta_l11_own_npc(name, None),
         HostBehavior::L11TrickCard => step::l11_cards::trigger_meta_l11_trick(name),
         HostBehavior::L11EquipCards => step::l11_equips::trigger_meta_l11_equips(name),
         HostBehavior::L11Daiyuan
@@ -406,6 +407,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         },
         HostBehavior::Q4BossPlaySkill => step::q4_boss_skills::limits_q4_boss(name),
         HostBehavior::Q4FoolSkill => step::q4_fool_skills::limits_q4_fool(name),
+        HostBehavior::L11OwnNpc => step::l11_own_npc::limits_l11_own_npc(name),
         _ => crate::catalog::SkillLimits::default(),
     }
 }

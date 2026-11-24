@@ -90,6 +90,25 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
         return;
     }
+    let sha_dmg_guard = if d.card.is_none() {
+        d.source.filter(|s| {
+            ctx.core
+                .vm_aux
+                .flags
+                .get(&(*s, format!("sha_damage_frame:{frame_id}")))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        })
+    } else {
+        None
+    };
+    if let Some(src) = sha_dmg_guard {
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((src, "active_sha_damage_eval".to_string()), 1);
+    }
     d.amount = ctx.core.effective_damage_amount(
         ctx.catalog,
         d.source,
@@ -98,6 +117,12 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         d.nature,
         d.amount as u32,
     ) as i32;
+    if let Some(src) = sha_dmg_guard {
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(src, "active_sha_damage_eval".to_string()));
+    }
     if d.amount <= 0 {
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
         return;

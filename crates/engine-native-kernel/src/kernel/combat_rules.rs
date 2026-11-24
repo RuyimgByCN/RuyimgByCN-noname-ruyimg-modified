@@ -157,15 +157,45 @@ pub(crate) fn mbcmjiushi_dying_skill(
 }
 
 #[inline]
+pub fn effective_card_kind_for(
+    core: &crate::state::GameStateCore,
+    catalog: &Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) -> CardKind {
+    if let Some(k) = core.declared_kinds.get(&card).copied() {
+        return k;
+    }
+    if crate::rvm_bridge::modifiers::eval_card_name_as_sha(core, catalog, player, card) {
+        return CardKind::Sha;
+    }
+    catalog.card_kind(card)
+}
+
+#[inline]
 pub(crate) fn effective_card_kind_in_core(
     core: &crate::state::GameStateCore,
     catalog: &Catalog,
     card: crate::ids::CardId,
 ) -> CardKind {
-    core.declared_kinds
-        .get(&card)
-        .copied()
-        .unwrap_or_else(|| catalog.card_kind(card))
+    if let Some(k) = core.declared_kinds.get(&card).copied() {
+        return k;
+    }
+    if let Some(owner) = core
+        .players
+        .iter()
+        .position(|p| p.hand.contains(&card) || p.equips.contains(&card))
+    {
+        if crate::rvm_bridge::modifiers::eval_card_name_as_sha(
+            core,
+            catalog,
+            owner as PlayerId,
+            card,
+        ) {
+            return CardKind::Sha;
+        }
+    }
+    catalog.card_kind(card)
 }
 
 /// `U05-5b` 复生（`gwfusheng` `chooseToUse`）：任一存活角色在濒死者正面朝上时可发动。
@@ -235,7 +265,7 @@ pub fn is_tao_like_core(
     {
         return false;
     }
-    let raw_kind = catalog.resolved_card_kind(core, card);
+    let raw_kind = effective_card_kind_for(core, catalog, responder, card);
     let raw_suit = catalog.resolved_card_suit(core, card);
     if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
         core, catalog, responder, dying, card,
@@ -526,7 +556,7 @@ pub fn response_kind_cards_core(
                     catalog.effective_card_suit(core, responder, c),
                     crate::catalog::Suit::Spade | crate::catalog::Suit::Club
                 );
-                let ck = catalog.resolved_card_kind(core, c);
+                let ck = effective_card_kind_for(core, catalog, responder, c);
                 let hufu_as = ck == CardKind::Hufu
                     && ((need == CardKind::Sha
                         && catalog
@@ -616,7 +646,7 @@ pub fn discard_response_card(
 ) {
     let in_hand = ctx.core.player(player).hand.contains(&card);
     let mut from_none = false;
-    if effective_card_kind_in_core(ctx.core, ctx.catalog, card) != target_kind || !in_hand {
+    if effective_card_kind_for(ctx.core, ctx.catalog, player, card) != target_kind || !in_hand {
         if let Some(spec) = ctx
             .catalog
             .find_player_vm_view_as(ctx.core, player, card, false, Some(target_kind))

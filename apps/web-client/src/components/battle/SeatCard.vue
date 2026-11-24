@@ -49,7 +49,11 @@ const props = defineProps<{
   selfSeatView?: SeatView | null;
   selfHandCount?: number;
   selfEquipsCount?: number;
+  attackRange?: number;
   seatDistance?: number;
+  reverseDistance?: number;
+  targetInRange?: boolean;
+  emptySlots2To6?: boolean;
   decadeStyle?: string;
   l20Marks?: Record<string, number>;
 }>();
@@ -303,7 +307,11 @@ const foolLiegongTag = computed(() =>
     targetSeat: props.seat,
     selfHandCount: props.selfHandCount ?? 0,
     selfEquipsCount: props.selfEquipsCount ?? 0,
+    attackRange: props.attackRange ?? 1,
     distance: props.seatDistance ?? 1,
+    reverseDistance: props.reverseDistance ?? props.seatDistance ?? 1,
+    inRange: props.targetInRange,
+    emptySlots2To6: props.emptySlots2To6,
   }),
 );
 const showCaiLanZiLayer = computed(() =>

@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-24 Batch P3-B（L26 7/0/0、U02 17/0/0、L11 Tier-1 +24→578/936，全局 4,061/363/0）更新
+
+- **核验与升级**：基线 `f08a704c3ef69a3ae56cbf5aff2d7711a2aca626`（Batch `P3-A` CI Run `45340220955` Attempt 1 `10/10 success`）；合入 `swarm/p3-l26-u02-l11-tier1`（`b5a83dd6d..0c03410f8d7daabe8bfe58b04aedf88a00a8905b`，`verifier-l11` `#238 APPROVE`），将 `#238` 批准之 **`26`** 项（`L26:configs:Fool_liegong`、`U02:modes:boss_play_arenaReady`、`L11:skills:{gx_taijifuchen, qilin_skill}` 与 `22` 名无阻塞 `L11` 武将）升为 `已复核等价`（`L26` **`7 / 0 / 0`**、`U02` **`17 / 0 / 0`**、`L11` **`578 / 358 / 0`**，`U05` 保持 `1,618 / 3 / 0`；保留 `40` 名受 `x164` / 共享缺陷阻塞之 `L11` 武将、`171` 模式节点及冻结项）。全局现 **`4,061 / 363 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[L26-笨蛋插件.md](L26-笨蛋插件.md)、[U02-boss.md](U02-boss.md)、[Batch P3-B 证据摘要](../../operations/evidence/2026-11-24-p3-b-tier1/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-24 Batch P3-A（U05 杀海拾遗非冻结 31 项收口→1,618/1,621，全局 4,035/389/0）更新
 
 - **核验与升级**：基线 `e8244d6ed8f14ad499a5bdf82949bafb67b354b7`（Batch `Q4-remaining` CI Run `45303299654` Attempt 1 `10/10 success`）；合入 `swarm/p3-u05-closure`（`e8b71bfc4..7d574912ecf29d8ef158b34388c7827271fd0c72`，`verifier-u05-b` `#231 APPROVE`），将 `U05` 剩余全部 **`31`** 项非冻结 `简化近似` 条目升为 `已复核等价`，严格保留 `shixu`、`hs_nozdormu`（墙钟边界）与 `old_longfan`（Decision 40 200ms `setInterval` 4 位 DOM 虎口机）共 `3` 项为 `简化近似`。`U05` 现 **`1,618 / 3 / 0`**，全局 **`4,035 / 389 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [U05-杀海拾遗.md](U05-杀海拾遗.md)、[Batch P3-A 证据摘要](../../operations/evidence/2026-11-24-p3-a-u05-closure/README.md) 与 [inventory_status.json](inventory_status.json)。

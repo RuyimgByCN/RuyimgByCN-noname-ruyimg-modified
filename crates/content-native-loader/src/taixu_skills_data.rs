@@ -779,6 +779,35 @@ pub fn lookup_l11_b5_host_behavior(
         | "txhj_chuhai"
         | "txhj_chuhai2" => Some(HostBehavior::L11GeneralBossC),
         "boss_lingfeng" => Some(HostBehavior::L11BossLingfeng),
+        "tx_modao"
+        | "txhj_baoji"
+        | "txhj_baolian"
+        | "txhj_beiming"
+        | "txhj_chuanyun"
+        | "txhj_didun"
+        | "txhj_dizhou"
+        | "txhj_guihuo"
+        | "txhj_guimei"
+        | "txhj_guimen"
+        | "txhj_guiyan"
+        | "txhj_huangjin"
+        | "txhj_juhun"
+        | "txhj_kuangbao"
+        | "txhj_luolei"
+        | "txhj_renfang"
+        | "txhj_renwang"
+        | "txhj_shiyuan"
+        | "txhj_tunshi"
+        | "txhj_wangyuan"
+        | "txhj_wangzu"
+        | "txhj_xiefeng"
+        | "txhj_yaoshu"
+        | "txhj_zhoufa"
+        | "txhj_zhoulei"
+        | "txhj_zhouzu"
+        | "txhj_zhuhun"
+        | "txhj_zuijiu"
+        | "txqyyouji" => Some(HostBehavior::L11OwnNpc),
         "guofengyupao" | "wushuangfangtianji_skill" => Some(HostBehavior::L28ThunderBatchA),
         "twzhouhu" | "twharvestinori" | "twzuhuo" => Some(HostBehavior::L27BeautifyBatchB),
         _ => None,

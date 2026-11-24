@@ -773,3 +773,58 @@ fn l11_b6a_round3_double_gender_u01_and_u08_parity() {
         );
     }
 }
+
+#[test]
+fn l11_txhj_huangjinyaoshushi_twzuhuo_txleizhen_and_restore() {
+    let verified = taixu_verified();
+    let mut e = start_locked_engine(2026_799, 2, LockedStartMode::Prototype, verified).unwrap();
+    e.assign_general_named(0, "txhj_huangjinyaoshushi").unwrap();
+    e.assign_general_named(1, "曹操").unwrap();
+    let g_idx = (0..e.catalog().general_count() as u16)
+        .find(|&d| e.catalog().general_meta(d).map(|m| m.0) == Some("txhj_huangjinyaoshushi"))
+        .unwrap();
+    let (_, fac, skills, hp, gen) = e.catalog().general_meta(g_idx).unwrap();
+    assert_eq!(fac, Faction::Qun);
+    assert_eq!(gen, Gender::Male);
+    assert_eq!(hp, 4);
+    assert_eq!(skills, ["twzuhuo", "txleizhen"]);
+
+    // 1. Activate `twzuhuo` in real Play phase (discard non-basic, choose 1 turn -> End grants shield)
+    advance_to_play(&mut e, 0);
+    let trick = take_card_kind(&mut e, CardKind::Dismantle);
+    give_hand_card(&mut e, 0, trick);
+    let zh = e.catalog().skill_by_name("twzuhuo").expect("twzuhuo");
+    let out = submit(&mut e, 0, GameAction::ActivateSkill { skill: zh });
+    assert!(!matches!(out, CommandOutcome::Rejected(_)));
+    let _ = answer_choice(&mut e, 0, vec![ChoiceOption::Card(trick)]);
+    let _ = answer_choice(&mut e, 0, vec![ChoiceOption::Tag(1)]);
+    // Advance through End phase -> shield becomes active (prevents next Sha damage)
+    advance_to_play(&mut e, 1);
+    let sha1 = take_card_kind(&mut e, CardKind::Sha);
+    give_hand_card(&mut e, 1, sha1);
+    e.debug_clear_hand(0);
+    let _ = play_real_card(&mut e, 1, sha1, vec![0]);
+    drain_to_pass(&mut e);
+    assert_eq!(e.state_core().player(0).hp, 4, "twzuhuo shield absorbed 1st Sha damage");
+
+    // 2. Roundtrip mid-match NGSA save/restore before fatal damage triggers `txleizhen` Death
+    let bytes = encode_archive(&e.save());
+    let snap = decode_archive(&bytes).expect("decode archive");
+    let mut r = restore_locked_engine(&snap, verified).expect("restore");
+    advance_to_play(&mut r, 0);
+    advance_to_play(&mut r, 1);
+    r.debug_set_hp(0, 1);
+    r.debug_clear_hand(0);
+    let sha2 = take_card_kind(&mut r, CardKind::Sha);
+    give_hand_card(&mut r, 1, sha2);
+    let killer_hp_before = r.state_core().player(1).hp;
+    let out2 = play_real_card(&mut r, 1, sha2, vec![0]);
+    assert!(!matches!(out2, CommandOutcome::Rejected(_)), "sha2 rejected: {out2:?}");
+    drain_to_pass(&mut r);
+    assert!(!r.state_core().player(0).alive, "txhj_huangjinyaoshushi died on lethal Sha");
+    assert_eq!(
+        r.state_core().player(1).hp,
+        killer_hp_before - 1,
+        "txleizhen Death trigger dealt 1 Thunder damage to killer"
+    );
+}

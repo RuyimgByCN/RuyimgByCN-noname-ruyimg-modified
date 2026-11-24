@@ -30,6 +30,8 @@ import {
   applyL15NamePrefix,
   batch7ArenaDatasetAttrs,
   buildSimplePaginationView,
+  computeAliveSeatDistance,
+  computeAttackRangeFromEquips,
   computeFoolEquipMirrorCards,
   computeFoolThrowRotation,
   computeL21DoubleHp,
@@ -300,11 +302,42 @@ test("L05/U04 coin haveFun + L07 SimplePagination + L13 _qy_chongzhu + L23 _fixC
   assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: plainSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0 }), null);
   assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: zhangfeiSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0 }), null);
   assert.equal(evaluateFoolLiegongTag({ mode: "close", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0 }), null);
-  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0 }), { label: "烈弓强中", cssClass: "Fool_liegone_shousha" });
-  assert.deepEqual(evaluateFoolLiegongTag({ mode: "olten", selectedCard: shaCard, selfSeat: { ...liegongSelf, skills: [{ id: 5, def: 5, name: "烈弓", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] }, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0 }), { label: "可烈弓 不可响应", cssClass: "Fool_liegone_olten" });
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0 }), { label: "可烈弓", cssClass: "Fool_liegone_shousha" });
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "olten", selectedCard: shaCard, selfSeat: { ...liegongSelf, skills: [{ id: 5, def: 5, name: "烈弓", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] }, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0 }), { label: "可烈弓", cssClass: "Fool_liegone_olten" });
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "ol", selectedCard: shaCard, selfSeat: { ...plainSelf, skills: [{ id: 7, def: 7, name: "xinliegong", enabled: true, use_count: 0, active: false, view_as: false, locked: false }] }, targetSeat, selfHandCount: 5, selfEquipsCount: 0 }), { label: "可烈弓", cssClass: "Fool_liegone_ol" });
   assert.deepEqual(evaluateFoolLiegongTag({ mode: "olten", selectedCard: shaCard, selfSeat: { ...plainSelf, skills: [{ id: 3, def: 3, name: "wushen", enabled: true, use_count: 0, active: false, view_as: false, locked: false }] }, targetSeat, selfHandCount: 4, selfEquipsCount: 0 }), { label: "不可响应", cssClass: "Fool_liegone_olten" });
   assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: { ...plainSelf, skills: [{ id: 6, def: 6, name: "诈降", enabled: true, use_count: 0, active: false, view_as: false, locked: false }] }, targetSeat, selfHandCount: 4, selfEquipsCount: 0 }), { label: "不可响应", cssClass: "Fool_liegone_shousha" });
   assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: { ...plainSelf, skills: [{ id: 7, def: 7, name: "新烈弓", enabled: true, use_count: 0, active: false, view_as: false, locked: false }] }, targetSeat, selfHandCount: 5, selfEquipsCount: 0 }), { label: "强中加伤", cssClass: "Fool_liegone_shousha" });
+
+  // Upstream targetInRange, weapon attackRange, alive/horse distances, and live skill counters
+  assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0, distance: 2, attackRange: 1 }), null);
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 1, distance: 2, attackRange: 5 }), { label: "可烈弓", cssClass: "Fool_liegone_shousha" });
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: liegongSelf, targetSeat: { ...targetSeat, hand_count: 4 }, selfHandCount: 4, selfEquipsCount: 0, distance: 2, attackRange: 1, inRange: true }), { label: "可烈弓", cssClass: "Fool_liegone_shousha" });
+  const sbPaoxiaoSelf = { ...plainSelf, skills: [{ id: 8, def: 8, name: "sbpaoxiao", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] };
+  assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: sbPaoxiaoSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, phaseHasSha: false }), null);
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: sbPaoxiaoSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, phaseHasSha: true }), { label: "不可响应", cssClass: "Fool_liegone_shousha" });
+  const sbZhaxiangSelf = { ...plainSelf, hp: 4, max_hp: 4, skills: [{ id: 9, def: 9, name: "sbzhaxiang", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] };
+  assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: sbZhaxiangSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, useCountTurn: 0 }), null);
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: { ...sbZhaxiangSelf, hp: 3 }, targetSeat, selfHandCount: 4, selfEquipsCount: 0, useCountTurn: 0 }), { label: "不可响应", cssClass: "Fool_liegone_shousha" });
+  const jintaoSelf = { ...plainSelf, skills: [{ id: 10, def: 10, name: "jintao", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] };
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: jintaoSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, phaseShaCount: 0, distance: 3 }), { label: "加伤", cssClass: "Fool_liegone_shousha" });
+  assert.deepEqual(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: jintaoSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, phaseShaCount: 1 }), { label: "不可响应", cssClass: "Fool_liegone_shousha" });
+  assert.equal(evaluateFoolLiegongTag({ mode: "shousha", selectedCard: shaCard, selfSeat: jintaoSelf, targetSeat, selfHandCount: 4, selfEquipsCount: 0, phaseShaCount: 2 }), null);
+  assert.equal(computeAttackRangeFromEquips([{ def: 97, kind: "Weapon" }]), 5);
+  assert.equal(
+    computeAliveSeatDistance(
+      [
+        { player: 0, alive: true, skills: [{ id: 1, def: 1, name: "mashu", enabled: true, use_count: 0, active: false, view_as: false, locked: true }] },
+        { player: 1, alive: false, skills: [] },
+        { player: 2, alive: true, skills: [] },
+        { player: 3, alive: true, skills: [] },
+      ],
+      (p) => (p === 2 ? [{ kind: "HorseDef" }] : []),
+      0,
+      2,
+    ),
+    1,
+  );
 
   assert.notEqual(computeFoolThrowRotation(1, 0, true), 0);
   assert.equal(computeFoolThrowRotation(1, 0, false), 0);

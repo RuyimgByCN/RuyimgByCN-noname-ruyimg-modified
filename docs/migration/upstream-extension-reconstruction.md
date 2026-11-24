@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-24 Batch P3-B（L26 7/0/0、U02 17/0/0、L11 Tier-1 +24→578/936，全局 4,061/363/0）合入
+
+- **范围与结果**：在 `f08a704c3ef69a3ae56cbf5aff2d7711a2aca626`（Batch `P3-A` CI Run `45340220955` Attempt 1 `10/10 success`）上合入 `swarm/p3-l26-u02-l11-tier1`（`b5a83dd6d..0c03410f8d7daabe8bfe58b04aedf88a00a8905b`，`verifier-l11` `#238 APPROVE`），接入 `HostBehavior::L11OwnNpc`（`1389`，`ALL=702`）、`step/l11_own_npc/*`、`L26 Fool_liegong` 后端+前端闭环、`U02 boss_play_arenaReady`、`gx_taijifuchen`/`qilin_skill`、`9` 项 VM/宿主根因与 Round 2 `4` 项修复（并协同 `filtering/swd.rs` 与 `play_sha.rs` `xinliegong_range_free`）；将获批 **`26`** 项升为 `已复核等价`（`L26` **`7 / 0 / 0`**、`U02` **`17 / 0 / 0`**、`L11` **`578 / 358 / 0`**，保留 `40` 名依赖 `x164` 或未覆盖 VM/宿主技能武将、`171` 模式节点及冻结项），全局 **`4,061 / 363 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch P3-B 证据摘要](../operations/evidence/2026-11-24-p3-b-tier1/README.md) 与各来源 G0 文档。
+
 ## 2026-11-24 Batch P3-A（U05 杀海拾遗非冻结 31 项收口→1,618/1,621，全局 4,035/389/0）合入
 
 - **范围与结果**：在 `e8244d6ed8f14ad499a5bdf82949bafb67b354b7`（Batch `Q4-remaining` CI Run `45303299654` Attempt 1 `10/10 success`）上合入 `swarm/p3-u05-closure`（`e8b71bfc4..7d574912ecf29d8ef158b34388c7827271fd0c72`，`verifier-u05-b` `#231 APPROVE`），完成 `catalog_queries_seals.rs` 拆分、`shahai_config.rs` 四子包真裁剪、`qixingzhen`/`stone_chenshui`/`diy_caiwenji`、6 名 `hearth` 武将（含 `xinwuyan` 与封印门控）及 SWD 10 技 + 8 将闭合（含 `yijue` AI 与 `yueren` 封印门控）；将获批 **`31`** 项全部升为 `已复核等价`（严格维持 `shixu`、`hs_nozdormu` 墙钟边界及 `old_longfan` Decision 40 实时 DOM 虎口机边界共 `3` 项为 `简化近似`），**`U05` `1,618 / 3 / 0`**、全局 **`4,035 / 389 / 0`**（缺失 `0`），整包 8 维签字保持 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变。详见 [Batch P3-A 证据摘要](../operations/evidence/2026-11-24-p3-a-u05-closure/README.md) 与 [U05-杀海拾遗.md](g0/U05-杀海拾遗.md)。

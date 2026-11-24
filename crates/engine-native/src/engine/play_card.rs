@@ -326,6 +326,11 @@ pub(super) fn play_card(
                     if (target == actor && !limu_self_le) || !core.player(target).alive {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    if kind == CardKind::Bing {
+                        super::play_card_targets::check_bing_range(
+                            core, catalog, actor, card, target,
+                        )?;
+                    }
                     // 无心（Boss 张春华，规则 v260）：锁定——你不能使用延时
                     // 锦囊指定其他角色为目标（上游 mod targetEnabled delay 同
                     // 口径；原生乐/兵路由本就只能置他人→等价持有者不可用乐/

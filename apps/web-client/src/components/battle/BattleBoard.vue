@@ -64,9 +64,12 @@ import {
   type Batch7UiSuiteState,
 } from "../../engine/surfaces/batch7ClosureState";
 import {
+  computeAliveSeatDistance,
+  computeAttackRangeFromEquips,
   computeFoolEquipMirrorCards,
   computeFoolThrowRotation,
   dispatchFixCaiLanZiTap,
+  isShaCard,
 } from "../../engine/surfaces/visualEffectsBatch7Runtime";
 import { DECADE_NOSKILL_CONTROL_IDS } from "../../engine/surfaces/decadeMarkSkillsData";
 import type { DecadeUiRuntimeState } from "../../engine/surfaces/decadeUiSurface";
@@ -447,8 +450,18 @@ const selfSeatView = computed(() => seats().find((s) => s.player === props.selfI
 const selectedCardView = computed(() =>
   selectedCard.value == null ? null : myHand().find((c) => c.id === selectedCard.value) ?? null,
 );
-function seatDistanceFor(position: number, total: number): number {
-  return position === 0 ? 0 : Math.max(1, Math.min(position, total - position));
+const selfHandCount = computed(() => myHand().length);
+const selfEquips = computed(() => equipCardsFor(props.selfId));
+const selfAttackRange = computed(() => computeAttackRangeFromEquips(selfEquips.value));
+const selfEmptySlots2To6 = computed(
+  () => !selfEquips.value.some((c) => c.kind !== "Weapon"),
+);
+function seatDistanceBetween(fromId: number, toId: number): number {
+  return computeAliveSeatDistance(seats(), equipCardsFor, fromId, toId);
+}
+function targetInRangeFor(targetId: number): boolean | undefined {
+  if (!targetMode.value || !isShaCard(selectedCardView.value)) return undefined;
+  return selectableSet.value.has(targetId);
 }
 const l01AttitudeEntries = computed(() => {
   const me = selfSeatView.value;
@@ -975,9 +988,13 @@ const endPhaseDisabled = computed(
             :batch7="batch7State"
             :selected-card-view="selectedCardView"
             :self-seat-view="selfSeatView"
-            :self-hand-count="myHand().length"
-            :self-equips-count="equipCardsFor(selfId).length"
-            :seat-distance="seatDistanceFor(slot.position, slot.total)"
+            :self-hand-count="selfHandCount"
+            :self-equips-count="selfEquips.length"
+            :attack-range="selfAttackRange"
+            :seat-distance="seatDistanceBetween(selfId, slot.seat.player)"
+            :reverse-distance="seatDistanceBetween(slot.seat.player, selfId)"
+            :target-in-range="targetInRangeFor(slot.seat.player)"
+            :empty-slots-2-to-6="selfEmptySlots2To6"
             :decade-style="surfaces?.theme?.decadeSkinStyle"
             :l20-marks="surfaces?.theme?.l20Marks"
             @select="onTargetSelect"

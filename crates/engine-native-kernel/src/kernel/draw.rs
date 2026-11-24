@@ -86,6 +86,12 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                         pending += bonus as i32;
                     }
                     if !num_fixed {
+                        pending = crate::rvm_bridge::modifiers::eval_optional_draw_count(
+                            ctx.core,
+                            ctx.catalog,
+                            player,
+                            pending,
+                        );
                         (ctx.catalog.hooks.draw_begin_step)(ctx, player, &mut pending);
                     }
                     // 玉如意（swd 7a / b44）：摸牌前从牌堆顶 20 张窗口取最大点数牌

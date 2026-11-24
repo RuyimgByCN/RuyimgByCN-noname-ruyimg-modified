@@ -73,6 +73,16 @@ pub enum VmModifierTarget {
     LinkLossCancel,
     CardDiscardProtected,
     SkillConditionalModifier,
+    CardTargetsSelfOnly,
+    CardDistanceUnlimitedTargetHandGteOwner,
+    CardDistanceUnlimitedSkillBoundTarget,
+    CardDistanceLimit,
+    ShaDistanceUnlimitedRankLtMark,
+    ShaNoUseCountRankGtMark,
+    ShaUseUnlimitedSkillBoundTarget,
+    IgnoreArmorSkillBoundTarget,
+    OptionalDrawCount,
+    ShaDamage,
 }
 
 /// 修饰运算模式（对齐 `content-schema::PackageModifierEntry::mode`）。
@@ -637,6 +647,7 @@ impl VmModifierRule {
 
 pub mod d34_flags;
 pub mod d34_l11_buff_mods;
+pub mod d34_l11_npc_mods;
 pub mod d34_l28_mods;
 pub mod d34_u05_b1_mods;
 pub mod d34_q4_boss_mods;
@@ -652,4 +663,6 @@ pub use d34_l11_buff_mods::{
 };
 mod eval;
 pub use eval::*;
+mod eval_ext;
+pub use eval_ext::*;
 

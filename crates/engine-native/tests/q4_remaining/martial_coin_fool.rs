@@ -505,5 +505,23 @@ fn l26_fool_liegong_and_fool_skill_real_engine_and_restore() {
     let restored = assert_archive_roundtrip(&e, &[&general_pack]);
     assert!(restored.fool_skill_enabled());
     assert_eq!(restored.fool_liegong_style(), FoolLiegongStyle::Shousha);
+
+    // 4. Fool_liegong range parity (dist=2 out of base range 1 -> ""; with Qilin or jiying -> "可烈弓")
+    let mut e_lg = Engine::new_with_extensions(608, 4, &[&general_pack]).expect("fool liegong 4-seat");
+    apply_fool_to_engine(&raw_cfg, &mut e_lg).unwrap();
+    e_lg.assign_general_named(0, "huangzhong_lg").unwrap();
+    step_to_phase(&mut e_lg, 0, Phase::Play);
+    while e_lg.state_core().player(2).hand.len() < 4 {
+        let _ = e_lg.debug_place(2, "sha");
+    }
+    assert_eq!(e_lg.query_fool_sha_hints(0, 2, None, 0).as_deref(), Some(""));
+    let qilin_card = e_lg.debug_place(0, "qilin");
+    assert_accepted_or_pending(&submit(&mut e_lg, 0, GameAction::PlayCard { card: qilin_card, targets: vec![] }));
+    drain_default(&mut e_lg);
+    assert_eq!(e_lg.query_fool_sha_hints(0, 2, None, 0).as_deref(), Some("可烈弓"));
+    e_lg.set_fool_liegong_style(FoolLiegongStyle::Ol);
+    assert_eq!(e_lg.query_fool_sha_hints(0, 2, None, 0).as_deref(), Some("可烈弓"));
+    let restored_ol = assert_archive_roundtrip(&e_lg, &[&general_pack]);
+    assert_eq!(restored_ol.fool_liegong_style(), FoolLiegongStyle::Ol);
     let _ = (CardKind::Sha, Suit::Heart);
 }

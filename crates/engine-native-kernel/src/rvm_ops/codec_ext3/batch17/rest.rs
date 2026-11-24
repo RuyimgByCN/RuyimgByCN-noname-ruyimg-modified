@@ -370,6 +370,15 @@ pub(super) fn enc_batch17_rest(w: &mut Vec<u8>, e: &EffectRequest) {
             push_u32(w, player.raw());
             push_u32(w, skill.raw());
         }
+        EffectRequest::JudgeSetSkillMarkToRank { player, skill } => {
+            push_ext_tag(w, 270);
+            push_u32(w, player.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ResolveTwxiongjun { player } => {
+            push_ext_tag(w, 271);
+            push_u32(w, player.raw());
+        }
         _ => unreachable!("accept_effect 已拒绝未编码变体"),
     }
 }
@@ -557,6 +566,13 @@ pub(super) fn dec_ext_u16(ext_tag: u16, rd: &mut Rd<'_>) -> Option<EffectRequest
         269 => EffectRequest::MoveEquipmentThenDraw {
             player: rule_api::PlayerId::new(rd.u32()?),
             skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        270 => EffectRequest::JudgeSetSkillMarkToRank {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        271 => EffectRequest::ResolveTwxiongjun {
+            player: rule_api::PlayerId::new(rd.u32()?),
         },
         _ => return None,
     })

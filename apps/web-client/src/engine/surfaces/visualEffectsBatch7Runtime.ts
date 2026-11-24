@@ -416,7 +416,7 @@ export interface L26FoolConfig {
   Fool_throwEmotion: boolean;
   Fool_skill: boolean;
   Fool_chooseAudio: boolean;
-  Fool_liegong: "shousha" | "olten" | "close";
+  Fool_liegong: "shousha" | "olten" | "ol" | "close";
   Fool_derivationSkill: boolean;
 }
 export const L26_SURFACE_IDS = ["extension.css"] as const;
@@ -426,7 +426,7 @@ export const L26_CONFIG_SPECS: ReadonlyArray<ConfigSpecEntry<keyof L26FoolConfig
   { key: "Fool_throwEmotion", label: "表情砸蛋随机旋转落点", control: "boolean", upstreamLine: 1568, ruleCoupled: false },
   { key: "Fool_skill", label: "技能计算优化（资援/敏思/方统）", control: "boolean", upstreamLine: 1573, ruleCoupled: true },
   { key: "Fool_chooseAudio", label: "选将语音播放开关", control: "boolean", upstreamLine: 1578, ruleCoupled: false },
-  { key: "Fool_liegong", label: "选中卡牌提示样式（不可响应）", control: "select", upstreamLine: 1588, ruleCoupled: true, options: [{ value: "shousha", label: "手杀样式" }, { value: "olten", label: "十周年样式" }, { value: "close", label: "关闭" }] },
+  { key: "Fool_liegong", label: "选中卡牌提示样式（不可响应）", control: "select", upstreamLine: 1588, ruleCoupled: true, options: [{ value: "shousha", label: "手杀样式" }, { value: "olten", label: "十周年样式" }, { value: "ol", label: "OL样式" }, { value: "close", label: "关闭" }] },
   { key: "Fool_derivationSkill", label: "衍生技能详细显示", control: "boolean", upstreamLine: 1638, ruleCoupled: false },
 ];
 const L26_KEY_SET: ReadonlySet<string> = new Set(L26_CONFIG_SPECS.map((s) => s.key));
@@ -455,7 +455,7 @@ export function importL26ConfigJson(jsonText: string): L26FoolConfig {
     Fool_throwEmotion: pickBool(rec.Fool_throwEmotion, d.Fool_throwEmotion),
     Fool_skill: pickBool(rec.Fool_skill, d.Fool_skill),
     Fool_chooseAudio: pickBool(rec.Fool_chooseAudio, d.Fool_chooseAudio),
-    Fool_liegong: pickOpt(rec.Fool_liegong, ["shousha", "olten", "close"], d.Fool_liegong),
+    Fool_liegong: pickOpt(rec.Fool_liegong, ["shousha", "olten", "ol", "close"], d.Fool_liegong),
     Fool_derivationSkill: pickBool(rec.Fool_derivationSkill, d.Fool_derivationSkill),
   };
 }
@@ -488,7 +488,61 @@ export function isShaCard(card: Pick<CardView, "kind"> | null | undefined): bool
   return card.kind === "Sha" || card.kind === "ShaFire" || card.kind === "ShaThunder";
 }
 
-/** 对照 `笨蛋插件/extension.js:473-573` 选中【杀】且角色具备烈弓/武神/诈降/玲珑/伏骑等强中加伤条件时计算提示文本 */
+const NAMED_WEAPON_RANGE_BY_DEF: Readonly<Record<number, number>> = {
+  95: 2, // Qinggang
+  96: 3, // Xuanyuanjian
+  97: 5, // Qilin
+  98: 2, // Hanbing
+  99: 1, // Zhuge
+  100: 3, // Guanshi
+  101: 3, // Qinglong
+  102: 3, // Zhangba
+  103: 2, // Cixiong
+  104: 4, // Fangtian
+  108: 2, // Chilongya
+  109: 2, // Fengxueren
+};
+
+/** Compute effective self attack range from equipped weapon card defs (`CardKind::named_weapon_range` parity). */
+export function computeAttackRangeFromEquips(equips: ReadonlyArray<Pick<CardView, "def" | "kind">>): number {
+  let range = 1;
+  for (const eq of equips) {
+    if (eq.def != null && eq.def in NAMED_WEAPON_RANGE_BY_DEF) {
+      range = Math.max(range, NAMED_WEAPON_RANGE_BY_DEF[eq.def]!);
+    } else if (eq.kind === "Weapon") {
+      range = Math.max(range, 1);
+    }
+  }
+  return range;
+}
+
+/** Compute circular distance between two alive seats factoring `-1`/`+1` horses and `mashu`/`feiying`. */
+export function computeAliveSeatDistance(
+  seats: ReadonlyArray<Pick<SeatView, "player" | "alive" | "skills">>,
+  equipsBySeat: (playerId: number) => ReadonlyArray<Pick<CardView, "kind">>,
+  fromId: number,
+  toId: number,
+): number {
+  if (fromId === toId) return 0;
+  const alive = seats.filter((s) => s.alive);
+  const idxFrom = alive.findIndex((s) => s.player === fromId);
+  const idxTo = alive.findIndex((s) => s.player === toId);
+  if (idxFrom < 0 || idxTo < 0) return 1;
+  const n = alive.length;
+  const raw = Math.min((idxTo - idxFrom + n) % n, (idxFrom - idxTo + n) % n);
+  let dist = Math.max(1, raw);
+  const hasSkill = (seat: Pick<SeatView, "skills">, names: ReadonlyArray<string>) =>
+    seat.skills.some((sk) => sk.enabled !== false && names.includes(String(sk.name ?? "").trim().toLowerCase()));
+  const fromSeat = alive[idxFrom]!;
+  const toSeat = alive[idxTo]!;
+  if (equipsBySeat(fromId).some((c) => c.kind === "HorseOff")) dist -= 1;
+  if (hasSkill(fromSeat, ["mashu", "马术"])) dist -= 1;
+  if (equipsBySeat(toId).some((c) => c.kind === "HorseDef")) dist += 1;
+  if (hasSkill(toSeat, ["feiying", "飞影"])) dist += 1;
+  return Math.max(1, dist);
+}
+
+/** 对照 `笨蛋插件/extension.js:473-620` 选中【杀】且角色具备烈弓/武神/诈降/玲珑/伏骑等强中加伤条件时计算提示文本 */
 export function evaluateFoolLiegongTag(opts: {
   mode: L26FoolConfig["Fool_liegong"];
   selectedCard: CardView | null;
@@ -498,7 +552,17 @@ export function evaluateFoolLiegongTag(opts: {
   selfEquipsCount: number;
   attackRange?: number;
   distance?: number;
-}): { label: string; cssClass: "Fool_liegone_shousha" | "Fool_liegone_olten" } | null {
+  reverseDistance?: number;
+  inRange?: boolean;
+  selectedCount?: number;
+  phaseHasSha?: boolean;
+  phaseShaCount?: number;
+  useCountTurn?: number;
+  spshidiMark?: number;
+  emptySlots2To6?: boolean;
+  dcgonghuBasic?: boolean;
+  dcgonghuDamage?: boolean;
+}): { label: string; cssClass: "Fool_liegone_shousha" | "Fool_liegone_olten" | "Fool_liegone_ol" } | null {
   if (opts.mode === "close" || !opts.selectedCard || !opts.selfSeat || !opts.targetSeat) return null;
   if (opts.selfSeat.player === opts.targetSeat.player || !opts.targetSeat.alive) return null;
   if (!isShaCard(opts.selectedCard)) return null;
@@ -510,8 +574,11 @@ export function evaluateFoolLiegongTag(opts: {
   );
   const range = Math.max(1, opts.attackRange ?? 1);
   const dist = Math.max(1, opts.distance ?? 1);
+  const reverseDist = Math.max(1, opts.reverseDistance ?? dist);
+  const inRange = opts.inRange ?? dist <= range;
   const targetHand = opts.targetSeat.hand_count;
-  const selfHand = Math.max(0, opts.selfHandCount - 1);
+  const selCount = opts.selectedCount ?? 1;
+  const selfHand = Math.max(0, opts.selfHandCount - selCount);
   const isHeart = opts.selectedCard.suit === "Heart";
   const isRed = opts.selectedCard.suit === "Heart" || opts.selectedCard.suit === "Diamond";
   const isBlack = opts.selectedCard.suit === "Spade" || opts.selectedCard.suit === "Club";
@@ -520,62 +587,75 @@ export function evaluateFoolLiegongTag(opts: {
   let qiangming = false;
   let jiaShang = false;
 
-  if (activeSkills.has("diy_liegong") && targetHand <= selfHand) {
-    foolLiegong = true;
-    qiangming = true;
-  }
-  if (
-    (activeSkills.has("liegong") ||
-      activeSkills.has("fz_liegong") ||
-      activeSkills.has("sbliegong") ||
-      activeSkills.has("烈弓") ||
-      activeSkills.has("谋烈弓")) &&
-    (targetHand >= opts.selfSeat.hp || targetHand <= range)
-  ) {
-    foolLiegong = true;
-    qiangming = true;
-  }
-  if (activeSkills.has("xinliegong") || activeSkills.has("新烈弓")) {
-    const canCond = targetHand <= selfHand || opts.targetSeat.hp >= opts.selfSeat.hp;
-    if (canCond) {
+  const hasDiyLg = activeSkills.has("diy_liegong");
+  const hasLg =
+    activeSkills.has("liegong") ||
+    activeSkills.has("fz_liegong") ||
+    activeSkills.has("sbliegong") ||
+    activeSkills.has("烈弓") ||
+    activeSkills.has("谋烈弓");
+  const hasXinLg = activeSkills.has("xinliegong") || activeSkills.has("新烈弓");
+  if ((hasDiyLg || hasLg || hasXinLg) && inRange) {
+    const cond =
+      (hasDiyLg && targetHand <= selfHand) ||
+      (hasLg && (targetHand >= opts.selfSeat.hp || targetHand <= range)) ||
+      (hasXinLg && (targetHand <= selfHand || opts.targetSeat.hp >= opts.selfSeat.hp));
+    if (cond) {
       foolLiegong = true;
-      if (targetHand <= selfHand) qiangming = true;
-      if (opts.targetSeat.hp >= opts.selfSeat.hp) jiaShang = true;
+      if (hasXinLg) {
+        if (targetHand <= selfHand) qiangming = true;
+        if (opts.targetSeat.hp >= opts.selfSeat.hp) jiaShang = true;
+      }
     }
   }
-  if ((activeSkills.has("wushen") || activeSkills.has("武神")) && isHeart) qiangming = true;
-  if ((activeSkills.has("zhaxiang2") || activeSkills.has("sbzhaxiang") || activeSkills.has("诈降")) && isRed) {
-    qiangming = true;
+  if (inRange) {
+    if (activeSkills.has("spshidi") && isBlack && ((opts.spshidiMark ?? 0) % 2 === 0)) qiangming = true;
+    if ((activeSkills.has("fuqi") || activeSkills.has("伏骑")) && reverseDist <= 1) qiangming = true;
+    if (activeSkills.has("refuqi") && dist <= 1) qiangming = true;
+    if ((activeSkills.has("wushen") || activeSkills.has("武神")) && isHeart) qiangming = true;
+    if (activeSkills.has("sbpaoxiao") && opts.phaseHasSha) qiangming = true;
+    if (activeSkills.has("liyong2")) qiangming = true;
+    if ((activeSkills.has("zhaxiang2") || activeSkills.has("诈降")) && isRed) qiangming = true;
+    const damaged = Math.max(0, opts.selfSeat.max_hp - opts.selfSeat.hp);
+    if (activeSkills.has("sbzhaxiang") && (opts.useCountTurn ?? 0) < damaged) qiangming = true;
+    const empty26 = opts.emptySlots2To6 ?? opts.selfEquipsCount === 0;
+    if ((activeSkills.has("relinglong") || activeSkills.has("玲珑")) && empty26) qiangming = true;
+    if (activeSkills.has("dcgonghu") && opts.dcgonghuBasic && opts.dcgonghuDamage && isRed) qiangming = true;
   }
-  if ((activeSkills.has("relinglong") || activeSkills.has("玲珑")) && opts.selfEquipsCount === 0) qiangming = true;
-  if ((activeSkills.has("fuqi") || activeSkills.has("refuqi") || activeSkills.has("伏骑")) && dist <= 1) {
-    qiangming = true;
+  if (activeSkills.has("jintao") || activeSkills.has("金韬")) {
+    const cnt = opts.phaseShaCount ?? 0;
+    if (cnt === 0) jiaShang = true;
+    else if (cnt === 1) qiangming = true;
   }
-  if (activeSkills.has("spshidi") && isBlack) qiangming = true;
-  if (activeSkills.has("liyong2") || activeSkills.has("sbpaoxiao")) qiangming = true;
-  if (activeSkills.has("dcgonghu") && isRed) qiangming = true;
-  if (activeSkills.has("jintao") || activeSkills.has("金韬")) jiaShang = true;
 
   if (!foolLiegong && !qiangming && !jiaShang) return null;
 
   let label = "";
+  const isShousha = opts.mode === "shousha";
   if (foolLiegong) {
-    if (qiangming && jiaShang) label = opts.mode === "shousha" ? "强中加伤" : "可烈弓 不可响应 伤害+1";
-    else if (qiangming) label = opts.mode === "shousha" ? "烈弓强中" : "可烈弓 不可响应";
-    else if (jiaShang) label = opts.mode === "shousha" ? "烈弓加伤" : "可烈弓 伤害+1";
-    else label = "可烈弓";
+    label = "可烈弓";
+    if (qiangming && jiaShang) label = isShousha ? "强中加伤" : "可烈弓 不可响应 伤害+1";
+    else if (qiangming) label = isShousha ? "烈弓强中" : "可烈弓 不可响应";
+    else if (jiaShang) label = isShousha ? "烈弓加伤" : "可烈弓 伤害+1";
   } else if (qiangming && jiaShang) {
-    label = opts.mode === "shousha" ? "强中加伤" : "不可响应 伤害+1";
+    label = isShousha ? "强中加伤" : "不可响应 伤害+1";
   } else if (qiangming) {
     label = "不可响应";
   } else if (jiaShang) {
-    label = opts.mode === "shousha" ? "加伤" : "伤害+1";
+    label = isShousha ? "加伤" : "伤害+1";
   }
 
-  return {
-    label,
-    cssClass: opts.mode === "shousha" ? "Fool_liegone_shousha" : "Fool_liegone_olten",
-  };
+  if (opts.mode === "ol" && label.length > 0 && foolLiegong) {
+    label = "可烈弓";
+  }
+
+  const cssClass =
+    opts.mode === "shousha"
+      ? "Fool_liegone_shousha"
+      : opts.mode === "ol"
+        ? "Fool_liegone_ol"
+        : "Fool_liegone_olten";
+  return { label, cssClass };
 }
 
 export function computeFoolThrowRotation(seat: number, selfId: number, enabled: boolean): number {

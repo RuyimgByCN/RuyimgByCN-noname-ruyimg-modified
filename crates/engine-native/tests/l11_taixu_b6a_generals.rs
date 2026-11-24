@@ -25,6 +25,12 @@ use engine_native::{
 
 #[path = "l11_taixu_b6a/round3_fixes.rs"]
 mod round3_fixes;
+#[path = "l11_taixu_b6a/step5_fixes.rs"]
+mod step5_fixes;
+#[path = "l11_taixu_b6a/l11_own_npc_fixes.rs"]
+mod l11_own_npc_fixes;
+#[path = "l11_taixu_b6a/l11_own_npc_fixes_part2.rs"]
+mod l11_own_npc_fixes_part2;
 
 static TAIXU_B6A_VERIFIED: OnceLock<VerifiedLockedContent> = OnceLock::new();
 static B6A_DEDUP: AtomicU64 = AtomicU64::new(61_000_000);

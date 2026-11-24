@@ -134,6 +134,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11OwnNpc {
+            return super::step::l11_own_npc::filter_l11_own_npc(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if self.behavior == HostBehavior::L11GeneralSkillsF {
             return super::step::l11_skills_f::filter_l11_skills_f_with_frames(
                 self, ctx, frames, Some(frame), owner, event,
@@ -1152,6 +1157,9 @@ impl HostSkillBehavior {
             }
             HostBehavior::Q4FoolSkill => {
                 super::step::q4_fool_skills::filter_q4_fool(self, ctx, owner, event)
+            }
+            HostBehavior::L11OwnNpc => {
+                super::step::l11_own_npc::filter_l11_own_npc(self, ctx, &[], None, owner, event)
             }
             _ => false,
         }

@@ -670,6 +670,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::Q4FoolSkill => {
             super::step::q4_fool_skills::ask_q4_fool(stage, owner, card, cards, core, catalog)
         }
+        HostBehavior::L11OwnNpc => super::step::l11_own_npc::ask_l11_own_npc(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::NewMeibu => {
             if stage != HostStage::SelectCard {
                 return None;

@@ -502,29 +502,15 @@ fn vm_finish_hand_compare(
     if tc_from_hand && ctx.core.player(target).hand.contains(&tc) {
         ctx.discard_from_hand(target, tc);
     }
-    let grant = if my_rank > their_rank {
-        ctx.core
-            .vm_aux
-            .flags
-            .insert((owner, "compare_win_turn".to_string()), 1);
-        win_skill_def
-    } else {
-        lose_skill_def
-    };
-    if grant.is_some() {
-        if let Some(def) = crate::rvm_ops::resolve_skill_def(ctx.catalog, grant.raw()) {
-            ctx.ensure_skill(
-                (owner, def),
-                crate::state::SkillInstance {
-                    owner,
-                    enabled: true,
-                    once_used: false,
-                    expires_end_of_turn: false,
-                    rounds: 0,
-                },
-            );
-        }
-    }
+    crate::rvm_ops::commit_hand_compare_outcome(
+        ctx,
+        owner,
+        target,
+        pc,
+        my_rank > their_rank,
+        win_skill_def,
+        lose_skill_def,
+    );
     crate::machine::Flow::Done
 }
 

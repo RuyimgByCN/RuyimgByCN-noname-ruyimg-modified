@@ -415,6 +415,10 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
             .vm_aux
             .flags
             .remove(&(seat, "q4_play_sha_count".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(seat, "sha_used_count".to_string()));
         if ctx
             .core
             .vm_aux

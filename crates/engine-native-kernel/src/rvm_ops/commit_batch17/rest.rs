@@ -519,6 +519,56 @@ pub(super) fn commit_batch17_rest(
             ctx.start_draw(p, 1);
             set_flag(ctx.core, p, "move_equipment_then_draw", 1);
         }
+        EffectRequest::JudgeSetSkillMarkToRank { player, skill } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let mark_def = super::super::resolve_skill_def(ctx.catalog, skill.raw())
+                .and_then(|d| ctx.catalog.skills[d as usize].behavior.package_skill_id())
+                .unwrap_or_else(|| skill.raw());
+            set_flag(ctx.core, p, "pending_judge_set_skill_mark_def", mark_def);
+            ctx.emit(EventData::OrdinaryJudge {
+                owner: p,
+                invocation: u32::MAX,
+            });
+        }
+        EffectRequest::ResolveTwxiongjun { player } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let dmg_fid = ctx.res.stack.iter().rev().find_map(|f| match f.data {
+                EventData::DamageWindow { root, .. } => Some(root),
+                EventData::Damage(_) => Some(f.id),
+                _ => None,
+            });
+            if let Some(fid) = dmg_fid {
+                let prev = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(p, "twxiongjun_last_damage_fid".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+                if prev == fid as u32 {
+                    return;
+                }
+                set_flag(ctx.core, p, "twxiongjun_last_damage_fid", fid as u32);
+            }
+            let xj_def = ctx.catalog.skill_by_name("twxiongjun");
+            let holders: Vec<PlayerId> = (0..seats)
+                .filter(|&s| {
+                    ctx.core.player(s).alive
+                        && (xj_def.is_some_and(|d| ctx.core.has_skill(s, d))
+                            || ctx.catalog.skills.iter().enumerate().any(|(i, sk)| {
+                                sk.behavior.package_skill_id() == Some(2_909_562_544)
+                                    && ctx.core.has_skill(s, i as u16)
+                            }))
+                })
+                .collect();
+            for holder in holders.into_iter().rev() {
+                ctx.start_draw(holder, 1);
+            }
+        }
         _ => {}
     }
 }

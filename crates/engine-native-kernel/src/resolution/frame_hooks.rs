@@ -105,10 +105,13 @@ fn on_frame_popped_inner(
                 .remove(&(*player, format!("l11_recover_source:{}", popped.id)));
         }
     }
-    if let EventData::CardResponded { player, .. } = &popped.data {
+    if let EventData::CardResponded { player, card } = &popped.data {
         core.vm_aux
             .flags
             .remove(&(*player, "dddfushi_resp_eff_kind".to_string()));
+        if run_after_hooks {
+            collect_txhj_renwang_card(core, catalog, *player, *card);
+        }
     }
     if let EventData::Damage(d) = &popped.data {
         super::pop_cleanup::on_damage_pop_cleanup(core, catalog, popped.id, d.target);
@@ -463,6 +466,11 @@ fn on_card_use_popped(
             }
         }
     }
+    if run_after_hooks {
+        if let Some(c) = u.card {
+            collect_txhj_renwang_card(core, catalog, u.player, c);
+        }
+    }
     if u.use_as == Some(crate::catalog::CardKind::Shan) {
         for p in 0..core.players.len() as PlayerId {
             core.vm_aux
@@ -521,5 +529,36 @@ fn on_card_use_popped(
             out,
         };
         crate::kernel::flush_qiankundai_pending_lose(&mut ctx);
+    }
+}
+
+fn collect_txhj_renwang_card(
+    core: &mut GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    card: crate::ids::CardId,
+) {
+    if !core.player(player).alive
+        || !core.discard.contains(&card)
+        || catalog.is_tieji_sealed(core, player)
+        || catalog.is_chanyuan_sealed(core, player)
+        || crate::kernel::mbcmfangzhu_baiban(core, player)
+        || catalog
+            .skill_by_name("txhj_feilong_skill_blank")
+            .is_some_and(|b| core.has_skill(player, b))
+        || !catalog
+            .skill_by_name("txhj_renwang")
+            .is_some_and(|d| core.has_skill(player, d))
+    {
+        return;
+    }
+    core.discard.retain(|&x| x != card);
+    let pile = core
+        .vm_aux
+        .piles
+        .entry((player, "txhj_renwang".to_string()))
+        .or_default();
+    if !pile.contains(&card) {
+        pile.push(card);
     }
 }

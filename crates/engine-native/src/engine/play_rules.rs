@@ -108,7 +108,7 @@ pub(super) fn common_play_validation(
             .skill_by_name("yudun")
             .is_some_and(|d| core.has_skill(actor, d))
     {
-        let kind = catalog.resolved_card_kind(core, card);
+        let kind = crate::kernel::effective_card_kind_for(core, catalog, core.turn.current, card);
         let is_trick =
             !kind.is_basic_kind() && kind.equip_slot().is_none() && kind.is_basic_trick_or_equip();
         if is_trick {
@@ -229,7 +229,7 @@ pub(super) fn play_kind(
     let mut kind = match catalog.cards[card as usize].name {
         "gw_wuyao" => CardKind::Sha,
         "gw_lang" => CardKind::Jiu,
-        _ => catalog.resolved_card_kind(core, card),
+        _ => crate::kernel::effective_card_kind_for(core, catalog, actor, card),
     };
     if sealed {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
@@ -518,7 +518,9 @@ pub(super) fn play_kind(
     {
         kind = CardKind::Tao;
     }
-    if kind == catalog.resolved_card_kind(core, card) && !mark_mutoumianju {
+    if kind == crate::kernel::effective_card_kind_for(core, catalog, actor, card)
+        && !mark_mutoumianju
+    {
         if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
             kind = CardKind::Duel;
         } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
@@ -642,7 +644,14 @@ pub(super) fn check_play_target_restrictions(
                     .is_some_and(|i| i.enabled)
             })
         });
-        if ban && targets.iter().any(|t| *t != core.turn.current) {
+        if (ban
+            || crate::rvm_bridge::modifiers::eval_card_targets_self_only(
+                core,
+                catalog,
+                core.turn.current,
+            ))
+            && targets.iter().any(|t| *t != core.turn.current)
+        {
             return Err(RejectReason::IllegalTargets);
         }
     }

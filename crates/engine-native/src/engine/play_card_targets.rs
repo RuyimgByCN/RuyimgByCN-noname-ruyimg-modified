@@ -709,8 +709,56 @@ pub(super) fn validate_jiu_or_tianxianjiu(
     ) && catalog
         .skill_by_name(crate::content::standard::BOSS_FENTIAN)
         .is_some_and(|def| core.has_skill(user, def));
-    if core.turn.jiu_used && !fentian_red_jiu && !bushi_unlimited && !fengnu_unlimited {
+    let card_use_unlimited = crate::rvm_bridge::modifiers::eval_card_use_unlimited(
+        core,
+        catalog,
+        user,
+        Some(card),
+        kind,
+        crate::event::DamageNature::Normal,
+    );
+    if core.turn.jiu_used
+        && !fentian_red_jiu
+        && !bushi_unlimited
+        && !fengnu_unlimited
+        && !card_use_unlimited
+    {
         return Err(RejectReason::CardLimit);
+    }
+    Ok(())
+}
+
+/// Validates distance for `Bingliang` (`CardKind::Bing`), respecting `duanliang` (`target.hand >= owner.hand`),
+/// `card_distance_limit`, `yuanduandilue`, and black-card unlimited modifiers without changing `play_card.rs` string invariants.
+pub(super) fn check_bing_range(
+    core: &GameStateCore,
+    catalog: &SharedCatalog,
+    actor: PlayerId,
+    card: CardId,
+    target: PlayerId,
+) -> Result<(), RejectReason> {
+    if crate::rvm_bridge::modifiers::eval_card_distance_unlimited_to(
+        core,
+        catalog,
+        actor,
+        Some(target),
+        card,
+        CardKind::Bing,
+        crate::event::DamageNature::Normal,
+    ) {
+        return Ok(());
+    }
+    let limit = crate::rvm_bridge::modifiers::eval_card_distance_limit(
+        core,
+        catalog,
+        actor,
+        Some(card),
+        CardKind::Bing,
+        crate::event::DamageNature::Normal,
+        1,
+    ) as u32;
+    if core.computed_distance(catalog, actor, target) > limit {
+        return Err(RejectReason::IllegalTargets);
     }
     Ok(())
 }

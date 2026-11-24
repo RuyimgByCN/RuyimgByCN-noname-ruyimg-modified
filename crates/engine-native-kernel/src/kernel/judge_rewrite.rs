@@ -40,6 +40,7 @@ pub fn judge_rewrite_providers(
         crate::vocabulary::names::GUI_DAO,
         crate::vocabulary::names::BOSS_TIANDAO,
         "gtiandao",
+        "txhj_didun",
         crate::vocabulary::host::SWD_TIANLUN_KEY,
     ]
     .into_iter()
@@ -75,7 +76,7 @@ pub fn judge_provider_cards(
     let cai = name == crate::vocabulary::names::GUI_CAI;
     let reguicai =
         crate::rvm_bridge::modifiers::skill_has_judgment_rewrite_hand_equip(catalog, provider);
-    let dao = name == crate::vocabulary::names::GUI_DAO;
+    let dao = name == crate::vocabulary::names::GUI_DAO || name == "txhj_didun";
     let any = name == crate::vocabulary::names::BOSS_TIANDAO || name == "gtiandao";
     let black = |c: &crate::ids::CardId| {
         matches!(

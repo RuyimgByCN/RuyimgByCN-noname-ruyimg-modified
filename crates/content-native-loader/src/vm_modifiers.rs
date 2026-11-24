@@ -373,9 +373,11 @@ pub(super) fn compile_modifier_entry(
         "hand_limit_base_max_hp" => VmModifierTarget::HandLimitBaseMaxHp,
         "sha_ignored_hand_limit" => VmModifierTarget::ShaIgnoredHandLimit,
         "card_ignored_hand_limit" => VmModifierTarget::CardIgnoredHandLimit,
-        "sha_use_limit"
-        | "sha_use_unlimited_for_skill_bound_target"
-        | "sha_no_use_count_if_rank_gt_skill_mark" => VmModifierTarget::ShaUseLimit,
+        "sha_use_limit" => VmModifierTarget::ShaUseLimit,
+        "sha_use_unlimited_for_skill_bound_target" => {
+            VmModifierTarget::ShaUseUnlimitedSkillBoundTarget
+        }
+        "sha_no_use_count_if_rank_gt_skill_mark" => VmModifierTarget::ShaNoUseCountRankGtMark,
         "global_sha_use_limit" => VmModifierTarget::GlobalShaUseLimit,
         "sha_target_limit" | "sha_extra_targets" => VmModifierTarget::ShaExtraTargets,
         "card_target_limit" if selector == Some(VmModifierSelector::Sha) => {
@@ -399,19 +401,27 @@ pub(super) fn compile_modifier_entry(
         }
         "global_distance_to" => VmModifierTarget::GlobalDistanceTo,
         "card_distance_unlimited"
-        | "card_distance_limit"
-        | "card_distance_unlimited_if_target_hand_gte_owner"
-        | "card_distance_unlimited_for_skill_bound_target"
         | "card_distance_unlimited_for_skill_card_policy"
-        | "sha_distance_unlimited_if_rank_lt_skill_mark"
         | "sha_distance_unlimited_if_target_distance_lte_rank" => {
             VmModifierTarget::CardDistanceUnlimited
+        }
+        "card_distance_limit" => VmModifierTarget::CardDistanceLimit,
+        "card_distance_unlimited_if_target_hand_gte_owner" => {
+            VmModifierTarget::CardDistanceUnlimitedTargetHandGteOwner
+        }
+        "card_distance_unlimited_for_skill_bound_target" => {
+            VmModifierTarget::CardDistanceUnlimitedSkillBoundTarget
+        }
+        "sha_distance_unlimited_if_rank_lt_skill_mark" => {
+            VmModifierTarget::ShaDistanceUnlimitedRankLtMark
         }
         "card_use_unlimited" | "first_hand_card_suit_use_unlimited" => {
             VmModifierTarget::CardUseUnlimited
         }
-        "draw_count" | "draw_phase" | "optional_draw_count" => VmModifierTarget::DrawCount,
+        "draw_count" | "draw_phase" => VmModifierTarget::DrawCount,
+        "optional_draw_count" => VmModifierTarget::OptionalDrawCount,
         "global_draw_count" => VmModifierTarget::GlobalDrawCount,
+        "card_targets_self_only" => VmModifierTarget::CardTargetsSelfOnly,
         "card_target_cancel"
         | "armor_card_target_cancel"
         | "card_target_cancel_from_current"
@@ -420,7 +430,6 @@ pub(super) fn compile_modifier_entry(
         | "card_target_cancel_if_other_user_hand_gte_target_and_armor_empty"
         | "card_target_cancel_if_other_user_hp_gte_target"
         | "card_target_cancel_if_other_user_distance_gt_one"
-        | "card_targets_self_only"
         | "immune_shunshou"
         | "immune_le" => VmModifierTarget::CardTargetCancel,
         "sha_use_cancel" => VmModifierTarget::ShaUseCancel,
@@ -443,9 +452,9 @@ pub(super) fn compile_modifier_entry(
             VmModifierTarget::DyingPeachTargetCancel
         }
         "damage_amount"
-        | "sha_damage"
         | "sha_damage_if_outside_target_range"
         | "sha_damage_source_range_threshold" => VmModifierTarget::DamageAmount,
+        "sha_damage" => VmModifierTarget::ShaDamage,
         "damage_taken_amount"
         | "global_damage_taken_amount"
         | "global_damage_taken_final_amount"
@@ -455,9 +464,9 @@ pub(super) fn compile_modifier_entry(
         | "damage_taken_final_amount" => VmModifierTarget::DamageTakenAmount,
         "damage_taken_cancel" | "damage_cancel" => VmModifierTarget::DamageTakenCancel,
         "ignore_armor"
-        | "ignore_armor_for_skill_bound_target"
         | "ignore_armor_for_skill_card_policy"
         | "armor_effect_disabled" => VmModifierTarget::IgnoreArmor,
+        "ignore_armor_for_skill_bound_target" => VmModifierTarget::IgnoreArmorSkillBoundTarget,
         "card_use_unrespondable"
         | "card_use_unrespondable_within_responder_to_owner_distance"
         | "card_use_unrespondable_within_owner_to_responder_distance"

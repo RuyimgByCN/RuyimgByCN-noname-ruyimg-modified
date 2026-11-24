@@ -356,6 +356,36 @@ pub(super) fn commit_equip(
         ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
         return;
     }
+    if played || l11_played {
+        let yaoshu = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(player, "l11_yaoshu_effect_stacks".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if yaoshu > 0 {
+            if yaoshu == 1 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(player, "l11_yaoshu_effect_stacks".to_string()));
+            } else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((player, "l11_yaoshu_effect_stacks".to_string()), yaoshu - 1);
+            }
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(player, format!("zhilian_equip_use:{frame_id}")));
+            ctx.to_discard(card);
+            ctx.log(LogEvent::CardNullified { player, card });
+            ctx.res.frame_mut(frame_id).expect("equip frame").stage = crate::event::Stage::Done;
+            return;
+        }
+    }
     if ctx
         .core
         .vm_aux

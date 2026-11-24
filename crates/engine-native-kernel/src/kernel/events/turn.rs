@@ -799,7 +799,16 @@ fn clear_turn_ended_temp_state(ctx: &mut Ctx<'_>, player: PlayerId) {
     }
     ctx.core.vm_aux.flags.retain(|(p, key), _| {
         *p != player
-            || (!key.starts_with("q4_fengjian_ban:") && !key.starts_with("ssr_lieren_temp:"))
+            || (!key.starts_with("q4_fengjian_ban:")
+                && !key.starts_with("ssr_lieren_temp:")
+                && !matches!(
+                    key.as_str(),
+                    "bound_target"
+                        | "compare_card_was_sha"
+                        | "sha_used_count"
+                        | "skill:3222374511"
+                        | "skill_turn:3222374511"
+                ))
     });
     ctx.core.vm_aux.clear_turn();
 }

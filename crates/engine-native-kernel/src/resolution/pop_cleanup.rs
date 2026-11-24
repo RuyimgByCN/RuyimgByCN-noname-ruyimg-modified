@@ -13,10 +13,65 @@ pub(super) fn clear_jifeng_more_flags(core: &mut GameStateCore, player: PlayerId
     core.vm_aux
         .flags
         .remove(&(player, format!("jifeng_more_idx:{frame_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(player, format!("jifeng_vh:{frame_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(player, format!("jifeng_vtc:{frame_id}")));
     for i in 0..len {
         core.vm_aux
             .flags
             .remove(&(player, format!("jifeng_more:{frame_id}:{i}")));
+    }
+}
+
+/// 疾风/游击多目标普通锦囊：`Slot::Intrinsic` 首目标前拆分余下目标至 `jifeng_more_*`。
+pub(crate) fn setup_jifeng_more_targets(
+    core: &mut GameStateCore,
+    res: &mut super::Resolution,
+    frame_id: EventId,
+    u: &mut crate::event::CardUseData,
+) {
+    let tail: Vec<PlayerId> = u.targets[1..].to_vec();
+    core.vm_aux
+        .flags
+        .insert((u.player, format!("jifeng_more_len:{frame_id}")), tail.len() as u32);
+    core.vm_aux
+        .flags
+        .insert((u.player, format!("jifeng_more_idx:{frame_id}")), 0);
+    if u.card.is_none() {
+        let vh = core
+            .vm_aux
+            .flags
+            .get(&(u.player, "l11_virtual_huogong".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if vh > 0 {
+            core.vm_aux
+                .flags
+                .insert((u.player, format!("jifeng_vh:{frame_id}")), vh);
+        }
+        let vtc = core
+            .vm_aux
+            .flags
+            .get(&(u.player, "l11_virtual_trick_cid".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if vtc > 0 {
+            core.vm_aux
+                .flags
+                .insert((u.player, format!("jifeng_vtc:{frame_id}")), vtc);
+        }
+    }
+    for (i, p) in tail.into_iter().enumerate() {
+        core.vm_aux
+            .flags
+            .insert((u.player, format!("jifeng_more:{frame_id}:{i}")), u32::from(p));
+    }
+    u.targets.truncate(1);
+    if let Some(fr) = res.frame_mut(frame_id) {
+        fr.card_use_mut().targets.truncate(1);
     }
 }
 
@@ -59,6 +114,26 @@ pub(super) fn advance_jifeng_slot(
         core.vm_aux
             .flags
             .insert((player, format!("jifeng_more_idx:{frame_id}")), idx);
+        if let Some(vh) = core
+            .vm_aux
+            .flags
+            .get(&(player, format!("jifeng_vh:{frame_id}")))
+            .copied()
+        {
+            core.vm_aux
+                .flags
+                .insert((player, "l11_virtual_huogong".to_string()), vh);
+        }
+        if let Some(vtc) = core
+            .vm_aux
+            .flags
+            .get(&(player, format!("jifeng_vtc:{frame_id}")))
+            .copied()
+        {
+            core.vm_aux
+                .flags
+                .insert((player, "l11_virtual_trick_cid".to_string()), vtc);
+        }
         if let Some(c) = card {
             if !core.table.contains(&c) && core.discard.contains(&c) {
                 core.discard.retain(|&x| x != c);

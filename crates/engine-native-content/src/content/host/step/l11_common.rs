@@ -616,6 +616,16 @@ pub(super) fn is_sha_use(catalog: &Catalog, u: &CardUseData) -> bool {
         .is_some_and(|k| k.is_sha_like())
 }
 
+pub(super) fn is_sha_use_state(
+    state: &GameStateCore,
+    catalog: &Catalog,
+    u: &CardUseData,
+) -> bool {
+    u.use_as
+        .or_else(|| u.card.map(|c| effective_card_kind(state, catalog, c)))
+        .is_some_and(|k| k.is_sha_like())
+}
+
 pub(super) fn effective_kind_of_use(catalog: &Catalog, u: &CardUseData) -> Option<CardKind> {
     u.use_as.or_else(|| u.card.map(|c| catalog.card_kind(c)))
 }

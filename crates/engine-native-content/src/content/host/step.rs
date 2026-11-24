@@ -14,6 +14,7 @@ pub(in crate::content::host) mod l10_scs;
 pub(in crate::content::host) mod q4_boss_skills;
 pub(crate) use q4_boss_skills::q4_boss_on_deck_washed;
 pub mod q4_fool_skills;
+pub(in crate::content::host) mod l11_own_npc;
 pub(crate) use l10_reguhuo::{
     reguhuo_consume_resp, reguhuo_has_pending_final, reguhuo_response_skill, reguhuo_spawn_final,
     reguhuo_spawn_response,
@@ -163,6 +164,7 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
     host_on_round_start_l19(ctx);
     u05_hearth::host_on_round_start_hearth(ctx);
     u05_b5a_gwent::u05_gwent_on_round_start(ctx);
+    l11_own_npc::on_round_start_l11_own_npc(ctx);
 }
 pub(super) mod u05_b5a_gwent;
 pub(super) mod u05_hearth;
@@ -1380,6 +1382,7 @@ impl HostMachine {
             HostBehavior::SwdPozhouSealed => self.step_swd_status(ctx),
             HostBehavior::Q4BossPlaySkill => q4_boss_skills::handle_q4_boss(self, ctx),
             HostBehavior::Q4FoolSkill => q4_fool_skills::handle_q4_fool(self, ctx),
+            HostBehavior::L11OwnNpc => l11_own_npc::handle_l11_own_npc(self, ctx),
             HostBehavior::Rechanyuan => Flow::Done,
             HostBehavior::L11TrickCard => l11_cards::handle_l11_trick_card(self, ctx),
             HostBehavior::L11EquipCards => l11_equips::handle_l11_equips(self, ctx),

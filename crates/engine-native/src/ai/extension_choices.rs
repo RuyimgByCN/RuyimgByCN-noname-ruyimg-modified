@@ -50,6 +50,8 @@ mod extension_choices_swd;
 mod extension_choices_u05_7d;
 #[path = "extension_choices_q4.rs"]
 mod extension_choices_q4;
+#[path = "extension_choices_l11_npc.rs"]
+mod extension_choices_l11_npc;
 
 pub(super) use extension_choices_common::{extension_card_value, public_attitude};
 
@@ -858,6 +860,17 @@ pub(super) fn plan_extension_choice_action(
         })
         .or_else(|| {
             extension_choices_q4::plan_q4_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_l11_npc::plan_l11_npc_choice_action(
                 catalog,
                 input,
                 id,

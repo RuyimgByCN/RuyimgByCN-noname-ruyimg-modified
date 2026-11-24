@@ -126,8 +126,15 @@ impl Engine {
             return None;
         }
         let kind = card.map(|c| cat.card_kind(c)).unwrap_or(CardKind::Sha);
+        let sha_nature = match kind {
+            CardKind::FireSha => crate::event::DamageNature::Fire,
+            CardKind::LeiSha => crate::event::DamageNature::Thunder,
+            _ => crate::event::DamageNature::Normal,
+        };
         let original_filter = core.legal_targets(cat, kind, viewer).2.contains(&target);
-        let in_range = core.computed_distance(cat, viewer, target) <= core.attack_range(cat, viewer);
+        let in_range = crate::engine::play_sha::sha_target_in_range(
+            core, cat, viewer, target, card, kind, sha_nature, None,
+        );
         let has_skill = |names: &[&str]| {
             names.iter().any(|name| {
                 cat.skill_by_name(name)
@@ -168,7 +175,7 @@ impl Engine {
             }
         }
 
-        let suit = card.map(|c| cat.cards[c as usize].suit);
+        let suit = card.map(|c| cat.resolved_card_suit(core, c));
         let is_black = suit.is_some_and(suit_is_black);
         let is_red = suit.is_some_and(suit_is_red);
         let is_heart = suit.is_some_and(suit_matches_heart);
@@ -198,7 +205,18 @@ impl Engine {
         if has_skill(&["wushen", "武神"]) && is_heart && in_range && original_filter {
             qiangming = true;
         }
-        if has_skill(&["sbpaoxiao"]) && core.turn.sha_used_play_phase && in_range && original_filter {
+        let phase_sha_count = core
+            .vm_aux
+            .flags
+            .get(&(viewer, "q4_play_sha_count".to_string()))
+            .or_else(|| core.vm_aux.flags.get(&(viewer, "sha_used_count".to_string())))
+            .copied()
+            .unwrap_or_else(|| u32::from(core.turn.sha_used_play_phase));
+        if has_skill(&["sbpaoxiao"])
+            && (core.turn.sha_used_play_phase || phase_sha_count > 0)
+            && in_range
+            && original_filter
+        {
             qiangming = true;
         }
         if has_skill(&["liyong2"]) && in_range && original_filter {
@@ -222,12 +240,6 @@ impl Engine {
         if has_skill(&["relinglong"]) && empty_slots_2_to_6 && in_range && original_filter {
             qiangming = true;
         }
-        let phase_sha_count = core
-            .vm_aux
-            .flags
-            .get(&(viewer, "q4_play_sha_count".to_string()))
-            .copied()
-            .unwrap_or_else(|| u32::from(core.turn.sha_used_play_phase));
         if has_skill(&["jintao"]) && (phase_sha_count == 0 || phase_sha_count == 1) {
             if phase_sha_count == 0 {
                 shanghai = true;

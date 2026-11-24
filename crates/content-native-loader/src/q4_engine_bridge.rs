@@ -33,33 +33,75 @@ pub fn boss_play_init_and_arena_ready(
     let cfg = parse_boss_play_config(config_json)?;
     let out = crate::init_outcome(&cfg, mode, versus_mode, status_mode, storage, enableai);
     if mode != "tafang" {
-        boss_play_arena_ready(engine, &cfg.source, mode, enableai);
+        boss_play_arena_ready_with_storage(engine, &cfg.source, mode, storage, enableai);
     } else {
         engine.set_boss_pool_filtering(false);
     }
     Ok(out)
 }
 
-/// Apply `boss_play_arenaReady` pool filtering (`isBossAllowed` in boss/versus modes,
-/// `forbidai` controlled by `enableai` across eligible modes) directly onto `Engine`.
+/// Apply `boss_play_arenaReady` pool filtering (`isBossAllowed` in `boss`/`versus` modes,
+/// `L03` 8 vs `U02` 15/`versus` 12 Jiange boundary, and `forbidai` controlled by `enableai`).
 pub fn boss_play_arena_ready(engine: &mut Engine, source: &str, mode: &str, enableai: bool) {
+    boss_play_arena_ready_with_storage(engine, source, mode, &PlayStorage::default(), enableai);
+}
+
+/// Apply `boss_play_arenaReady` with explicit `storage.boss` / `storage.versus` `isBossAllowed`
+/// gating matching upstream `arenaReady()` (`boss` loads 15 / `L03` 8; `versus` allows Jiange
+/// generals only unless overridden in `storage.versus`; `tafang` returns early without mutating).
+pub fn boss_play_arena_ready_with_storage(
+    engine: &mut Engine,
+    source: &str,
+    mode: &str,
+    storage: &PlayStorage,
+    enableai: bool,
+) {
     if mode == "tafang" {
         engine.set_boss_pool_filtering(false);
         return;
     }
-    let boss_mode = matches!(mode, "boss" | "versus");
+    let is_boss = mode == "boss";
+    let is_versus = mode == "versus";
+    let boss_mode = is_boss || is_versus;
     engine.set_boss_pool_filtering(boss_mode);
     let liuli = source == "noname-liuli" || source == "liuli";
+    let storage_pack = if is_versus {
+        &storage.versus
+    } else {
+        &storage.boss
+    };
     for (idx, &(name, _, _, _, _)) in U02_BOSS_GENERALS.iter().enumerate() {
         let in_source = !liuli || idx < 8;
         if in_source {
+            let mode_eligible = if is_versus {
+                idx < 12
+            } else {
+                boss_mode
+            };
+            let storage_override = storage_pack.iter().find(|e| e.name == name).map(|e| e.allowed);
+            let allowed = if boss_mode {
+                storage_override.unwrap_or(mode_eligible)
+            } else {
+                false
+            };
             engine.set_general_unseen_named(name, false);
-            engine.set_boss_general_allowed(name, boss_mode);
+            engine.set_boss_general_allowed(name, allowed);
             engine.set_general_forbidai_named(name, !enableai);
         } else {
             engine.set_general_unseen_named(name, true);
             engine.set_boss_general_allowed(name, false);
             engine.set_general_forbidai_named(name, true);
+        }
+    }
+    if boss_mode && !liuli {
+        for entry in storage_pack {
+            if !U02_BOSS_GENERALS.iter().any(|g| g.0 == entry.name) {
+                engine.set_general_unseen_named(&entry.name, false);
+                engine.set_boss_general_allowed(&entry.name, entry.allowed);
+                if entry.allowed {
+                    engine.set_general_forbidai_named(&entry.name, !enableai);
+                }
+            }
         }
     }
 }

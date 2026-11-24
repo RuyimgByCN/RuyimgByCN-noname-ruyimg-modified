@@ -416,6 +416,9 @@ impl HostSkillBehavior {
             HostBehavior::Q4FoolSkill => {
                 super::step::q4_fool_skills::activate_q4_fool(self, ctx, owner)
             }
+            HostBehavior::L11OwnNpc => {
+                super::step::l11_own_npc::activate_l11_own_npc(self, ctx, owner)
+            }
             _ => None,
         }
     }
@@ -722,6 +725,7 @@ pub(in crate::content::host) fn has_phase_use_activation(
         }
         HostBehavior::Q4BossPlaySkill => super::step::q4_boss_skills::has_phase_use_q4_boss(name),
         HostBehavior::Q4FoolSkill => super::step::q4_fool_skills::has_phase_use_q4_fool(name),
+        HostBehavior::L11OwnNpc => super::step::l11_own_npc::has_phase_use_l11_own_npc(name),
         _ => false,
     }
 }

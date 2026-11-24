@@ -943,6 +943,7 @@ impl VmHost for EngineVmHost<'_> {
             | EffectRequest::ResolveDddGuanning { skill, .. }
             | EffectRequest::ResolveDddJianshuo { skill, .. }
             | EffectRequest::ResolveShenSimayi { skill, .. }
+            | EffectRequest::JudgeSetSkillMarkToRank { skill, .. }
                 if !skill.is_some() && self.ctx.skill_id != 0 =>
             {
                 *skill = rule_api::SkillId::new(self.ctx.skill_id);

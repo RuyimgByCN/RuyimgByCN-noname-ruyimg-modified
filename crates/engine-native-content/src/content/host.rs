@@ -825,6 +825,9 @@ impl SkillBehavior for HostSkillBehavior {
                 step::u05_b5a_gwent::trigger_meta_u05_gwent_skill(&self.name)
                     .filter(|m| m.event == kind || m.extra_events.contains(&kind))
             }
+            HostBehavior::L11OwnNpc => {
+                step::l11_own_npc::trigger_meta_l11_own_npc(&self.name, Some(kind))
+            }
             _ => None,
         }
     }
@@ -913,6 +916,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11Weapons
                 | HostBehavior::L11GeneralBossC
                 | HostBehavior::L11BossLingfeng
+                | HostBehavior::L11OwnNpc
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
         )

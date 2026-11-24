@@ -51,7 +51,8 @@ pub(super) fn accept_batch17_effect(
             | EffectRequest::DiscardOneOwnXumou { player, .. }
             | EffectRequest::DiscardRememberedHandCards { player, .. }
             | EffectRequest::ExtraResolveCurrentTrick { player, .. }
-            | EffectRequest::MoveEquipmentThenDraw { player, .. } => {
+            | EffectRequest::MoveEquipmentThenDraw { player, .. }
+            | EffectRequest::JudgeSetSkillMarkToRank { player, .. } => {
                 ok_player(*player, "Batch17.player")?;
             }
             EffectRequest::ChooseDrawOrDiscardTargetCardRecordSha { player, target, .. }
@@ -391,6 +392,9 @@ pub(super) fn accept_batch17_effect(
                 ok_player(*player, "GainHighestRankShaFromEventCards.player")?;
                 ok_cards(cards, "GainHighestRankShaFromEventCards.cards")?;
             }
+            EffectRequest::ResolveTwxiongjun { player } => {
+                ok_player(*player, "ResolveTwxiongjun.player")?;
+            }
             _ => return Ok(()),
         }
         Ok(())
@@ -455,7 +459,9 @@ pub(super) fn accept_batch17_effect(
         | EffectRequest::GainDrawCardsForLifetimeCardActionDivisors { .. }
         | EffectRequest::GainHandCompareResultCard { .. }
         | EffectRequest::GainHighestRankShaFromEventCards { .. }
-        | EffectRequest::MoveEquipmentThenDraw { .. } => Some(res),
+        | EffectRequest::MoveEquipmentThenDraw { .. }
+        | EffectRequest::JudgeSetSkillMarkToRank { .. }
+        | EffectRequest::ResolveTwxiongjun { .. } => Some(res),
         _ => None,
     }
 }
@@ -538,6 +544,7 @@ pub(crate) fn backfill_batch17_skill(
         | EffectRequest::GainHandCompareResultCard { skill, .. }
         | EffectRequest::GainHighestRankShaFromEventCards { skill, .. }
         | EffectRequest::MoveEquipmentThenDraw { skill, .. }
+        | EffectRequest::JudgeSetSkillMarkToRank { skill, .. }
             if !skill.is_some() =>
         {
             *skill = rule_api::SkillId::new(skill_id);

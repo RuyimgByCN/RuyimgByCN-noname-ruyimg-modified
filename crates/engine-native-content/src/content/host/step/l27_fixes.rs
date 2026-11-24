@@ -113,6 +113,7 @@ pub(crate) fn host_on_death_before(ctx: &mut Ctx<'_>, dying: PlayerId) -> bool {
 /// `TurnEndWindow { after: true }`（`phaseAfter`）前钩子：`yange` 子将在拷贝技 `phaseEnd` 之后、`lianjing` 之前退出。
 pub(crate) fn host_on_turn_phase_after(ctx: &mut Ctx<'_>, player: PlayerId) {
     super::u05_b2_gujian::on_turn_phase_after_gujian(ctx, player);
+    super::l11_own_npc::on_turn_phase_after_l11_own_npc(ctx, player);
 }
 
 /// `dieEnd` 死亡结算后钩子（`alive=false` 落账后）：刷新全场存活 `xiefang` 计数，并登记 `lingyong` / 清理 `mhuanyi` 与 U05 `ow` / `hearth` / `gwent` 死亡监听。
@@ -121,6 +122,7 @@ pub(crate) fn host_on_player_died(
     dead: PlayerId,
     killer: Option<PlayerId>,
 ) {
+    super::l11_own_npc::on_player_died_l11_own_npc(ctx, dead, killer);
     super::u05_ow::host_on_player_died_ow(ctx, dead);
     super::u05_hearth::host_on_player_died_hearth(ctx, dead, killer);
     crate::content::host::step::u05_b5b_gwent::u05_b5b_on_player_died(ctx, dead);
@@ -219,6 +221,7 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
 pub(crate) fn host_on_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
     set_flag(ctx.core, player, "u05_mhuanyi_tgt", 0);
     set_flag(ctx.core, player, "u05_mhuanyi_cls", 0);
+    super::l11_own_npc::on_turn_begin_l11_own_npc(ctx, player);
 }
 
 /// 手牌移除钩子：处理 `mtg_du_*` 离手失血（非交出/保留在他人手牌），以及 `xingchong` 展示牌离手摸 2。
@@ -307,6 +310,9 @@ pub(crate) fn on_skill_removed_all(
     let hearth_cards =
         super::u05_hearth::on_skill_removed_hearth(core, catalog, owner, skill_name);
     cards.extend(hearth_cards);
+    cards.extend(super::l11_own_npc::on_skill_removed_l11_own_npc(
+        core, owner, skill_name,
+    ));
     cards
 }
 

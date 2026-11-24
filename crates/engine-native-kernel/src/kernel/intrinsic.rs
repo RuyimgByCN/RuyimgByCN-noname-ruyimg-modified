@@ -259,30 +259,21 @@ pub fn intrinsic_machine(
                         .get(c as usize)
                         .is_some_and(|cd| cd.name == "txhj_jiedao")
                 });
-            if effective_kind.is_jifeng_single_target_trick()
+            let youji_dup = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, format!("txqyyouji_dup:{frame_id}")))
+                .is_some();
+            if ((effective_kind.is_jifeng_single_target_trick()
                 && effective_kind != CardKind::Zhufangshenshi
-                && !is_txhj_jiedao
+                && !is_txhj_jiedao)
+                || youji_dup)
                 && u.targets.len() > 1
             {
-                let tail: Vec<PlayerId> = u.targets[1..].to_vec();
-                ctx.core.vm_aux.flags.insert(
-                    (u.player, format!("jifeng_more_len:{frame_id}")),
-                    tail.len() as u32,
+                crate::resolution::pop_cleanup::setup_jifeng_more_targets(
+                    ctx.core, ctx.res, frame_id, &mut u,
                 );
-                ctx.core
-                    .vm_aux
-                    .flags
-                    .insert((u.player, format!("jifeng_more_idx:{frame_id}")), 0);
-                for (i, p) in tail.into_iter().enumerate() {
-                    ctx.core.vm_aux.flags.insert(
-                        (u.player, format!("jifeng_more:{frame_id}:{i}")),
-                        u32::from(p),
-                    );
-                }
-                u.targets.truncate(1);
-                if let Some(fr) = ctx.res.frame_mut(frame_id) {
-                    fr.card_use_mut().targets.truncate(1);
-                }
             }
             let Some(card) = u.card else {
                 if matches!(

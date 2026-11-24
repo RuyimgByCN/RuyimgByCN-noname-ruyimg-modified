@@ -29,6 +29,7 @@ mod accept_batch15;
 pub(crate) use accept_batch15::backfill_batch17_skill;
 mod commit_batch13;
 mod commit_batch14;
+pub use commit_batch14::commit_hand_compare_outcome;
 mod commit_batch15;
 mod commit_batch15_rest;
 mod commit_batch16;

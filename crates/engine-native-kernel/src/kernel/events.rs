@@ -391,6 +391,42 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
     if let (Some(card), Some(as_kind)) = (u.card, u.use_as) {
         ctx.core.declared_kinds.insert(card, as_kind);
     }
+    let yaoshu_stacks = ctx
+        .core
+        .vm_aux
+        .flags
+        .get(&(u.player, "l11_yaoshu_effect_stacks".to_string()))
+        .copied()
+        .unwrap_or(0);
+    if yaoshu_stacks > 0 {
+        if yaoshu_stacks == 1 {
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(u.player, "l11_yaoshu_effect_stacks".to_string()));
+        } else {
+            ctx.core.vm_aux.flags.insert(
+                (u.player, "l11_yaoshu_effect_stacks".to_string()),
+                yaoshu_stacks - 1,
+            );
+        }
+        if let Some(card) = u.card {
+            ctx.core.table.retain(|&c| c != card);
+            if !ctx.core.discard.contains(&card) {
+                ctx.to_discard(card);
+            }
+            ctx.log(LogEvent::CardNullified {
+                player: u.player,
+                card,
+            });
+        }
+        if let Some(f) = ctx.res.frame_mut(frame_id) {
+            let cu = f.card_use_mut();
+            cu.cancelled = true;
+            cu.targets.clear();
+        }
+        return;
+    }
     if !pre_counted {
         if let Some(card) = u.card {
             ctx.log(LogEvent::CardPlayed {
@@ -512,25 +548,45 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 .unwrap_or(0)
                 != 0;
             if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current {
-                if ctx
-                    .catalog
-                    .skill_by_name("jintao")
-                    .is_some_and(|def| ctx.core.has_skill(u.player, def))
-                {
-                    *ctx.core
-                        .vm_aux
-                        .flags
-                        .entry((u.player, "q4_play_sha_count".to_string()))
-                        .or_insert(0) += 1;
-                }
-                if ctx.core.turn.sha_used_play_phase {
-                    if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
-                        && !vm_va_free
-                    {
-                        ctx.core.turn.land_sha_used = true;
+                let qiangwu_no_count = crate::rvm_bridge::modifiers::eval_sha_no_use_count(
+                    ctx.core,
+                    ctx.catalog,
+                    u.player,
+                    u.card,
+                    u.effective_kind(ctx.catalog),
+                );
+                if !qiangwu_no_count {
+                    if crate::rvm_bridge::modifiers::player_tracks_sha_used_count(
+                        ctx.core,
+                        ctx.catalog,
+                        u.player,
+                    ) {
+                        *ctx.core
+                            .vm_aux
+                            .flags
+                            .entry((u.player, "sha_used_count".to_string()))
+                            .or_insert(0) += 1;
                     }
-                } else if !poyue_red_free && !yudun_free && !vm_va_free {
-                    ctx.core.turn.sha_used_play_phase = true;
+                    if ctx
+                        .catalog
+                        .skill_by_name("jintao")
+                        .is_some_and(|def| ctx.core.has_skill(u.player, def))
+                    {
+                        *ctx.core
+                            .vm_aux
+                            .flags
+                            .entry((u.player, "q4_play_sha_count".to_string()))
+                            .or_insert(0) += 1;
+                    }
+                    if ctx.core.turn.sha_used_play_phase {
+                        if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
+                            && !vm_va_free
+                        {
+                            ctx.core.turn.land_sha_used = true;
+                        }
+                    } else if !poyue_red_free && !yudun_free && !vm_va_free {
+                        ctx.core.turn.sha_used_play_phase = true;
+                    }
                 }
             }
             ctx.core.table.extend(u.card);

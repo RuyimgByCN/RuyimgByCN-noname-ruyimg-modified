@@ -447,6 +447,13 @@ impl HostMachine {
                         }
                     }
                     // ③ 弃置使用者一张牌（手/装备；强制）
+                    if !ctx.core.player(self.owner).alive || !ctx.core.player(user).alive {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(self.owner, "l01_zhenlie_lose".to_string()));
+                        return Flow::Done;
+                    }
                     let cards: Vec<CardId> = ctx
                         .core
                         .player(user)
@@ -494,6 +501,15 @@ impl HostMachine {
                         ctx.core.player_mut(user).equips.retain(|x| *x != c);
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, user, c);
                         ctx.to_discard(c);
+                        ctx.note_cards_lost(user, &[c]);
+                        ctx.log(LogEvent::CardDiscarded {
+                            player: user,
+                            cards: vec![c],
+                        });
+                        ctx.emit(EventData::CardsDiscarded {
+                            player: user,
+                            cards: vec![c],
+                        });
                     }
                     Flow::Done
                 }

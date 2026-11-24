@@ -1937,4 +1937,6 @@ pub enum HostBehavior {
     Q4BossPlaySkill,
     /// Batch Q4 L26 `Fool_skill` 点数总和约束技能家族（tag 1388：`ziyuan`/`minsi`/`xinfu_fangtong`）。
     Q4FoolSkill,
+    /// Batch L11-6a 太虚自有 NPC 武将技能家族（tag 1389；`L11_TAIXU_OWN_NPC_SKILLS` 29 技宿主真触发与交互询问）。
+    L11OwnNpc,
 }
