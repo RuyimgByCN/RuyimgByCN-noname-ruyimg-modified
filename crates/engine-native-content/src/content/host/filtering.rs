@@ -192,6 +192,11 @@ impl HostSkillBehavior {
                 self, ctx, frames, Some(frame), owner, event,
             );
         }
+        if self.behavior == HostBehavior::L11VmFixA {
+            return super::step::l11_vm_fix_a::filter_with_frames(
+                self, ctx, frames, Some(frame), owner, event,
+            );
+        }
         if let Some(v) = super::step::u01_fixes_3::filter_u01_fix3_with_frames(
             self, ctx, frames, frame, owner, event,
         ) {
@@ -1103,6 +1108,9 @@ impl HostSkillBehavior {
                 )
             }
             HostBehavior::L11CrossNpcA => super::step::l11_npc_a::filter_l11_npc_a_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
+            HostBehavior::L11VmFixA => super::step::l11_vm_fix_a::filter_with_frames(
                 self, ctx, &[], None, owner, event,
             ),
             HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {

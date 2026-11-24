@@ -2,6 +2,137 @@
 
 use super::*;
 
+fn has_l11_vm_a(catalog: &crate::catalog::Catalog, name: &str) -> bool {
+    catalog.skill_by_name(name).is_some_and(|d| {
+        catalog.skills[d as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+    })
+}
+
+fn mark_fulin_gained(ctx: &mut Ctx<'_>, player: PlayerId, cards: &[crate::ids::CardId]) {
+    if player != ctx.core.turn.current {
+        return;
+    }
+    let Some(def) = ctx.catalog.skill_by_name("fulin").filter(|&d| {
+        ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+            == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+            && ctx.core.has_skill(player, d)
+            && !ctx.catalog.is_skill_chanyuan_blocked(ctx.core, player, d)
+            && !ctx.catalog.is_tieji_sealed(ctx.core, player)
+    }) else {
+        return;
+    };
+    let _ = def;
+    for &c in cards {
+        if ctx.core.player(player).hand.contains(&c) {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, format!("l11_fulin_tag:{c}")), 1);
+        }
+    }
+}
+
+fn record_l11_vm_a_use_or_equip(
+    ctx: &mut Ctx<'_>,
+    frame_id: crate::ids::EventId,
+    player: PlayerId,
+    suit: Option<crate::catalog::Suit>,
+    rank: u8,
+    kind: CardKind,
+    is_equip: bool,
+) {
+    if player != ctx.core.turn.current {
+        return;
+    }
+    let color_code = match suit {
+        Some(crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond) => 1u32,
+        Some(crate::catalog::Suit::Spade | crate::catalog::Suit::Club) => 2u32,
+        None => 0u32,
+    };
+    let suit_code = match suit {
+        Some(crate::catalog::Suit::Spade) => 1u32,
+        Some(crate::catalog::Suit::Heart) => 2u32,
+        Some(crate::catalog::Suit::Club) => 3u32,
+        Some(crate::catalog::Suit::Diamond) => 4u32,
+        None => 0u32,
+    };
+    let packed = 0x0100_0000u32 | (color_code << 16) | (suit_code << 8) | u32::from(rank);
+    if has_l11_vm_a(ctx.catalog, "fenyin") {
+        let prev = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(player, "l11_cur_card_turn".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if prev != 0 {
+            let pkey = if is_equip {
+                format!("l11_prev_eq_turn:{frame_id}")
+            } else {
+                format!("l11_prev_card_turn:{frame_id}")
+            };
+            ctx.core.vm_aux.flags.insert((player, pkey), prev);
+        }
+        ctx.core
+            .vm_aux
+            .flags
+            .insert((player, "l11_cur_card_turn".to_string()), packed);
+    }
+    if ctx.core.turn.phase == Phase::Play {
+        if has_l11_vm_a(ctx.catalog, "jianying") {
+            let prev = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(player, "l11_cur_card_play".to_string()))
+                .copied()
+                .unwrap_or(0);
+            if prev != 0 {
+                let pkey = if is_equip {
+                    format!("l11_prev_eq_play:{frame_id}")
+                } else {
+                    format!("l11_prev_card_play:{frame_id}")
+                };
+                ctx.core.vm_aux.flags.insert((player, pkey), prev);
+            }
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, "l11_cur_card_play".to_string()), packed);
+        }
+        if has_l11_vm_a(ctx.catalog, "langmie") {
+            let cat = if kind.is_basic_kind() {
+                0u32
+            } else if kind.equip_slot().is_some() {
+                2u32
+            } else {
+                1u32
+            };
+            *ctx.core
+                .vm_aux
+                .flags
+                .entry((player, format!("l11_langmie_play_cat:{cat}")))
+                .or_insert(0) += 1;
+        }
+    }
+}
+
+fn push_guzheng_flag_card(
+    ctx: &mut Ctx<'_>,
+    cur: PlayerId,
+    key_prefix: &str,
+    card: crate::ids::CardId,
+) {
+    let len_key = (cur, format!("{key_prefix}_len"));
+    let len = ctx.core.vm_aux.flags.get(&len_key).copied().unwrap_or(0);
+    ctx.core
+        .vm_aux
+        .flags
+        .insert((cur, format!("{key_prefix}:{len}")), card);
+    ctx.core.vm_aux.flags.insert(len_key, len + 1);
+}
+
 /// 造异异变 def 查询（运行时授予技）。
 pub(in crate::kernel) fn zhp_def(ctx: &Ctx<'_>) -> crate::ids::SkillDefId {
     ctx.catalog
@@ -151,8 +282,19 @@ pub(in crate::kernel) fn record_vm_history(
     }
     let track_olshanjia = ctx.catalog.skill_by_name("olshanjia").is_some();
     let track_dedup = track_l11_loss_dedup(ctx.catalog);
+    let track_guzheng =
+        ctx.core.turn.phase == Phase::Discard && has_l11_vm_a(ctx.catalog, "guzheng");
     match data {
         EventData::CardsDiscarded { player, cards } => {
+            if track_guzheng {
+                let cur = ctx.core.turn.current;
+                for &c in cards {
+                    push_guzheng_flag_card(ctx, cur, "l11_gz_all", c);
+                    if *player == cur {
+                        push_guzheng_flag_card(ctx, cur, "l11_gz_own", c);
+                    }
+                }
+            }
             {
                 let entry = ctx.core.vm_aux.lost.entry(*player).or_default();
                 for &c in cards {
@@ -167,6 +309,10 @@ pub(in crate::kernel) fn record_vm_history(
                         .vm_aux
                         .flags
                         .remove(&(*player, format!("l11_gaintag_paiku:{c}")));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*player, format!("l11_fulin_tag:{c}")));
                 }
                 if track_olshanjia
                     && ctx.catalog.card_kind(c).equip_slot().is_some()
@@ -191,6 +337,29 @@ pub(in crate::kernel) fn record_vm_history(
                         .vm_aux
                         .flags
                         .remove(&(*player, format!("l11_gaintag_paiku:{c}")));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*player, format!("l11_fulin_tag:{c}")));
+                }
+                if track_guzheng
+                    && !matches!(orig, crate::event::LostOrigin::Judge)
+                    && !ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .contains_key(&(*player, "in_discard_to_limit".to_string()))
+                    && ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .contains_key(&(*player, format!("u01_discard_reason:{c}")))
+                {
+                    let cur = ctx.core.turn.current;
+                    push_guzheng_flag_card(ctx, cur, "l11_gz_all", c);
+                    if *player == cur {
+                        push_guzheng_flag_card(ctx, cur, "l11_gz_own", c);
+                    }
                 }
                 if track_olshanjia && ctx.catalog.card_kind(c).equip_slot().is_some() {
                     *ctx.core
@@ -233,6 +402,10 @@ pub(in crate::kernel) fn record_vm_history(
                         .vm_aux
                         .flags
                         .remove(&(*from, format!("l11_gaintag_paiku:{c}")));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(*from, format!("l11_fulin_tag:{c}")));
                 }
                 if track_olshanjia
                     && ctx.catalog.card_kind(c).equip_slot().is_some()
@@ -245,6 +418,7 @@ pub(in crate::kernel) fn record_vm_history(
                         .or_insert(0) += 1;
                 }
             }
+            mark_fulin_gained(ctx, *to, cards);
             ctx.core
                 .vm_aux
                 .lost
@@ -254,6 +428,7 @@ pub(in crate::kernel) fn record_vm_history(
         }
         EventData::CardsDrawn { player, cards } => {
             *ctx.core.vm_aux.drawn.entry(*player).or_default() += cards.len() as u32;
+            mark_fulin_gained(ctx, *player, cards);
         }
         EventData::CardUsed(u) => {
             if let Some(c) = u.card {
@@ -262,9 +437,21 @@ pub(in crate::kernel) fn record_vm_history(
                         .vm_aux
                         .flags
                         .remove(&(u.player, format!("l11_gaintag_paiku:{c}")));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(u.player, format!("l11_fulin_tag:{c}")));
                 }
             }
             let effective = u.effective_kind_in(ctx.core, ctx.catalog);
+            if !pre_counted && !u.cancelled {
+                let suit = crate::kernel::card_use_suit(ctx.core, ctx.catalog, u);
+                let rank = u
+                    .card
+                    .and_then(|c| ctx.catalog.cards.get(c as usize).map(|cd| cd.rank))
+                    .unwrap_or(0);
+                record_l11_vm_a_use_or_equip(ctx, frame_id, u.player, suit, rank, effective, false);
+            }
             if effective.is_sha_like()
                 && ctx
                     .catalog
@@ -305,6 +492,21 @@ pub(in crate::kernel) fn record_vm_history(
                     .vm_aux
                     .flags
                     .remove(&(*player, format!("l11_gaintag_paiku:{card}")));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_fulin_tag:{card}")));
+            }
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .contains_key(&(*player, format!("l11_play_equip_use:{frame_id}")))
+            {
+                let suit = Some(ctx.catalog.effective_card_suit(ctx.core, *player, *card));
+                let rank = ctx.catalog.cards.get(*card as usize).map_or(0, |cd| cd.rank);
+                let kind = ctx.catalog.resolved_card_kind(ctx.core, *card);
+                record_l11_vm_a_use_or_equip(ctx, frame_id, *player, suit, rank, kind, true);
             }
             if ctx.core.turn.phase == Phase::Play && *player == ctx.core.turn.current {
                 *ctx.core
@@ -320,6 +522,10 @@ pub(in crate::kernel) fn record_vm_history(
                     .vm_aux
                     .flags
                     .remove(&(*player, format!("l11_gaintag_paiku:{card}")));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_fulin_tag:{card}")));
             }
         }
         _ => {}

@@ -168,6 +168,9 @@ impl HostSkillBehavior {
             HostBehavior::L11CrossNpcA => {
                 return super::step::l11_npc_a::machine_l11_npc_a(self, owner, event);
             }
+            HostBehavior::L11VmFixA => {
+                return super::step::l11_vm_fix_a::machine(self, owner, event);
+            }
             HostBehavior::U05GujianCardBatch
             | HostBehavior::U05GujianCharBatchA
             | HostBehavior::U05GujianCharBatchB

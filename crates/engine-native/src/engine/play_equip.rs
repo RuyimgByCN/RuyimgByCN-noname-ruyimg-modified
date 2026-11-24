@@ -106,5 +106,17 @@ pub(super) fn play_equip(
             .flags
             .insert((player, format!("twzhian_equip_use:{frame}")), 1);
     }
+    if ["fenyin", "jianying", "langmie"].into_iter().any(|sk| {
+        catalog.skill_by_name(sk).is_some_and(|d| {
+            catalog.skills[d as usize].behavior.as_host_behavior()
+                == Some(crate::content::host::HostBehavior::L11VmFixA)
+        })
+    }) {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player, format!("l11_play_equip_use:{frame}")), 1);
+    }
     Ok(())
 }

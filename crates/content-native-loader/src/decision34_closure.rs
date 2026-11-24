@@ -561,6 +561,9 @@ pub use taixu_generals_data::*;
 pub mod taixu_skills_data;
 pub use taixu_skills_data::*;
 
+#[path = "taixu_vm_fix_a.rs"]
+pub mod taixu_vm_fix_a;
+
 #[path = "taixu_campaign_data.rs"]
 pub mod taixu_campaign_data;
 pub use taixu_campaign_data::*;

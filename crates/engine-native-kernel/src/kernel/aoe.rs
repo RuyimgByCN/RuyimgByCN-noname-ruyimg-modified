@@ -146,7 +146,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                     player: self.target,
                 });
                 if self.need == CardKind::Shan
-                    || ctx.catalog.resolved_card_kind(ctx.core, c) == CardKind::Shan
+                    || ctx.catalog.player_card_kind(ctx.core, self.target, c) == CardKind::Shan
                 {
                     releiji_on_shan(ctx, self.target);
                 }
@@ -241,7 +241,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
                 // （南蛮响应为杀，不触发）
                 if self.need == CardKind::Shan
-                    || ctx.catalog.resolved_card_kind(ctx.core, c) == CardKind::Shan
+                    || ctx.catalog.player_card_kind(ctx.core, self.target, c) == CardKind::Shan
                 {
                     releiji_on_shan(ctx, self.target);
                 }

@@ -1943,4 +1943,6 @@ pub enum HostBehavior {
     L11CrossNpcB,
     /// Phase 3 P3-C1a L11 太虚幻境跨包 NPC 武将技 Part A 80+3 技家族（tag 1391）。
     L11CrossNpcA,
+    /// P3-E1 L11 `taixu` 跨包 NPC / 疑点 VM 技能全量迁移宿主分发（tag 1392）。
+    L11VmFixA,
 }

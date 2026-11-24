@@ -430,7 +430,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .iter()
                     .copied()
                     .filter(|c| {
-                        let kind = ctx.catalog.resolved_card_kind(ctx.core, *c);
+                        let kind = ctx.catalog.player_card_kind(ctx.core, next, *c);
                         !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(
                             ctx.core,
                             ctx.catalog,

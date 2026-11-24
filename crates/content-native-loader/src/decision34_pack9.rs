@@ -10,8 +10,6 @@ use engine_native::content::extension::{
 };
 use engine_native::content::names;
 use engine_native::content::standard::{Gender, STANDARD_GENERALS};
-use engine_native::event::EventKind;
-use engine_native::rvm_bridge::VmFilterPolicy;
 
 #[path = "decision34_pack9_data.rs"]
 pub mod decision34_pack9_data;
@@ -22,8 +20,6 @@ pub use decision34_pack9_triggers::classify_skill_trigger;
 #[path = "decision34_pack9_ui.rs"]
 pub mod decision34_pack9_ui;
 pub use decision34_pack9_ui::*;
-
-use super::DECISION34_STORAGE_DISPATCH_KEY;
 
 pub const DDD_SKILL_DISPATCH_ID: u32 = 1_926_001_001;
 pub const SWD_DUIJUE_ID: u32 = 1_926_002_001;
@@ -44,58 +40,7 @@ pub const L25_ZUAN_SKILL_ID: u32 = 1_926_009_001;
 pub const L27_SELECT_SKILL_ID: u32 = 1_926_010_001;
 pub const L11_TAIXU_SKILL_ID: u32 = 1_926_011_001;
 
-pub(crate) fn make_vm_skill_decl(name_str: &str, dispatch_id: u32, idx: usize) -> Option<VmSkillDecl> {
-    let (event, inner_filter) = classify_skill_trigger(name_str)?;
-    let mod_name = format!("{name_str}#d34p9");
-    let mut code = Vec::with_capacity(14);
-    code.push(0x57); // HOST_SKILL
-    code.push(0x10); // CONST_I32
-    code.extend_from_slice(&(DECISION34_STORAGE_DISPATCH_KEY as i32).to_le_bytes());
-    code.push(0x10); // CONST_I32
-    code.extend_from_slice(&(dispatch_id as i32).to_le_bytes());
-    code.push(0x5A); // HOST_EFFECT_EXT
-    code.extend_from_slice(&649u16.to_le_bytes()); // STORAGE_SET = 649
-    code.push(0x01); // HALT
-    let module = engine_native::rvm_bridge::BytecodeModule {
-        logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
-            &mod_name, &code, 0, 1, 0,
-        ),
-        name: mod_name,
-        code,
-        local_count: 0,
-        max_stack: 4,
-        entry_pc: 0,
-        caps_mask: 1,
-    };
-    let skill_def_id = dispatch_id.wrapping_add(idx as u32);
-    let extra_events = if name_str == "dddxiaxing" {
-        vec![EventKind::Dying]
-    } else {
-        Vec::new()
-    };
-    Some(VmSkillDecl {
-        declaration_hash: None,
-        presentation_binding: None,
-        name: name_str.to_string(),
-        module,
-        trigger: engine_native::catalog::TriggerMeta {
-            event,
-            timing: engine_native::event::Timing::Normal,
-            priority: 15,
-            order_selectable: false,
-            optional: false,
-            extra_events,
-        },
-        filter: VmFilterPolicy::Declared {
-            skill_def_id,
-            hand_limit_base_max_hp: false,
-            choice_actor: engine_native::rvm_bridge::VmChoiceActor::Owner,
-            modifiers: Vec::new(),
-            inner: Box::new(inner_filter),
-        },
-        r05_identity: None,
-    })
-}
+pub(crate) use crate::taixu_vm_fix_a::make_vm_skill_decl;
 
 /// Build the complete `ExtensionPack` covering the remaining 9 sources (`U01`, `U05`,
 /// `L08`, `L14`, `L19`, `L20`, `L24`, `L25`, `L27`) plus `U07` (`jianbi`, `choudu`).
@@ -510,7 +455,8 @@ pub fn attach_formal_package_upstream_rules(
             && vs.name != "xinjuejing"
             && (super::lookup_upstream_host_behavior(&vs.name).is_some()
                 || crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&vs.name.as_str())
-                || vs.name == "jueqing")
+                || vs.name == "jueqing"
+                || crate::taixu_vm_fix_a::is_stripped_vm_skill(&vs.name))
         {
             return false;
         }

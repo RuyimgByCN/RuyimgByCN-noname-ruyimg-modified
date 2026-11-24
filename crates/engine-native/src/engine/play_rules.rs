@@ -96,7 +96,7 @@ pub(super) fn common_play_validation(
     // 基本牌（上游 mod cardEnabled2 类型禁用→恒定基本牌近似登记；
     // kind 基础集=杀族/闪/桃/酒族/手里剑）；打出面（响应窗）未
     // 落=登记差异（仅使用位 PlayCard 校验）
-    if core.player(actor).wangshi_ban && catalog.resolved_card_kind(core, card).is_basic_kind() {
+    if core.player(actor).wangshi_ban && catalog.player_card_kind(core, actor, card).is_basic_kind() {
         return Err(RejectReason::CardLimit);
     }
     // 愚钝·福面（swd 武将面批 82）：锁定——无法使用锦囊牌（上游
@@ -108,7 +108,7 @@ pub(super) fn common_play_validation(
             .skill_by_name("yudun")
             .is_some_and(|d| core.has_skill(actor, d))
     {
-        let kind = crate::kernel::effective_card_kind_for(core, catalog, core.turn.current, card);
+        let kind = crate::kernel::effective_card_kind_for(core, catalog, actor, card);
         let is_trick =
             !kind.is_basic_kind() && kind.equip_slot().is_none() && kind.is_basic_trick_or_equip();
         if is_trick {
@@ -341,7 +341,7 @@ pub(super) fn play_kind(
             .skill_by_name("liangce")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && catalog.resolved_card_kind(core, card).is_basic_kind()
+            && catalog.player_card_kind(core, actor, card).is_basic_kind()
         {
             kind = CardKind::Wugu;
         }
@@ -352,7 +352,7 @@ pub(super) fn play_kind(
             .skill_by_name("ycnluweiyan")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && !catalog.resolved_card_kind(core, card).is_basic_kind()
+            && !catalog.player_card_kind(core, actor, card).is_basic_kind()
         {
             kind = CardKind::Shuigong;
         }
@@ -384,7 +384,7 @@ pub(super) fn play_kind(
         // 玉蝉八卦（swd 补切批⑫）：手持 autoViewAs 对应基本牌
         //（你的行动时=PlayCard 自身回合门已限；登记差异随机换形态
         // 与煅造装备面挂后续批）
-        else if let Some(vk) = catalog.resolved_card_kind(core, card).yuchan_auto_view_as() {
+        else if let Some(vk) = catalog.player_card_kind(core, actor, card).yuchan_auto_view_as() {
             kind = vk;
         }
         // 万钧（浊山铸，swd 武将面批㉖）：装备牌当南蛮入侵使用
@@ -394,7 +394,7 @@ pub(super) fn play_kind(
             .skill_by_name("wanjun")
             .map(|d| core.has_skill(actor, d))
             .unwrap_or(false)
-            && catalog.resolved_card_kind(core, card).is_equip()
+            && catalog.player_card_kind(core, actor, card).is_equip()
         {
             kind = CardKind::SavageAttack;
         }
@@ -427,7 +427,7 @@ pub(super) fn play_kind(
             && catalog
                 .skill_by_name("poxiao")
                 .is_some_and(|d| core.has_skill(actor, d))
-            && catalog.resolved_card_kind(core, card).is_equip()
+            && catalog.player_card_kind(core, actor, card).is_equip()
         {
             kind = CardKind::Sha;
         }

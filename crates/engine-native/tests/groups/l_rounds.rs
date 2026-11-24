@@ -204,3 +204,6 @@ mod l11_npc_a_triggers;
 
 #[path = "../l11_npc_a_save_ai.rs"]
 mod l11_npc_a_save_ai;
+
+#[path = "../l11_vm_fix_a.rs"]
+mod l11_vm_fix_a;

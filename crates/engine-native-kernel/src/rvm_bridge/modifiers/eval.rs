@@ -307,8 +307,9 @@ pub fn eval_sha_use_limit(
             }
         }
     }
-    (cur, unlimited) =
-        super::d34_flags::apply_sha_use_limit(state, catalog, player, card, cur, unlimited);
+    (cur, unlimited) = super::d34_flags::apply_sha_use_limit(
+        state, catalog, player, card, nature, cur, unlimited,
+    );
     (cur, unlimited) =
         super::d34_l11_npc_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
     if super::d34_l11_mods_npc_a::chenglve_card_unlimited(state, catalog, player, card) {

@@ -83,6 +83,15 @@ pub fn apply_card_unrespondable_with_nature(
         {
             unrespondable = true;
         }
+        if catalog.skill_by_name("wushen").is_some_and(|def| {
+            catalog.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+                && state.has_skill(source, def)
+                && !catalog.is_skill_chanyuan_blocked(state, source, def)
+        }) && catalog.effective_card_suit(state, source, card) == Suit::Heart
+        {
+            unrespondable = true;
+        }
     }
     if kind == CardKind::Duel
         && (has_ext_skill(state, catalog, source, "ssr_wushuang")

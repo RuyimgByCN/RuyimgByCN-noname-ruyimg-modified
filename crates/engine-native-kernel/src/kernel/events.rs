@@ -547,6 +547,36 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                 .remove(&(u.player, "vm_va_sha_no_count".to_string()))
                 .unwrap_or(0)
                 != 0;
+            let l11_wushen_heart_free = matches!(
+                crate::kernel::card_use_suit(ctx.core, ctx.catalog, &u),
+                Some(crate::catalog::Suit::Heart)
+            ) && ctx.catalog.skill_by_name("wushen").is_some_and(|d| {
+                ctx.catalog.skills[d as usize].behavior.as_host_behavior()
+                    == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+                    && ctx.core.has_skill(u.player, d)
+                    && !ctx.catalog.is_skill_chanyuan_blocked(ctx.core, u.player, d)
+            });
+            let qiangwu_mark = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(u.player, "l11_qiangwu_rank".to_string()))
+                .copied()
+                .unwrap_or(0);
+            let l11_qiangwu_gt_free = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(u.player, "l11_qiangwu_active".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+                && u.card.is_some_and(|c| {
+                    ctx.catalog
+                        .cards
+                        .get(c as usize)
+                        .is_some_and(|cd| u32::from(cd.rank) > qiangwu_mark)
+                });
             if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current {
                 let qiangwu_no_count = crate::rvm_bridge::modifiers::eval_sha_no_use_count(
                     ctx.core,
@@ -581,10 +611,17 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseDa
                     if ctx.core.turn.sha_used_play_phase {
                         if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
                             && !vm_va_free
+                            && !l11_wushen_heart_free
+                            && !l11_qiangwu_gt_free
                         {
                             ctx.core.turn.land_sha_used = true;
                         }
-                    } else if !poyue_red_free && !yudun_free && !vm_va_free {
+                    } else if !poyue_red_free
+                        && !yudun_free
+                        && !vm_va_free
+                        && !l11_wushen_heart_free
+                        && !l11_qiangwu_gt_free
+                    {
                         ctx.core.turn.sha_used_play_phase = true;
                     }
                 }

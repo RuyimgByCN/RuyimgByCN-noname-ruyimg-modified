@@ -355,6 +355,7 @@ pub fn apply_sha_use_limit(
     catalog: &Catalog,
     player: PlayerId,
     card: Option<CardId>,
+    nature: DamageNature,
     mut cur: i32,
     mut unlimited: bool,
 ) -> (i32, bool) {
@@ -436,7 +437,8 @@ pub fn apply_sha_use_limit(
     let cur = super::d34_q4_boss_mods::apply_sha_use_limit(state, catalog, player, cur);
     let (cur, unlimited) =
         d34_u05_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
-    let (cur, unlimited) = d34_l11_mods::apply_sha_use_limit(state, catalog, player, cur, unlimited);
+    let (cur, unlimited) =
+        d34_l11_mods::apply_sha_use_limit(state, catalog, player, card, nature, cur, unlimited);
     let sha_kind = card
         .and_then(|c| ((c as usize) < catalog.cards.len()).then(|| catalog.card_kind(c)))
         .unwrap_or(CardKind::Sha);

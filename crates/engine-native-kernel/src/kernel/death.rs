@@ -233,21 +233,36 @@ impl crate::catalog::SkillMachine for DeathMachine {
             player: self.player,
             killer: self.killer, presentation: None });
         if let Some(k) = self.killer {
-            if ctx.catalog.skill_by_name("lianpo").is_some_and(|d| {
-                ctx.catalog.skills[d as usize].behavior.as_host_behavior()
-                    == Some(crate::vocabulary::host::HostBehavior::U05OwBatchC)
-            }) {
-                let cur = ctx
-                    .core
-                    .vm_aux
-                    .flags
-                    .get(&(k, "ow_turn_kill_count".to_string()))
-                    .copied()
-                    .unwrap_or(0);
-                ctx.core
-                    .vm_aux
-                    .flags
-                    .insert((k, "ow_turn_kill_count".to_string()), cur + 1);
+            if let Some(d) = ctx.catalog.skill_by_name("lianpo") {
+                match ctx.catalog.skills[d as usize].behavior.as_host_behavior() {
+                    Some(crate::vocabulary::host::HostBehavior::U05OwBatchC) => {
+                        let cur = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(k, "ow_turn_kill_count".to_string()))
+                            .copied()
+                            .unwrap_or(0);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((k, "ow_turn_kill_count".to_string()), cur + 1);
+                    }
+                    Some(crate::vocabulary::host::HostBehavior::L11VmFixA) => {
+                        let cur = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(k, "l11_lianpo_kills".to_string()))
+                            .copied()
+                            .unwrap_or(0);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((k, "l11_lianpo_kills".to_string()), cur + 1);
+                    }
+                    _ => {}
+                }
             }
         }
         (ctx.catalog.hooks.on_player_died)(ctx, self.player, self.killer);

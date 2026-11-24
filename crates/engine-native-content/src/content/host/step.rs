@@ -199,6 +199,7 @@ pub(super) mod l11_boss_c2;
 pub(super) mod l11_boss_c_asks;
 pub(super) mod l11_effect_pack;
 pub(super) mod l11_effect_pack_asks;
+pub(super) mod l11_vm_fix_a;
 pub(super) mod u05_b1_mtg;
 pub(super) mod u05_b1_mtg_asks;
 pub(super) mod u05_b1_mtg_subplayer;
@@ -1364,6 +1365,7 @@ impl HostMachine {
                 l11_boss_c::handle_l11_boss_c(self, ctx)
             }
             HostBehavior::L11CrossNpcA => l11_npc_a::handle_l11_npc_a(self, ctx),
+            HostBehavior::L11VmFixA => l11_vm_fix_a::handle(self, ctx),
             HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
                 u05_b1_zhenfa::handle_u05_main_stone(self, ctx)
             }

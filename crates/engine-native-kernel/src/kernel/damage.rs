@@ -185,7 +185,33 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
                             .entry((user, format!("dddfenji_dmg:{card_fid}")))
                             .or_default() += submitted;
                     }
+                    if d.source == Some(user)
+                        && ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .contains_key(&(user, format!("l11_lihuo_converted:{card_fid}")))
+                    {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((user, format!("l11_lihuo_did_dmg:{card_fid}")), 1);
+                    }
                 }
+            }
+        }
+        if let Some(src) = d.source {
+            if submitted > 0
+                && ctx.catalog.skill_by_name("langmie").is_some_and(|def| {
+                    ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+                        == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+                })
+            {
+                *ctx.core
+                    .vm_aux
+                    .flags
+                    .entry((src, "l11_turn_dmg_dealt".to_string()))
+                    .or_insert(0) += submitted;
             }
         }
         if ctx

@@ -357,6 +357,7 @@ impl HostSkillBehavior {
             HostBehavior::L11CrossNpcA => {
                 super::step::l11_npc_a::activate_l11_npc_a(self, ctx, owner)
             }
+            HostBehavior::L11VmFixA => super::step::l11_vm_fix_a::activate(self, ctx, owner),
             HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
                 super::step::u05_b1_zhenfa::activate_u05_zhenfa(self, ctx, owner)
                     .map(|m| Box::new(m) as Box<dyn crate::catalog::SkillMachine>)
@@ -735,6 +736,7 @@ pub(in crate::content::host) fn has_phase_use_activation(
         HostBehavior::L11OwnNpc => super::step::l11_own_npc::has_phase_use_l11_own_npc(name),
         HostBehavior::L11CrossNpcB => super::step::l11_npc_b::has_phase_use_activation_l11_npc_b(name),
         HostBehavior::L11CrossNpcA => super::step::l11_npc_a::has_phase_use_l11_npc_a(name),
+        HostBehavior::L11VmFixA => super::step::l11_vm_fix_a::has_phase_use(name),
         _ => false,
     }
 }
@@ -790,6 +792,8 @@ pub(in crate::content::host) fn is_host_skill_bolan_eligible(
     ) && !matches!(
         name,
         "rechuhai"
+            | "yeyan"
+            | "drlt_xiongluan"
             | "th_yeyan"
             | "qimou"
             | "reqimou"

@@ -56,6 +56,8 @@ mod extension_choices_u05_7d;
 mod extension_choices_q4;
 #[path = "extension_choices_l11_npc.rs"]
 mod extension_choices_l11_npc;
+#[path = "extension_choices_l11_vm_a.rs"]
+mod extension_choices_l11_vm_a;
 
 pub(super) use extension_choices_common::{extension_card_value, public_attitude};
 
@@ -265,7 +267,7 @@ pub(super) fn plan_extension_choice_action(
                 })
             }
             Some("wzhanyi") => extension_choices_u05_hearth::plan_wzhanyi_trigger_confirm(input, id),
-            _ => extension_choices_l11_b3::plan_l11_b3_choice_action(
+            _ => extension_choices_l11_vm_a::plan_l11_vm_a_choice_action(
                 catalog,
                 input,
                 id,
@@ -274,7 +276,19 @@ pub(super) fn plan_extension_choice_action(
                 min,
                 max,
                 allow_cancel,
-            ),
+            )
+            .or_else(|| {
+                extension_choices_l11_b3::plan_l11_b3_choice_action(
+                    catalog,
+                    input,
+                    id,
+                    prompt,
+                    options,
+                    min,
+                    max,
+                    allow_cancel,
+                )
+            }),
         },
         // U06 欢乐卡牌·手里剑（card.js:47-59）：背面朝上且装备旋涡面具时宁可受 1 伤保留面具，否则弃置最低价值装备
         "host_target_discard_equip" => {
@@ -881,6 +895,18 @@ pub(super) fn plan_extension_choice_action(
                 prompt,
                 options,
                 min,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_l11_vm_a::plan_l11_vm_a_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
                 allow_cancel,
             )
         }),

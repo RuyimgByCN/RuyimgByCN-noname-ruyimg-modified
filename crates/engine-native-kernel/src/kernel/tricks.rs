@@ -738,6 +738,16 @@ impl DismantleMachine {
                         == Some(crate::vocabulary::host::HostBehavior::U05Hearth2BatchD)
                 })
             {
+                if from_judge {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((target, format!("l11_discard_judge:{c}")), 1);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((target, format!("l11_discard_non_hand:{c}")), 1);
+                }
                 ctx.emit(EventData::CardsDiscarded {
                     player: target,
                     cards: vec![c],

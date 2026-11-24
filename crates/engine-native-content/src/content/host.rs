@@ -378,7 +378,8 @@ impl SkillBehavior for HostSkillBehavior {
         (self.name == "txhj_xiongziyingfa").then(|| core.player(owner).max_hp as usize)
     }
     fn card_used_in_before_window(&self) -> bool {
-        self.behavior == HostBehavior::U05Hearth2BatchE && self.name == "huanjue"
+        (self.behavior == HostBehavior::U05Hearth2BatchE && self.name == "huanjue")
+            || (self.behavior == HostBehavior::L11VmFixA && self.name == "lihuo")
     }
     fn window_trigger_meta(
         &self,
@@ -866,6 +867,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::L11BossLingfeng
                 | HostBehavior::L11OwnNpc
                 | HostBehavior::L11CrossNpcA
+                | HostBehavior::L11VmFixA
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
                 | HostBehavior::L11CrossNpcB

@@ -202,7 +202,15 @@ impl JudgePhaseMachine {
                             CardKind::ShanDian,
                             crate::event::DamageNature::Thunder,
                         );
-                        if ctx.core.player(cand).alive && !has_shandian && !blocked {
+                        let disabled = ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .get(&(cand, "l11_judge_slot_disabled".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0;
+                        if ctx.core.player(cand).alive && !has_shandian && !blocked && !disabled {
                             chosen = Some(cand);
                             break;
                         }
@@ -219,7 +227,15 @@ impl JudgePhaseMachine {
                         ctx.catalog.resolved_card_kind(ctx.core, *c) == CardKind::ShanDian
                             && !super::judge_hearth::is_fulei_card(ctx.catalog, *c)
                     });
-                    (!next_has_shandian).then_some(next)
+                    let disabled = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(next, "l11_judge_slot_disabled".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0;
+                    (!next_has_shandian && !disabled).then_some(next)
                 };
                 if let Some(dest) = pass_to {
                     ctx.core.player_mut(dest).judge.push(trick);

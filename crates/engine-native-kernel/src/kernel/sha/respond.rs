@@ -342,7 +342,7 @@ impl ShaResolveMachine {
             .iter()
             .filter(|c| {
                 matches!(
-                    ctx.catalog.resolved_card_kind(ctx.core, **c),
+                    ctx.catalog.player_card_kind(ctx.core, self.source, **c),
                     CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
                 )
             })
@@ -521,7 +521,7 @@ pub fn collect_shan_response_cards(
             .iter()
             .copied()
             .filter(|&c| {
-                let kind = catalog.resolved_card_kind(core, c);
+                let kind = catalog.player_card_kind(core, target, c);
                 let is_shan_like = kind == CardKind::Shan
                     || kind.yuchan_auto_view_as() == Some(CardKind::Shan);
                 let is_sha_like = kind.is_sha_like()

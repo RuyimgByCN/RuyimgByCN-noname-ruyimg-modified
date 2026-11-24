@@ -67,4 +67,5 @@ pub(crate) fn host_on_round_start(ctx: &mut Ctx<'_>) {
     u05_hearth::host_on_round_start_hearth(ctx);
     u05_b5a_gwent::u05_gwent_on_round_start(ctx);
     l11_own_npc::on_round_start_l11_own_npc(ctx);
+    l11_vm_fix_a::on_round_start(ctx);
 }

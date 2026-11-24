@@ -28,6 +28,25 @@ pub(crate) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
             && !k.starts_with("u01_cj_card:")
             && !k.starts_with("dddzhuanshe_given:")
             && k != "u01_turn_trick_used_stamp"
+            && !matches!(
+                k.as_str(),
+                "l11_lianpo_kills"
+                    | "l11_shenxian_used"
+                    | "l11_turn_dmg_dealt"
+                    | "l11_cur_card_turn"
+                    | "l11_cur_card_play"
+                    | "l11_qiangwu_active"
+                    | "l11_qiangwu_rank"
+                    | "l11_xiongluan1_active"
+                    | "l11_xiongluan2_hand_ban"
+                    | "l11_fulin_phase_discard"
+                    | "nzry_longnu_fire_turn"
+                    | "nzry_longnu_thunder_turn"
+            )
+            && !k.starts_with("l11_langmie_play_cat:")
+            && !k.starts_with("l11_xiongluan2_from:")
+            && !k.starts_with("l11_fulin_tag:")
+            && !k.starts_with("l11_gz_")
     });
     ctx.core.vm_aux.once.retain(|(_, _, scope)| *scope != 4);
     ctx.reset_turn_limits(player);

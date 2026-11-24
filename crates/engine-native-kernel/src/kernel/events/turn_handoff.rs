@@ -74,8 +74,27 @@ pub(crate) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
             && !k.starts_with("dddshijian_old_armed:")
             && !matches!(
                 k.as_str(),
-                "ow_turn_kill_count" | "ow_juji2_target" | "ow_liangou2_from" | "ow_tuijin_target"
+                "ow_turn_kill_count"
+                    | "ow_juji2_target"
+                    | "ow_liangou2_from"
+                    | "ow_tuijin_target"
+                    | "l11_lianpo_kills"
+                    | "l11_shenxian_used"
+                    | "l11_turn_dmg_dealt"
+                    | "l11_cur_card_turn"
+                    | "l11_cur_card_play"
+                    | "l11_qiangwu_active"
+                    | "l11_qiangwu_rank"
+                    | "l11_xiongluan1_active"
+                    | "l11_xiongluan2_hand_ban"
+                    | "l11_fulin_phase_discard"
+                    | "nzry_longnu_fire_turn"
+                    | "nzry_longnu_thunder_turn"
             )
+            && !k.starts_with("l11_langmie_play_cat:")
+            && !k.starts_with("l11_xiongluan2_from:")
+            && !k.starts_with("l11_fulin_tag:")
+            && !k.starts_with("l11_gz_")
             && !(*p == prev
                 && matches!(
                     k.as_str(),

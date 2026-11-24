@@ -68,6 +68,7 @@ pub fn host_skill_trigger_meta(
             step::l11_boss_c::trigger_meta_l11_boss_c(name)
         }
         HostBehavior::L11CrossNpcA => step::l11_npc_a::trigger_meta_l11_npc_a(name),
+        HostBehavior::L11VmFixA => step::l11_vm_fix_a::trigger_meta(name),
         HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
             step::u05_b1_zhenfa::trigger_meta_u05_zhenfa(name)
         }
@@ -240,6 +241,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
             step::l11_boss_c::limits_l11_boss_c(name)
         }
         HostBehavior::L11CrossNpcA => step::l11_npc_a::limits_l11_npc_a(name),
+        HostBehavior::L11VmFixA => step::l11_vm_fix_a::limits(name),
         HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
             step::u05_b1_zhenfa::limits_u05_zhenfa(name)
         }

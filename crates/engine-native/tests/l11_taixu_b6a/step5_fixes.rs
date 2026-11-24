@@ -300,9 +300,13 @@ fn l11_step5_qiangwu_dujin_and_jintao_real_event_parity() {
         drain_to_pass(&mut e_res);
         assert_eq!(e.state_hash(), e_res.state_hash());
         assert_eq!(
-            e.state_core().vm_aux.marks.get(&(0, 2_563_176_834)).copied(),
+            e.state_core()
+                .vm_aux
+                .flags
+                .get(&(0, "l11_qiangwu_rank".to_string()))
+                .copied(),
             Some(6),
-            "qiangwu judge must record rank 6 on skill mark"
+            "qiangwu judge must record rank 6 on host flag"
         );
 
         // Rank 8 (> 6) Sha CANNOT hit dist=2 seat 2, CAN hit dist=1 seat 1 and DOES NOT consume Sha use count!
@@ -330,7 +334,12 @@ fn l11_step5_qiangwu_dujin_and_jintao_real_event_parity() {
         let _ = submit(&mut e, 0, GameAction::NextPhase);
         drain_to_pass(&mut e);
         assert_eq!(
-            e.state_core().vm_aux.marks.get(&(0, 2_563_176_834)).copied().unwrap_or(0),
+            e.state_core()
+                .vm_aux
+                .flags
+                .get(&(0, "l11_qiangwu_rank".to_string()))
+                .copied()
+                .unwrap_or(0),
             0,
             "qiangwu mark must clear at phase_play_end"
         );

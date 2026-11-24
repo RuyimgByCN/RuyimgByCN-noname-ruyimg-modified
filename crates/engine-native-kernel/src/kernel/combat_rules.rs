@@ -163,13 +163,19 @@ pub fn effective_card_kind_for(
     player: PlayerId,
     card: crate::ids::CardId,
 ) -> CardKind {
+    if !core.player(player).equips.contains(&card)
+        && catalog.has_active_l11_wushen(core, player)
+        && catalog.effective_card_suit(core, player, card) == crate::catalog::Suit::Heart
+    {
+        return CardKind::Sha;
+    }
     if let Some(k) = core.declared_kinds.get(&card).copied() {
         return k;
     }
     if crate::rvm_bridge::modifiers::eval_card_name_as_sha(core, catalog, player, card) {
         return CardKind::Sha;
     }
-    catalog.card_kind(card)
+    catalog.resolved_card_kind(core, card)
 }
 
 #[inline]
@@ -186,16 +192,9 @@ pub(crate) fn effective_card_kind_in_core(
         .iter()
         .position(|p| p.hand.contains(&card) || p.equips.contains(&card))
     {
-        if crate::rvm_bridge::modifiers::eval_card_name_as_sha(
-            core,
-            catalog,
-            owner as PlayerId,
-            card,
-        ) {
-            return CardKind::Sha;
-        }
+        return effective_card_kind_for(core, catalog, owner as PlayerId, card);
     }
-    catalog.card_kind(card)
+    catalog.resolved_card_kind(core, card)
 }
 
 /// `U05-5b` 复生（`gwfusheng` `chooseToUse`）：任一存活角色在濒死者正面朝上时可发动。

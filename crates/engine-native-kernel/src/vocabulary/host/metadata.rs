@@ -1005,7 +1005,8 @@ impl HostBehavior {
             HostBehavior::Q4BossPlaySkill
             | HostBehavior::Q4FoolSkill
             | HostBehavior::L11OwnNpc
-            | HostBehavior::L11CrossNpcB => None,
+            | HostBehavior::L11CrossNpcB
+            | HostBehavior::L11VmFixA => None,
             HostBehavior::L11CrossNpcA => self.trigger_meta_l11_npc_a(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {

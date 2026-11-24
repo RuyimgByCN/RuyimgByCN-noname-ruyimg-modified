@@ -745,7 +745,16 @@ impl crate::catalog::SkillMachine for PlaceDelayedMachine {
         self.placed = true;
         let card = self.card;
         ctx.core.table.retain(|c| *c != card);
-        if !ctx.core.player(self.target).alive {
+        if !ctx.core.player(self.target).alive
+            || ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.target, "l11_judge_slot_disabled".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+        {
             ctx.to_discard(card);
             return Flow::Done;
         }

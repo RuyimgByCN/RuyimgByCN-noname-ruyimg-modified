@@ -56,6 +56,9 @@ fn on_frame_popped_inner(
                 core.vm_aux
                     .flags
                     .remove(&(*player, format!("l11_discard_non_hand:{c}")));
+                core.vm_aux
+                    .flags
+                    .remove(&(*player, format!("l11_discard_judge:{c}")));
             }
         }
         if catalog.vm_card_history {
@@ -161,6 +164,15 @@ fn on_frame_popped_inner(
         core.vm_aux
             .flags
             .remove(&(*player, format!("u05_play_equip_frame:{}", popped.id)));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("l11_play_equip_use:{}", popped.id)));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("l11_prev_eq_turn:{}", popped.id)));
+        core.vm_aux
+            .flags
+            .remove(&(*player, format!("l11_prev_eq_play:{}", popped.id)));
         core.vm_aux
             .flags
             .remove(&(*player, format!("l11_equip_from_hand:{card}")));
@@ -553,6 +565,18 @@ fn on_card_use_popped(
             && *k != hj_resp_key
             && *k != "l11b_sbliegong_cur_block_mask"
     });
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("l11_prev_card_turn:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("l11_prev_card_play:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("l11_lihuo_converted:{popped_id}")));
+    core.vm_aux
+        .flags
+        .remove(&(u.player, format!("l11_lihuo_did_dmg:{popped_id}")));
     {
         let mut ctx = Ctx {
             core,

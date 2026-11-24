@@ -126,6 +126,7 @@ pub(crate) fn host_on_player_died(
     super::u05_ow::host_on_player_died_ow(ctx, dead);
     super::u05_hearth::host_on_player_died_hearth(ctx, dead, killer);
     crate::content::host::step::u05_b5b_gwent::u05_b5b_on_player_died(ctx, dead);
+    super::l11_vm_fix_a::on_player_died(ctx, dead);
     let seats = ctx.core.players.len() as PlayerId;
     for owner in 0..seats {
         if !ctx.core.player(owner).alive {

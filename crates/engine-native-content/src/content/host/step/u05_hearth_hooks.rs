@@ -481,6 +481,9 @@ pub(crate) fn hearth_dying_save_skills(
     dying: PlayerId,
 ) -> Vec<crate::ids::SkillDefId> {
     let mut out = super::u05_b6b_hearth::b6b_dying_save_skills(core, catalog, responder, dying);
+    out.extend(super::l11_vm_fix_a::dying_save_skills(
+        core, catalog, responder, dying,
+    ));
     if !hearth_formal_enabled(catalog)
         || !core.player(responder).alive
         || catalog.is_tieji_sealed(core, responder)
@@ -517,6 +520,9 @@ pub(crate) fn resolve_hearth_dying_save(
     dying: PlayerId,
     def: crate::ids::SkillDefId,
 ) -> bool {
+    if let Some(sync_done) = super::l11_vm_fix_a::resolve_dying_save(ctx, responder, dying, def) {
+        return sync_done;
+    }
     let sname = ctx.catalog.skill_name(def);
     match sname {
         "shouwang" => {

@@ -79,6 +79,13 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "l11_xiongluan2_hand_ban".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
             || self.skill_by_name("mianzhen2").is_some_and(|d| {
                 self.skills[d as usize].behavior.as_host_behavior()
                     == Some(crate::vocabulary::host::HostBehavior::U05OwBatchB)

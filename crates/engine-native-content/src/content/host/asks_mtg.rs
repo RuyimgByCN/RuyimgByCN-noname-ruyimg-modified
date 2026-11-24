@@ -518,6 +518,9 @@ pub(super) fn active_ask_batches(
         HostBehavior::L11CrossNpcA => super::step::l11_npc_a::ask_l11_npc_a(
             stage, owner, target, targets, card, cards, core, catalog,
         ),
+        HostBehavior::L11VmFixA => super::step::l11_vm_fix_a::ask(
+            stage, owner, target, targets, card, cards, core, catalog,
+        ),
         HostBehavior::U05MainStoneBatch | HostBehavior::U05ZhenfaRecastSkill => {
             super::step::u05_b1_zhenfa::ask_u05_zhenfa(
                 stage, owner, target, targets, card, cards, core, catalog,

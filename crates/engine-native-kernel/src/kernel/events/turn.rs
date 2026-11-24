@@ -873,6 +873,10 @@ pub fn cleanup_interrupted_turn_for_phase_loop(
             .flags
             .retain(|(_, k), _| k != "sha_played_this_turn" && k != "damaged_this_turn");
     }
+    ctx.core
+        .vm_aux
+        .flags
+        .retain(|(_, k), _| !k.starts_with("l11_gz_"));
     ctx.expire_temporary_skills(interrupted);
     ctx.core.player_mut(interrupted).boss_mad = false;
     ctx.core.turn.qizuo_copy = None;

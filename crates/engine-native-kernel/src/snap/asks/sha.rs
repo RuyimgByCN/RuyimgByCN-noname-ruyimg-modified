@@ -103,7 +103,7 @@ pub(super) fn active_sha_ask(
             .iter()
             .filter(|c| {
                 matches!(
-                    catalog.resolved_card_kind(core, **c),
+                    catalog.player_card_kind(core, source, **c),
                     CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
                 )
             })
@@ -183,7 +183,7 @@ pub(super) fn active_sha_ask(
             .iter()
             .copied()
             .filter(|c| {
-                let kind = catalog.resolved_card_kind(core, *c);
+                let kind = catalog.player_card_kind(core, h, *c);
                 !crate::rvm_bridge::modifiers::d34_flags::is_ducai3_forbidden(core, catalog, h, *c)
                     && (kind == CardKind::Shan
                         || (qingguo_h
@@ -279,7 +279,7 @@ pub(super) fn active_sha_ask(
         let mut options: Vec<ChoiceOption> = vec![ChoiceOption::Pass];
         if !hand_locked {
             for c in core.player(target).hand.iter().copied() {
-                let kind = catalog.resolved_card_kind(core, c);
+                let kind = catalog.player_card_kind(core, target, c);
                 if target_can_play && (kind == CardKind::Shan || (longdan && kind == CardKind::Sha))
                 {
                     options.push(ChoiceOption::Card(c));
@@ -288,7 +288,7 @@ pub(super) fn active_sha_ask(
         }
         if qingguo && target_can_play && !hand_locked {
             for c in core.player(target).hand.iter().copied() {
-                let kind = catalog.resolved_card_kind(core, c);
+                let kind = catalog.player_card_kind(core, target, c);
                 let already = kind == CardKind::Shan || (longdan && kind == CardKind::Sha);
                 let black = matches!(
                     catalog.effective_card_suit(core, target, c),

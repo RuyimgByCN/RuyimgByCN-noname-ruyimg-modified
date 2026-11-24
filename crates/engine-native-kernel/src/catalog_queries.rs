@@ -423,6 +423,14 @@ impl Catalog {
                 | "mjmouzhi"
                 | "olzhuiji"
                 | "reqizhou"
+                | "fulin"
+                | "nzry_longnu"
+                | "nzry_longnu_fire"
+                | "nzry_longnu_thunder"
+                | "jiezi"
+                | "kunfen"
+                | "manji"
+                | "jsrgbahu"
         ) {
             return true;
         }
@@ -609,6 +617,16 @@ impl Catalog {
         core: &crate::state::GameStateCore,
         p: crate::ids::PlayerId,
     ) -> bool {
+        if core
+            .vm_aux
+            .flags
+            .get(&(p, "l11_judge_slot_disabled".to_string()))
+            .copied()
+            .unwrap_or(0)
+            > 0
+        {
+            return true;
+        }
         core.skills
             .keys()
             .any(|(o, _)| *o == p)
@@ -848,5 +866,33 @@ impl Catalog {
             out.push(none_tok);
         }
         out
+    }
+
+    /// Whether `player` holds an unblocked `L11VmFixA` `wushen` (only `chanyuan` HP==1 seals).
+    pub fn has_active_l11_wushen(&self, core: &GameStateCore, player: PlayerId) -> bool {
+        self.skill_by_name("wushen").is_some_and(|def| {
+            self.skills[def as usize].behavior.as_host_behavior()
+                == Some(crate::vocabulary::host::HostBehavior::L11VmFixA)
+                && core.has_skill(player, def)
+                && !self.is_skill_chanyuan_blocked(core, player, def)
+        })
+    }
+
+    /// Card kind seen by `player` after mandatory `mod.cardname` (`L11VmFixA` `wushen`:
+    /// Heart non-equip cards act strictly as `CardKind::Sha`).
+    pub fn player_card_kind(
+        &self,
+        core: &GameStateCore,
+        player: PlayerId,
+        card: CardId,
+    ) -> CardKind {
+        if !core.player(player).equips.contains(&card)
+            && self.has_active_l11_wushen(core, player)
+            && self.effective_card_suit(core, player, card) == crate::catalog::Suit::Heart
+        {
+            CardKind::Sha
+        } else {
+            self.resolved_card_kind(core, card)
+        }
     }
 }

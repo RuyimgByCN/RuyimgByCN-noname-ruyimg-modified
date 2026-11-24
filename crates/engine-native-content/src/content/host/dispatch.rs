@@ -64,6 +64,7 @@ pub(crate) fn host_card_use_after_all(
     step::swd_u05_7b::host_card_use_after_u05_7b(ctx, u);
     step::l11_npc_b::on_card_use_after_l11_npc_b(ctx, fid, u);
     step::l11_npc_a::on_card_use_after_l11_npc_a(ctx, fid, u);
+    step::l11_vm_fix_a::on_card_use_after(ctx, fid, u);
 }
 
 pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
@@ -76,6 +77,7 @@ pub(crate) fn host_on_phase_use_end_all(ctx: &mut Ctx<'_>, player: PlayerId) {
     host_on_phase_use_end_xianjian(ctx, player);
     step::l11_npc_b::on_phase_use_end_l11_npc_b(ctx, player);
     step::l11_npc_a::on_phase_use_end_l11_npc_a(ctx, player);
+    step::l11_vm_fix_a::on_phase_use_end(ctx, player);
 }
 
 pub(crate) fn host_on_round_start_all(ctx: &mut Ctx<'_>) {

@@ -709,6 +709,7 @@ impl HostBehavior {
             1389 => HostBehavior::L11OwnNpc,
             1390 => HostBehavior::L11CrossNpcB,
             1391 => HostBehavior::L11CrossNpcA,
+            1392 => HostBehavior::L11VmFixA,
             _ => return None,
         })
     }
