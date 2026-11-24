@@ -52,6 +52,7 @@ pub fn eval_hand_limit(
     }
     limit = super::d34_flags::apply_hand_limit(state, catalog, player, limit);
     limit = super::d34_l11_npc_mods::apply_hand_limit(state, catalog, player, limit);
+    limit = super::d34_l11_mods_vm_c::apply_hand_limit(state, catalog, player, limit);
     limit.max(0) as usize
 }
 
@@ -156,16 +157,9 @@ pub fn eval_distance_total(
         if !rule.selector.map_or(true, |s| s.matches_owner(state, a)) {
             return;
         }
-        match rule.target {
-            VmModifierTarget::DistanceToOthers => {
-                let val = rule.effective_value_for(state, catalog, a, Some(b), def);
-                cur = rule.apply_to(cur, val);
-            }
-            VmModifierTarget::DistanceFromIfHpGteTarget if state.player(a).hp >= state.player(b).hp => {
-                let val = rule.effective_value_for(state, catalog, a, Some(b), def);
-                cur = rule.apply_to(cur, val);
-            }
-            _ => {}
+        if rule.target == VmModifierTarget::DistanceToOthers {
+            let val = rule.effective_value_for(state, catalog, a, Some(b), def);
+            cur = rule.apply_to(cur, val);
         }
     });
     for_each_player_vm_modifier(state, catalog, b, |def, rule| {
@@ -188,7 +182,18 @@ pub fn eval_distance_total(
             }
         });
     }
+    // `zhuiji` (`sp.js:19854`): `from.hp >= to.hp -> distance == 1` applies after `+1` horses / `feiying` / global dist.
+    for_each_player_vm_modifier(state, catalog, a, |def, rule| {
+        if rule.target == VmModifierTarget::DistanceFromIfHpGteTarget
+            && rule.selector.map_or(true, |s| s.matches_owner(state, a))
+            && state.player(a).hp >= state.player(b).hp
+        {
+            let val = rule.effective_value_for(state, catalog, a, Some(b), def);
+            cur = rule.apply_to(cur, val);
+        }
+    });
     cur = super::d34_flags::apply_distance_total(state, catalog, a, b, cur);
+    cur = super::d34_l11_mods_vm_c::apply_distance_total(state, catalog, a, b, cur);
     cur.max(1) as u32
 }
 
@@ -315,6 +320,8 @@ pub fn eval_sha_use_limit(
     if super::d34_l11_mods_npc_a::chenglve_card_unlimited(state, catalog, player, card) {
         unlimited = true;
     }
+    (cur, unlimited) =
+        super::d34_l11_mods_vm_c::apply_sha_use_limit(state, catalog, player, card, cur, unlimited);
     (cur.max(0) as u32, unlimited)
 }
 
@@ -411,7 +418,10 @@ pub fn eval_card_distance_unlimited_to(
             _ => {}
         }
     });
-    super::d34_flags::apply_card_distance_unlimited_to(
+    let unlimited = super::d34_flags::apply_card_distance_unlimited_to(
+        state, catalog, player, target, card, kind, unlimited,
+    );
+    super::d34_l11_mods_vm_c::apply_card_distance_unlimited_to(
         state, catalog, player, target, card, kind, unlimited,
     )
 }
@@ -532,7 +542,10 @@ pub fn eval_card_use_canceled(
     {
         canceled = true;
     }
-    super::d34_flags::apply_card_use_canceled(state, catalog, actor, card, kind, in_hand, canceled)
+    let canceled = super::d34_flags::apply_card_use_canceled(
+        state, catalog, actor, card, kind, in_hand, canceled,
+    );
+    super::d34_l11_mods_vm_c::apply_card_use_canceled(state, catalog, actor, kind, canceled)
 }
 
 /// 评估角色是否被禁止对濒死角色使用【桃】（`DyingPeachTargetCancel` / `DyingSavePeachUsable` / `CardSavable`）。
@@ -652,6 +665,11 @@ pub fn eval_damage_amount(
         }
         match rule.target {
             VmModifierTarget::DamageTakenAmount => {
+                if catalog.skill_name(def) == "rechouhai"
+                    && !is_sha_damage_eval(state, catalog, source.unwrap_or(target), card)
+                {
+                    return;
+                }
                 let val = rule.effective_value_for(state, catalog, target, source, def);
                 cur = rule.apply_to(cur, val);
             }
@@ -727,8 +745,20 @@ pub fn eval_card_unrespondable(
     nature: DamageNature,
 ) -> bool {
     let is_sha = kind.is_sha_like();
+    let is_damage_basic = matches!(
+        kind,
+        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
+    );
     let mut unrespondable = false;
     for_each_player_vm_modifier(state, catalog, source, |def, rule| {
+        if catalog.skill_name(def) == "fuqi" {
+            if source == target
+                || !(kind.is_ordinary_trick_kind() || (kind.is_basic_kind() && is_damage_basic))
+                || state.computed_distance(catalog, target, source) > 1
+            {
+                return;
+            }
+        }
         let sel_ok = rule
             .selector
             .map_or(true, |s| s.matches_card(state, catalog, source, card, kind, nature));
@@ -916,12 +946,14 @@ pub fn can_gain_link(state: &GameStateCore, catalog: &Catalog, player: PlayerId)
     !super::d34_l28_mods::rewrite_tengjia_blocks_link(state, catalog, player)
         && !super::txminguangkai_blocks_link(state, catalog, player)
         && !eval_armor_link_gain_canceled(state, catalog, player)
+        && !super::d34_l11_mods_vm_c::drlt_qianjie_blocks_link(state, catalog, player)
 }
 
 /// 角色由横置解除前统一门控。
 pub fn can_lose_link(state: &GameStateCore, catalog: &Catalog, player: PlayerId) -> bool {
     !super::txlianbi_blocks_unlink(state, catalog, player)
         && !eval_link_loss_canceled(state, catalog, player)
+        && !super::d34_l11_mods_vm_c::nzry_jieying_blocks_unlink(state, catalog, player)
 }
 
 /// 评估他人是否禁止弃置目标装备区中的某张牌（`CardDiscardProtected`）。

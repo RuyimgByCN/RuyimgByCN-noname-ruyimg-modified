@@ -1947,4 +1947,6 @@ pub enum HostBehavior {
     L11VmFixA,
     /// Batch L11 VM Fix B（`P3-E2`：`taixu-upstream-liuli` 34 技及伴生状态宿主真实现与交互询问；tag 1393）。
     L11VmFixB,
+    /// Batch L11 VM Fix C（`P3-E3`：`taixu-upstream-liuli` 42 技及伴生子技宿主真实现；tag 1394）。
+    L11VmFixC,
 }

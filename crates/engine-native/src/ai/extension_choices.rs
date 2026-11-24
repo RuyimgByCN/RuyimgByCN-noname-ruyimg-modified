@@ -60,6 +60,8 @@ mod extension_choices_l11_npc;
 mod extension_choices_l11_vm_a;
 #[path = "extension_choices_l11_vm_b.rs"]
 mod extension_choices_l11_vm_b;
+#[path = "extension_choices_l11_vm_c.rs"]
+mod extension_choices_l11_vm_c;
 
 pub(super) use extension_choices_common::{extension_card_value, public_attitude};
 
@@ -691,12 +693,14 @@ pub(super) fn plan_extension_choice_action(
         "dying_save" => {
             let has_card = options.iter().any(|o| matches!(o, ChoiceOption::Card(_)));
             if !has_card {
-                if let Some(def) = catalog.skill_by_name("mbcmjiushi") {
-                    if options.contains(&ChoiceOption::Skill(def)) {
-                        return Some(GameAction::Answer {
-                            choice_id: id,
-                            selection: vec![ChoiceOption::Skill(def)],
-                        });
+                for sk in ["mbcmjiushi", "fuli"] {
+                    if let Some(def) = catalog.skill_by_name(sk) {
+                        if options.contains(&ChoiceOption::Skill(def)) {
+                            return Some(GameAction::Answer {
+                                choice_id: id,
+                                selection: vec![ChoiceOption::Skill(def)],
+                            });
+                        }
                     }
                 }
             }
@@ -914,6 +918,18 @@ pub(super) fn plan_extension_choice_action(
         })
         .or_else(|| {
             extension_choices_l11_vm_a::plan_l11_vm_a_choice_action(
+                catalog,
+                input,
+                id,
+                prompt,
+                options,
+                min,
+                max,
+                allow_cancel,
+            )
+        })
+        .or_else(|| {
+            extension_choices_l11_vm_c::plan_l11_vm_c_choice_action(
                 catalog,
                 input,
                 id,

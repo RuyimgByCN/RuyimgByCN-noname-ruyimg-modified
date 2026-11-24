@@ -11,7 +11,7 @@
 //! Zero `debug_execute_effect`; public-info AI checks only.
 
 use super::*;
-use engine_native::event::{DamageNature, EventData};
+use engine_native::event::DamageNature;
 use engine_native::{LogEvent, RejectReason};
 
 fn step5_take_card<F>(e: &mut Engine, pred: F) -> u32
@@ -351,7 +351,7 @@ fn l11_step5_qiangwu_dujin_and_jintao_real_event_parity() {
         e.assign_general_named(0, g).unwrap();
         e.assign_general_named(1, "txhj_huangyueying").unwrap();
         assert!(step5_has_skill(&e, 0, "dujin"), "{g} must have dujin");
-        for (equip_cnt, expected_draw) in [(0usize, 3usize), (1, 4), (2, 4), (3, 5)] {
+        for (equip_cnt, expected_draw) in [(0usize, 3usize), (1, 3), (2, 4), (3, 4)] {
             let mut ec = start_locked_engine(2026_807 + equip_cnt as u64, 2, LockedStartMode::Prototype, verified).unwrap();
             ec.assign_general_named(0, g).unwrap();
             ec.assign_general_named(1, "txhj_huangyueying").unwrap();
@@ -362,11 +362,34 @@ fn l11_step5_qiangwu_dujin_and_jintao_real_event_parity() {
             ec.debug_clear_hand(0);
             ec.debug_set_turn(0, Phase::Judge, 1);
             let _ = submit(&mut ec, 0, GameAction::NextPhase); // Judge -> Draw
+            let ch = ec.open_choice().cloned().expect("dujin:confirm prompt");
+            assert_eq!((ch.observer, ch.spec.prompt), (0, "dujin:confirm"));
+            let _ = answer_choice(&mut ec, 0, vec![ChoiceOption::Confirm]);
             drain_to_pass(&mut ec);
             assert_eq!(
                 ec.state_core().player(0).hand.len(),
                 expected_draw,
                 "{g} dujin with {equip_cnt} equips must draw {expected_draw} (no bogus Phase::Draw xinjuejing draw)"
+            );
+        }
+        // Negative check: declining `dujin:confirm` with Pass draws only 2!
+        {
+            let mut ep = start_locked_engine(2026_8095, 2, LockedStartMode::Prototype, verified).unwrap();
+            ep.assign_general_named(0, g).unwrap();
+            ep.assign_general_named(1, "txhj_huangyueying").unwrap();
+            step5_equip_card(&mut ep, 0, CardKind::Weapon);
+            step5_equip_card(&mut ep, 0, CardKind::Armor);
+            ep.debug_clear_hand(0);
+            ep.debug_set_turn(0, Phase::Judge, 1);
+            let _ = submit(&mut ep, 0, GameAction::NextPhase); // Judge -> Draw
+            let ch = ep.open_choice().cloned().expect("dujin:confirm prompt");
+            assert_eq!((ch.observer, ch.spec.prompt), (0, "dujin:confirm"));
+            let _ = answer_choice(&mut ep, 0, vec![ChoiceOption::Pass]);
+            drain_to_pass(&mut ep);
+            assert_eq!(
+                ep.state_core().player(0).hand.len(),
+                2,
+                "{g} passing dujin:confirm must draw only 2"
             );
         }
         // Authentic `xinjuejing` on `txhj_caocaox`: +2 hand limit AND draws 1 on Dying + draws 1 on DyingSaved (`dyingAfter`)!
@@ -407,28 +430,27 @@ fn l11_step5_qiangwu_dujin_and_jintao_real_event_parity() {
                 "xinjuejing must draw 1 more card on DyingSaved/dyingAfter (2 - 1 Tao + 1 = 2)"
             );
         }
-        // Negative check: DrawPhase { num_fixed: true } skips `OptionalDrawCount` (`dujin`)!
+        // Negative check: `debug_emit_fixed_draw_phase` (`num_fixed: true`) neither prompts `dujin:confirm` nor adds draw!
         e.debug_clear_hand(0);
         e.state_core_mut().player_mut(0).equips.clear();
-        let draw_fixed = EventData::DrawPhase {
-            player: 0,
-            progress: engine_native::event::DrawPhaseProgress::Before,
-            pending: 2,
-            num_fixed: true,
-            actual_gain: 0,
-            outcome: engine_native::event::DrawOutcome::Running,
-        };
-        assert_eq!(
-            engine_native::rvm_bridge::modifiers::eval_optional_draw_count(e.state_core(), e.catalog(), 0, 2),
-            3
+        step5_equip_card(&mut e, 0, CardKind::Weapon);
+        step5_equip_card(&mut e, 0, CardKind::Armor);
+        let out_fixed = e.debug_emit_fixed_draw_phase(0, 2);
+        assert!(
+            e.open_choice().is_none(),
+            "dujin must NOT prompt dujin:confirm when num_fixed == true: {out_fixed:?}"
         );
-        // Execute real fixed DrawPhase via machine? Verify eval_draw_count does NOT include dujin!
+        drain_to_pass(&mut e);
+        assert_eq!(
+            e.state_core().player(0).hand.len(),
+            2,
+            "dujin must NOT add draw when num_fixed == true"
+        );
         assert_eq!(
             engine_native::rvm_bridge::modifiers::eval_draw_count(e.state_core(), e.catalog(), 0, 2),
             2,
             "fixed draw phase eval_draw_count must NOT include dujin OptionalDrawCount"
         );
-        let _ = draw_fixed;
     }
 
     // 6. `jintao` (`txhj_huzhen`, `txhj_mowangzhizhong`)
@@ -587,13 +609,33 @@ fn l11_step5_jinjiu_rexianzhen_zhenlie_and_lieren_real_event_parity() {
         advance_to_play(&mut e, 0);
         e.debug_clear_hand(0);
         let wp = step5_equip_card(&mut e, 0, CardKind::Weapon);
-        // Delayed tricks (`Le`, `Bing`) must NOT trigger `zhenlie`!
+        // Delayed tricks (`Le`, `Bing`) must NOT trigger `zhenlie` (seat 0 `txhj_huangyueying` holds `rejizhi`, so dismiss seat-0 `rejizhi:` prompts if opened)!
         let le = step5_take_card(&mut e, |d| d.kind == CardKind::Le);
         let bing = step5_take_card(&mut e, |d| d.kind == CardKind::Bing);
         let _ = step5_play_card(&mut e, 0, le, vec![1]);
-        assert!(e.open_choice().is_none(), "Le must NOT trigger zhenlie");
+        while let Some(ch) = e.open_choice().cloned() {
+            assert_ne!(ch.observer, 1, "Le must NOT trigger seat 1 zhenlie");
+            assert!(ch.spec.prompt.starts_with("rejizhi:"), "unexpected choice on Le: {:?}", ch.spec.prompt);
+            let sel = if ch.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else {
+                Vec::new()
+            };
+            let _ = answer_choice(&mut e, 0, sel);
+        }
+        assert!(e.state_core().player(1).judge.contains(&le), "Le must enter judge zone");
         let _ = step5_play_card(&mut e, 0, bing, vec![1]);
-        assert!(e.open_choice().is_none(), "Bing must NOT trigger zhenlie");
+        while let Some(ch) = e.open_choice().cloned() {
+            assert_ne!(ch.observer, 1, "Bing must NOT trigger seat 1 zhenlie");
+            assert!(ch.spec.prompt.starts_with("rejizhi:"), "unexpected choice on Bing: {:?}", ch.spec.prompt);
+            let sel = if ch.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else {
+                Vec::new()
+            };
+            let _ = answer_choice(&mut e, 0, sel);
+        }
+        assert!(e.state_core().player(1).judge.contains(&bing), "Bing must enter judge zone");
 
         // Sha DOES trigger `zhenlie`, loses 1 HP, excludes self, and discards user's equip with CardDiscarded!
         let sha = step5_take_card(&mut e, |d| d.kind == CardKind::Sha);

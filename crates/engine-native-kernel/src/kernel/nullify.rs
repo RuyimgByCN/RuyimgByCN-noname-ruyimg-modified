@@ -383,7 +383,20 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             let wuxie_guard = format!("xj_longxi_wuxie:{}", self.card);
             while let Some(p) = self.queue.first().copied() {
                 crate::kernel::maybe_trigger_longxi_guarded(ctx, p, 3, &wuxie_guard);
-                let can_use_nullify = !ctx.catalog.blocks_card_use_and_save(ctx.core, p);
+                let eff_kind = ctx
+                    .current_card_use()
+                    .map(|u| u.effective_kind_in(ctx.core, ctx.catalog))
+                    .unwrap_or_else(|_| ctx.catalog.resolved_card_kind(ctx.core, self.card));
+                let unrespondable = crate::rvm_bridge::modifiers::eval_card_unrespondable(
+                    ctx.core,
+                    ctx.catalog,
+                    self.source,
+                    p,
+                    self.card,
+                    eff_kind,
+                    crate::event::DamageNature::Normal,
+                );
+                let can_use_nullify = !ctx.catalog.blocks_card_use_and_save(ctx.core, p) && !unrespondable;
                 let has_host_resp = can_use_nullify
                     && (!host_response_skills(ctx.core, ctx.catalog, p, 3).is_empty()
                         || !(ctx.catalog.hooks.respond_skill_options)(

@@ -128,6 +128,9 @@ pub fn eval_sha_no_use_count(
     if !kind.is_sha_like() {
         return false;
     }
+    if super::d34_l11_mods_vm_c::sha_no_use_count(state, player, card, kind) {
+        return true;
+    }
     let Some(c) = card else {
         return false;
     };
@@ -217,7 +220,7 @@ pub fn eval_card_use_unlimited(
             unlimited = true;
         }
     });
-    unlimited
+    super::d34_l11_mods_vm_c::apply_card_use_unlimited(state, catalog, player, card, kind, unlimited)
 }
 
 /// 评估 `CardIgnoredHandLimit` 是否同时禁止在弃牌阶段弃置该牌（`jiaojie` 红牌）。

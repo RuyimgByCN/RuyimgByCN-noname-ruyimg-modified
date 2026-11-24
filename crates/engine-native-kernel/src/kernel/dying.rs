@@ -374,7 +374,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                                 } else {
                                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                                         card: None,
-                                        player: self.dying,
+                                        player: responder,
                                         targets: vec![self.dying],
                                         nature: crate::event::DamageNature::Normal,
                                         use_as: Some(crate::catalog::CardKind::Tao),
@@ -573,7 +573,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                                 } else {
                                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
                                         card: None,
-                                        player: self.dying,
+                                        player: responder,
                                         targets: vec![self.dying],
                                         nature: crate::event::DamageNature::Normal,
                                         use_as: Some(crate::catalog::CardKind::Tao),

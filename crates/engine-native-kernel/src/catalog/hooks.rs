@@ -282,6 +282,13 @@ pub struct ContentHooks {
     pub on_damage_end_step: fn(&mut crate::machine::Ctx<'_>, &crate::event::DamageData),
     /// 弃牌堆洗入牌库后钩子（如 `boss_baonuwash`）。
     pub on_deck_washed: fn(&mut crate::machine::Ctx<'_>),
+    /// 角色首次获得技能实例时触发（如 `baonu`、`nzry_jieying`、`xinfu_xionghuo` 初始化）。
+    pub on_skill_granted: fn(
+        &mut crate::state::GameStateCore,
+        &Catalog,
+        crate::ids::PlayerId,
+        crate::ids::SkillDefId,
+    ),
 }
 
 impl ContentHooks {
@@ -349,5 +356,6 @@ impl ContentHooks {
         on_choose_respond_begin: |_, _, _| {},
         on_damage_end_step: |_, _| {},
         on_deck_washed: |_| {},
+        on_skill_granted: |_, _, _, _| {},
     };
 }

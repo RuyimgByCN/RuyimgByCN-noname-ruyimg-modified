@@ -7,6 +7,7 @@ impl HostSkillBehavior {
             || (self.behavior == HostBehavior::L28ThunderBatchA && self.name == "xinfu_pdgyingshi")
             || (self.behavior == HostBehavior::U05GujianCharBatchA && self.name == "gjqtwuxie")
             || (self.behavior == HostBehavior::L11OwnNpc && self.name == "txhj_guimei")
+            || (self.behavior == HostBehavior::L11VmFixC && self.name == "drlt_qianjie")
     }
 
     pub(super) fn machine(&self, owner: PlayerId, event: &EventData) -> HostMachine {
@@ -262,6 +263,9 @@ impl HostSkillBehavior {
             }
             HostBehavior::L11VmFixB => {
                 return super::step::l11_vm_fix_b::machine_l11_vm_fix_b(self, owner, event);
+            }
+            HostBehavior::L11VmFixC => {
+                return super::step::l11_vm_fix_c::machine_l11_vm_c(self, owner, event);
             }
             _ => {}
         }

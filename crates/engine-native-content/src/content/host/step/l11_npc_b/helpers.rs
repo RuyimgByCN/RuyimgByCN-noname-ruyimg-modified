@@ -52,7 +52,7 @@ pub(super) const SHEFU_NAMES: [CardKind; 14] = [
 ];
 
 #[inline]
-pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
+pub(in crate::content::host) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
     core.vm_aux
         .flags
         .get(&(p, key.to_string()))
@@ -61,7 +61,7 @@ pub(super) fn flag(core: &GameStateCore, p: PlayerId, key: &str) -> u32 {
 }
 
 #[inline]
-pub(super) fn set_flag(core: &mut GameStateCore, p: PlayerId, key: &str, val: u32) {
+pub(in crate::content::host) fn set_flag(core: &mut GameStateCore, p: PlayerId, key: &str, val: u32) {
     if val == 0 {
         core.vm_aux.flags.remove(&(p, key.to_string()));
     } else {
@@ -70,7 +70,7 @@ pub(super) fn set_flag(core: &mut GameStateCore, p: PlayerId, key: &str, val: u3
 }
 
 #[inline]
-pub(super) fn turn_stamp(core: &GameStateCore) -> u32 {
+pub(in crate::content::host) fn turn_stamp(core: &GameStateCore) -> u32 {
     core.turn
         .round
         .saturating_mul(64)
@@ -78,14 +78,14 @@ pub(super) fn turn_stamp(core: &GameStateCore) -> u32 {
 }
 
 #[inline]
-pub(super) fn phase_stamp(core: &GameStateCore) -> u32 {
+pub(in crate::content::host) fn phase_stamp(core: &GameStateCore) -> u32 {
     turn_stamp(core)
         .saturating_mul(8)
         .saturating_add((core.turn.phase as u32) + 1)
 }
 
 #[inline]
-pub(super) fn suit_bit(suit: Suit) -> u32 {
+pub(in crate::content::host) fn suit_bit(suit: Suit) -> u32 {
     match suit {
         Suit::Spade => 1,
         Suit::Heart => 2,
@@ -95,13 +95,13 @@ pub(super) fn suit_bit(suit: Suit) -> u32 {
 }
 
 #[inline]
-pub(super) fn is_red_suit(suit: Suit) -> bool {
+pub(in crate::content::host) fn is_red_suit(suit: Suit) -> bool {
     matches!(suit, Suit::Heart | Suit::Diamond)
 }
 
 /// Group per `get.type(c, 'trick')`: 0 = basic, 1 = trick/delay, 2 = equip.
 #[inline]
-pub(super) fn card_type_group(kind: CardKind) -> u8 {
+pub(in crate::content::host) fn card_type_group(kind: CardKind) -> u8 {
     if kind.is_basic_kind() {
         0
     } else if kind.equip_slot().is_some() {
@@ -190,14 +190,14 @@ pub(super) fn cancel_all_current_card_targets(ctx: &mut Ctx<'_>) {
     }
 }
 
-pub(super) fn current_card_use_fid(ctx: &Ctx<'_>) -> Option<EventId> {
+pub(in crate::content::host) fn current_card_use_fid(ctx: &Ctx<'_>) -> Option<EventId> {
     ctx.res.stack.iter().rev().find_map(|f| match f.data {
         EventData::CardUsed(_) => Some(f.id),
         _ => None,
     })
 }
 
-pub(super) fn damage_root_card_use_fid(ctx: &Ctx<'_>) -> Option<EventId> {
+pub(in crate::content::host) fn damage_root_card_use_fid(ctx: &Ctx<'_>) -> Option<EventId> {
     let mut damage_idx = None;
     for (idx, f) in ctx.res.stack.iter().enumerate().rev() {
         if matches!(f.data, EventData::Damage(_) | EventData::DamageWindow { .. }) {
@@ -215,7 +215,7 @@ pub(super) fn damage_root_card_use_fid(ctx: &Ctx<'_>) -> Option<EventId> {
         })
 }
 
-pub(super) fn damage_effective_kind(
+pub(in crate::content::host) fn damage_effective_kind(
     ctx: &Ctx<'_>,
     d: &crate::event::DamageData,
 ) -> Option<CardKind> {
@@ -229,7 +229,10 @@ pub(super) fn damage_effective_kind(
     d.card.map(|c| ctx.catalog.resolved_card_kind(ctx.core, c))
 }
 
-pub(super) fn distinct_alive_factions(core: &GameStateCore, catalog: &Catalog) -> u32 {
+pub(in crate::content::host) fn distinct_alive_factions(
+    core: &GameStateCore,
+    catalog: &Catalog,
+) -> u32 {
     let mut mask = 0u32;
     for (pid, p) in core.players.iter().enumerate() {
         if !p.alive {
@@ -326,7 +329,11 @@ pub(super) fn pop_detached_or_field_card(
     None
 }
 
-pub(super) fn equip_card_onto_player(ctx: &mut Ctx<'_>, target: PlayerId, card: CardId) -> bool {
+pub(in crate::content::host) fn equip_card_onto_player(
+    ctx: &mut Ctx<'_>,
+    target: PlayerId,
+    card: CardId,
+) -> bool {
     let Some(slot) = ctx.catalog.card_slot_of(ctx.core, card) else {
         return false;
     };
@@ -356,7 +363,12 @@ pub(super) fn equip_card_onto_player(ctx: &mut Ctx<'_>, target: PlayerId, card: 
     true
 }
 
-pub(super) fn push_to_pile(core: &mut GameStateCore, owner: PlayerId, pile: &str, cards: &[CardId]) {
+pub(in crate::content::host) fn push_to_pile(
+    core: &mut GameStateCore,
+    owner: PlayerId,
+    pile: &str,
+    cards: &[CardId],
+) {
     core.vm_aux
         .piles
         .entry((owner, pile.to_string()))
@@ -364,7 +376,11 @@ pub(super) fn push_to_pile(core: &mut GameStateCore, owner: PlayerId, pile: &str
         .extend(cards.iter().copied());
 }
 
-pub(super) fn pile_cards(core: &GameStateCore, owner: PlayerId, pile: &str) -> Vec<CardId> {
+pub(in crate::content::host) fn pile_cards(
+    core: &GameStateCore,
+    owner: PlayerId,
+    pile: &str,
+) -> Vec<CardId> {
     core.vm_aux
         .piles
         .get(&(owner, pile.to_string()))
@@ -372,7 +388,7 @@ pub(super) fn pile_cards(core: &GameStateCore, owner: PlayerId, pile: &str) -> V
         .unwrap_or_default()
 }
 
-pub(super) fn take_from_pile(
+pub(in crate::content::host) fn take_from_pile(
     core: &mut GameStateCore,
     owner: PlayerId,
     pile: &str,
@@ -393,7 +409,7 @@ pub(super) fn take_from_pile(
     taken
 }
 
-pub(super) fn take_owned_cards_from_zones(
+pub(in crate::content::host) fn take_owned_cards_from_zones(
     ctx: &mut Ctx<'_>,
     from: PlayerId,
     cards: &[CardId],
@@ -491,7 +507,7 @@ pub(super) fn can_target_sha_no_range_npc(
         )
 }
 
-pub(super) fn usable_sha_targets_no_range(
+pub(in crate::content::host) fn usable_sha_targets_no_range(
     core: &GameStateCore,
     catalog: &Catalog,
     user: PlayerId,
@@ -502,7 +518,7 @@ pub(super) fn usable_sha_targets_no_range(
         .collect()
 }
 
-pub(super) fn card_usable_on_target_with_card(
+pub(in crate::content::host) fn card_usable_on_target_with_card(
     core: &GameStateCore,
     catalog: &Catalog,
     user: PlayerId,
@@ -563,12 +579,14 @@ pub(super) fn card_usable_on_target_with_card(
         }
         CardKind::Dismantle => user != target && !hej_cards(core, target).is_empty(),
         CardKind::Duel => user != target,
-        _ if is_huogong_card(catalog, card) => user != target && !core.player(target).hand.is_empty(),
+        _ if kind == CardKind::Linghunzhihuo || is_huogong_card(catalog, card) => {
+            user != target && !core.player(target).hand.is_empty()
+        }
         _ => true,
     }
 }
 
-pub(super) fn card_effective_rank_with_mods(
+pub(in crate::content::host) fn card_effective_rank_with_mods(
     ctx: &Ctx<'_>,
     owner: PlayerId,
     cid: CardId,
@@ -592,7 +610,7 @@ pub(super) fn card_effective_rank_with_mods(
     r
 }
 
-pub(super) fn pindian_resolve_cards(
+pub(in crate::content::host) fn pindian_resolve_cards(
     ctx: &mut Ctx<'_>,
     p1: PlayerId,
     c1: CardId,
@@ -673,7 +691,7 @@ pub(super) fn remove_npc_b_skill(ctx: &mut Ctx<'_>, p: PlayerId, name: &str) {
     remove_named_skill(ctx, p, name);
 }
 
-pub(super) fn is_weapon_card(catalog: &Catalog, core: &GameStateCore, c: CardId) -> bool {
+pub(in crate::content::host) fn is_weapon_card(catalog: &Catalog, core: &GameStateCore, c: CardId) -> bool {
     catalog.card_slot_of(core, c) == Some(EquipSlot::Weapon)
 }
 
@@ -685,7 +703,7 @@ pub(super) fn shefu_tag_to_kind(t: u8) -> Option<CardKind> {
     SHEFU_NAMES.get(t as usize).copied()
 }
 
-pub(super) fn log_skill(ctx: &mut Ctx<'_>, owner: PlayerId, skill: &'static str) {
+pub(in crate::content::host) fn log_skill(ctx: &mut Ctx<'_>, owner: PlayerId, skill: &'static str) {
     ctx.log(LogEvent::SkillTriggered {
         skill,
         owner,

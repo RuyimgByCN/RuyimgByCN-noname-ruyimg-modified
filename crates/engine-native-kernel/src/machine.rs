@@ -629,6 +629,22 @@ impl<'a> Ctx<'a> {
             });
             return;
         }
+        if let Some(pile) = self.core.vm_aux.piles.get_mut(&(player, "gnjinfan".to_string())) {
+            if let Some(pos) = pile.iter().position(|&c| c == card) {
+                pile.remove(pos);
+                self.core
+                    .vm_aux
+                    .flags
+                    .insert((player, format!("l11c_gnjinfan_lost:{card}")), 1);
+                self.note_cards_lost(player, &[card]);
+                self.emit(EventData::CardsLost {
+                    player,
+                    cards: vec![card],
+                    origins: vec![crate::event::LostOrigin::Hand],
+                });
+                return;
+            }
+        }
         panic!("card {card} not in hand, equips, or judge of {player}");
     }
 

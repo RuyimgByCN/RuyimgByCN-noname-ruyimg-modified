@@ -365,6 +365,17 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 //（含倾国转化：黑手牌可代出）；取消/空选 = 拒绝，问下一位
                 if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                     if ctx.core.player(holder).hand.contains(&shan) {
+                        if ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .contains_key(&(holder, format!("l11c_twkujian_card:{shan}")))
+                        {
+                            ctx.core
+                                .vm_aux
+                                .flags
+                                .insert((holder, format!("l11c_twkujian_use_resp:{shan}")), 1);
+                        }
                         ctx.discard_from_hand(holder, shan);
                         if ctx.catalog.vm_card_history {
                             if let Some(fid) = self.current_sha_frame_id(ctx) {

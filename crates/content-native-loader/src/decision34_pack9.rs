@@ -457,7 +457,8 @@ pub fn attach_formal_package_upstream_rules(
                 || crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&vs.name.as_str())
                 || vs.name == "jueqing"
                 || crate::taixu_vm_fix_a::is_stripped_vm_skill(&vs.name)
-                || crate::taixu_vm_fix_b::is_stripped_vm_skill(&vs.name))
+                || crate::taixu_vm_fix_b::is_stripped_vm_skill(&vs.name)
+                || crate::taixu_vm_fix_c::is_stripped_vm_skill(&vs.name))
         {
             return false;
         }

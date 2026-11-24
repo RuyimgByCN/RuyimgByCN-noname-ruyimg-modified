@@ -267,6 +267,12 @@ impl ShaResolveMachine {
     pub(super) fn resolve_shan_card(&mut self, ctx: &mut Ctx<'_>, shan: crate::ids::CardId) -> Flow {
         if ctx.core.player(self.target).hand.contains(&shan)
             || ctx.core.player(self.target).equips.contains(&shan)
+            || ctx
+                .core
+                .vm_aux
+                .piles
+                .get(&(self.target, "gnjinfan".to_string()))
+                .is_some_and(|p| p.contains(&shan))
         {
             discard_response_card(ctx, self.target, shan, CardKind::Shan);
         } else if let Some(owner) = (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan) {
@@ -590,7 +596,14 @@ pub fn collect_shan_response_cards(
 }
 
 pub(super) fn note_longdan_sha_source(ctx: &mut Ctx<'_>, responder: PlayerId, source: PlayerId) {
-    let has_longdan = ["fz_new_longdan", "zylongdan"].iter().any(|name| {
+    let has_longdan = [
+        crate::vocabulary::names::LONG_DAN,
+        "ollongdan",
+        "fz_new_longdan",
+        "zylongdan",
+    ]
+    .iter()
+    .any(|name| {
         ctx.catalog
             .skill_by_name(name)
             .is_some_and(|d| ctx.core.has_skill(responder, d))

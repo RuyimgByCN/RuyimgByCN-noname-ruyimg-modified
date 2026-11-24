@@ -415,6 +415,7 @@ pub fn host_skill_limits(name: &str, behavior: HostBehavior) -> crate::catalog::
         HostBehavior::L11OwnNpc => step::l11_own_npc::limits_l11_own_npc(name),
         HostBehavior::L11CrossNpcB => step::l11_npc_b::limits_l11_npc_b(name),
         HostBehavior::L11VmFixB => step::l11_vm_fix_b::limits_l11_vm_fix_b(name),
+        HostBehavior::L11VmFixC => step::l11_vm_fix_c::limits_l11_vm_c(name),
         _ => crate::catalog::SkillLimits::default(),
     }
 }

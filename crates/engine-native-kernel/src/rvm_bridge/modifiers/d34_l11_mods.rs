@@ -794,9 +794,16 @@ pub(super) fn apply_card_target_canceled(
     if actor != target
         && kind.is_sha_like()
         && flag_val(state, actor, "xinfu_xionghuo_no_sha_turn") > 0
-        && (has_ext_skill(state, catalog, target, "xinfu_xionghuo")
-            || flag_val(state, target, "xinfu_xionghuo_marks") > 0
-            || flag_val(state, target, "xinfu_xionghuo_init") > 0)
+        && {
+            let src_enc = flag_val(state, actor, "xinfu_xionghuo_disable_src");
+            if src_enc > 0 {
+                src_enc == u32::from(target) + 1
+            } else {
+                has_ext_skill(state, catalog, target, "xinfu_xionghuo")
+                    || flag_val(state, target, "xinfu_xionghuo_marks") > 0
+                    || flag_val(state, target, "xinfu_xionghuo_init") > 0
+            }
+        }
     {
         canceled = true;
     }

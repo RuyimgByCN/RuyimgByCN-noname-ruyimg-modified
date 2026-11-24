@@ -649,6 +649,12 @@ impl ShaResolveMachine {
             if let Some(ChoiceOption::Card(shan)) = ctx.answer().first().copied() {
                 if ctx.core.player(self.target).hand.contains(&shan)
                     || ctx.core.player(self.target).equips.contains(&shan)
+                    || ctx
+                        .core
+                        .vm_aux
+                        .piles
+                        .get(&(self.target, "gnjinfan".to_string()))
+                        .is_some_and(|p| p.contains(&shan))
                 {
                     discard_response_card(ctx, self.target, shan, CardKind::Shan);
                     if ctx.catalog.vm_card_history {

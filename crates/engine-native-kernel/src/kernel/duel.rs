@@ -176,6 +176,20 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 Vec::new()
             };
             if !self.asked {
+                if self.on_target
+                    && crate::rvm_bridge::modifiers::eval_card_unrespondable(
+                        ctx.core,
+                        ctx.catalog,
+                        self.source,
+                        self.target,
+                        self.card,
+                        CardKind::Duel,
+                        crate::event::DamageNature::Normal,
+                    )
+                {
+                    self.emit_duel_damage(ctx, opponent, responder);
+                    return self.finish(ctx);
+                }
                 if shas.is_empty()
                     && resp_skills.is_empty()
                     && skill_opts.is_empty()

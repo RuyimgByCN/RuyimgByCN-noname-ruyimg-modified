@@ -163,6 +163,18 @@ pub(super) fn apply_command(
             {
                 return Err(RejectReason::InvalidChoice);
             }
+            if matches!(
+                open.spec.prompt,
+                "shelie:pick_card" | "gnjinfan:choose_cards"
+            ) && !distinct_card_suits_valid(
+                &state.core,
+                catalog,
+                open.observer,
+                open.spec.prompt,
+                &selection,
+            ) {
+                return Err(RejectReason::InvalidChoice);
+            }
             let open = state.resolution.open_choice.take().expect("checked");
             log.push(LogEvent::ChoiceAnswered {
                 id: open.id,
@@ -234,4 +246,53 @@ pub(super) fn kuiji_suits_valid(
         suits |= bit;
     }
     suits == 0b1111
+}
+
+/// 涉猎 / 复古锦帆多选牌必须花色两两不同；空选仅在允许取消时由上层放行。
+fn distinct_card_suits_valid(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    observer: PlayerId,
+    prompt: &str,
+    selection: &[ChoiceOption],
+) -> bool {
+    if selection.is_empty() {
+        return true;
+    }
+    let mut suits = 0u8;
+    if prompt == "gnjinfan:choose_cards" {
+        if let Some(existing) = core.vm_aux.piles.get(&(observer, "gnjinfan".to_string())) {
+            for &cid in existing {
+                let bit = match catalog.effective_card_suit(core, observer, cid) {
+                    crate::catalog::Suit::Spade => 1 << 0,
+                    crate::catalog::Suit::Heart => 1 << 1,
+                    crate::catalog::Suit::Club => 1 << 2,
+                    crate::catalog::Suit::Diamond => 1 << 3,
+                };
+                suits |= bit;
+            }
+        }
+    }
+    for opt in selection {
+        let ChoiceOption::Card(cid) = opt else {
+            return false;
+        };
+        let holder = core
+            .players
+            .iter()
+            .position(|p| p.hand.contains(cid))
+            .map(|i| i as PlayerId)
+            .unwrap_or(observer);
+        let bit = match catalog.effective_card_suit(core, holder, *cid) {
+            crate::catalog::Suit::Spade => 1 << 0,
+            crate::catalog::Suit::Heart => 1 << 1,
+            crate::catalog::Suit::Club => 1 << 2,
+            crate::catalog::Suit::Diamond => 1 << 3,
+        };
+        if (suits & bit) != 0 {
+            return false;
+        }
+        suits |= bit;
+    }
+    true
 }

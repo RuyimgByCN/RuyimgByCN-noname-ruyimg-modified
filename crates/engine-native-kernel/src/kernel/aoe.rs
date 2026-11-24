@@ -257,6 +257,17 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             .flags
             .remove(&(self.target, format!("aoe_direct_hit:{}", self.card)))
             .is_some()
+            || crate::rvm_bridge::modifiers::eval_card_unrespondable(
+                ctx.core,
+                ctx.catalog,
+                self.source,
+                self.target,
+                self.card,
+                ctx.current_card_use()
+                    .map(|u| u.effective_kind_in(ctx.core, ctx.catalog))
+                    .unwrap_or_else(|_| ctx.catalog.resolved_card_kind(ctx.core, self.card)),
+                self.nature,
+            )
         {
             self.emit_aoe_damage(ctx);
             return Flow::Done;
@@ -460,7 +471,13 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
                         } else {
                             CardKind::SavageAttack
                         };
-                        crate::rvm_bridge::modifiers::eval_card_target_canceled_opt(
+                        crate::rvm_bridge::modifiers::d34_l11_mods_vm_c::xswuyan_excludes_target(
+                            ctx.core,
+                            ctx.catalog,
+                            self.source,
+                            self.targets[self.idx],
+                            eff_kind,
+                        ) || crate::rvm_bridge::modifiers::eval_card_target_canceled_opt(
                             ctx.core,
                             ctx.catalog,
                             self.source,

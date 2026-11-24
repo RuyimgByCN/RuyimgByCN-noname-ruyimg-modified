@@ -484,6 +484,9 @@ pub(crate) fn hearth_dying_save_skills(
     out.extend(super::l11_vm_fix_a::dying_save_skills(
         core, catalog, responder, dying,
     ));
+    out.extend(super::l11_vm_fix_c::fuli_dying_save_skills(
+        core, catalog, dying, responder,
+    ));
     if !hearth_formal_enabled(catalog)
         || !core.player(responder).alive
         || catalog.is_tieji_sealed(core, responder)
@@ -524,6 +527,9 @@ pub(crate) fn resolve_hearth_dying_save(
         return sync_done;
     }
     let sname = ctx.catalog.skill_name(def);
+    if super::l11_vm_fix_c::resolve_fuli_dying_save(ctx, dying, responder, def) {
+        return true;
+    }
     match sname {
         "shouwang" => {
             ctx.recover(dying, 1, None);

@@ -648,6 +648,7 @@ fn clear_turn_after_window_flags(ctx: &mut Ctx<'_>, player: PlayerId) {
             "fz_new_tieji_target_sealed",
             "sbtieji_target_sealed",
             "q4_retieji_target_sealed",
+            "l11c_retieji_sealed",
             "q4_rewansha_sealed",
             "tspowei_in_range",
             "rekuanshi_turn_dmg",

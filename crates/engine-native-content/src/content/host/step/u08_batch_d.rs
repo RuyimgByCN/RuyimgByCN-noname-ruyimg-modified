@@ -940,6 +940,16 @@ pub(crate) fn host_sha_begin_step(
     priority_ge_6: bool,
 ) -> bool {
     super::u05_hearth::host_sha_begin_step_hearth(ctx, source, target, sha_card, priority_ge_6);
+    if super::l11_vm_fix_c::sha_begin_step_l11_vm_c(
+        ctx,
+        sha_frame_id,
+        source,
+        target,
+        sha_card,
+        priority_ge_6,
+    ) {
+        return true;
+    }
     u08_batch_d_hooks::host_sha_begin_step_impl(
         ctx,
         sha_frame_id,

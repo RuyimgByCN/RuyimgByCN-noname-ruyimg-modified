@@ -116,6 +116,7 @@ pub(crate) fn attach_taixu_pack(
         );
     }
     crate::taixu_vm_fix_b::attach_l11_vm_fix_b_skills(extra_host_skills, seen_skills);
+    crate::taixu_vm_fix_c::attach_taixu_vm_fix_c(extra_host_skills, seen_skills);
 
     // P3-C1a: Part A 80 跨包 NPC 技 + 3 派生技 (`olhuoji`, `olkanpo`, `rexuanfeng`)
     // 统一绑定到原生行为组 `HostBehavior::L11CrossNpcA`；同时保证 `bazhen` / `reyingzi` 派生基础技可查。
@@ -152,6 +153,7 @@ pub(crate) fn attach_taixu_pack(
     {
         if s != "xinfu_sidao"
             && !crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s)
+            && !crate::taixu_vm_fix_c::is_stripped_vm_skill(s)
         {
             push_taixu_skill(
                 s,
@@ -168,6 +170,7 @@ pub(crate) fn attach_taixu_pack(
         if crate::taixu_pack_attach_b::L11_NPC_B_SKILLS.contains(&s)
             || crate::taixu_vm_fix_a::is_stripped_vm_skill(s)
             || crate::taixu_vm_fix_b::is_stripped_vm_skill(s)
+            || crate::taixu_vm_fix_c::is_stripped_vm_skill(s)
         {
             continue;
         }

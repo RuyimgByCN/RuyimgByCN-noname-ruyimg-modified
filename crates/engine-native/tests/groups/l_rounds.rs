@@ -210,3 +210,9 @@ mod l11_npc_a_save_ai;
 
 #[path = "../l11_vm_fix_a.rs"]
 mod l11_vm_fix_a;
+
+#[path = "../l11_vm_fix_c.rs"]
+mod l11_vm_fix_c;
+
+#[path = "../l11_vm_fix_c_parity.rs"]
+mod l11_vm_fix_c_parity;

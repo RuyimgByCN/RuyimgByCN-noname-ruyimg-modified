@@ -131,6 +131,8 @@ impl NamedProgram {
                     Atom::SourceNotTarget => { h.update(&119u16.to_le_bytes()); }
                     Atom::TargetWounded => { h.update(&120u16.to_le_bytes()); }
                     Atom::DrawPhaseSkipped => { h.update(&121u16.to_le_bytes()); }
+                    Atom::AnyHandEmpty => { h.update(&122u16.to_le_bytes()); }
+                    Atom::XinfuZhanjiPlayDraw => { h.update(&123u16.to_le_bytes()); }
                 }
             }
         }

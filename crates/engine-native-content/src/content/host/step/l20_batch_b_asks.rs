@@ -642,10 +642,7 @@ pub(super) fn filter_l20_extra_four(
                 } else {
                     let s = ctx
                         .catalog
-                        .cards
-                        .get(*invocation as usize)
-                        .map(|c| c.suit)
-                        .unwrap_or(Suit::Club);
+                        .effective_card_suit(ctx.state, *j_owner, *invocation);
                     s == Suit::Heart || (s == Suit::Spade && *j_owner == owner)
                 }
             }

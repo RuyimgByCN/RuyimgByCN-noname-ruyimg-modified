@@ -30,6 +30,8 @@ pub(crate) fn u01_respond_skill_options(
     u01_fixes_3::u01_respond_skill_options_3(core, catalog, player, need, is_use, &mut out);
     l11_npc_b::respond_skill_options_l11_npc_b(core, catalog, player, need, is_use, &mut out);
     l11_npc_a::aocai_respond_skill_options(core, catalog, player, need, is_use, &mut out);
+    l11_vm_fix_c::respond_skill_options_l11_vm_c(core, catalog, player, need, is_use, &mut out);
+    l27_batch_a::taoluan_dying_respond_options(core, catalog, player, need, is_use, &mut out);
     out
 }
 
@@ -57,6 +59,12 @@ pub(crate) fn u01_try_activate_respond_skill(
         })
         .or_else(|| {
             l11_npc_a::aocai_try_activate_respond_skill(ctx, player, def, need, fid, is_use)
+        })
+        .or_else(|| {
+            l11_vm_fix_c::try_activate_respond_skill_l11_vm_c(ctx, player, def, need, fid, is_use)
+        })
+        .or_else(|| {
+            l27_batch_a::try_activate_taoluan_dying(ctx, player, def, need, fid, is_use)
         })
 }
 

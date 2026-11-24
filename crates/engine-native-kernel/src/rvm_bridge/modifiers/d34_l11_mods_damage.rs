@@ -48,6 +48,7 @@ pub(in crate::rvm_bridge::modifiers) fn apply_damage_amount(
             cur += 1;
         }
         if src != target
+            && !catalog.is_chanyuan_sealed(state, src)
             && (flag_val(state, target, "xinfu_xionghuo_marked") > 0
                 || flag_val(state, target, "xionghuo") > 0)
             && (has_ext_skill(state, catalog, src, "xinfu_xionghuo")

@@ -27,6 +27,16 @@ impl HostSkillBehavior {
                 event,
             );
         }
+        if self.behavior == HostBehavior::L11VmFixC {
+            return super::step::l11_vm_fix_c::filter_l11_vm_c_with_frames(
+                self,
+                ctx,
+                frames,
+                Some(frame),
+                owner,
+                event,
+            );
+        }
         if self.behavior == HostBehavior::ShaDamageForceDiscard {
             return match event {
                 EventData::Damage(d) => {
@@ -1198,6 +1208,9 @@ impl HostSkillBehavior {
             HostBehavior::L11VmFixB => {
                 super::step::l11_vm_fix_b::filter_l11_vm_fix_b(self, ctx, &[], None, owner, event)
             }
+            HostBehavior::L11VmFixC => super::step::l11_vm_fix_c::filter_l11_vm_c_with_frames(
+                self, ctx, &[], None, owner, event,
+            ),
             _ => false,
         }
     }

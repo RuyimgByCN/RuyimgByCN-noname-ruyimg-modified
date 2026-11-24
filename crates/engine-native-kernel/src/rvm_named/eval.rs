@@ -437,6 +437,23 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
                     .unwrap_or(0)
                     > 0
         }
+        Atom::AnyHandEmpty => ctx
+            .state
+            .players
+            .iter()
+            .any(|pl| pl.alive && pl.hand.is_empty()),
+        Atom::XinfuZhanjiPlayDraw => {
+            ctx.state.turn.current == owner
+                && ctx.state.turn.phase == Phase::Play
+                && ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "vm_xinfu_zhanji_self_draw".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    == 0
+        }
     }
 }
 

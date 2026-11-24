@@ -58,6 +58,7 @@ pub mod taixu;
 pub mod taixu_mode;
 mod taixu_pack_attach_b;
 mod taixu_pack_attach;
+pub mod taixu_vm_fix_c;
 mod thunder;
 mod update_guard;
 mod wuxing;

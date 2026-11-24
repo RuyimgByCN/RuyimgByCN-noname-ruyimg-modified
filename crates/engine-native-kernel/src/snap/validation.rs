@@ -546,13 +546,20 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
         }
         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
         MachineSnapshot::Wugu { cards, .. } => out.extend(cards.iter().copied()),
-        // 末焱/调兵遣将/灵锋展示牌已离开牌库，挂起期间只在宿主机器上。
+        // 末焱/调兵遣将/灵锋/涉猎/再兴/易策(SelectCard, stage=2)展示或暂存牌已离开牌库/堆，挂起期间只在宿主机器上。
         MachineSnapshot::Host {
-            behavior, cards, ..
+            behavior,
+            def_key,
+            stage,
+            cards,
+            ..
         } if *behavior == HostBehavior::D3Moyan.tag()
             || *behavior == HostBehavior::WudianDiaobingCard.tag()
             || *behavior == HostBehavior::L11BossLingfeng.tag()
-            || *behavior == HostBehavior::U05GwentCardEffect.tag() =>
+            || *behavior == HostBehavior::U05GwentCardEffect.tag()
+            || (*behavior == HostBehavior::L11VmFixC.tag()
+                && (matches!(def_key.as_str(), "shelie" | "rezhenxing")
+                    || (def_key == "nsyice" && *stage == 2))) =>
         {
             out.extend(cards.iter().copied());
         }

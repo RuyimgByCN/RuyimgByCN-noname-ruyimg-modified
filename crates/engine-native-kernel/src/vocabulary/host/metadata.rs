@@ -1007,7 +1007,8 @@ impl HostBehavior {
             | HostBehavior::L11OwnNpc
             | HostBehavior::L11CrossNpcB
             | HostBehavior::L11VmFixA
-            | HostBehavior::L11VmFixB => None,
+            | HostBehavior::L11VmFixB
+            | HostBehavior::L11VmFixC => None,
             HostBehavior::L11CrossNpcA => self.trigger_meta_l11_npc_a(),
         };
         if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {

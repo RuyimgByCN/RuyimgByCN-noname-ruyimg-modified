@@ -291,6 +291,15 @@ impl Engine {
         self.finish_segment(work, log_mark)
     }
 
+    /// Fixed-count `num_fixed=true` `DrawPhase` test helper (alias of [`Self::debug_start_draw_phase_fixed`]).
+    pub fn debug_emit_fixed_draw_phase(
+        &mut self,
+        player: PlayerId,
+        pending: i32,
+    ) -> CommandOutcome {
+        self.debug_start_draw_phase_fixed(player, pending.max(0) as u32)
+    }
+
     /// 上帝视角清场：全部玩家判定区移入弃牌堆（仅负载/测试布阵用，
     /// 防止闪电转移后同名锦囊滞留他区导致布阵无牌可回收）。
     pub fn debug_sweep_judge_zones(&mut self) {
@@ -398,6 +407,7 @@ impl Engine {
                 rounds: 0,
             },
         );
+        (self.catalog.hooks.on_skill_granted)(&mut self.state.core, &self.catalog, player, def);
         if name == "ssr_luoyi" {
             let discarded = crate::kernel::discard_armor_for_ssr_luoyi(
                 &mut self.state.core,

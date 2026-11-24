@@ -196,6 +196,16 @@ pub(super) fn emit_card_responded_as(
             (eff_kind as u32) + 1,
         );
     }
+    if ctx
+        .catalog
+        .skill_by_name("chongzhen")
+        .is_some_and(|def| ctx.core.has_skill(player, def))
+    {
+        ctx.core.vm_aux.flags.insert(
+            (player, format!("l11c_chongzhen_resp_eff:{card}")),
+            (eff_kind as u32) + 1,
+        );
+    }
     ctx.emit(EventData::CardResponded { card, player });
 }
 

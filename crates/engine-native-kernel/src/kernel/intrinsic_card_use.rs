@@ -68,59 +68,11 @@ pub(super) fn card_use_intrinsic(
         discard_remaining_carriers(ctx);
         return None;
     }
-    if dying_save.is_none() {
-        let excl_kind = u.effective_kind_in(ctx.core, ctx.catalog);
-        let excl_targets = match excl_kind {
-            CardKind::Wugu if u.targets.is_empty() => ctx.core.alive_players().collect(),
-            CardKind::Taoyuan if u.targets.is_empty() => {
-                ctx.core.alive_players().filter(|&p| p != u.player).collect()
-            }
-            _ => u.targets.clone(),
-        };
-        let total = excl_targets.len();
-        if total > 0 {
-            let filtered: Vec<PlayerId> = excl_targets
-                .into_iter()
-                .filter(|&t| {
-                    !crate::rvm_bridge::modifiers::d34_l28_mods::shengong_excludes_target(
-                        ctx.core,
-                        ctx.catalog,
-                        u.player,
-                        t,
-                        u.card,
-                        excl_kind,
-                        u.nature,
-                        total,
-                    )
-                })
-                .collect();
-            if filtered.len() != total {
-                u.targets = filtered;
-                ctx.res
-                    .frame_mut(frame_id)
-                    .expect("card use frame")
-                    .card_use_mut()
-                    .targets = u.targets.clone();
-                if !u.targets.is_empty()
-                    && matches!(excl_kind, CardKind::Wugu | CardKind::Taoyuan)
-                {
-                    ctx.core
-                        .vm_aux
-                        .flags
-                        .insert((u.player, format!("dddanzhi_targets:{frame_id}")), 1);
-                }
-                if u.targets.is_empty()
-                    || (excl_kind == CardKind::Jiedao && u.targets.len() < 2)
-                {
-                    ctx.core
-                        .vm_aux
-                        .flags
-                        .remove(&(u.player, "vm_va_recover_bonus".to_string()));
-                    discard_remaining_carriers(ctx);
-                    return None;
-                }
-            }
-        }
+    if dying_save.is_none()
+        && !super::intrinsic_targets::filter_intrinsic_card_targets(ctx, frame_id, &mut u)
+    {
+        discard_remaining_carriers(ctx);
+        return None;
     }
     if let Some((dying, raw_tao)) = dying_save {
         discard_remaining_carriers(ctx);

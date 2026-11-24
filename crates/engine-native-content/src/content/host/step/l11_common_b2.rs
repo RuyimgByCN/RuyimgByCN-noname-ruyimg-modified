@@ -428,7 +428,12 @@ pub(crate) fn vm_pindian_targets(
     if !owner_ok {
         return Vec::new();
     }
-    let tgt_ok = |p: PlayerId| !core.player(p).hand.is_empty() || has_txyonglve_ready(core, catalog, p);
+    let tgt_ok = |p: PlayerId| {
+        (!core.player(p).hand.is_empty() || has_txyonglve_ready(core, catalog, p))
+            && crate::rvm_bridge::modifiers::d34_l11_mods_vm_c::can_compare_target(
+                core, catalog, p,
+            )
+    };
     if fixed_target.is_some() {
         let Some(idx) = fixed_target.raw().checked_sub(1) else {
             return Vec::new();

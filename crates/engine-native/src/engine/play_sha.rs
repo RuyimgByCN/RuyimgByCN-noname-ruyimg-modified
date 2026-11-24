@@ -42,7 +42,7 @@ pub(super) fn has_unlimited_sha_public(
 /// unlimited range, distance-1 exemptions, `ow_feidan`, and weapon/horse attack range).
 pub(crate) fn sha_target_in_range(
     core: &GameStateCore,
-    catalog: &SharedCatalog,
+    catalog: &crate::catalog::Catalog,
     from: PlayerId,
     target: PlayerId,
     card: Option<CardId>,
@@ -186,24 +186,35 @@ pub(crate) fn sha_target_in_range(
         || core.in_attack_range(catalog, from, target)
 }
 
-pub(super) fn play_sha(
-    state: &mut GameState,
-    catalog: &SharedCatalog,
-    card: CardId,
-    targets: Vec<PlayerId>,
-    kind: CardKind,
-    mark_mutoumianju: bool,
-) -> Result<(), RejectReason> {
-    let core = &state.core;
+pub(super) struct ShaQuotaEval {
+    pub(super) vm_va_sha: Option<crate::rvm_bridge::VmViewAsSpec>,
+    pub(super) is_red: bool,
+    pub(super) sha_nature: crate::event::DamageNature,
+    pub(super) vm_va_no_count: bool,
+    pub(super) mark_yuanbaorou: bool,
+    pub(super) mark_huihuo: bool,
+    pub(super) mark_lingshi: bool,
+    pub(super) mark_dcdichou_eff: bool,
+    pub(super) mark_vm_sha_extra: bool,
+    pub(super) mark_tanlin3: bool,
+}
 
-    // 咆哮（张飞）：出牌阶段使用杀无次数限制
+/// Evaluates whether `player_id` has Play-phase `Sha` quota to use `card` as `kind` against
+/// `targets`, returning the resolved `DamageNature` and which once-per-turn quota flag to consume.
+pub(super) fn eval_play_phase_sha_quota(
+    core: &GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player_id: PlayerId,
+    card: CardId,
+    targets: &[PlayerId],
+    kind: CardKind,
+) -> Result<ShaQuotaEval, RejectReason> {
     let mut mark_yuanbaorou = false;
     let mut mark_huihuo = false;
     let mut mark_lingshi = false;
     let mut mark_dcdichou_eff = false;
     let mut mark_vm_sha_extra = false;
     let mut mark_tanlin3 = false;
-    let player_id = core.turn.current;
     let sha_nature = match kind {
         CardKind::FireSha => crate::event::DamageNature::Fire,
         CardKind::LeiSha => crate::event::DamageNature::Thunder,
@@ -385,7 +396,7 @@ pub(super) fn play_sha(
         || zhanlong2_unlimited
         || tanbei_free
         || crate::rvm_bridge::modifiers::eval_sha_unlimited_for_targets(
-            core, catalog, player_id, &targets,
+            core, catalog, player_id, targets,
         )
         || crate::rvm_bridge::modifiers::eval_sha_no_use_count(
             core,
@@ -525,6 +536,42 @@ pub(super) fn play_sha(
             mark_yuanbaorou = true;
         }
     }
+    Ok(ShaQuotaEval {
+        vm_va_sha,
+        is_red,
+        sha_nature,
+        vm_va_no_count,
+        mark_yuanbaorou,
+        mark_huihuo,
+        mark_lingshi,
+        mark_dcdichou_eff,
+        mark_vm_sha_extra,
+        mark_tanlin3,
+    })
+}
+
+pub(super) fn play_sha(
+    state: &mut GameState,
+    catalog: &SharedCatalog,
+    card: CardId,
+    targets: Vec<PlayerId>,
+    kind: CardKind,
+    mark_mutoumianju: bool,
+) -> Result<(), RejectReason> {
+    let core = &state.core;
+    let player_id = core.turn.current;
+    let ShaQuotaEval {
+        vm_va_sha,
+        is_red,
+        sha_nature,
+        vm_va_no_count,
+        mark_yuanbaorou,
+        mark_huihuo,
+        mark_lingshi,
+        mark_dcdichou_eff,
+        mark_vm_sha_extra,
+        mark_tanlin3,
+    } = eval_play_phase_sha_quota(core, catalog, player_id, card, &targets, kind)?;
     // 方天画戟（批③-b 第九把）：该杀为最后手牌且装备方天
     // 时可指定至多 3 个目标（逐个独立合法性检查，去重）。
     let fangtian = !crate::kernel::mbcmfangzhu_baiban(core, player_id)

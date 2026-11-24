@@ -923,8 +923,14 @@ pub(super) fn push_play_card_frame(
 ) -> Result<(), RejectReason> {
     let player = state.core.turn.current;
     // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
+    let in_gnjinfan = state
+        .core
+        .vm_aux
+        .piles
+        .get(&(player, "gnjinfan".to_string()))
+        .is_some_and(|p| p.contains(&card));
     let use_as = if kind != catalog.resolved_card_kind(&state.core, card)
-        || !state.core.player(player).hand.contains(&card)
+        || (!state.core.player(player).hand.contains(&card) && !in_gnjinfan)
     {
         Some(kind)
     } else {

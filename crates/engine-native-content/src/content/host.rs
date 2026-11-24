@@ -368,6 +368,10 @@ impl SkillBehavior for HostSkillBehavior {
                 | "huandie_discard"
                 | "xuezhou_hp2"
                 | "boss_aozhan"
+                | "reshanxi2"
+                | "qiaoshui2"
+                | "qiaoshui3"
+                | "new_repaoxiao2"
         )
     }
     fn hand_limit_base(
@@ -380,6 +384,8 @@ impl SkillBehavior for HostSkillBehavior {
     fn card_used_in_before_window(&self) -> bool {
         (self.behavior == HostBehavior::U05Hearth2BatchE && self.name == "huanjue")
             || (self.behavior == HostBehavior::L11VmFixA && self.name == "lihuo")
+            || (self.behavior == HostBehavior::L11VmFixC
+                && matches!(self.name.as_str(), "mieji" | "qiaoshui3"))
     }
     fn window_trigger_meta(
         &self,
@@ -751,6 +757,7 @@ impl SkillBehavior for HostSkillBehavior {
             HostBehavior::L11VmFixB => {
                 step::l11_vm_fix_b::trigger_meta_l11_vm_fix_b(&self.name, Some(kind))
             }
+            HostBehavior::L11VmFixC => step::l11_vm_fix_c::trigger_meta_l11_vm_c(&self.name, kind),
             _ => None,
         }
     }
@@ -875,6 +882,7 @@ impl SkillBehavior for HostSkillBehavior {
                 | HostBehavior::U05SwdJiguanyaoshuSkill
                 | HostBehavior::U05SwdLingjianLoseTemp
                 | HostBehavior::L11CrossNpcB
+                | HostBehavior::L11VmFixC
         )
     }
     /// 止息（L27 批 2）：**计数标记 ≥ 体力** 或 **已使用过锦囊**（记录标记

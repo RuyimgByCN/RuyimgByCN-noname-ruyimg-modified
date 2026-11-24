@@ -250,6 +250,15 @@ fn on_frame_popped_inner(
     if let EventData::CardUsed(u) = &popped.data {
         on_card_use_popped(popped.id, u, core, res, catalog, out, run_after_hooks);
     }
+    if run_after_hooks {
+        if let EventData::CardResponded { card, player } = &popped.data {
+            if core.discard.contains(card) && catalog.skill_by_name("nsyice").is_some() {
+                core.vm_aux
+                    .flags
+                    .insert((*player, format!("l11c_nsyice_resp_card:{card}")), 1);
+            }
+        }
+    }
     if run_after_hooks
         && matches!(
             popped.kind,

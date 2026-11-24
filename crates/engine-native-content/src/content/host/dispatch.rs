@@ -6,12 +6,14 @@ pub(crate) fn host_on_outer_settled(ctx: &mut Ctx<'_>) {
     on_outer_settled_taipingyaoshu(ctx);
     host_on_outer_settled_hearth(ctx);
     step::l11_npc_b::on_outer_settled_l11_npc_b(ctx);
+    step::l11_vm_fix_c::on_outer_settled_l11_vm_c(ctx);
 }
 
 pub(crate) fn host_on_phase_end(ctx: &mut Ctx<'_>) {
     on_phase_end_l10_scs(ctx);
     host_on_phase_end_hearth(ctx);
     step::l11_npc_b::on_phase_end_l11_npc_b(ctx);
+    step::l11_vm_fix_c::on_phase_end_l11_vm_c(ctx);
 }
 
 pub(crate) fn host_play_begin_step(ctx: &mut Ctx<'_>, player: PlayerId) {
@@ -66,6 +68,8 @@ pub(crate) fn host_card_use_after_all(
     step::l11_npc_a::on_card_use_after_l11_npc_a(ctx, fid, u);
     step::l11_vm_fix_a::on_card_use_after(ctx, fid, u);
     step::l11_vm_fix_b::on_card_use_after_l11_vm_fix_b(ctx, fid, u);
+    step::l11_vm_fix_c::on_card_use_after_l11_vm_c(ctx, fid, u);
+    step::l27_batch_a::on_card_use_after_taoluan(ctx, u);
 }
 
 pub(crate) fn host_on_outer_settled_all(ctx: &mut Ctx<'_>) {
@@ -91,6 +95,7 @@ pub(crate) fn host_on_hand_card_removed_all(ctx: &mut Ctx<'_>, player: PlayerId,
     host_on_hand_card_removed(ctx, player, card);
     host_on_hand_card_removed_xianjian(ctx, player, card);
     step::l11_npc_a::on_hand_card_removed_l11_npc_a(ctx, player, card);
+    step::l11_vm_fix_c::on_hand_card_removed_l11_vm_c(ctx, player, card);
 }
 
 pub(crate) fn host_on_phase_end_all(ctx: &mut Ctx<'_>) {
@@ -123,6 +128,7 @@ pub(crate) fn host_on_turn_phase_after_all(ctx: &mut Ctx<'_>, player: PlayerId) 
     host_on_turn_phase_after(ctx, player);
     step::l11_npc_b::on_turn_phase_after_l11_npc_b(ctx, player);
     step::l11_npc_a::on_turn_phase_after_l11_npc_a(ctx, player);
+    step::l11_vm_fix_c::on_turn_phase_after_l11_vm_c(ctx, player);
 }
 
 pub(crate) fn host_on_turn_begin_all(ctx: &mut Ctx<'_>, player: PlayerId) {
@@ -152,6 +158,7 @@ pub(crate) fn host_on_damage_end_all(ctx: &mut Ctx<'_>, d: &crate::event::Damage
     host_on_damage_end_xianjian(ctx, d);
     step::l11_npc_b::on_damage_end_l11_npc_b(ctx, d);
     step::l11_npc_a::on_damage_end_l11_npc_a(ctx, d);
+    step::l11_vm_fix_c::on_damage_end_l11_vm_c(ctx, d);
 }
 
 pub(crate) fn host_on_player_died_all(
@@ -177,6 +184,15 @@ pub(crate) fn host_on_host_event_all(ctx: &mut Ctx<'_>, event: &EventData) {
 pub(crate) fn host_on_hp_changed_all(ctx: &mut Ctx<'_>, player: PlayerId, delta: i32) {
     host_on_hp_changed_xianjian(ctx, player, delta);
     step::l11_npc_b::on_hp_changed_l11_npc_b(ctx, player, delta);
+}
+
+pub(crate) fn host_on_skill_granted(
+    core: &mut crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    def: crate::ids::SkillDefId,
+) {
+    step::l11_vm_fix_c::on_skill_granted_l11_vm_c(core, catalog, player, def);
 }
 
 pub(crate) fn host_on_recover_before_all(ctx: &mut Ctx<'_>, player: PlayerId, amount: &mut u32) {

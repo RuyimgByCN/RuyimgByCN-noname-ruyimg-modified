@@ -97,6 +97,17 @@ pub(crate) fn host_on_game_start(core: &mut GameStateCore, catalog: &Catalog) {
     super::l01_rules::l01_on_game_start(core, catalog);
     super::u05_b2_gujian::on_game_start_gujian(core, catalog);
     super::u05_hearth::host_on_game_start_hearth(core, catalog);
+    super::l11_vm_fix_c::on_game_start_l11_vm_c(core, catalog);
+    for owner in 0..seats {
+        if core.player(owner).alive
+            && has_skill_named(core, catalog, owner, "xinfu_xionghuo")
+            && flag(core, owner, "xinfu_xionghuo_init") == 0
+        {
+            set_flag(core, owner, "xinfu_xionghuo_init", 1);
+            set_flag(core, owner, "xinfu_xionghuo_marks", 3);
+            set_flag(core, owner, "xionghuo", 3);
+        }
+    }
     if core
         .boss_mode()
         .is_some_and(|(boss, _)| has_skill_named(core, catalog, boss, "boss_baonu"))
@@ -320,6 +331,12 @@ pub(crate) fn on_skill_removed_all(
     ));
     super::l11_npc_b::on_skill_removed_l11_npc_b(core, catalog, owner, skill_name);
     super::l11_vm_fix_b::on_skill_removed_l11_vm_fix_b(core, owner, skill_name);
+    cards.extend(super::l11_vm_fix_c::on_skill_removed_l11_vm_c(
+        core,
+        catalog,
+        owner,
+        skill_name,
+    ));
     cards
 }
 

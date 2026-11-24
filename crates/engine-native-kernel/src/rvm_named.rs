@@ -164,6 +164,8 @@ pub enum Atom {
     SourceNotTarget,
     TargetWounded,
     DrawPhaseSkipped,
+    AnyHandEmpty,
+    XinfuZhanjiPlayDraw,
 }
 
 /// OR 组，组内 AND。
@@ -260,6 +262,28 @@ fn compile_named_tail(mut groups: Vec<Vec<Clause>>, is_target_domain: bool) -> O
 pub fn compile_named(name: &str) -> Option<NamedProgram> {
     if name == "always" || name.is_empty() {
         return None;
+    }
+    if let Some(atom) = match name {
+        "owner_is_target_any_alive_wounded" => Some(Atom::OtherWounded),
+        "owner_is_target_any_alive_hand_empty" => Some(Atom::AnyHandEmpty),
+        "owner_draws_during_own_play_not_self" => Some(Atom::XinfuZhanjiPlayDraw),
+        _ => None,
+    } {
+        return Some(NamedProgram {
+            groups: vec![vec![
+                Clause {
+                    neg: false,
+                    atom: Atom::EvPlayer,
+                },
+                Clause {
+                    neg: false,
+                    atom: Atom::OwnerAlive,
+                },
+                Clause { neg: false, atom },
+            ]],
+            consume: Vec::new(),
+            count_hits: false,
+        });
     }
     if !name.starts_with("owner") && !vocabulary_extra(name) {
         return None;

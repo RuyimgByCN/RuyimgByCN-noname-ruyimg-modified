@@ -394,8 +394,10 @@ impl VmTargetFilter {
             return false;
         }
         if self.can_compare
-            && tp.hand.is_empty()
-            && !has_txyonglve_ready_kernel(state, catalog, target)
+            && ((tp.hand.is_empty() && !has_txyonglve_ready_kernel(state, catalog, target))
+                || !crate::rvm_bridge::modifiers::d34_l11_mods_vm_c::can_compare_target(
+                    state, catalog, target,
+                ))
         {
             return false;
         }

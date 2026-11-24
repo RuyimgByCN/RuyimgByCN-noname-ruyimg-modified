@@ -71,12 +71,6 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                     // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
                     // begin_draw 同口径逐项相加（有符号），执行入口统一 max(0)。
                     pending += host_pending_adjust(ctx, player);
-                    pending = crate::rvm_bridge::modifiers::eval_draw_count(
-                        ctx.core,
-                        ctx.catalog,
-                        player,
-                        pending,
-                    );
                     if let Some(bonus) = ctx
                         .core
                         .vm_aux
@@ -86,6 +80,12 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                         pending += bonus as i32;
                     }
                     if !num_fixed {
+                        pending = crate::rvm_bridge::modifiers::eval_draw_count(
+                            ctx.core,
+                            ctx.catalog,
+                            player,
+                            pending,
+                        );
                         pending = crate::rvm_bridge::modifiers::eval_optional_draw_count(
                             ctx.core,
                             ctx.catalog,
@@ -441,7 +441,7 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         return Flow::Done;
                     }
                 }
-                let from_bottom = nearest_draw_phase(ctx, self.root).is_some()
+                let from_bottom = (nearest_draw_phase(ctx, self.root).is_some()
                     && ctx
                         .core
                         .vm_aux
@@ -449,7 +449,12 @@ impl crate::catalog::SkillMachine for DrawMachine {
                         .get(&(player, "draw_phase_bottom".to_string()))
                         .copied()
                         .unwrap_or(0)
-                        > 0;
+                        > 0)
+                    || crate::rvm_bridge::modifiers::d34_l11_mods_vm_c::nzry_cunmu_draws_from_bottom(
+                        ctx.core,
+                        ctx.catalog,
+                        player,
+                    );
                 if held_cards.is_empty() && !from_bottom {
                     crate::kernel::elo_on_draw_begin(ctx.core, ctx.catalog, player, requested);
                     crate::kernel::l25_haoyunlai_on_draw_begin(ctx.core, ctx.catalog, player);
@@ -579,6 +584,22 @@ impl crate::catalog::SkillMachine for GainMachine {
                 }
                 // 事件帧＋日志双发（与旧 draw_cards 同面：mbqianlong 等
                 // CardsDrawn 触发面依赖事件帧而非日志）。
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(recipient, format!("xinfu_zhanji_draw_id:{draw}")))
+                    .is_some()
+                {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((recipient, "vm_xinfu_zhanji_self_draw".to_string()), 1);
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((recipient, format!("xinfu_zhanji_clear_draw:{draw}")), 1);
+                }
                 ctx.emit(EventData::CardsDrawn {
                     player: recipient,
                     cards: eligible.clone(),
@@ -589,7 +610,21 @@ impl crate::catalog::SkillMachine for GainMachine {
                 });
                 progress = GP::After;
             }
-            GP::After => progress = GP::Done,
+            GP::After => {
+                if ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(recipient, format!("xinfu_zhanji_clear_draw:{draw}")))
+                    .is_some()
+                {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(recipient, "vm_xinfu_zhanji_self_draw".to_string()));
+                }
+                progress = GP::Done;
+            }
             GP::Done => return Flow::Done,
         }
         ctx.res.frame_mut(self.root).unwrap().data = EventData::DrawGain {

@@ -84,6 +84,46 @@ impl Engine {
                             &mut dedup,
                         );
                     }
+                } else if matches!(
+                    choice.spec.prompt,
+                    "shelie:pick_card" | "gnjinfan:choose_cards"
+                ) {
+                    let mut seen_suits = 0u8;
+                    let mut sel = Vec::new();
+                    for &opt in &choice.spec.options {
+                        if let crate::choice::ChoiceOption::Card(cid) = opt {
+                            let bit = match self.catalog().effective_card_suit(
+                                self.state_core(),
+                                seat,
+                                cid,
+                            ) {
+                                crate::catalog::Suit::Spade => 1 << 0,
+                                crate::catalog::Suit::Heart => 1 << 1,
+                                crate::catalog::Suit::Club => 1 << 2,
+                                crate::catalog::Suit::Diamond => 1 << 3,
+                            };
+                            if (seen_suits & bit) == 0 {
+                                seen_suits |= bit;
+                                sel.push(opt);
+                                if sel.len() >= choice.spec.max {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if sel.len() >= choice.spec.min && sel.len() <= choice.spec.max && !sel.is_empty()
+                    {
+                        push_action(
+                            self,
+                            seat,
+                            GameAction::Answer {
+                                choice_id: choice.id,
+                                selection: sel,
+                            },
+                            &mut out,
+                            &mut dedup,
+                        );
+                    }
                 } else if choice.spec.min >= 2 {
                     let sel: Vec<crate::choice::ChoiceOption> = choice
                         .spec
@@ -149,6 +189,18 @@ impl Engine {
 
             // ③ 出牌：逐手牌（及可 view-as 转化的装备牌）× 目标组合（自目标/无目标 + 单目标 + 双目标）
             let mut hand: Vec<crate::ids::CardId> = self.debug_hand(seat);
+            if let Some(jf) = self
+                .state_core()
+                .vm_aux
+                .piles
+                .get(&(seat, "gnjinfan".to_string()))
+            {
+                for &c in jf {
+                    if !hand.contains(&c) {
+                        hand.push(c);
+                    }
+                }
+            }
             for eq in self
                 .catalog()
                 .player_vm_view_as_extra_cards(self.state_core(), seat, true, None)
@@ -529,7 +581,6 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                 CardKind::Jiedao => {
                     targets.len() != 2
                         || targets[0] == seat
-                        || targets[1] == seat
                         || targets[0] == targets[1]
                 }
                 _ => false,

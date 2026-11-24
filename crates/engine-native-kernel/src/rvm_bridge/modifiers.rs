@@ -650,6 +650,7 @@ pub mod d34_l11_buff_mods;
 pub mod d34_l11_npc_mods;
 pub mod d34_l11_mods_npc_b;
 pub mod d34_l11_mods_npc_a;
+pub mod d34_l11_mods_vm_c;
 pub mod d34_l28_mods;
 pub mod d34_u05_b1_mods;
 pub mod d34_q4_boss_mods;

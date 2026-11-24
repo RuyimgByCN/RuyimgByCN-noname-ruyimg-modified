@@ -86,6 +86,12 @@ pub(crate) fn on_cards_to_discard_chengye(
     from_use_card: bool,
 ) {
     super::super::u01_fixes_3::on_cards_to_discard_u01_3(ctx);
+    crate::content::host::step::l11_vm_fix_c::on_cards_to_discard_l11_vm_c(
+        ctx,
+        actor,
+        cards,
+        from_use_card,
+    );
     if cards.is_empty() {
         return;
     }

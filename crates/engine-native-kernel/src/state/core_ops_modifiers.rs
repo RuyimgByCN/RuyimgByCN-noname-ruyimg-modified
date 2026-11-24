@@ -741,7 +741,7 @@ impl GameStateCore {
         //——覆盖基数；星体改造等 maxHandcard 修饰仍叠加）
         let base = if catalog
             .skill_by_name("reyingzi")
-            .map(|d| self.has_skill(p, d))
+            .map(|d| self.has_skill(p, d) && !catalog.is_chanyuan_sealed(self, p))
             .unwrap_or(false)
         {
             self.player(p).max_hp as usize
@@ -752,7 +752,9 @@ impl GameStateCore {
         let base = self
             .skills
             .iter()
-            .filter(|((owner, _), inst)| *owner == p && inst.enabled)
+            .filter(|((owner, def), inst)| {
+                *owner == p && inst.enabled && !catalog.is_rechanyuan_sealed_def(self, p, *def)
+            })
             .find_map(|((_, def), _)| {
                 let b = &catalog.skills[*def as usize].behavior;
                 b.hand_limit_base(self, p).or_else(|| {

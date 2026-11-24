@@ -172,6 +172,7 @@ pub fn apply_general_assembly(
                 rounds: 0,
             },
         );
+        (catalog.hooks.on_skill_granted)(state, catalog, player, def);
         if skill == "ssr_luoyi" {
             let _ = crate::kernel::discard_armor_for_ssr_luoyi(state, catalog, player);
         }

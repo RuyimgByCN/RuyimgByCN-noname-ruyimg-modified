@@ -117,7 +117,11 @@ pub(in crate::content::host) fn try_l11_card_intrinsic(
         )
     } else {
         let card = u.card?;
-        if u.use_as.is_some() {
+        let allow_l11c_huogong = u.use_as == Some(CardKind::Linghunzhihuo)
+            && flag(ctx.core, owner, &format!("l11c_huogong_use:{card}")) > 0;
+        if allow_l11c_huogong {
+            set_flag(ctx.core, owner, &format!("l11c_huogong_use:{card}"), 0);
+        } else if u.use_as.is_some() {
             return None;
         }
         crate::content::host::intrinsic::base_card_key(

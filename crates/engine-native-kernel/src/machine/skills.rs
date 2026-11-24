@@ -39,6 +39,7 @@ impl Ctx<'_> {
                 }
             }
             crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
+            (self.catalog.hooks.on_skill_granted)(self.core, self.catalog, key.0, key.1);
         }
         old
     }

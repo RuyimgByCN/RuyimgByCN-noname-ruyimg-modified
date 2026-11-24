@@ -420,6 +420,15 @@ pub(super) fn dying_tao_cards(
         p.hand
             .iter()
             .copied()
+            .chain(
+                ctx.core
+                    .vm_aux
+                    .piles
+                    .get(&(responder, "gnjinfan".to_string()))
+                    .into_iter()
+                    .flatten()
+                    .copied(),
+            )
             .filter(|&c| is_tao_like(ctx, responder, c, dying))
             .collect()
     };
@@ -524,6 +533,14 @@ pub fn response_kind_cards_core(
         p.hand
             .iter()
             .copied()
+            .chain(
+                core.vm_aux
+                    .piles
+                    .get(&(responder, "gnjinfan".to_string()))
+                    .into_iter()
+                    .flatten()
+                    .copied(),
+            )
             .filter(|&c| {
                 if is_gw_dudayuanshuai2_locked(core, catalog, responder, c) {
                     return false;
@@ -680,6 +697,17 @@ pub fn discard_response_card(
         return;
     }
     if ctx.core.player(player).hand.contains(&card) {
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .contains_key(&(player, format!("l11c_twkujian_card:{card}")))
+        {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, format!("l11c_twkujian_use_resp:{card}")), 1);
+        }
         ctx.discard_from_hand(player, card);
     } else if ctx.core.player(player).equips.contains(&card) {
         ctx.core.player_mut(player).equips.retain(|x| *x != card);
@@ -695,23 +723,42 @@ pub fn discard_response_card(
             cards: vec![card],
             origins: vec![crate::event::LostOrigin::Equip],
         });
-    } else if ctx
-        .core
-        .vm_aux
-        .piles
-        .iter_mut()
-        .filter(|((owner, _), _)| *owner == player)
-        .any(|(_, pile)| {
-            let len_before = pile.len();
-            pile.retain(|&x| x != card);
-            pile.len() != len_before
-        })
-    {
-        ctx.to_discard(card);
-        ctx.log(LogEvent::CardDiscarded {
-            player,
-            cards: vec![card],
-        });
+    } else if let Some(lost_from_gnjinfan) = {
+        let mut hit = None;
+        for ((owner, key), pile) in ctx.core.vm_aux.piles.iter_mut() {
+            if *owner == player {
+                let len_before = pile.len();
+                pile.retain(|&x| x != card);
+                if pile.len() != len_before {
+                    hit = Some(key == "gnjinfan");
+                    break;
+                }
+            }
+        }
+        hit
+    } {
+        if lost_from_gnjinfan {
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((player, format!("l11c_gnjinfan_lost:{card}")), 1);
+            ctx.to_discard(card);
+            ctx.log(LogEvent::CardDiscarded {
+                player,
+                cards: vec![card],
+            });
+            ctx.emit(EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Hand],
+            });
+        } else {
+            ctx.to_discard(card);
+            ctx.log(LogEvent::CardDiscarded {
+                player,
+                cards: vec![card],
+            });
+        }
     } else {
         ctx.core.table.retain(|x| *x != card);
         ctx.to_discard(card);

@@ -149,9 +149,7 @@ fn l11_b2_skills_e_nangce_duanzui_yingyang_qianxi() {
     let _ = place_kind_rank(&mut e_yy, 1, CardKind::Sha, 7);
     e_yy.debug_set_turn(0, Phase::Draw, 1);
     let _ = next_phase(&mut e_yy); // -> Play triggers qiaoshui!
-    let c_qs_opt = expect_pending(&e_yy, "trigger_confirm");
-    let _ = answer(&mut e_yy, &c_qs_opt, vec![ChoiceOption::Confirm]);
-    let c_qs_t = expect_pending(&e_yy, "rvm_choice");
+    let c_qs_t = expect_pending(&e_yy, "qiaoshui:target");
     let _ = answer(&mut e_yy, &c_qs_t, vec![ChoiceOption::Player(1)]);
     // Single-card hands auto-pick into Pindian -> txyingyang:choose_mode (+3 makes 5+3=8 > 7 win!).
     let c_yy = expect_pending(&e_yy, "txyingyang:choose_mode");

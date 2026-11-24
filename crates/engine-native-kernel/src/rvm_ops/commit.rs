@@ -95,6 +95,13 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             // R05（C 批）：VM 摸牌效果走真实 R 帧（后续步不读所抽牌；
             // 需要结果的 VM 技能经后续查询原语读取）。
             if let Some(p) = seat_of(player, seats) {
+                if executing == "xinfu_zhanji" && count > 0 {
+                    let next_id = ctx.res.next_event_id;
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .insert((p, format!("xinfu_zhanji_draw_id:{next_id}")), 1);
+                }
                 ctx.start_draw(p, count);
             }
         }
@@ -338,16 +345,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
         }
         EffectRequest::RemoveSkill { skill } => {
             if let Some(def) = resolve_skill_def(ctx.catalog, skill.raw()) {
-                let owners: Vec<PlayerId> = ctx
-                    .core
-                    .skills
-                    .keys()
-                    .filter(|(_, d)| *d == def)
-                    .map(|(o, _)| *o)
-                    .collect();
-                for owner in owners {
-                    ctx.remove_skill(owner, def);
-                }
+                ctx.remove_skill(owner, def);
             }
         }
         EffectRequest::GainTopCardToSkillPile { player, .. } => {

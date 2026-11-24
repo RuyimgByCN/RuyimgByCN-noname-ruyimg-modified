@@ -1,5 +1,9 @@
 # G0 来源清单与裁决 34 逐项上游台账（37 来源）
 
+## 2026-11-25 Batch P3-E3（L11 VM Fix C +84→320/320 武将与 765/936，全局 4,248/176/0）更新
+
+- **核验与升级**：基线 `764eef2a63027fec4f7cbc47d6a97892571e2b65`（Batch `P3-E2` CI Run `45411044047` Attempt 4 `10/10 success`）；合入 `swarm/p3-l11-vm-fix-c`（Round 2 终提交 `381f175fa71424a73c8693fc395f1c89175ca8b2`，`verifier-l11` `#309 APPROVE`），将 `HostBehavior::L11VmFixC` 重编号至 **`1394`**（保留 `1389..=1393`，`ALL=707`），接入 `42+7` 技宿主闭环、五重 VM 剥离及跨批内核/出牌/AI/测试协同，经核对 `taixu_general_profiles.rs` 与 `extension_character.js` 后将全部剩余 **`84`** 名 `L11:generals:*` 升为 `已复核等价`（`L11:generals` **`320 / 0 / 0`**、`L11` **`765 / 171 / 0`**；严格仅留 `171` 项 `L11:modes:*` 与 `5` 项冻结边界）。全局现 **`4,248 / 176 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[Batch P3-E3 证据摘要](../../operations/evidence/2026-11-25-p3-e3/README.md) 与 [inventory_status.json](inventory_status.json)。
+
 ## 2026-11-24 Batch P3-E2（L11 VM Fix B +18→681/936，全局 4,164/260/0）更新
 
 - **核验与升级**：基线 `835347f53e14c4d17cd9b1d5c5b55816a29909bb`（Batch `P3-E1` CI Run `45395404971` Attempt 1 `10/10 success`）；合入 `swarm/p3-l11-vm-fix-b`（Round 2 终提交 `7a104dc04a74a933a8a96f2ffa408791afa8d132`，`verifier-u05-a` `#300 APPROVE`），将 `HostBehavior::L11VmFixB` 重编号至 **`1393`**（保留 `1389..=1392`，`ALL=706`），经 `taixu_pack_attach.rs` 绑定 `34+13` 技与 `4` 张 `tiaojiyanmei*` `off_deck` 牌（保持 `rebiyue` 走 VM）、去重并叠加 `d34_l11_mods_damage.rs`/`d34_l11_mods_vm_b.rs` 并适配 `part3_phase_save.rs` `off_deck` 断言，将 `#300` 核准之 **`18`** 名洁净 `L11:generals:*` 升为 `已复核等价`（`L11` **`681 / 255 / 0`**；保留 `txhj_mangyachang`/`txhj_wujiaoxinmo`/阻塞 `84` 名武将、`171` 模式节点及 `5` 项冻结项）。全局现 **`4,164 / 260 / 0`**（缺失 `0`，整包 8 维签字仍 **`0/37`**，`333/107/5/759/8` 与 14 条 golden 哈希不变）。详见 [L11-太虚幻境.md](L11-太虚幻境.md)、[Batch P3-E2 证据摘要](../../operations/evidence/2026-11-24-p3-e2/README.md) 与 [inventory_status.json](inventory_status.json)。

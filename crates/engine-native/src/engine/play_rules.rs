@@ -137,8 +137,15 @@ pub(super) fn common_play_validation(
             || catalog
                 .skill_by_name("mizhilianou")
                 .is_some_and(|d| core.has_skill(actor, d)));
+    let in_gnjinfan = !in_hand
+        && core
+            .vm_aux
+            .piles
+            .get(&(actor, "gnjinfan".to_string()))
+            .is_some_and(|p| p.contains(&card));
     let in_equip_va = !in_hand
-        && (has_mizhilianou_equip_heart
+        && (in_gnjinfan
+            || has_mizhilianou_equip_heart
             || catalog
                 .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
                 .contains(&card)
@@ -219,7 +226,12 @@ pub(super) fn play_kind(
     let sealed = catalog.is_tieji_sealed(core, actor)
         || catalog.is_xj_fengyin_sealed(core, actor)
         || (core.player(actor).hp <= 1 && catalog.has_rechanyuan(core, actor));
-    if !core.player(actor).hand.contains(&card) {
+    let in_gnjinfan_card = core
+        .vm_aux
+        .piles
+        .get(&(actor, "gnjinfan".to_string()))
+        .is_some_and(|p| p.contains(&card));
+    if !core.player(actor).hand.contains(&card) && !in_gnjinfan_card {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             if spec.skill_name != "xinfu_limu" {
                 return (spec.as_kind, false);
@@ -524,16 +536,39 @@ pub(super) fn play_kind(
         if crate::kernel::is_ssr_luoyi_trick_to_duel(core, catalog, actor, card) {
             kind = CardKind::Duel;
         } else if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
+            let natural_sha_usable = !kind.is_sha_like()
+                || (!targets.is_empty()
+                    && super::play_sha::eval_play_phase_sha_quota(
+                        core, catalog, actor, card, targets, kind,
+                    )
+                    .is_ok_and(|q| {
+                        targets.iter().all(|&t| {
+                            super::play_sha::sha_target_in_range(
+                                core, catalog, actor, t, Some(card), kind, q.sha_nature, None,
+                            )
+                        })
+                    }));
+            let protect_natural_play = matches!(
+                spec.skill_name.as_str(),
+                "duanliang" | "jiuchi" | "new_rewusheng" | "xiaoxi_hansui" | "zymoucheng"
+            ) && card_naturally_accepts_play_targets(
+                kind,
+                targets,
+                core.player(actor).hand.contains(&card),
+            ) && (spec.skill_name != "duanliang" || natural_sha_usable);
             if !matches!(
                 spec.skill_name.as_str(),
                 "xinfu_limu" | "kyou_zhidian" | "dclbjiuxian" | "olkanpo"
-            ) && ((kind != CardKind::Sha
-                && kind != CardKind::Le
-                && !(kind == CardKind::Tao && targets.is_empty()))
+            ) && !protect_natural_play
+                && ((kind != CardKind::Sha
+                    && kind != CardKind::Le
+                    && !(kind == CardKind::Tao && targets.is_empty()))
                     || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
                     || (spec.as_kind.is_sha_like() && !targets.is_empty())
                     || (targets.is_empty() && kind != CardKind::Tao)
-                    || (kind == CardKind::Sha && core.turn.sha_used_play_phase))
+                    || (kind == CardKind::Sha && !natural_sha_usable)
+                    || (matches!(spec.skill_name.as_str(), "duanliang" | "zymoucheng")
+                        && !protect_natural_play))
             {
                 kind = spec.as_kind;
             }
@@ -542,10 +577,45 @@ pub(super) fn play_kind(
     (kind, mark_mutoumianju)
 }
 
+fn card_naturally_accepts_play_targets(
+    kind: CardKind,
+    targets: &[PlayerId],
+    in_hand: bool,
+) -> bool {
+    if targets.is_empty() {
+        (in_hand && kind.is_equip())
+            || matches!(
+                kind,
+                CardKind::Tao
+                    | CardKind::Jiu
+                    | CardKind::Wuzhong
+                    | CardKind::Taoyuan
+                    | CardKind::Wugu
+                    | CardKind::SavageAttack
+                    | CardKind::ArcheryAttack
+                    | CardKind::ShanDian
+            )
+    } else if targets.len() == 1 {
+        kind.is_sha_like()
+            || matches!(
+                kind,
+                CardKind::Dismantle
+                    | CardKind::Snatch
+                    | CardKind::Duel
+                    | CardKind::Linghunzhihuo
+                    | CardKind::Bing
+                    | CardKind::Chain
+                    | CardKind::Le
+            )
+    } else {
+        matches!(kind, CardKind::Jiedao | CardKind::Chain)
+    }
+}
+
 /// 立牧（`xinfu_limu`，sp/skill.js:49243）：判定区有牌且未封技时，对攻击范围内的角色用牌无距离/次数限制。
 pub(super) fn xinfu_limu_in_range(
     core: &GameStateCore,
-    catalog: &SharedCatalog,
+    catalog: &crate::catalog::Catalog,
     from: PlayerId,
     target: PlayerId,
 ) -> bool {

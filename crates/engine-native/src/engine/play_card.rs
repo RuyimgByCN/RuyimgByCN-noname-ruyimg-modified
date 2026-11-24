@@ -596,7 +596,6 @@ pub(super) fn play_card(
                     }
                     let (holder, victim) = (targets[0], targets[1]);
                     if holder == core.turn.current
-                        || victim == core.turn.current
                         || holder == victim
                         || !core.player(holder).alive
                         || !core.player(victim).alive

@@ -216,6 +216,7 @@ mod swd_u05_7d_fixes;
 pub(super) mod swd_u05_7d_fixes_cards;
 mod swd_u05_7d_fixes_combat;
 pub(super) mod l11_npc_b;
+pub(super) mod l11_vm_fix_c;
 
 impl HostMachine {
     pub(super) fn step_behavior(&mut self, ctx: &mut Ctx<'_>) -> Flow {
@@ -1398,6 +1399,7 @@ impl HostMachine {
             | HostBehavior::SwdMoyu
             | HostBehavior::SwdU05_7dSub => swd_u05_7d::step_swd_u05_7d(self, ctx),
             HostBehavior::L11CrossNpcB => l11_npc_b::handle_l11_npc_b(self, ctx),
+            HostBehavior::L11VmFixC => l11_vm_fix_c::handle_l11_vm_c(self, ctx),
         }
     }
 }

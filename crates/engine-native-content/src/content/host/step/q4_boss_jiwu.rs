@@ -214,6 +214,11 @@ pub(crate) fn retieji_sha_begin(
     let Some(def) = ctx.catalog.skill_by_name("retieji") else {
         return false;
     };
+    if ctx.catalog.skills[def as usize].behavior.as_host_behavior()
+        != Some(HostBehavior::Q4BossPlaySkill)
+    {
+        return false;
+    }
     if !ctx.core.has_skill(source, def)
         || ctx.catalog.is_tieji_sealed(ctx.core, source)
         || ctx

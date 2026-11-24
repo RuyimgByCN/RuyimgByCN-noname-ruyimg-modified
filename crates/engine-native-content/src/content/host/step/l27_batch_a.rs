@@ -30,8 +30,14 @@ use crate::state::GameStateCore;
 
 #[path = "l27_batch_a_asks.rs"]
 mod l27_batch_a_asks;
+#[path = "l27_batch_a_taoluan.rs"]
+mod l27_batch_a_taoluan;
 pub(in crate::content::host) use l27_batch_a_asks::ask_l27_batch_a;
 pub(super) use l27_batch_a_asks::wait_ask;
+pub(in crate::content::host) use l27_batch_a_taoluan::on_card_use_after_taoluan;
+pub(in crate::content::host) use l27_batch_a_taoluan::{
+    taoluan_dying_respond_options, try_activate_taoluan_dying,
+};
 
 pub(super) const ASK_REGUSHE_TARGETS: u32 = 10;
 pub(super) const ASK_REGUSHE_PINDIAN_CARD: u32 = 11;
@@ -45,6 +51,7 @@ pub(super) const ASK_TAOLUAN_CARD: u32 = 40;
 pub(super) const ASK_TAOLUAN_VIRTUAL: u32 = 41;
 pub(super) const ASK_TAOLUAN_HELPER: u32 = 42;
 pub(super) const ASK_TAOLUAN_HELPER_GIVE: u32 = 43;
+pub(super) const ASK_TAOLUAN_TARGETS: u32 = 44;
 pub(super) const ASK_SHOUXI_DECLARE: u32 = 50;
 pub(super) const ASK_SHOUXI_ATTACKER_DISCARD: u32 = 51;
 pub(super) const ASK_SHOUXI_ATTACKER_GAIN: u32 = 52;
@@ -82,7 +89,7 @@ pub(super) const JINGHE_SKILL_POOL: [&str; 8] = [
     "xianshou",
 ];
 
-pub(super) const TAOLUAN_KINDS: [CardKind; 12] = [
+pub(super) const TAOLUAN_KINDS: [CardKind; 14] = [
     CardKind::Sha,
     CardKind::Tao,
     CardKind::Jiu,
@@ -95,6 +102,8 @@ pub(super) const TAOLUAN_KINDS: [CardKind; 12] = [
     CardKind::Taoyuan,
     CardKind::Wugu,
     CardKind::Chain,
+    CardKind::Linghunzhihuo,
+    CardKind::Jiedao,
 ];
 
 pub(super) const SHOUXI_KINDS: [CardKind; 15] = [
@@ -414,10 +423,10 @@ pub(in crate::content::host) fn filter_l27_batch_a(
         "taoluan" => matches!(
             event,
             EventData::Phase {
-                player,
                 phase: Phase::End,
-                begin: false
-            } if *player == owner && flag(ctx.state, owner, "taoluan_disabled_turn") > 0
+                begin: false,
+                ..
+            } if flag(ctx.state, owner, "taoluan_disabled_turn") > 0
         ),
         "shouxi" => match event {
             EventData::CardUsed(u) => {
@@ -539,8 +548,8 @@ pub(in crate::content::host) fn activate_l27_batch_a(
         "taoluan" => {
             !ctx.state.player(owner).dying
                 && flag(ctx.state, owner, "taoluan_disabled_turn") == 0
-                && !hand_and_equips(ctx.state, owner).is_empty()
-                && (flag(ctx.state, owner, "taoluan_used_mask") & 0xFFF) != 0xFFF
+                && !l27_batch_a_taoluan::taoluan_hes_cards(ctx.state, owner).is_empty()
+                && (flag(ctx.state, owner, "taoluan_used_mask") & 0x3FFF) != 0x3FFF
                 && !alive_others(ctx.state, owner).is_empty()
         }
         "qimou" => flag(ctx.state, owner, "qimou_used") == 0 && ctx.state.player(owner).hp > 0,
@@ -648,7 +657,7 @@ pub(in crate::content::host) fn handle_l27_batch_a(m: &mut HostMachine, ctx: &mu
         "clandianzhan" => super::l27_fixes::step_clandianzhan_fix(m, ctx),
         "rehuashen" => step_rehuashen(m, ctx),
         "rexinsheng" => step_rexinsheng(m, ctx),
-        "taoluan" => step_taoluan(m, ctx),
+        "taoluan" => l27_batch_a_taoluan::step_taoluan(m, ctx),
         "shouxi" => l27_batch_a_asks::step_shouxi(m, ctx),
         "dinghan" => l27_batch_a_asks::step_dinghan(m, ctx),
         "quanji" => l27_batch_a_asks::step_quanji(m, ctx),
@@ -937,84 +946,4 @@ fn step_rexinsheng(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
     set_flag(ctx.core, owner, "rehuashen_pool_count", pool);
     set_flag(ctx.core, owner, "rehuashen", pool);
     Flow::Done
-}
-
-fn step_taoluan(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flow {
-    let owner = m.owner;
-    match m.stage {
-        HostStage::Act => {
-            if m.card == Some(16) {
-                set_flag(ctx.core, owner, "taoluan_disabled_turn", 0);
-                return Flow::Done;
-            }
-            wait_ask(m, ctx, HostStage::SelectCard, ASK_TAOLUAN_CARD)
-        }
-        HostStage::SelectCard => {
-            let Some(ChoiceOption::Card(c)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            m.card = Some(c);
-            wait_ask(m, ctx, HostStage::SelectNature, ASK_TAOLUAN_VIRTUAL)
-        }
-        HostStage::SelectNature => {
-            let Some(ChoiceOption::Tag(tag)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            let bit = (tag as usize).min(TAOLUAN_KINDS.len() - 1);
-            let mask = flag(ctx.core, owner, "taoluan_used_mask") | (1u32 << bit);
-            set_flag(ctx.core, owner, "taoluan_used_mask", mask);
-            set_flag(ctx.core, owner, "taoluan_last_kind", (bit as u32) + 1);
-            if let Some(c) = m.card {
-                discard_cards(ctx, owner, &[c]);
-            }
-            match TAOLUAN_KINDS[bit] {
-                CardKind::Tao if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 => {
-                    ctx.recover(owner, 1, None);
-                }
-                CardKind::Jiu => {
-                    ctx.core.turn.jiu_active = true;
-                }
-                CardKind::Wuzhong => {
-                    ctx.start_draw(owner, 2);
-                }
-                _ => {}
-            }
-            m.cards = vec![bit as u32];
-            wait_ask(m, ctx, HostStage::TargetChoice, ASK_TAOLUAN_HELPER)
-        }
-        HostStage::TargetChoice => {
-            let Some(ChoiceOption::Player(helper)) = ctx.answer().first().copied() else {
-                return Flow::Done;
-            };
-            m.target = Some(helper);
-            if hand_and_equips(ctx.core, helper).is_empty() {
-                set_flag(ctx.core, owner, "taoluan_disabled_turn", 1);
-                ctx.emit(EventData::LoseHp {
-                    player: owner,
-                    amount: 1,
-                });
-                set_flag(ctx.core, owner, "l27_ask_id", 0);
-                return Flow::Done;
-            }
-            wait_ask(m, ctx, HostStage::CardsAsk, ASK_TAOLUAN_HELPER_GIVE)
-        }
-        HostStage::CardsAsk => {
-            let helper = m.target.unwrap_or(owner);
-            match ctx.answer().first().copied() {
-                Some(ChoiceOption::Card(c)) => {
-                    move_cards_to_hand(ctx, helper, owner, &[c]);
-                }
-                _ => {
-                    set_flag(ctx.core, owner, "taoluan_disabled_turn", 1);
-                    ctx.emit(EventData::LoseHp {
-                        player: owner,
-                        amount: 1,
-                    });
-                }
-            }
-            set_flag(ctx.core, owner, "l27_ask_id", 0);
-            Flow::Done
-        }
-        _ => Flow::Done,
-    }
 }

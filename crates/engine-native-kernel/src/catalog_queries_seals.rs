@@ -62,6 +62,25 @@ impl Catalog {
                 .copied()
                 .unwrap_or(0)
                 > 0
+            || core
+                .vm_aux
+                .flags
+                .get(&(p, "l11c_retieji_sealed".to_string()))
+                .copied()
+                .unwrap_or(0)
+                > 0
+            || (core.player(p).hp > 0
+                && core.players.iter().enumerate().any(|(src, pl)| {
+                    src as PlayerId != p
+                        && pl.alive
+                        && core
+                            .vm_aux
+                            .flags
+                            .get(&(src as PlayerId, "non_locked_suppression_source".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                }))
     }
 
     /// Hand-card lock (`position == "h"` cannot use or respond; equips unaffected).

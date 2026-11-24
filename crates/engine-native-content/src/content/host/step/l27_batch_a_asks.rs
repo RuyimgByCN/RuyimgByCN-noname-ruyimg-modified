@@ -87,7 +87,7 @@ fn card_ask(
     )
 }
 
-const CANCELLABLE_ASKS: [u32; 18] = [
+const CANCELLABLE_ASKS: [u32; 19] = [
     ASK_REGUSHE_TARGETS,
     ASK_REGUSHE_TARGET_DISCARD,
     ASK_REGUSHE_CONFIRM_DRAW,
@@ -95,6 +95,7 @@ const CANCELLABLE_ASKS: [u32; 18] = [
     ASK_TAOLUAN_CARD,
     ASK_TAOLUAN_VIRTUAL,
     ASK_TAOLUAN_HELPER_GIVE,
+    ASK_TAOLUAN_TARGETS,
     ASK_SHOUXI_DECLARE,
     ASK_SHOUXI_ATTACKER_DISCARD,
     ASK_SHOUXI_ATTACKER_GAIN,
@@ -146,11 +147,13 @@ fn build_ask(
     ask_id: u32,
     owner: PlayerId,
     target: Option<PlayerId>,
+    targets: &[PlayerId],
+    card: Option<CardId>,
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<(PlayerId, ChoiceSpec)> {
-    let mut built = build_ask_spec(ask_id, owner, target, cards, core, catalog)?;
+    let mut built = build_ask_spec(ask_id, owner, target, targets, card, cards, core, catalog)?;
     built.1.allow_cancel = is_cancellable(ask_id);
     Some(built)
 }
@@ -159,6 +162,8 @@ fn build_ask_spec(
     ask_id: u32,
     owner: PlayerId,
     target: Option<PlayerId>,
+    targets: &[PlayerId],
+    card: Option<CardId>,
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
@@ -192,31 +197,78 @@ fn build_ask_spec(
             tag_ask(owner, "rehuashen:choose_skill", 0..pool)
         }
         ASK_REHUASHEN_ACTION => tag_ask(owner, "rehuashen:choose_action", 0..=2),
-        ASK_TAOLUAN_CARD => {
-            card_ask(owner, "taoluan:choose_card", hand_and_equips(core, owner), 1, 1)
-        }
+        ASK_TAOLUAN_CARD => card_ask(
+            owner,
+            "taoluan:choose_card",
+            l27_batch_a_taoluan::taoluan_hes_cards(core, owner),
+            1,
+            1,
+        ),
         ASK_TAOLUAN_VIRTUAL => {
-            let mask = flag(core, owner, "taoluan_used_mask");
-            let avail: Vec<u8> = (0..TAOLUAN_KINDS.len() as u8)
-                .filter(|&i| (mask & (1u32 << i)) == 0)
-                .collect();
+            let avail = l27_batch_a_taoluan::taoluan_legal_kind_tags(
+                core,
+                catalog,
+                owner,
+                card.unwrap_or(0),
+            );
             tag_ask(owner, "taoluan:choose_virtual", avail)
+        }
+        ASK_TAOLUAN_TARGETS => {
+            let bit = (cards.first().copied().unwrap_or(0) as usize).min(TAOLUAN_KINDS.len() - 1);
+            let kind = TAOLUAN_KINDS[bit];
+            if kind == CardKind::Jiedao {
+                let opts = if let Some(&h) = targets.first() {
+                    alive_all(core, owner)
+                        .into_iter()
+                        .filter(|&v| v != h && core.in_attack_range(catalog, h, v))
+                        .collect()
+                } else {
+                    let mut hs = Vec::new();
+                    for (h, _) in l27_batch_a_taoluan::taoluan_jiedao_pairs(core, catalog, owner) {
+                        if !hs.contains(&h) {
+                            hs.push(h);
+                        }
+                    }
+                    hs
+                };
+                player_ask(owner, "taoluan:choose_targets", opts, 1, 1)
+            } else {
+                let cands = l27_batch_a_taoluan::taoluan_targets_for(
+                    core,
+                    catalog,
+                    owner,
+                    card.unwrap_or(0),
+                    kind,
+                );
+                let max = if kind == CardKind::Chain { cands.len().min(2) } else { 1 };
+                player_ask(owner, "taoluan:choose_targets", cands, 1, max)
+            }
         }
         ASK_TAOLUAN_HELPER => {
             player_ask(owner, "taoluan:choose_helper", alive_others(core, owner), 1, 1)
         }
         ASK_TAOLUAN_HELPER_GIVE => {
             let helper = target.unwrap_or(owner);
-            let virt_idx = cards.first().copied().unwrap_or(0) as usize;
-            let virt_is_basic = virt_idx < 3;
-            let all_he = hand_and_equips(core, helper);
-            let diff_type: Vec<CardId> = all_he
-                .iter()
-                .copied()
-                .filter(|&c| catalog.card_kind(c).is_basic_kind() != virt_is_basic)
-                .collect();
-            let opts = if diff_type.is_empty() { all_he } else { diff_type };
-            card_ask(helper, "taoluan:helper_give", opts, 1, 1)
+            let virt_bit = cards.first().copied().unwrap_or(0) as usize;
+            let virt_kind = l27_batch_a_taoluan::taoluan_kind_by_bit(virt_bit);
+            let diff_type = l27_batch_a_taoluan::taoluan_diff_type_cards(
+                core, catalog, helper, virt_kind,
+            );
+            if diff_type.is_empty() {
+                None
+            } else {
+                Some((
+                    helper,
+                    ChoiceSpec {
+                        kind: ChoiceKind::SelectCards,
+                        prompt: "taoluan:helper_give",
+                        options: diff_type.into_iter().map(ChoiceOption::Card).collect(),
+                        min: 0,
+                        max: 1,
+                        allow_cancel: true,
+                    },
+                ))
+            }
         }
         ASK_SHOUXI_DECLARE => {
             let mask = flag(core, owner, "shouxi_declared_mask");
@@ -336,9 +388,16 @@ pub(in crate::content::host::step) fn wait_ask(
     ask_id: u32,
 ) -> Flow {
     set_flag(ctx.core, m.owner, "l27_ask_id", ask_id);
-    if let Some((observer, spec)) =
-        build_ask(ask_id, m.owner, m.target, &m.cards, ctx.core, ctx.catalog)
-    {
+    if let Some((observer, spec)) = build_ask(
+        ask_id,
+        m.owner,
+        m.target,
+        &m.targets,
+        m.card,
+        &m.cards,
+        ctx.core,
+        ctx.catalog,
+    ) {
         m.stage = stage;
         Flow::WaitChoice { observer, spec }
     } else {
@@ -351,8 +410,8 @@ pub(in crate::content::host) fn ask_l27_batch_a(
     stage: HostStage,
     owner: PlayerId,
     target: Option<PlayerId>,
-    _targets: &[PlayerId],
-    _card: Option<CardId>,
+    targets: &[PlayerId],
+    card: Option<CardId>,
     cards: &[CardId],
     core: &GameStateCore,
     catalog: &Catalog,
@@ -361,7 +420,7 @@ pub(in crate::content::host) fn ask_l27_batch_a(
         return None;
     }
     let ask_id = flag(core, owner, "l27_ask_id");
-    let (observer, spec) = build_ask(ask_id, owner, target, cards, core, catalog)?;
+    let (observer, spec) = build_ask(ask_id, owner, target, targets, card, cards, core, catalog)?;
     Some(crate::snap::ask(
         observer,
         spec.prompt,

@@ -1,5 +1,8 @@
 use super::*;
 
+#[path = "intrinsic_targets.rs"]
+pub(super) mod intrinsic_targets;
+
 /// 帧固有流程机器（`Intrinsic` 阶段启动）。
 pub fn intrinsic_machine(
     ctx: &mut Ctx<'_>,

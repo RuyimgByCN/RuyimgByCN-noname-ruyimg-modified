@@ -759,6 +759,7 @@ impl HostBehavior {
             HostBehavior::L11CrossNpcA => "host:l11_cross_npc_a",
             HostBehavior::L11VmFixA => "host:l11_vm_fix_a",
             HostBehavior::L11VmFixB => "host:l11_vm_fix_b",
+            HostBehavior::L11VmFixC => "host:l11_vm_fix_c",
         }
     }
 }

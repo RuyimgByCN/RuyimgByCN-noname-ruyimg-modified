@@ -396,6 +396,7 @@ pub(super) fn step_xinfu_xionghuo(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flo
             if m.card == Some(16) {
                 let p = m.target.unwrap_or(owner);
                 set_flag(ctx.core, p, "xinfu_xionghuo_no_sha_turn", 0);
+                set_flag(ctx.core, p, "xinfu_xionghuo_disable_src", 0);
                 set_flag(ctx.core, p, "xinfu_xionghuo_hand_minus", 0);
                 return Flow::Done;
             }
@@ -413,10 +414,16 @@ pub(super) fn step_xinfu_xionghuo(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flo
                 match mode {
                     0 => {
                         set_flag(ctx.core, t, "xinfu_xionghuo_no_sha_turn", 1);
+                        set_flag(
+                            ctx.core,
+                            t,
+                            "xinfu_xionghuo_disable_src",
+                            u32::from(owner) + 1,
+                        );
                         emit_damage(ctx, Some(owner), t, 1, DamageNature::Fire);
                     }
                     1 => {
-                        set_flag(ctx.core, t, "xinfu_xionghuo_hand_minus", 2);
+                        set_flag(ctx.core, t, "xinfu_xionghuo_hand_minus", 1);
                         ctx.emit(EventData::LoseHp {
                             player: t,
                             amount: 1,
@@ -424,11 +431,15 @@ pub(super) fn step_xinfu_xionghuo(m: &mut HostMachine, ctx: &mut Ctx<'_>) -> Flo
                     }
                     _ => {
                         let mut steal = Vec::new();
-                        if let Some(&hc) = ctx.core.player(t).hand.first() {
-                            steal.push(hc);
+                        let hand_len = ctx.core.player(t).hand.len();
+                        if hand_len > 0 {
+                            let idx = ctx.core.rng.gen_range(hand_len as u32) as usize;
+                            steal.push(ctx.core.player(t).hand[idx]);
                         }
-                        if let Some(&ec) = ctx.core.player(t).equips.first() {
-                            steal.push(ec);
+                        let equips_len = ctx.core.player(t).equips.len();
+                        if equips_len > 0 {
+                            let idx = ctx.core.rng.gen_range(equips_len as u32) as usize;
+                            steal.push(ctx.core.player(t).equips[idx]);
                         }
                         move_cards_to_hand(ctx, t, owner, &steal);
                     }
