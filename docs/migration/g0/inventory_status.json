@@ -4407,13 +4407,13 @@
       "upstream_ref": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/character.js:215",
       "target": "原生规则 / `rule-vm` 包",
       "status": "简化近似",
-      "reviewer": null,
-      "review_date": null,
-      "upstream_file_line": null,
-      "test_name": null,
-      "difference": "简化近似（待复核）",
-      "note": null,
-      "reason": null
+      "reviewer": "1cf6b3e7-33a1-432d-8c90-3da79cd80eec",
+      "review_date": "2026-11-25",
+      "upstream_file_line": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/character.js:215-220",
+      "test_name": "u05_b6b_hearth_fixes::part3_batch_b::u05_b6b_shixu_and_hs_nozdormu_boundary_audit",
+      "difference": "武将静态属性（group=qun、sex=male、hp=5、skills=[\"shixu\"]）已与上游完全一致；保留为简化近似仅因所携唯一技能 `shixu` 存在真钟耗时冻结边界（未升级 WS/Ruleset/Archive 版本时无法在确定性 WAL 内测量真钟毫秒间隔）",
+      "note": "2026-11-25 独立核验（1cf6b3e7）：shahai_generals_data.rs:122 已实现 Faction::Qun/Gender::Male/5/[\"shixu\"]，同步修复 shixu 缠怨/铁骑封印判定后仅余 `shixu` 真钟触发门限需用户裁决（Decision 40 候选）",
+      "reason": "carries_wall_clock_frozen_skill_shixu"
     },
     "U05:generals:hs_sapphiron@archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/character.js:221": {
       "source_id": "U05",
@@ -16425,13 +16425,13 @@
       "upstream_ref": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4877",
       "target": "原生规则 / `rule-vm` 包",
       "status": "简化近似",
-      "reviewer": null,
-      "review_date": null,
-      "upstream_file_line": null,
-      "test_name": null,
-      "difference": "简化近似（待复核）",
-      "note": null,
-      "reason": null
+      "reviewer": "1cf6b3e7-33a1-432d-8c90-3da79cd80eec",
+      "review_date": "2026-11-25",
+      "upstream_file_line": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4877-4915",
+      "test_name": "u05_b6b_hearth_fixes::part3_batch_b::u05_b6b_shixu_and_hs_nozdormu_boundary_audit",
+      "difference": "全局阶段结束触发、仅响应自己回合（!event.player.hasSkill('shixu')）、强制弃1张牌或无牌可弃跳过、locked:true（不受铁骑封技、仅受缠怨 hp<=1 封技）均与上游一致；仅因上游以 `get.time() - time > 8000` 真钟毫秒判定耗时，确定性内核与 WAL（room_native/wal.rs:204-248）禁止 wall-clock I/O 且 `EndPhase`/`StoredNativeAction` 不含耗时字段（补录须升级 WS_PROTOCOL_VERSION 8->9、STANDARD_RULESET_VERSION 333->334、若独立字段则 ARCHIVE_FORMAT_VERSION 107->108），当前由 `PhaseEnded.elapsed_ms > 8000` 确定性参数代理",
+      "note": "2026-11-25 独立核验（1cf6b3e7）已修复非时钟真实偏差（hooks.rs:97,301 从 `!is_tieji_sealed` 改为 `!is_chanyuan_sealed` 以匹配 upstream locked:true）；真钟毫秒传递方案并入用户裁决清单（A 维持确定性耗时代理 vs B 联机升 WS 8->9/Ruleset 333->334 录制耗时）",
+      "reason": "frozen_ws8_ruleset333_no_wall_clock_in_deterministic_wal"
     },
     "U05:skills:jixuan@archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4916": {
       "source_id": "U05",

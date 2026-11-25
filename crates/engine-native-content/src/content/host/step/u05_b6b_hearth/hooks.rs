@@ -94,7 +94,7 @@ pub(crate) fn b6b_on_phase_use_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     let shixu_present = (0..ctx.core.players.len() as PlayerId).any(|p| {
         ctx.core.player(p).alive
             && has_skill_b6b(ctx.core, ctx.catalog, p, "shixu")
-            && !ctx.catalog.is_tieji_sealed(ctx.core, p)
+            && !ctx.catalog.is_chanyuan_sealed(ctx.core, p)
     });
     if shixu_present && ms > 3000 {
         set_b6b_flag(ctx.core, player, "hs_shixu_duration", ms);
@@ -298,7 +298,7 @@ pub(crate) fn b6b_on_card_use_after(ctx: &mut Ctx<'_>, u: &CardUseData) {
         let shixu_present = (0..ctx.core.players.len() as PlayerId).any(|p| {
             ctx.core.player(p).alive
                 && has_skill_b6b(ctx.core, ctx.catalog, p, "shixu")
-                && !ctx.catalog.is_tieji_sealed(ctx.core, p)
+                && !ctx.catalog.is_chanyuan_sealed(ctx.core, p)
         });
         if shixu_present {
             inc_b6b_flag(ctx.core, user, "hs_shixu_actions");

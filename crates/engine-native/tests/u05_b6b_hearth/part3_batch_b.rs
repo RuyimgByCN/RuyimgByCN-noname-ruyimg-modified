@@ -278,3 +278,120 @@ fn u05_b6b_batch_b_stuxi_through_oldmalymowang() {
             .contains("hsmengjing_")
     }));
 }
+
+#[test]
+fn u05_b6b_shixu_and_hs_nozdormu_boundary_audit() {
+    use engine_native::ai::BoundedPlanner;
+    use engine_native::catalog::Faction;
+    use engine_native::content::standard::Gender;
+    use engine_native::RejectReason;
+
+    // 1) `hs_nozdormu` 静态档案核对（character/hearth/character.js:215-220）
+    let mut e_noz = fresh_proto(10_790, &["hs_nozdormu", "hs_jaina"]);
+    let g_noz = e_noz
+        .catalog()
+        .extension_generals
+        .iter()
+        .find(|g| g.name == "hs_nozdormu")
+        .expect("hs_nozdormu in catalog");
+    assert_eq!(g_noz.faction, Faction::Qun);
+    assert_eq!(g_noz.gender, Gender::Male);
+    assert_eq!(g_noz.max_hp, 5);
+    assert_eq!(g_noz.skills, vec!["shixu"]);
+    assert!(has_skill(&e_noz, 0, "shixu"));
+
+    // 2) `<= 3000ms` 负例：出牌阶段用牌 <= 3 次不触发弃牌
+    clear_hand(&mut e_noz, 0);
+    advance_to_phase(&mut e_noz, 0, Phase::Play);
+    for _ in 0..3 {
+        let wz = give_free_base_named(&mut e_noz, 0, "wuzhong");
+        let out = play_card(&mut e_noz, 0, wz, vec![]);
+        assert!(!matches!(out, CommandOutcome::Rejected(_)));
+        drain_auto(&mut e_noz);
+    }
+    advance_to_phase(&mut e_noz, 1, Phase::Play);
+    assert!(e_noz.open_choice().is_none());
+
+    // 3) 自己回合（global: phaseEnd）触发、he 含装备弃置、allow_cancel=false 拒空、floor(6000/3000)=2
+    clear_hand(&mut e_noz, 1);
+    advance_to_phase(&mut e_noz, 0, Phase::Play);
+    clear_hand(&mut e_noz, 0);
+    let eq_armor = give_free_card_kind_suit(&mut e_noz, 0, CardKind::Armor, None);
+    play_card(&mut e_noz, 0, eq_armor, vec![]);
+    drain_auto(&mut e_noz);
+    assert!(e_noz.state_core().player(0).equips.contains(&eq_armor));
+    for _ in 0..6 {
+        let wz = give_free_base_named(&mut e_noz, 0, "wuzhong");
+        let _ = play_card(&mut e_noz, 0, wz, vec![]);
+        drain_auto(&mut e_noz);
+    }
+    // 弃牌阶段保持适量手牌（至少 1 手牌 + 1 装备 -> he >= 2）
+    while e_noz.state_core().player(0).hand.len() > 2 {
+        e_noz.state_core_mut().player_mut(0).hand.pop();
+    }
+    let ch = advance_until_open_prompt(&mut e_noz, "hs_shixu_discard", 8).expect("shixu own turn ask");
+    assert_eq!(ch.observer, 0);
+    assert_eq!(ch.spec.min, 2);
+    assert!(!ch.spec.allow_cancel);
+    assert!(ch.spec.options.contains(&ChoiceOption::Card(eq_armor)));
+    let bad = answer(&mut e_noz, 0, vec![]);
+    assert!(matches!(bad, CommandOutcome::Rejected(RejectReason::InvalidChoice)));
+    let hand_c = ch
+        .spec
+        .options
+        .iter()
+        .copied()
+        .find(|o| *o != ChoiceOption::Card(eq_armor))
+        .expect("hand card option");
+    answer(&mut e_noz, 0, vec![ChoiceOption::Card(eq_armor), hand_c]);
+    drain_auto(&mut e_noz);
+    assert!(!e_noz.state_core().player(0).equips.contains(&eq_armor));
+
+    // 4) 空 he 负例：> 3 次动作但结算时手牌和装备全空，不触发弃牌窗
+    let mut e_empty = fresh_proto(10_791, &["hs_nozdormu", "hs_jaina"]);
+    advance_to_phase(&mut e_empty, 1, Phase::Play);
+    for _ in 0..4 {
+        let wz = give_free_base_named(&mut e_empty, 1, "wuzhong");
+        let _ = play_card(&mut e_empty, 1, wz, vec![]);
+        drain_auto(&mut e_empty);
+    }
+    clear_hand(&mut e_empty, 1);
+    e_empty.state_core_mut().player_mut(1).equips.clear();
+    advance_to_phase(&mut e_empty, 0, Phase::Play);
+    assert!(e_empty.open_choice().is_none());
+
+    // 5) `locked: true` 免受 tieji 非锁定技封印，但受 chanyuan (hp<=1) 封印
+    let mut e_seal = fresh_proto(10_792, &["hs_nozdormu", "hs_jaina"]);
+    e_seal
+        .state_core_mut()
+        .vm_aux
+        .flags
+        .insert((0, "fz_new_tieji_target_sealed".to_string()), 1);
+    advance_to_phase(&mut e_seal, 1, Phase::Play);
+    for _ in 0..4 {
+        let wz = give_free_base_named(&mut e_seal, 1, "wuzhong");
+        let _ = play_card(&mut e_seal, 1, wz, vec![]);
+        drain_auto(&mut e_seal);
+    }
+    let ch_tieji = advance_until_open_prompt(&mut e_seal, "hs_shixu_discard", 8)
+        .expect("locked shixu must still fire under tieji non-locked seal");
+    let planner = BoundedPlanner::new(64);
+    let plan = e_seal.plan_action(ch_tieji.observer, &planner);
+    assert!(matches!(e_seal.apply_plan(&plan), Ok(CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. })));
+
+    // 6) chanyuan (hp <= 1) 封印包括锁定技 shixu
+    let mut e_cy = fresh_proto(10_793, &["hs_nozdormu", "hs_jaina"]);
+    e_cy.state_core_mut()
+        .vm_aux
+        .flags
+        .insert((0, "l10_rechanyuan".to_string()), 1);
+    e_cy.state_core_mut().player_mut(0).hp = 1;
+    advance_to_phase(&mut e_cy, 1, Phase::Play);
+    for _ in 0..4 {
+        let wz = give_free_base_named(&mut e_cy, 1, "wuzhong");
+        let _ = play_card(&mut e_cy, 1, wz, vec![]);
+        drain_auto(&mut e_cy);
+    }
+    advance_to_phase(&mut e_cy, 0, Phase::Play);
+    assert!(e_cy.open_choice().is_none(), "chanyuan at hp<=1 must seal locked shixu");
+}

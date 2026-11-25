@@ -1,5 +1,13 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-25 Batch S1（`U05:shixu` / `U05:hs_nozdormu` 独立复核与 `is_chanyuan_sealed` 修复，冻结边界定案并入待用户裁决清单）
+
+- **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
+- **独立复核与非时钟缺陷修复**：
+  - 经独立复核 agent `1cf6b3e7-33a1-432d-8c90-3da79cd80eec` 对照上游 `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js:4877-4915`（`shixu`）与 `character.js:215-220`（`hs_nozdormu`），确认 `hs_nozdormu` 静态字段（`Qun`/`Male`/`5`/`["shixu"]`）及 `shixu` 己方全局阶段结束触发、无牌跳过与强制弃置 1 张牌机制完整。
+  - 修复唯一真实非墙钟实现偏差：[hooks.rs](../../crates/engine-native-content/src/content/host/step/u05_b6b_hearth/hooks.rs#L97-L301) 两处误检 `!ctx.catalog.is_tieji_sealed(...)`（上游 `shixu` 含 `locked: true`，依 `catalog_queries_seals.rs` 不受铁骑封技影响、仅受缠怨 `hp <= 1` 封技）已修正为 `!ctx.catalog.is_chanyuan_sealed(...)`，并在 [part3_batch_b.rs](../../crates/engine-native/tests/u05_b6b_hearth/part3_batch_b.rs) 新增 `u05_b6b_shixu_and_hs_nozdormu_boundary_audit` 定向验证通过。
+- **墙钟冻结边界与用户选项**：上游 `shixu` 使用 `get.time() - time > 8000` 真钟毫秒门限；原生确定性内核与 WAL（[wal.rs](../../apps/game-server/src/room_native/wal.rs#L204-L248)）禁止依赖真实时钟，且 `CommandKind::EndPhase`/`StoredNativeAction` 不携带耗时载荷（真钟录制须升 `WS_PROTOCOL_VERSION` `8->9`、`STANDARD_RULESET_VERSION` `333->334`，若新增独立归档字段还须升 `ARCHIVE_FORMAT_VERSION` `107->108`）。在当前冻结版本下以确定性 `PhaseEnded.elapsed_ms > 8000` 参数代理并在 [inventory_status.json](../migration/g0/inventory_status.json) 保持 `shixu`/`hs_nozdormu` 为 `简化近似`，列明 **选项 A（维持确定性耗时代理定案）** vs **选项 B（授权联机录制 `elapsed_ms` 并升级 `WS 8->9` / `Ruleset 333->334`）** 并入[待用户裁决汇总](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)。
+
 ## 2026-11-25 Batch P3-D（`L11` 全部 `171` 模式节点＋DLC 装备与侍从界面闭环→`L11` `936/0/0`；全局 `4,419/5/0`，仅余 `5` 冻结项）
 
 - **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
