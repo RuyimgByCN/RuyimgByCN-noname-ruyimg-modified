@@ -9,6 +9,11 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-25 Batch S4（`Wave 3`〔9 源〕正式签署 7/8 ✅ 累计 `22/37` ＋ `Wave 4`〔6 源〕八维预验；整包 8/8 `0/37`）
+
+- **签署与代码测试**：确认 Batch S3 `77a5f2682` 精确提交 CI Run `45603333616` Attempt 1 **`10/10 success`**（`logs-first.zip` `sha256: 88295cc4d4ee80f516aea79ea4ac89f3dbb597383f35caba637501ee4f9af4ba`）并写入 [ci-runs.md](../operations/evidence/ci-runs.md)；在 [签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 正式将 **Wave 3（`L13..L21`）** 上调为仓内 7/8 `✅`（全局 `4,419 / 5 / 0`、整包 8/8 `0/37`、累计仓内 7/8 **`22/37`**）；新增 [wave4.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave4.rs) 覆盖 `Wave 4`（`L22`/`L23`/`L25`/`L26`/`L27`/`L29`，6 源 `336/336` 等价）并经独立复核 `c323960a-a1e4-4c5e-826d-24c93c1b075b` 列出全部尚存边界（待本批 CI 绿后于 Batch S5 签署）。详见 [Batch S4 证据](../operations/evidence/2026-11-25-signoff-s4-wave3-signoff-and-wave4/README.md)。
+- **主线本地实测（2026-11-25）**：`up37_eight_dim_signoff`、`recount_g0.py`、行数门禁、`check_doc_line_refs --strict` 与 `preflight.py` 全过。
+
 ### 2026-11-25 Batch S3（`Wave 2`〔7 源〕正式签署 7/8 ✅ 累计 `13/37` ＋ `Wave 3`〔9 源〕八维预验；整包 8/8 `0/37`）
 
 - **签署与代码测试**：确认 Batch S2 `8caa8da44` 精确提交 CI Run `45588526123`（Attempt 1 已分派 `8/8` 通过 + Attempt 2 `--failed` 重试 **`10/10 success`**，`logs-attempt2.zip` `sha256: 39562f5352e22a9243f1cb7ac9a525931f755b357b9b1359aeff8c5b1127e7a2`）并两行如实写入 [ci-runs.md](../operations/evidence/ci-runs.md)；在 [签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 与 [扩展台账](../migration/upstream-extension-reconstruction.md) 正式将 **Wave 2（`L06`/`L01`/`L02`/`L03` 双包/`L04`/`L05`/`L07`）** 上调为仓内 7/8 `✅`（全局 `4,419 / 5 / 0`、整包 8/8 `0/37`、累计仓内 7/8 **`13/37`**）；新增 [wave3.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave3.rs) 覆盖 `Wave 3`（`L13..L21`，9 源 `365/365` 等价）并经独立复核 `2a8e7b2e-0048-4fdf-913e-d6171f8cdfed` 列出全部尚存边界（待本批 CI 绿后于 Batch S4 签署）。详见 [Batch S3 证据](../operations/evidence/2026-11-25-signoff-s3-wave2-signoff-and-wave3/README.md)。

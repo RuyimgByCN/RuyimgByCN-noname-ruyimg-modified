@@ -352,14 +352,22 @@ pub fn verify_combo_match(label: &str, pkg_dirs: &[&str], seed: u64) {
     let installed = content.import().unwrap();
     assert_eq!(installed.len(), pkg_dirs.len(), "{label}: import count");
 
-    let mut packs = Vec::new();
+    let mut pids = Vec::with_capacity(pkg_dirs.len());
     for dir in pkg_dirs {
         let raw = std::fs::read_to_string(repo_extensions_root().join(dir).join("package.npack.json")).unwrap();
         let pkg = ContentPackage::from_json_bytes(raw.as_bytes()).unwrap();
-        packs.push(content.load_scoped(Some(&pkg.manifest.namespace), &pkg.manifest.package_id).unwrap().pack);
+        pids.push(pkg.manifest.package_id);
     }
-    let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    let mut e = Engine::new_with_extensions(seed, 4, &refs).unwrap();
+    let verified = content.freeze_room_selection(None, &pids).unwrap();
+    let mut e = content_native_loader::start_locked_engine(
+        seed,
+        4,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified,
+    )
+    .unwrap();
+    let initial_hash = e.state_hash();
+    let initial_cards = e.catalog().cards.len();
     let planner = BoundedPlanner::new(64);
     for _ in 0..8 {
         if e.outcome().is_some() {
@@ -383,11 +391,20 @@ pub fn verify_combo_match(label: &str, pkg_dirs: &[&str], seed: u64) {
     ids.sort_unstable();
     ids.dedup();
     assert_eq!(ids.len(), raw_len, "{label}: card ownership conservation");
-    let restored = Engine::restore_with_extensions(&snap, &refs).unwrap();
+    let restored = content_native_loader::restore_locked_engine(&snap, &verified).unwrap();
     assert_eq!(restored.state_hash(), e.state_hash(), "{label}: state_hash");
 
-    // 反向加载序亦不冲突
-    let rev_refs: Vec<&ExtensionPack> = packs.iter().rev().collect();
-    let rev_e = Engine::new_with_extensions(seed, 4, &rev_refs).unwrap();
-    assert_eq!(rev_e.catalog().cards.len(), e.catalog().cards.len(), "{label}: rev card count");
+    // 反向输入列表亦经规范内容锁排序正常建局并保持一致
+    let mut pids_rev = pids.clone();
+    pids_rev.reverse();
+    let verified_rev = content.freeze_room_selection(None, &pids_rev).unwrap();
+    let e_rev = content_native_loader::start_locked_engine(
+        seed,
+        4,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified_rev,
+    )
+    .unwrap();
+    assert_eq!(e_rev.catalog().cards.len(), initial_cards, "{label}: rev card count");
+    assert_eq!(e_rev.state_hash(), initial_hash, "{label}: rev initial state_hash");
 }
