@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-25 Batch S3（`Wave 2`〔7 源〕正式签署 7/8 ✅ 累计 `13/37` ＋ `Wave 3`〔9 源〕八维预验；整包 8/8 `0/37`）
+
+- **范围与结果**：确认 `8caa8da44` CI `45588526123` Attempt 2 `--failed` 重试 **`10/10 success`** 并如实将 Attempt 1/2 记入 [ci-runs.md](../operations/evidence/ci-runs.md)；在 [签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 正式将 **Wave 2（`L06`/`L01`/`L02`/`L03` 双包/`L04`/`L05`/`L07`）** 上调为仓内 7/8 `✅`（全局 **`4,419 / 5 / 0`**、整包 8/8 **`0/37`**、累计仓内 7/8 **`13/37`**）；新增 [wave3.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave3.rs) 完成 `Wave 3`（`L13..L21`，`365/365` 等价）全生命周期/配置/依赖/组合/恢复测试与独立差异复核（`2a8e7b2e`），待本批 CI 绿后于 Batch S4 签署。详见 [Batch S3 证据](../operations/evidence/2026-11-25-signoff-s3-wave2-signoff-and-wave3/README.md)。
+
 ## 2026-11-25 Batch S2（`Wave 1`〔6 源〕正式签署 7/8 ✅ ＋ `Wave 2`〔7 源〕八维预验；整包 8/8 `0/37` / 仓内 7/8 `6/37`）
 
 - **范围与结果**：确认 `6dbf6e0f0` CI `45577611687` Attempt 1 **`10/10 success`** 并记入 [ci-runs.md](../operations/evidence/ci-runs.md)；在 [签署表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 正式将 **Wave 1（`U06`/`U07`/`U08`/`U02`/`U03`/`U04`）** 上调为仓内 7/8 `✅`（仅第 ⑥ 维缺物理真机与三端签名，全局 **`4,419 / 5 / 0`**、整包 8/8 **`0/37`**、仓内 7/8 **`6/37`**）；新增 [wave2.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave2.rs) 完成 `Wave 2`（`L06`/`L01`/`L02`/`L03` 双包/`L04`/`L05`/`L07`，`187/187` 等价）全生命周期/配置/依赖/组合/恢复测试与独立差异复核（`6c2971da`），待本批 CI 绿后于 Batch S3 签署。详见 [Batch S2 证据](../operations/evidence/2026-11-25-signoff-s2-wave1-signoff-and-wave2/README.md)。
