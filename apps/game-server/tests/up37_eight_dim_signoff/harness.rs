@@ -9,7 +9,6 @@ use content_runtime::{
 use content_schema::{ContentPackage, PackageDependency};
 use engine_native::ai::BoundedPlanner;
 use engine_native::archive::{decode_archive, encode_archive};
-use engine_native::content::extension::ExtensionPack;
 use engine_native::Engine;
 
 use super::native::{restore_match_locked, save_fresh_match_locked, NativeContent};
@@ -173,12 +172,13 @@ pub fn verify_source_full_lifecycle_and_deps(source_id: &str, pkg_dirs: &[&str],
     let verified_v1 = content.freeze_room_selection(ns_scope, &pkg_ids).unwrap();
     let (fresh_bytes_v1, fresh_cards_v1, _) =
         save_fresh_match_locked(&content, &pkg_ids, seed, 4).unwrap();
-    let mut loaded_packs = Vec::new();
-    for (_, ns, pid, _, _) in &primary_meta {
-        loaded_packs.push(content.load_scoped(Some(ns), pid).unwrap());
-    }
-    let refs: Vec<&ExtensionPack> = loaded_packs.iter().map(|l| &l.pack).collect();
-    let mut engine_v1 = Engine::new_with_extensions(seed, 4, &refs).unwrap();
+    let mut engine_v1 = content_native_loader::start_locked_engine(
+        seed,
+        4,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified_v1,
+    )
+    .unwrap();
     let planner = BoundedPlanner::new(64);
     for _ in 0..8 {
         if engine_v1.outcome().is_some() {
@@ -194,12 +194,7 @@ pub fn verify_source_full_lifecycle_and_deps(source_id: &str, pkg_dirs: &[&str],
     let snap_v1 = engine_v1.save();
     let hash_v1 = engine_v1.state_hash();
     let archive_v1 = encode_archive(&snap_v1);
-    let mut session_v1 = NativeRoomSession::new_locked(
-        engine_v1,
-        verified_v1,
-        loaded_packs.into_iter().map(|l| l.pack).collect(),
-        4,
-    );
+    let mut session_v1 = NativeRoomSession::new_locked(engine_v1, verified_v1, vec![], 4);
     let saved_v1_state = session_v1.export_state(&session_v1.snapshot_hex());
 
     // ⑤b 错版/无包恢复拒绝校验

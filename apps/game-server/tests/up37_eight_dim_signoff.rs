@@ -35,3 +35,5 @@ mod wave2;
 mod wave3;
 #[path = "up37_eight_dim_signoff/wave4.rs"]
 mod wave4;
+#[path = "up37_eight_dim_signoff/wave5_6.rs"]
+mod wave5_6;
