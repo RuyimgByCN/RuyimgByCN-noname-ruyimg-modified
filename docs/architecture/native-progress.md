@@ -9,6 +9,11 @@
 
 ## 当前交付与带日期核验记录
 
+### 2026-11-26 Batch S6（全量 37 来源 / 46 包仓内八项签署分层收口 `37/37`；整包 8/8 `0/37`；仅余真机/签名/Spine 对照/5 冻结边界待用户拍板）
+
+- **签署与收口结论**：确认 Batch S5 `3e68b62187f05ec594522a00c12fc77f4220aa8c` 精确提交 CI Run `45636201258`（Attempts 1–3 因 hosted macOS 容量排队取消、`job_failure_count=0`，Attempt 4 **`10/10 success`**，`logs-first.zip` `sha256: 670e23152bf007935960029af3051937d52041008e4681d4c2fe05f3063a5a8b`）全部四次尝试如实记入 [ci-runs.md](../operations/evidence/ci-runs.md)。依据已全量覆盖 `wave1..wave5_6`（`37` 来源 / `46` 正式包、`48/48` 通过）与 6 轮独立差异复核，在 [37 来源八项签署总表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 与 [两仓扩展台账](../migration/upstream-extension-reconstruction.md) 完成最终仓内签署分层：**`28` 源无 Spine 100% 达仓内 `7/8 ✅`**（仅第 ⑥ 维待真机/签名）、**`6` 源 Spine 4.0（`L08..L12, L24`）达仓内 `6/8 ✅`**（第 ⑥ 维同上＋第 ⑧ 维待用户本机 Spine 对照）、**`3` 源冻结边界（`U01`、`L28`、`U05`）达仓内 `5/8 ✅`**（第 ①/⑥/⑧ 维部分）；全局保持 **`4,419 / 5 / 0`**（缺失 `0`）、整包八项满签 **`0/37`**、`333/107/5/759/8` 与 14 条 golden 不变。全部待用户裁决及外部实测事项集中于 [Batch S6 收口证据](../operations/evidence/2026-11-25-signoff-s6-full-37-closure/README.md) 与[外部前置清单](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)。
+- **主线本地门禁（2026-11-26）**：纯文档收口批次运行 `test_check_source_lines.py`、`check-source-lines.py`、`recount_g0.py`、`check_doc_line_refs.py --strict` 与 `preflight.py` 全过。
+
 ### 2026-11-25 Batch S5（如实记入 S4 CI 容量取消＋`Wave 5`/`Wave 6` 八维预验与 `37/46` 完备性；待本批 CI 绿后 Batch S6 全表签署）
 
 - **签署纪律与代码测试**：如实将 Batch S4 `d130c3f12` CI Run `45616460633`（Attempt 1 `8/10`、Attempt 2 `9/10`、Attempts 3–5 均仅 `desktop-macos-latest` 因托管容量 `runner_id=0, steps=[]` 取消、`job_failure_count=0`）记入 [ci-runs.md](../operations/evidence/ci-runs.md)；严守「门禁未全绿不上调」，**Wave 4 本批维持未上调**（全局 `4,419 / 5 / 0`、整包 8/8 `0/37`、累计仓内 7/8 保持 `22/37`）。新增 [wave5_6.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave5_6.rs) 覆盖 **Wave 5（`L08..L12, L24`，`1,513/0/0`）** 与 **Wave 6（`U01, L28, U05`，9 冻结边界 `5` 项）** 全生命周期/配置/组合/恢复并刚性校验 [map.tsv](../operations/evidence/2026-10-19-package-source-map/map.tsv) 全部 `37` 来源 / `46` 正式包完备性，经独立复核 `15a3bb8a-fcc3-4964-99bc-f4de2d1821e1` 核实全 9 源边界（确认 `U01` 仅用 CSS 3D、不含 Spine）。待本批精确 CI `10/10` 后于 Batch S6 正式完成 `37/37` 签署收口。详见 [Batch S5 证据](../operations/evidence/2026-11-25-signoff-s5-wave5-6-tests/README.md)。

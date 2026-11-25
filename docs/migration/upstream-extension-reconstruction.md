@@ -1,5 +1,9 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-26 Batch S6（全量 37 来源 / 46 包仓内可验八项签署全表收口；`28 [7/8 ✅] + 6 [6/8 ✅] + 3 [5/8 ✅] = 37/37`；整包 8/8 `0/37`）
+
+- **范围与结果**：确认 `3e68b6218` CI `45636201258` Attempt 4 **`10/10 success`**（并如实将 Attempts 1–4 记入 [ci-runs.md](../operations/evidence/ci-runs.md)）；在 [37 来源八项签署总表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 完成 **Wave 4（`L22/L23/L25/L26/L27/L29`，6 源上调 `7/8 ✅`→累计 `28/37`）**、**Wave 5（`L08..L12, L24`，6 个 Spine 4.0 源 `6/8 ✅`）** 与 **Wave 6（`U01/L28/U05`，3 个冻结边界源 `5/8 ✅`）** 正式签署收口（全局 **`4,419 / 5 / 0`**、缺失 `0`、整包 8/8 满签保持 **`0/37`**、`333/107/5/759/8` 与 14 golden 不变）。余留待用户拍板事项（5 项冻结边界含 `shixu`/`hs_nozdormu` 选项 A/B、7 源 Spine 4.0 本机对照、真机/三端签名、Phase 6 切换范围）详见 [Batch S6 证据](../operations/evidence/2026-11-25-signoff-s6-full-37-closure/README.md) 与 [外部前置清单](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)。
+
 ## 2026-11-25 Batch S5（如实记入 S4 CI 容量取消＋`Wave 5`/`Wave 6` 八维预验与 `37/46` 完备性；签署仍维持 `22/37`，待 S5 CI 绿后 S6 一次全表收口）
 
 - **范围与结果**：如实将 `d130c3f12` CI `45616460633`（Attempt 1 `8/10`、Attempt 2 `9/10`、Attempts 3–5 仅 `desktop-macos-latest` `runner_id=0, steps=[]` 托管容量取消、`job_failure_count=0`）记入 [ci-runs.md](../operations/evidence/ci-runs.md)；遵守「门禁未全绿不上调」，**Wave 4 本批不提前上调**（全局 **`4,419 / 5 / 0`**、整包 8/8 **`0/37`**、累计仓内 7/8 维持 **`22/37`**）。新增 [wave5_6.rs](../../apps/game-server/tests/up37_eight_dim_signoff/wave5_6.rs) 完成 **Wave 5（`L08..L12, L24` 6 个 Spine 4.0 源，`1,513/1,513` 等价）** 与 **Wave 6（`U01, L28, U05` 3 个冻结边界源）** 全生命周期/配置/依赖/组合/恢复测试及 [map.tsv](../operations/evidence/2026-10-19-package-source-map/map.tsv) 全量 `37` 来源 / `46` 正式包覆盖断言（经独立复核 `15a3bb8a` 核实全 9 源边界，并确认 `U01` 不含 Spine），待本批 CI `10/10 success` 后于 Batch S6 正式在签署表上调 Wave 4/5/6 完成 `37/37` 仓内签署收口。详见 [Batch S5 证据](../operations/evidence/2026-11-25-signoff-s5-wave5-6-tests/README.md)。
