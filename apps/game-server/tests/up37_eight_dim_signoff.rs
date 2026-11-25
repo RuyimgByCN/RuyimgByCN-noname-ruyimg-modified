@@ -29,3 +29,5 @@ mod session;
 mod harness;
 #[path = "up37_eight_dim_signoff/wave1.rs"]
 mod wave1;
+#[path = "up37_eight_dim_signoff/wave2.rs"]
+mod wave2;
