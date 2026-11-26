@@ -94,3 +94,12 @@ pnpm --dir apps/web-client desktop:build   # 当前平台安装制品
 ## 安全提醒
 
 签名只证明**完整性 / 来源标签**，不替代 VM 沙箱、能力清单与资源配额。
+
+## 对外发布前签名与公证发布清单（裁决 43，2026-11-26）
+
+依据[裁决 43](evidence/2026-10-28-user-decisions/README.md)，安装包商业签名与公证属于整个应用分发的共性前提（37 个扩展来源共用同一应用产物），不再作为逐来源第 ⑥ 维“目标平台”的阻塞条件，改为正式对外发布前的独立应用级发布清单（具体密钥、命令与环境变量见[外部前提 §1.3](evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)）：
+
+- **Tauri 自动更新签名**：配置 `TAURI_SIGNING_PRIVATE_KEY`（及密码环境变量）供 `.github/workflows/ci.yml` 与桌面打包签发更新清单。
+- **macOS Apple Developer ID 签名与公证**：使用 `Developer ID Application` 证书完成 `codesign --options runtime`、`xcrun notarytool submit --wait`、`xcrun stapler staple` 与 `spctl --assess -vv` 验证。
+- **Windows 代码签名**：使用 Authenticode / EV `.pfx` 证书对产出的 `.msi` / NSIS 安装包执行 `signtool sign /fd SHA256`。
+- **Linux 仓库签名**：使用 GPG 私钥对产出的 `.deb` / `.rpm` 仓库与安装包完成签名及 `dpkg-sig` 校验。

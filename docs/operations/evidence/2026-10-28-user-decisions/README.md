@@ -121,6 +121,18 @@
 
 **40. 扩展技能改为真实玩家选择，撤销裁决 39 的自动结算部分（2026-11-11，用户在 Claude Code 会话中选定「改为真实选择」）**：依据 [2026-11-11 扫描证据](../2026-11-11-progress-scan/README.md)，裁决 39 登记的「按上游优先级规则确定性结算」与实现不符（实际取座次上第一个存活的其他角色或第一张手牌），其效果是人类玩家不能自选目标和选牌，且内核已有不升版本号的选择通道（原生 `HostBehavior` ＋ `HostStage::TargetChoice`／`SelectCard` ＋ `ChoiceKind::SelectPlayers`／`SelectCards`／`Confirm`／按牌名选择，苍螭之璧即经此实现）。用户裁定：①裁决 39 中「维持规则 333／NGSA 107／content schema 5／ABI 759／WS 8 不升号」的部分保留；「多步交互子询问在单次触发窗口内确定性结算」的部分撤销。②37 来源中凡上游有 `chooseTarget`／`chooseCard`／`chooseControl`／`chooseBool`／`chooseButton` 等玩家选择的技能，须经既有选择通道向玩家提问并支持挂起恢复；AI 座位按上游 `ai` 函数的取向决策，不得固定取座次第一人或第一张牌。③经既有通道确实无法表达的交互，逐技能列出原因与所需的 `HostStage`／ABI／存档变化，报用户决定是否升号；答复前这些技能在清单中标「简化近似」，不得计入功能等价。④条件、判定、随机、次数限制、可选发动的保留本不属于裁决 39 的范围，一律按上游实现。本项只登记裁决，不表示已实施。
 
+## 补充裁决（2026-11-26，冻结边界、外部条件与第六阶段）
+
+依据 [Batch S6 收口证据 §二](../2026-11-25-signoff-s6-full-37-closure/README.md) 的待决清单，用户在 Claude Code 会话中指示「需要确认的项你给出建议，使用你的建议」，以下四项按 Claude 的建议定案。
+
+**41. 五项冻结边界一律选 A，不升号（2026-11-26）**：`U01:dddanzhi`、`L28:th_zhengjing`、`U05:old_longfan`、`U05:shixu`、`U05:hs_nozdormu` 维持规则 333／NGSA 107／content schema 5／ABI 759／WS 8 与 14 条 golden 不变，按现行实现定为用户确认的基准差异：①`shixu`／`hs_nozdormu` 用确定性 `PhaseEnded.elapsed_ms > 8000` 代理，不把真实时钟录入 WAL；②`th_zhengjing`、`old_longfan` 的实时 DOM 小游戏按裁决 40 用计数／选数询问代替；③`dddanzhi` 保留 `Prepare` 询问与冻结夹具 `u01-dddanzhi-pending-v107.ngsa`。它与前四项不同，是能确定性表达的时机差异：日后若因其他原因升规则或存档版本，随那次升号改为上游 `phaseBegin`，不为它单独升号。执行要求：五项逐条登记到[规则基准](../../../architecture/native-rules-baseline.md)；清单状态保持「简化近似」，不得改写为「已复核等价」；U01／L28／U05 第①维可按“含用户确认差异”上调，第⑧维逐条列出这五项。理由：真实时钟和实时小游戏放不进确定性重放；升号要重录 golden、迁移存档、打破跨版本兼容，而受影响的只是 4,424 项中的 5 项。
+
+**42. Spine 本机对照仍是签署条件，但不阻塞其他工作（2026-11-26）**：裁决 35⑤ 不改。对照只能由用户用自有动皮完成，agent 不得代做，也不得用手写测试资源代替；建议用户方便时先各取 `L08 十周年UI`、`L24 皮肤切换` 一款 4.0 动皮做并排截图。完成前，7 个 Spine 来源的第⑧维保持「部分」，不阻塞第六阶段。S6 证据此前引用的“裁决 42”以本条为准。
+
+**43. 商业签名／公证移出逐来源第⑥维，改列发布清单（2026-11-26）**：安装包签名与公证属于整个应用的分发，37 个来源共用同一产物，不反映单个扩展是否正确。自本条起，逐来源第⑥维“目标平台”只要求该来源在 Web、桌面与 Android／iOS 真机上实际运行（安装、对局、保存恢复）；Apple Developer ID 公证、Windows 代码签名与 Linux 仓库签名改为正式对外发布前的发布清单项。真机运行仍须用户接入设备，不得用模拟器或跨端编译结果代替；接入前第⑥维保持「部分」，整包 8/8 不上调。
+
+**44. 第六阶段按[外部前提 §三](../2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)的范围执行（2026-11-26）**：确认 §3.1 退场、§3.2 先迁、§3.3 保留（含裁决 36 的桌面 WASM 默认）。顺序：①§3.2 各消费方逐个迁到 `engine-native`，每批 exact-head CI 全绿；②[`config.rs`](../../../../apps/game-server/src/config.rs) 的 `native_rooms` 默认改为 `true`，联机房间默认走原生会话；③删除旧代码前建 git 标签 `pre-phase6-legacy` 作回滚点；④删除 `engine-core`／`engine-ai`／`engine-wasm`、旧 Worker 与旧线哈希脚本，CI 改用纯原生跨端校验；⑤旧线房间存档不做迁移，载入时按版本门禁明确拒绝并提示原因。每步一批、一提交、一次 CI，门禁为红即停。本节只登记裁决，不表示已实施。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

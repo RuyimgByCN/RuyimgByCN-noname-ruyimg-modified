@@ -1,5 +1,12 @@
 # 两个上游仓库的全部扩展重构计划
 
+## 2026-11-26 裁决 41–44 落地（5 冻结边界定案、第⑥维改仅真机运行、签名/公证移入发布清单与 L01 勘正）
+
+- **口径与状态**：依据[用户裁决 41–44](../operations/evidence/2026-10-28-user-decisions/README.md)及如实补登的 Batch S6 `6fd7244ce` CI（Run `45653703845` Attempts 1–6 已分派 `8/8` 通过、`job_failure_count=0`，`perf-macos-latest`/`build-macos-latest` 因托管容量取消，见 [ci-runs.md](../operations/evidence/ci-runs.md)）：
+  - **裁决 41（5 项冻结边界定案）**：`U01:dddanzhi`、`L28:th_zhengjing`、`U05:old_longfan`、`U05:shixu`、`U05:hs_nozdormu` 已逐条登记入[规则基准](../architecture/native-rules-baseline.md)（维持 `333/107/5/759/8` 与 14 golden 不变）；[inventory_status.json](g0/inventory_status.json) **继续保持 `4,419 / 5 / 0`**（该 5 项维持 `简化近似`），`U01`/`L28`/`U05` 在[签署总表](../operations/evidence/2026-10-19-source-signoff-32/README.md)第 ① 维按“含用户确认差异”上调为 `✅`、第 ⑧ 维逐条列明（`U01`/`U05` 升至 `7/8 ✅`，`L28` 因含 Spine 4.0 对照升至 `6/8 ✅`）。
+  - **裁决 42 / 43（第⑥维仅真机运行、签名/公证移入发布清单）**：逐来源第 ⑥ 维“目标平台”自本批起只要求各来源在 Web、桌面与 Android/iOS 真机实际运行（接入真机前维持 `部分`，不得以模拟器/跨端编译代替）；Apple Developer ID 公证、Windows 代码签名与 Linux 仓库 GPG 签名移入[发布清单](../operations/phase10-release.md)。7 个 Spine 来源第 ⑧ 维待用户本机自有动皮对照（裁决 42），保持 `部分`。
+  - **仓内分层汇总与 L01 勘正**：仓内可验分层现为 **`30 [7/8 ✅] + 7 [6/8 ✅] = 37/37`**，整包 8/8 满签严格保持 **`0/37`**；同步勘正签署总表 `L01` 行为原生 `crates/engine-native-content/src/content/host/step/l01_rules.rs`（非旧 `engine-ai`）。
+
 ## 2026-11-26 Batch S6（全量 37 来源 / 46 包仓内可验八项签署全表收口；`28 [7/8 ✅] + 6 [6/8 ✅] + 3 [5/8 ✅] = 37/37`；整包 8/8 `0/37`）
 
 - **范围与结果**：确认 `3e68b6218` CI `45636201258` Attempt 4 **`10/10 success`**（并如实将 Attempts 1–4 记入 [ci-runs.md](../operations/evidence/ci-runs.md)）；在 [37 来源八项签署总表](../operations/evidence/2026-10-19-source-signoff-32/README.md) 完成 **Wave 4（`L22/L23/L25/L26/L27/L29`，6 源上调 `7/8 ✅`→累计 `28/37`）**、**Wave 5（`L08..L12, L24`，6 个 Spine 4.0 源 `6/8 ✅`）** 与 **Wave 6（`U01/L28/U05`，3 个冻结边界源 `5/8 ✅`）** 正式签署收口（全局 **`4,419 / 5 / 0`**、缺失 `0`、整包 8/8 满签保持 **`0/37`**、`333/107/5/759/8` 与 14 golden 不变）。余留待用户拍板事项（5 项冻结边界含 `shixu`/`hs_nozdormu` 选项 A/B、7 源 Spine 4.0 本机对照、真机/三端签名、Phase 6 切换范围）详见 [Batch S6 证据](../operations/evidence/2026-11-25-signoff-s6-full-37-closure/README.md) 与 [外部前置清单](../operations/evidence/2026-11-22-queue8-9-external-prereqs-and-phase6/README.md)。

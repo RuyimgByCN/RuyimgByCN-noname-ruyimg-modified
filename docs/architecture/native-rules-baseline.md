@@ -1,5 +1,14 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+## 2026-11-26 裁决 41 定案：5 项冻结边界逐条登记为已确认基准差异（维持 333/107/5/759/8 与 14 golden 不变）
+
+- **不变量与清单口径**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与全部 `14` 条 golden 哈希零改动。依 [裁决 41](../operations/evidence/2026-10-28-user-decisions/README.md)，[inventory_status.json](../migration/g0/inventory_status.json) **继续保持 `4,419 / 5 / 0`**（下列 `5` 项保持 `简化近似`，不得改写为 `已复核等价`）；`U01`／`L28`／`U05` 第 ① 维在签署表中按“含用户确认差异”上调，并在第 ⑧ 维逐条列明下列已确认基准差异：
+  1. **`U01:skills:dddanzhi`**（上游 `archive/upstream/noname/apps/core/extension/3D精选/character/character.js` / `skill.js` → 原生 [u01_batch_d_asks.rs](../../crates/engine-native-content/src/content/host/step/u01_batch_d_asks.rs)）：保留 `Phase::Prepare` 触发与 `(Normal, 1, false)` 元数据及冻结夹具 `u01-dddanzhi-pending-v107.ngsa`（上游为 `phaseBegin` 与 `(Normal, 0, true)`）。该项属可确定性表达的时机差异：日后若因其他原因升规则或存档版本，随那次升号改为上游 `phaseBegin`，不为它单独升号。
+  2. **`L28:skills:th_zhengjing`**（上游 `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js` → 原生 [l28_batch_a_ext.rs](../../crates/engine-native-content/src/content/host/step/l28_batch_a_ext.rs)）：上游切水果实时 DOM 小游戏与斗地主概率早停在冻结 `ABI 759` / `WS 8` 下无法透传逐帧实时客户端交互，按裁决 40/41 确定性抽象为 `ChoiceSpec` `0..=5` 计数询问，作为已确认基准差异定案。
+  3. **`U05:skills:old_longfan`**（上游 `archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js` → 原生 [swd_u05_7b.rs](../../crates/engine-native-content/src/content/host/step/swd_u05_7b.rs)）：上游 `200ms setInterval` 4 位 DOM 虎口机实时连点轮盘属实时前端小游戏，无法放入确定性回放，按裁决 40/41 确定性抽象为选数 `ChoiceSpec` 询问，作为已确认基准差异定案。
+  4. **`U05:skills:shixu`**（上游 `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/skill.js` → 原生 [hooks.rs](../../crates/engine-native-content/src/content/host/step/u05_b6b_hearth/hooks.rs)）：上游 `get.time() - time > 8000` 真钟毫秒判定受确定性 WAL 与冻结协议（`WS 8` / `Ruleset 333` / `NGSA 107`）约束，禁止将真实时钟录入 WAL，以确定性参数 `PhaseEnded.elapsed_ms > 8000` 代理（非时钟 `is_chanyuan_sealed` 逻辑已在 Batch S1 修齐），按裁决 41 选 A 定为已确认基准差异。
+  5. **`U05:generals:hs_nozdormu`**（上游 `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/character.js` → `Qun`/`Male`/`5`/`["shixu"]`）：静态属性与上游完全一致，因绑定 `shixu` 墙钟边界同按裁决 41 选 A 列为已确认基准差异。
+
 ## 2026-11-25 Batch S1（`U05:shixu` / `U05:hs_nozdormu` 独立复核与 `is_chanyuan_sealed` 修复，冻结边界定案并入待用户裁决清单）
 
 - **不变量保持**：`STANDARD_RULESET_VERSION=333`、`ARCHIVE_FORMAT_VERSION=107`、content schema `5`、ABI `759`、WS `8`、`u01-dddanzhi-pending-v107.ngsa` 与 14 条 golden 哈希零改动。
