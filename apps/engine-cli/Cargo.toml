@@ -3,7 +3,7 @@ name = "engine-cli"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Headless CLI for engine debug, replay, and golden cases"
+description = "Headless CLI for engine-native debug, replay, and golden cases"
 
 [[bin]]
 name = "engine-cli"
@@ -11,9 +11,12 @@ path = "src/main.rs"
 
 [dependencies]
 engine-api = { workspace = true }
-engine-core = { workspace = true }
+engine-native = { path = "../../crates/engine-native" }
+engine-native-kernel = { path = "../../crates/engine-native-kernel" }
+content-native-loader = { path = "../../crates/content-native-loader" }
 content-compiler = { path = "../../crates/content-compiler" }
 content-schema = { path = "../../crates/content-schema" }
-rule-api = { workspace = true }
+rule-vm = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+blake3 = { workspace = true }

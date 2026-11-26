@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Cross-target golden hash gate (Phase 13).
-# Conformance pins the golden vectors; this script additionally proves that the
-# native and browser WASM runtimes produce the same hashes from current source.
+# Cross-target golden hash gate (Phase 6 transitional: engine-native vs native-wasm).
+# Conformance pins the 14 native golden vectors; this script additionally proves that
+# native engine-cli and browser engine-native-wasm produce identical start hashes.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -21,9 +21,9 @@ echo "manifest_4_42=$M42"
 test -n "$M42"
 cargo run -q -p engine-cli -- manifest 4 42 | grep -q 'chain=ok'
 
-echo "== browser wasm runtime hashes =="
+echo "== browser native-wasm runtime hashes =="
 rustup target add wasm32-unknown-unknown >/dev/null
-pnpm --dir apps/web-client build:wasm
+node apps/web-client/scripts/build-native.mjs
 W42=$(node scripts/wasm-hash.mjs 4 42)
 W1=$(node scripts/wasm-hash.mjs 2 1)
 echo "wasm_start_4_42=$W42"

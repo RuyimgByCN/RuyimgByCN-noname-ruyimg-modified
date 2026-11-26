@@ -3,11 +3,13 @@ name = "conformance"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "Golden-case and cross-target conformance suite (Phase 11)"
+description = "Golden-case and cross-target conformance suite (engine-native)"
 
 [dependencies]
 engine-api = { workspace = true }
-engine-core = { workspace = true }
+engine-native = { path = "../engine-native" }
+engine-native-kernel = { path = "../engine-native-kernel" }
+content-native-loader = { path = "../content-native-loader" }
 rule-vm = { workspace = true }
 content-compiler = { path = "../content-compiler" }
 content-schema = { path = "../content-schema" }

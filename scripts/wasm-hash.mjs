@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync } from "node:fs";
-import { initSync, WasmEngine } from "../apps/web-client/src/wasm-pkg/engine_wasm.js";
+import { initSync, NativeEngine } from "../apps/web-client/src/worker/native-pkg/engine_native_wasm.js";
 
 const players = Number(process.argv[2]);
 const seed = Number(process.argv[3]);
@@ -11,10 +11,9 @@ if (!Number.isInteger(players) || !Number.isInteger(seed)) {
 }
 
 const wasm = readFileSync(
-  new URL("../apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm", import.meta.url),
+  new URL("../apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm", import.meta.url),
 );
 initSync({ module: wasm });
 
-const engine = new WasmEngine();
-engine.startGame(players, seed);
-console.log(engine.stateHashHex());
+const engine = new NativeEngine(players, BigInt(seed));
+console.log(engine.state_hash_hex());
