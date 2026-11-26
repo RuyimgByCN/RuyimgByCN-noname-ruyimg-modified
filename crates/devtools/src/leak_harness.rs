@@ -1,11 +1,11 @@
 //! Observer Leak Test Harness (architecture §35 / §37.9).
 //!
-//! Systematically scans observer views for hidden information leaks.
-//! Verifies that no unauthorized card faces, identities, or private data
-//! are visible to the wrong observer.
+//! Systematically scans `PlayerView` observer projections for hidden information
+//! leaks against the authoritative `GameStateCore` and `Engine`.
 
-use engine_api::{ObserverKind, ObserverSnapshot, PlayerId};
-use engine_core::GameState;
+use engine_native::state::{GameStateCore, Role};
+use engine_native::view::{HandView, PlayerView};
+use engine_native::Engine;
 
 /// One detected leak.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -21,96 +21,65 @@ pub struct Leak {
 pub enum LeakKind {
     /// Foreign hand card face is visible.
     ForeignHandFace,
-    /// Private identity revealed to unauthorized observer.
+    /// Private identity/role revealed to unauthorized observer.
     PrivateIdentity,
-    /// Spectator sees card faces they shouldn't.
+    /// Spectator sees hand card faces they shouldn't.
     SpectatorCardFace,
 }
 
-/// Scan a single observer snapshot for leaks against the authority state.
-pub fn scan_view(state: &GameState, view: &ObserverSnapshot) -> Vec<Leak> {
+/// Scan a non-referee observer view (player seat or spectator) for hidden-information leaks.
+pub fn scan_view(state: &GameStateCore, view: &PlayerView) -> Vec<Leak> {
     let mut leaks = Vec::new();
-    let self_id = match view.observer {
-        ObserverKind::Player(id) => Some(id),
-        ObserverKind::ReplayExporter { privacy } => match privacy {
-            engine_api::ReplayPrivacy::Player(id) => Some(id),
-            _ => None,
-        },
-        _ => None,
-    };
+    let is_spectator = view.seat == u8::MAX;
 
-    // Check: foreign hand card faces must not be visible.
-    for p in state.players.sorted_live() {
-        if Some(p.id) == self_id {
-            continue;
-        }
-        let foreign_hand = state.hand_cards(p.id);
-        for cid in &foreign_hand {
-            let leaked = view
-                .known_cards
-                .iter()
-                .any(|c| c.id == *cid && (c.def.is_some() || c.suit.is_some()));
-            if leaked {
+    for cell in &view.players {
+        let is_self = !is_spectator && cell.seat == view.seat;
+        if !is_self {
+            if let HandView::Own(cards) = &cell.hand {
                 leaks.push(Leak {
-                    kind: LeakKind::ForeignHandFace,
+                    kind: if is_spectator {
+                        LeakKind::SpectatorCardFace
+                    } else {
+                        LeakKind::ForeignHandFace
+                    },
                     description: format!(
-                        "observer {:?} sees foreign hand card {} face of player {}",
-                        view.observer,
-                        cid.raw(),
-                        p.id.raw()
+                        "observer seat={} sees hand faces ({} cards) of player {}",
+                        view.seat,
+                        cards.len(),
+                        cell.seat
                     ),
                 });
             }
-        }
-    }
-
-    // Check: spectator must not see any hand card face.
-    if matches!(view.observer, ObserverKind::Spectator) {
-        for cv in &view.known_cards {
-            if let Some(owner) = cv.owner {
-                if cv.def.is_some() {
-                    let hand = state.hand_cards(owner);
-                    if hand.iter().any(|h| h == &cv.id) {
+            if let Some(p) = state.players.get(cell.seat as usize) {
+                for &cid in &p.hand {
+                    if view.cards.iter().any(|c| c.id == cid) {
                         leaks.push(Leak {
-                            kind: LeakKind::SpectatorCardFace,
+                            kind: if is_spectator {
+                                LeakKind::SpectatorCardFace
+                            } else {
+                                LeakKind::ForeignHandFace
+                            },
                             description: format!(
-                                "spectator sees hand card {} face of player {}",
-                                cv.id.raw(),
-                                owner.raw()
+                                "observer seat={} sees foreign hand card {} in view.cards of player {}",
+                                view.seat, cid, cell.seat
                             ),
                         });
                     }
                 }
             }
         }
-    }
 
-    // Check: private identities hidden from non-lord, non-dead, non-self.
-    let is_full = matches!(view.observer, ObserverKind::Referee)
-        || matches!(
-            view.observer,
-            ObserverKind::ReplayExporter {
-                privacy: engine_api::ReplayPrivacy::Full
-            }
-        );
-    if !is_full {
-        for seat in &view.seats {
-            if seat.identity.is_some() {
-                // Identity visible: is it lord, dead, or self?
-                let is_self = self_id == Some(seat.player);
-                let is_lord = seat.identity == Some(engine_api::IdentityTag::Lord);
-                let is_dead = !seat.alive;
-                if !is_self && !is_lord && !is_dead {
-                    leaks.push(Leak {
-                        kind: LeakKind::PrivateIdentity,
-                        description: format!(
-                            "observer {:?} sees private identity {:?} of player {}",
-                            view.observer,
-                            seat.identity,
-                            seat.player.raw()
-                        ),
-                    });
-                }
+        if let Some(role) = cell.role {
+            let is_lord = role == Role::Lord;
+            let is_dead = !cell.alive;
+            if !is_self && !is_lord && !is_dead {
+                leaks.push(Leak {
+                    kind: LeakKind::PrivateIdentity,
+                    description: format!(
+                        "observer seat={} sees private role {:?} of player {}",
+                        view.seat, role, cell.seat
+                    ),
+                });
             }
         }
     }
@@ -118,18 +87,17 @@ pub fn scan_view(state: &GameState, view: &ObserverSnapshot) -> Vec<Leak> {
     leaks
 }
 
-/// Scan all possible observers for a state (comprehensive harness).
-pub fn scan_all_observers(state: &GameState) -> Vec<Leak> {
+/// Scan all seat views and spectator view on an authoritative `Engine`.
+pub fn scan_all_observers(engine: &Engine) -> Vec<Leak> {
+    let state = engine.state_core();
     let mut all_leaks = Vec::new();
 
-    // Check each player's view.
-    for p in state.players.sorted_live() {
-        let view = engine_core::project_observer(state, ObserverKind::Player(p.id));
+    for seat in 0..state.players.len() as u8 {
+        let view = engine.view_for(seat);
         all_leaks.extend(scan_view(state, &view));
     }
 
-    // Check spectator view.
-    let spec_view = engine_core::project_observer(state, ObserverKind::Spectator);
+    let spec_view = engine.view_spectator();
     all_leaks.extend(scan_view(state, &spec_view));
 
     all_leaks
@@ -150,23 +118,11 @@ pub fn render_leaks(leaks: &[Leak]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey};
-    use engine_core::Engine;
 
     #[test]
     fn no_leaks_in_clean_match() {
-        let mut eng = Engine::new();
-        eng.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 4,
-                rng_seed: 42,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        let leaks = scan_all_observers(eng.state());
+        let eng = Engine::new(42, 4);
+        let leaks = scan_all_observers(&eng);
         assert!(
             leaks.is_empty(),
             "clean match must have no leaks: {:?}",

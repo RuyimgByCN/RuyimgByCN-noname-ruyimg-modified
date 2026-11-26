@@ -1,9 +1,8 @@
 //! State Hash Divergence Bisector (architecture §35).
 //!
-//! Finds the first revision where two replay logs diverge in state hash.
-//! Used to diagnose cross-target or cross-build mismatches.
+//! Finds the first revision where two native replay logs diverge in state hash.
 
-use engine_core::ReplayLog;
+use crate::timeline::NativeReplayLog;
 
 /// Result of a bisection.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -21,8 +20,8 @@ pub struct DivergenceResult {
     pub compared: usize,
 }
 
-/// Find the first divergence between two replay logs.
-pub fn find_divergence(a: &ReplayLog, b: &ReplayLog) -> DivergenceResult {
+/// Find the first divergence between two native replay logs.
+pub fn find_divergence(a: &NativeReplayLog, b: &NativeReplayLog) -> DivergenceResult {
     let n = a.records.len().min(b.records.len());
     for i in 0..n {
         if a.records[i].post_state_hash != b.records[i].post_state_hash {
@@ -35,7 +34,6 @@ pub fn find_divergence(a: &ReplayLog, b: &ReplayLog) -> DivergenceResult {
             };
         }
     }
-    // Logs agree up to min length; check if lengths differ.
     if a.records.len() != b.records.len() {
         return DivergenceResult {
             divergent_index: Some(n),
@@ -85,62 +83,38 @@ pub fn render_divergence(result: &DivergenceResult) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
-    use engine_core::Engine;
+    use engine_native::{Engine, GameAction, GameCommand};
+
+    fn run_trace(seed: u64) -> NativeReplayLog {
+        let mut eng = Engine::new(seed, 2);
+        let mut log = NativeReplayLog::new();
+        let actor = eng.turn().current;
+        let rev = eng.revision();
+        log.submit_and_record(
+            &mut eng,
+            GameCommand {
+                actor,
+                expected_revision: rev,
+                dedup_id: 1,
+                action: GameAction::NextPhase,
+            },
+        );
+        log
+    }
 
     #[test]
     fn identical_logs_no_divergence() {
-        let mut a = Engine::new();
-        a.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 5,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        let mut b = Engine::new();
-        b.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 5,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        let result = find_divergence(a.replay_log(), b.replay_log());
+        let a = run_trace(5);
+        let b = run_trace(5);
+        let result = find_divergence(&a, &b);
         assert!(result.divergent_index.is_none());
     }
 
     #[test]
     fn different_seed_detected_as_divergence() {
-        let mut a = Engine::new();
-        a.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 1,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        let mut b = Engine::new();
-        b.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 2,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        let result = find_divergence(a.replay_log(), b.replay_log());
+        let a = run_trace(1);
+        let b = run_trace(2);
+        let result = find_divergence(&a, &b);
         assert_eq!(result.divergent_index, Some(0));
     }
 }

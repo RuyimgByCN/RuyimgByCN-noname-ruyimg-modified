@@ -75,6 +75,9 @@ name = "content-schema"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "engine-api",
+ "licensing-schema",
+ "resource-schema",
  "rule-api",
  "rule-vm",
  "serde",
@@ -100,17 +103,35 @@ dependencies = [
 ]
 
 [[package]]
-name = "engine-core"
+name = "engine-native"
 version = "0.1.0"
 dependencies = [
  "blake3",
- "content-schema",
+ "engine-api",
+ "engine-native-content",
+ "engine-native-kernel",
+ "rule-api",
+]
+
+[[package]]
+name = "engine-native-content"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "engine-api",
+ "engine-native-kernel",
+ "rule-api",
+ "rule-vm",
+]
+
+[[package]]
+name = "engine-native-kernel"
+version = "0.1.0"
+dependencies = [
+ "blake3",
  "engine-api",
  "rule-api",
  "rule-vm",
- "serde",
- "serde_json",
- "thiserror",
 ]
 
 [[package]]
@@ -163,6 +184,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "licensing-schema"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "memchr"
 version = "2.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -175,7 +204,8 @@ dependencies = [
  "content-compiler",
  "content-schema",
  "engine-api",
- "engine-core",
+ "engine-native",
+ "engine-native-kernel",
  "libfuzzer-sys",
  "rule-vm",
  "serde_json",
@@ -206,6 +236,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
+name = "resource-schema"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "rule-api"
 version = "0.1.0"
 dependencies = [
@@ -219,6 +258,7 @@ name = "rule-vm"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "engine-api",
  "rule-api",
  "serde",
  "thiserror",

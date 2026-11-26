@@ -19,5 +19,6 @@ clap = { version = "4", features = ["derive"] }
 
 [dev-dependencies]
 content-compiler = { path = "../content-compiler" }
-engine-api = { workspace = true }
-engine-core = { workspace = true }
+engine-native = { path = "../engine-native" }
+engine-native-kernel = { path = "../engine-native-kernel" }
+rule-vm = { workspace = true }

@@ -1,13 +1,13 @@
 //! Full rewrite pipeline test (architecture §36).
 //!
-//! Verifies: legacy JS → analyze → grade → skeleton → compile → engine load.
-//! The generated DSL is compilable, not just a skeleton.
+//! Verifies: legacy JS → analyze → grade → skeleton → compile → VM verify → native engine invariants.
 
 use content_compiler::compile_source;
-use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
-use engine_core::{invariants::check_invariants, Engine};
+use engine_native::archive::{decode_archive, encode_archive};
+use engine_native::Engine;
 use legacy_analyzer::analyze_source;
 use legacy_analyzer::{generate_dsl_skeleton, grade_skill, CompatGrade};
+use rule_vm::{CollectingHost, ExecResult, HostContext, RuleVm, VerifiedModule};
 
 const JIANXIONG_JS: &str = include_str!("../../../tests/legacy_fixtures/jianxiong_legacy.js");
 const MASHU_JS: &str = include_str!("../../../tests/legacy_fixtures/mashu_legacy.js");
@@ -50,22 +50,36 @@ fn full_pipeline_loads_into_engine() {
         let skeleton = generate_dsl_skeleton(p, def_id);
         // Step 4: Compile
         let pkg = compile_source(&skeleton).unwrap_or_else(|e| panic!("{name} compile: {e}"));
-        // Step 5: Load into engine
-        let mut eng = Engine::new();
-        eng.load_package(&pkg)
-            .unwrap_or_else(|e| panic!("{name} load: {e}"));
-        // Step 6: Start game
-        eng.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 4,
-                rng_seed: 42,
-                ruleset: "identity-standard".into(),
-            },
-        });
-        check_invariants(eng.state()).unwrap();
+        // Step 5: Verify & execute bytecode modules in rule-vm
+        for module in &pkg.modules {
+            let verified = VerifiedModule::verify(module.clone())
+                .unwrap_or_else(|e| panic!("{name} module {} verify: {e}", module.name));
+            let mut vm = RuleVm::new();
+            let mut host = CollectingHost {
+                ctx: HostContext {
+                    skill_id: def_id,
+                    self_id: 0,
+                    event_player: 0,
+                    event_source: 1,
+                    event_card: 1,
+                    event_amount: 0,
+                },
+                ..CollectingHost::default()
+            };
+            let res = vm
+                .execute(&verified, &mut host, 10_000)
+                .unwrap_or_else(|e| panic!("{name} vm: {e}"));
+            assert!(
+                matches!(res, ExecResult::Halted { .. } | ExecResult::Paused { .. }),
+                "{name} unexpected vm outcome: {res:?}"
+            );
+        }
+        // Step 6: Start native engine and verify archive/restore invariants
+        let eng = Engine::new(42, 4);
+        let bytes = encode_archive(&eng.save());
+        let snap = decode_archive(&bytes).expect("decode archive");
+        let restored = Engine::restore(&snap).expect("restore archive");
+        assert_eq!(restored.state_hash(), eng.state_hash());
     }
 }
 

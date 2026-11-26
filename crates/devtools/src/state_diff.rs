@@ -1,8 +1,8 @@
 //! State Diff Viewer (architecture §35).
 //!
-//! Diffs two `GameState` snapshots field-by-field and reports what changed.
+//! Diffs two `GameStateCore` snapshots field-by-field and reports what changed.
 
-use engine_core::GameState;
+use engine_native::state::GameStateCore;
 
 /// One field difference.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -15,8 +15,15 @@ pub struct FieldDiff {
     pub new: String,
 }
 
-/// Compute the diff between two game states.
-pub fn diff_states(old: &GameState, new: &GameState) -> Vec<FieldDiff> {
+fn live_card_total(state: &GameStateCore) -> usize {
+    let hand_total: usize = state.players.iter().map(|p| p.hand.len()).sum();
+    let equip_total: usize = state.players.iter().map(|p| p.equips.len()).sum();
+    let judge_total: usize = state.players.iter().map(|p| p.judge.len()).sum();
+    state.deck.len() + state.discard.len() + state.table.len() + hand_total + equip_total + judge_total
+}
+
+/// Compute the diff between two native game states.
+pub fn diff_states(old: &GameStateCore, new: &GameStateCore) -> Vec<FieldDiff> {
     let mut diffs = Vec::new();
 
     if old.revision != new.revision {
@@ -30,8 +37,8 @@ pub fn diff_states(old: &GameState, new: &GameState) -> Vec<FieldDiff> {
     if old.turn.current != new.turn.current {
         diffs.push(FieldDiff {
             field: "turn.current".into(),
-            old: old.turn.current.raw().to_string(),
-            new: new.turn.current.raw().to_string(),
+            old: old.turn.current.to_string(),
+            new: new.turn.current.to_string(),
         });
     }
 
@@ -43,63 +50,58 @@ pub fn diff_states(old: &GameState, new: &GameState) -> Vec<FieldDiff> {
         });
     }
 
-    // Player diffs.
-    let old_players: std::collections::HashMap<_, _> = old
-        .players
-        .sorted_live()
-        .into_iter()
-        .map(|p| (p.id, p))
-        .collect();
-    let new_players: std::collections::HashMap<_, _> = new
-        .players
-        .sorted_live()
-        .into_iter()
-        .map(|p| (p.id, p))
-        .collect();
-
-    for (pid, np) in &new_players {
-        if let Some(op) = old_players.get(pid) {
-            if op.hp != np.hp {
-                diffs.push(FieldDiff {
-                    field: format!("players[{}].hp", pid.raw()),
-                    old: op.hp.to_string(),
-                    new: np.hp.to_string(),
-                });
-            }
-            if op.alive != np.alive {
-                diffs.push(FieldDiff {
-                    field: format!("players[{}].alive", pid.raw()),
-                    old: op.alive.to_string(),
-                    new: np.alive.to_string(),
-                });
-            }
-            if op.dying != np.dying {
-                diffs.push(FieldDiff {
-                    field: format!("players[{}].dying", pid.raw()),
-                    old: op.dying.to_string(),
-                    new: np.dying.to_string(),
-                });
-            }
-            if old.hand_count(*pid) != new.hand_count(*pid) {
-                diffs.push(FieldDiff {
-                    field: format!("players[{}].hand_count", pid.raw()),
-                    old: old.hand_count(*pid).to_string(),
-                    new: new.hand_count(*pid).to_string(),
-                });
-            }
-        }
-    }
-
-    // Card count.
-    if old.cards.live_count() != new.cards.live_count() {
+    if old.turn.phase != new.turn.phase {
         diffs.push(FieldDiff {
-            field: "cards.live_count".into(),
-            old: old.cards.live_count().to_string(),
-            new: new.cards.live_count().to_string(),
+            field: "turn.phase".into(),
+            old: format!("{:?}", old.turn.phase),
+            new: format!("{:?}", new.turn.phase),
         });
     }
 
-    // Outcome.
+    let n = old.players.len().min(new.players.len());
+    for idx in 0..n {
+        let op = &old.players[idx];
+        let np = &new.players[idx];
+        if op.hp != np.hp {
+            diffs.push(FieldDiff {
+                field: format!("players[{idx}].hp"),
+                old: op.hp.to_string(),
+                new: np.hp.to_string(),
+            });
+        }
+        if op.alive != np.alive {
+            diffs.push(FieldDiff {
+                field: format!("players[{idx}].alive"),
+                old: op.alive.to_string(),
+                new: np.alive.to_string(),
+            });
+        }
+        if op.dying != np.dying {
+            diffs.push(FieldDiff {
+                field: format!("players[{idx}].dying"),
+                old: op.dying.to_string(),
+                new: np.dying.to_string(),
+            });
+        }
+        if op.hand.len() != np.hand.len() {
+            diffs.push(FieldDiff {
+                field: format!("players[{idx}].hand_count"),
+                old: op.hand.len().to_string(),
+                new: np.hand.len().to_string(),
+            });
+        }
+    }
+
+    let old_cards = live_card_total(old);
+    let new_cards = live_card_total(new);
+    if old_cards != new_cards {
+        diffs.push(FieldDiff {
+            field: "cards.live_count".into(),
+            old: old_cards.to_string(),
+            new: new_cards.to_string(),
+        });
+    }
+
     if old.outcome != new.outcome {
         diffs.push(FieldDiff {
             field: "outcome".into(),
@@ -128,30 +130,19 @@ pub fn render_diffs(diffs: &[FieldDiff]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
-    use engine_core::Engine;
+    use engine_native::{Engine, GameAction, GameCommand};
 
     #[test]
     fn diff_detects_revision_change() {
-        let mut eng = Engine::new();
-        eng.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 1,
-                ruleset: "identity-standard".into(),
-            },
+        let mut eng = Engine::new(1, 2);
+        let before = eng.state_core().clone();
+        eng.submit(GameCommand {
+            actor: eng.turn().current,
+            expected_revision: eng.revision(),
+            dedup_id: 1,
+            action: GameAction::NextPhase,
         });
-        let before = eng.state().clone();
-        eng.submit(Command {
-            actor: PlayerId::new(1),
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::EndPhase,
-        });
-        let after = eng.state();
+        let after = eng.state_core();
         let diffs = diff_states(&before, after);
         assert!(!diffs.is_empty());
         assert!(diffs.iter().any(|d| d.field == "revision"));

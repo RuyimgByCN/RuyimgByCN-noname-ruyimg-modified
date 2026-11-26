@@ -13,7 +13,8 @@ cargo-fuzz = true
 content-compiler = { path = "../crates/content-compiler" }
 content-schema = { path = "../crates/content-schema" }
 engine-api = { path = "../crates/engine-api" }
-engine-core = { path = "../crates/engine-core" }
+engine-native = { path = "../crates/engine-native" }
+engine-native-kernel = { path = "../crates/engine-native-kernel" }
 rule-vm = { path = "../crates/rule-vm" }
 libfuzzer-sys = "0.4"
 serde_json = "1"

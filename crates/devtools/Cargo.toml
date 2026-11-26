@@ -7,7 +7,9 @@ description = "Developer toolchain: inspectors, profilers, verifiers (architectu
 
 [dependencies]
 engine-api = { workspace = true }
-engine-core = { workspace = true }
+engine-native = { path = "../engine-native" }
+engine-native-kernel = { path = "../engine-native-kernel" }
+content-native-loader = { path = "../content-native-loader" }
 rule-api = { workspace = true }
 rule-vm = { workspace = true }
 content-schema = { path = "../content-schema" }

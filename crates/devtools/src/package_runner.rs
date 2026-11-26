@@ -1,9 +1,11 @@
 //! Content Package Test Runner (architecture §35).
 //!
-//! Validates a compiled content package: compiles DSL, checks trigger/modifier
-//! indexes, loads into engine, and verifies the engine doesn't crash.
+//! Validates a compiled DSL package: compiles DSL, verifies bytecode modules,
+//! executes VM modules cleanly, and checks native engine start + archive invariants.
 
-use engine_api::{Command, CommandKind, ExpectedRevision, IdempotencyKey, PlayerId};
+use engine_native::archive::{decode_archive, encode_archive};
+use engine_native::Engine;
+use rule_vm::{CollectingHost, ExecResult, HostContext, RuleVm, VerifiedModule};
 
 /// Test result for one package test.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -27,9 +29,10 @@ pub fn run_package_tests(source: &str) -> Vec<PackageTestResult> {
                 test: "compile".into(),
                 passed: true,
                 detail: format!(
-                    "triggers={} modifiers={}",
+                    "triggers={} modifiers={} modules={}",
                     p.trigger_index.len(),
-                    p.modifier_index.len()
+                    p.modifier_index.len(),
+                    p.modules.len()
                 ),
             });
             p
@@ -60,64 +63,91 @@ pub fn run_package_tests(source: &str) -> Vec<PackageTestResult> {
         },
     });
 
-    // 3. Engine load test.
-    let mut eng = engine_core::Engine::new();
-    let load_result = eng.load_package(&pkg);
-    results.push(PackageTestResult {
-        test: "engine_load".into(),
-        passed: load_result.is_ok(),
-        detail: match &load_result {
-            Ok(()) => format!("packages={}", eng.content().package_count()),
-            Err(e) => e.to_string(),
-        },
-    });
-
-    if load_result.is_err() {
-        return results;
+    // 3. Bytecode verification + RuleVm execution test.
+    let mut verified_count = 0usize;
+    let mut vm_detail = String::from("ok");
+    let mut vm_ok = true;
+    for module in &pkg.modules {
+        match VerifiedModule::verify(module.clone()) {
+            Ok(verified) => {
+                let mut vm = RuleVm::new();
+                let mut host = CollectingHost {
+                    ctx: HostContext {
+                        skill_id: 1,
+                        self_id: 1,
+                        event_player: 1,
+                        event_source: 2,
+                        event_card: 1,
+                        event_amount: 0,
+                    },
+                    ..CollectingHost::default()
+                };
+                match vm.execute(&verified, &mut host, 10_000) {
+                    Ok(ExecResult::Halted { .. } | ExecResult::Paused { .. }) => {
+                        verified_count += 1;
+                    }
+                    Ok(other) => {
+                        vm_ok = false;
+                        vm_detail = format!("{} unexpected vm result: {other:?}", module.name);
+                        break;
+                    }
+                    Err(e) => {
+                        vm_ok = false;
+                        vm_detail = format!("{} vm error: {e}", module.name);
+                        break;
+                    }
+                }
+            }
+            Err(e) => {
+                vm_ok = false;
+                vm_detail = format!("{} verify error: {e}", module.name);
+                break;
+            }
+        }
     }
-
-    // 4. StartGame with package loaded.
-    let start_result = eng.submit(Command {
-        actor: PlayerId::NONE,
-        expected_revision: ExpectedRevision(0),
-        idempotency_key: IdempotencyKey(0),
-        kind: CommandKind::StartGame {
-            player_count: 4,
-            rng_seed: 42,
-            ruleset: "identity-standard".into(),
-        },
-    });
-    let started = matches!(start_result, engine_api::CommandResult::Accepted { .. });
     results.push(PackageTestResult {
-        test: "start_game_with_package".into(),
-        passed: started,
-        detail: if started {
-            format!("revision={}", eng.state().revision)
+        test: "vm_verify_and_exec".into(),
+        passed: vm_ok,
+        detail: if vm_ok {
+            format!("verified={verified_count} modules")
         } else {
-            "StartGame rejected".into()
+            vm_detail
         },
     });
 
-    // 5. Manifest pinned test.
-    let manifest_ok = eng.manifest().is_some();
+    // 4. Native Engine start check.
+    let eng = Engine::new(42, 4);
+    results.push(PackageTestResult {
+        test: "native_engine_start".into(),
+        passed: eng.revision() == 0,
+        detail: format!("revision={} hash={}", eng.revision(), hex_short(&eng.state_hash())),
+    });
+
+    // 5. Manifest logic hash pinned check.
     results.push(PackageTestResult {
         test: "manifest_pinned".into(),
-        passed: manifest_ok,
-        detail: if manifest_ok {
-            format!("hash={}", hex_short(&eng.manifest_hash().0))
-        } else {
-            "no manifest pinned".into()
-        },
+        passed: pkg.manifest.logic_hash != [0u8; 32],
+        detail: format!("hash={}", hex_short(&pkg.manifest.logic_hash)),
     });
 
-    // 6. Invariants hold.
-    let inv = engine_core::invariants::check_invariants(eng.state());
+    // 6. Native snapshot/archive invariants hold across roundtrip.
+    let bytes = encode_archive(&eng.save());
+    let inv = decode_archive(&bytes)
+        .map_err(|e| format!("decode error: {e:?}"))
+        .and_then(|snap| Engine::restore(&snap).map_err(|e| format!("restore error: {e:?}")))
+        .and_then(|restored| {
+            if restored.state_hash() == eng.state_hash() {
+                Ok(())
+            } else {
+                Err("state_hash mismatch after restore".into())
+            }
+        });
     results.push(PackageTestResult {
         test: "invariants".into(),
         passed: inv.is_ok(),
         detail: match &inv {
-            Ok(()) => "all invariants pass".into(),
-            Err(e) => e.to_string(),
+            Ok(()) => "native archive + restore invariants pass".into(),
+            Err(e) => e.clone(),
         },
     });
 

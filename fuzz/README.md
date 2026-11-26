@@ -10,8 +10,8 @@ boundary and parser listed in §37.7.
 | `fuzz_dsl_parser` | `content_compiler::parse_source` | DSL Parser |
 | `fuzz_bytecode_module` | `BytecodeModule::from_bytes` | IR / bytecode decode |
 | `fuzz_bytecode_verify` | `verify_module` on decoded modules | 字节码验证器 |
-| `fuzz_snapshot_decode` | `Snapshot::from_bytes` | Replay / Snapshot |
-| `fuzz_replay_decode` | `ReplayLog::from_bytes` | Replay / Snapshot |
+| `fuzz_snapshot_decode` | `decode_archive` + `Engine::restore` | Replay / Snapshot |
+| `fuzz_replay_decode` | `decode_archive` + `Engine::restore` + `state_hash` | Replay / Snapshot |
 | `fuzz_command_json` | `serde_json::from_slice::<Command>` | Command 解码 |
 | `fuzz_content_package` | `ContentPackage::from_json_bytes` | 内容包和依赖解析 |
 
@@ -43,8 +43,8 @@ coverage-guided mutations and write new finds to `fuzz/artifacts/<target>/`.
 ## CI integration
 
 libFuzzer requires nightly + a sanitizer build, so it runs in a dedicated CI
-stage, not `cargo test`. The stable-testable pseudo-fuzz lives in
-`crates/engine-core/tests/fuzz_stable.rs` and runs under `cargo test --workspace`
+stage, not `cargo test`. The stable-testable corpus replay lives in
+`crates/engine-native/tests/fuzz_corpus_replay.rs` and runs under `cargo test --workspace`
 as a smoke gate.
 
 ## Contract

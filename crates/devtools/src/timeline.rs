@@ -1,11 +1,9 @@
 //! Rule Timeline Inspector (architecture §35).
 //!
-//! Visualizes the sequence of trigger windows, Effects, and Choice barriers
-//! from a replay log. Produces a human-readable timeline that helps developers
-//! understand what happened during a match.
+//! Records native `Engine` command submissions and formats a human-readable
+//! sequence of accepted steps, Choice barriers, match completion, or rejections.
 
-use engine_api::{CommandKind, PlayerId};
-use engine_core::ReplayLog;
+use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
 
 /// One entry in the rule timeline.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -29,31 +27,73 @@ pub enum TimelineStepKind {
     ChoiceBarrier,
     /// The match completed.
     MatchCompleted,
-    /// A fault occurred.
+    /// A command was rejected or suspended.
     Fault,
 }
 
-/// Build a human-readable timeline from a replay log.
-pub fn build_timeline(log: &ReplayLog) -> Vec<TimelineEntry> {
+/// One recorded native command step and post-step state hash.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NativeReplayRecord {
+    /// 1-based record index.
+    pub record_sequence: u64,
+    /// Engine revision after command.
+    pub post_revision: u64,
+    /// Canonical state hash after command.
+    pub post_state_hash: [u8; 32],
+    /// Step kind.
+    pub kind: TimelineStepKind,
+    /// Command summary.
+    pub description: String,
+}
+
+/// Recorded native command trace used by timeline & bisector tools.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct NativeReplayLog {
+    /// Recorded steps in submission order.
+    pub records: Vec<NativeReplayRecord>,
+}
+
+impl NativeReplayLog {
+    /// Create an empty trace.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Submit `cmd` to `engine` and append the resulting trace record.
+    pub fn submit_and_record(&mut self, engine: &mut Engine, cmd: GameCommand) -> CommandOutcome {
+        let description = describe_action(&cmd.action, cmd.actor);
+        let outcome = engine.submit(cmd);
+        let kind = match &outcome {
+            CommandOutcome::Accepted { .. } => {
+                if engine.outcome().is_some() {
+                    TimelineStepKind::MatchCompleted
+                } else {
+                    TimelineStepKind::Command
+                }
+            }
+            CommandOutcome::Pending { .. } => TimelineStepKind::ChoiceBarrier,
+            CommandOutcome::Rejected(_) | CommandOutcome::Suspended => TimelineStepKind::Fault,
+        };
+        self.records.push(NativeReplayRecord {
+            record_sequence: (self.records.len() + 1) as u64,
+            post_revision: engine.revision(),
+            post_state_hash: engine.state_hash(),
+            kind,
+            description,
+        });
+        outcome
+    }
+}
+
+/// Build a human-readable timeline from a native replay log.
+pub fn build_timeline(log: &NativeReplayLog) -> Vec<TimelineEntry> {
     log.records
         .iter()
-        .map(|rec| {
-            let kind = match rec.outcome {
-                engine_core::ResolutionOutcome::Committed => TimelineStepKind::Command,
-                engine_core::ResolutionOutcome::ChoiceBarrierCommitted => {
-                    TimelineStepKind::ChoiceBarrier
-                }
-                engine_core::ResolutionOutcome::MatchCompleted => TimelineStepKind::MatchCompleted,
-                engine_core::ResolutionOutcome::TerminalContentFault
-                | engine_core::ResolutionOutcome::TerminalEngineFault
-                | engine_core::ResolutionOutcome::AdminAborted => TimelineStepKind::Fault,
-            };
-            TimelineEntry {
-                seq: rec.record_sequence,
-                revision: rec.post_revision,
-                kind,
-                description: describe_command(&rec.command.kind, rec.command.actor),
-            }
+        .map(|rec| TimelineEntry {
+            seq: rec.record_sequence,
+            revision: rec.post_revision,
+            kind: rec.kind.clone(),
+            description: rec.description.clone(),
         })
         .collect()
 }
@@ -78,70 +118,35 @@ pub fn render_timeline(entries: &[TimelineEntry]) -> String {
     out
 }
 
-fn describe_command(kind: &CommandKind, actor: PlayerId) -> String {
-    match kind {
-        CommandKind::StartGame {
-            player_count,
-            rng_seed,
-            ruleset,
-        } => {
-            format!("StartGame(players={player_count}, seed={rng_seed}, ruleset={ruleset})")
+fn describe_action(action: &GameAction, actor: u8) -> String {
+    match action {
+        GameAction::NextPhase => format!("NextPhase(actor={actor})"),
+        GameAction::PlayCard { card, targets } => {
+            format!("PlayCard(actor={actor}, card={card}, targets={targets:?})")
         }
-        CommandKind::PlayCard {
-            card,
-            targets,
-            card_targets,
+        GameAction::ActivateSkill { skill } => {
+            format!("ActivateSkill(actor={actor}, skill={skill})")
+        }
+        GameAction::RevealGeneral { slot } => {
+            format!("RevealGeneral(actor={actor}, slot={slot})")
+        }
+        GameAction::Answer {
+            choice_id,
+            selection,
         } => {
-            let targets_str: Vec<String> = targets.iter().map(|t| t.raw().to_string()).collect();
             format!(
-                "PlayCard(card={}, targets=[{}], card_targets={})",
-                card.raw(),
-                targets_str.join(","),
-                card_targets.len()
+                "Answer(actor={actor}, choice={choice_id}, selection={})",
+                selection.len()
             )
         }
-        CommandKind::ActivateSkill {
-            skill,
-            targets,
-            card_targets,
-        } => format!(
-            "ActivateSkill(skill={}, targets={}, card_targets={})",
-            skill.raw(),
-            targets.len(),
-            card_targets.len()
-        ),
-        CommandKind::UseSkillCard {
-            skill,
-            card_kind,
-            targets,
-            equip_slot,
-        } => format!(
-            "UseSkillCard(skill={}, kind={}, targets={}, equip_slot={})",
-            skill.raw(),
-            card_kind,
-            targets.len(),
-            equip_slot
-        ),
-        CommandKind::ResolveChoice {
+        GameAction::TimeoutAction {
             choice_id,
-            selections,
-            cancelled,
-        } => format!(
-            "ResolveChoice(choice={}, selections={}, cancelled={})",
-            choice_id.raw(),
-            selections.len(),
-            cancelled
-        ),
-        CommandKind::EndPhase => format!("EndPhase(actor={})", actor.raw()),
-        CommandKind::RevealGeneral { slot } => {
-            format!("RevealGeneral(actor={}, slot={})", actor.raw(), slot)
-        }
-        CommandKind::Surrender => format!("Surrender(actor={})", actor.raw()),
-        CommandKind::TimeoutAction { choice_id } => {
-            format!("TimeoutAction(choice={:?})", choice_id)
-        }
-        CommandKind::AdminAbortMatch { reason_code } => {
-            format!("AdminAbortMatch(reason={reason_code})")
+            selection,
+        } => {
+            format!(
+                "TimeoutAction(actor={actor}, choice={choice_id}, selection={})",
+                selection.len()
+            )
         }
     }
 }
@@ -149,51 +154,57 @@ fn describe_command(kind: &CommandKind, actor: PlayerId) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use engine_api::{Command, ExpectedRevision, IdempotencyKey};
-    use engine_core::Engine;
 
     #[test]
     fn timeline_shows_command_sequence() {
-        let mut eng = Engine::new();
-        eng.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 7,
-                ruleset: "identity-standard".into(),
+        let mut eng = Engine::new(7, 2);
+        let mut log = NativeReplayLog::new();
+        let actor = eng.turn().current;
+        let rev = eng.revision();
+        log.submit_and_record(
+            &mut eng,
+            GameCommand {
+                actor,
+                expected_revision: rev,
+                dedup_id: 1,
+                action: GameAction::NextPhase,
             },
-        });
-        eng.submit(Command {
-            actor: PlayerId::new(1),
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::EndPhase,
-        });
-        let timeline = build_timeline(eng.replay_log());
-        assert!(timeline.len() >= 2);
+        );
+        let actor = eng.turn().current;
+        let rev = eng.revision();
+        log.submit_and_record(
+            &mut eng,
+            GameCommand {
+                actor,
+                expected_revision: rev,
+                dedup_id: 2,
+                action: GameAction::NextPhase,
+            },
+        );
+        let timeline = build_timeline(&log);
+        assert_eq!(timeline.len(), 2);
         assert_eq!(timeline[0].kind, TimelineStepKind::Command);
-        assert!(timeline[0].description.contains("StartGame"));
-        assert!(timeline[1].description.contains("EndPhase"));
+        assert!(timeline[0].description.contains("NextPhase"));
     }
 
     #[test]
     fn render_produces_table() {
-        let mut eng = Engine::new();
-        eng.submit(Command {
-            actor: PlayerId::NONE,
-            expected_revision: ExpectedRevision(0),
-            idempotency_key: IdempotencyKey(0),
-            kind: CommandKind::StartGame {
-                player_count: 2,
-                rng_seed: 1,
-                ruleset: "identity-standard".into(),
+        let mut eng = Engine::new(1, 2);
+        let mut log = NativeReplayLog::new();
+        let actor = eng.turn().current;
+        let rev = eng.revision();
+        log.submit_and_record(
+            &mut eng,
+            GameCommand {
+                actor,
+                expected_revision: rev,
+                dedup_id: 1,
+                action: GameAction::NextPhase,
             },
-        });
-        let timeline = build_timeline(eng.replay_log());
+        );
+        let timeline = build_timeline(&log);
         let rendered = render_timeline(&timeline);
         assert!(rendered.contains("seq"));
-        assert!(rendered.contains("StartGame"));
+        assert!(rendered.contains("NextPhase"));
     }
 }
