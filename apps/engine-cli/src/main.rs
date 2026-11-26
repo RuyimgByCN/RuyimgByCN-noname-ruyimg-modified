@@ -285,10 +285,12 @@ fn run_skill_vm(path: &str) {
 fn run_load_hash(pkg_path: Option<&str>, players: u8, seed: u64) {
     let eng = if let Some(path_str) = pkg_path {
         let path = std::path::Path::new(path_str);
-        let raw = std::fs::read_to_string(path).unwrap_or_else(|e| {
-            eprintln!("read {path_str}: {e}");
-            std::process::exit(2);
-        });
+        let raw = std::fs::read_to_string(path)
+            .unwrap_or_else(|e| {
+                eprintln!("read {path_str}: {e}");
+                std::process::exit(2);
+            })
+            .replace('\r', "");
         let pkg = content_schema::ContentPackage::from_json_bytes(raw.as_bytes()).unwrap_or_else(|e| {
             eprintln!("parse package {path_str}: {e}");
             std::process::exit(2);
@@ -297,10 +299,15 @@ fn run_load_hash(pkg_path: Option<&str>, players: u8, seed: u64) {
         let parent = path.parent().unwrap_or_else(|| std::path::Path::new("."));
         for rel in pkg.asset_paths.values() {
             let full = parent.join(rel);
-            let bytes = std::fs::read(&full).unwrap_or_else(|e| {
+            let raw_bytes = std::fs::read(&full).unwrap_or_else(|e| {
                 eprintln!("read asset {}: {e}", full.display());
                 std::process::exit(2);
             });
+            let bytes = if rel.ends_with(".json") || rel.ends_with(".skill") {
+                raw_bytes.into_iter().filter(|&b| b != b'\r').collect()
+            } else {
+                raw_bytes
+            };
             assets.insert(rel.clone(), bytes);
         }
         let frozen = validate_and_freeze_raw_package(raw, assets).unwrap_or_else(|e| {

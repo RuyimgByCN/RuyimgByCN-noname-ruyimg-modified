@@ -550,9 +550,13 @@ fn check_native_start_and_archive_roundtrip() -> Result<(), String> {
 fn check_content_native_loader_locked_roundtrip() -> Result<(), String> {
     let pkg_dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions/huanle-upstream-noname");
     let package_json = std::fs::read_to_string(pkg_dir.join("package.npack.json"))
-        .map_err(|e| format!("read huanle package.npack.json: {e}"))?;
-    let cards_bytes = std::fs::read(pkg_dir.join("assets/cards.json"))
-        .map_err(|e| format!("read huanle assets/cards.json: {e}"))?;
+        .map_err(|e| format!("read huanle package.npack.json: {e}"))?
+        .replace('\r', "");
+    let cards_bytes: Vec<u8> = std::fs::read(pkg_dir.join("assets/cards.json"))
+        .map_err(|e| format!("read huanle assets/cards.json: {e}"))?
+        .into_iter()
+        .filter(|&b| b != b'\r')
+        .collect();
     let mut assets = BTreeMap::new();
     assets.insert("assets/cards.json".to_string(), cards_bytes);
     let frozen = validate_and_freeze_raw_package(package_json, assets)?;
